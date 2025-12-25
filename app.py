@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for
-from apscheduler.schedulers.background import BackgroundScheduler
 from update import make_data, create_matchups
 import pandas as pd
 import subprocess
@@ -10,9 +9,7 @@ app = Flask(__name__)
 df_global = pd.read_csv('vs_Position_withavg.csv')
 pos_df_global = pd.read_csv('positions.csv')
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=make_data, trigger='cron', hour=4, minute=0, args=[pos_df_global])
-scheduler.start()
+
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
@@ -91,3 +88,4 @@ def matchup():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
