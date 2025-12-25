@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if page_type == 'matchup' %}<!--for matchups -->
+    
+    <div class = "tabs">
+        <a href="/" class="tab-link active">Main Defense</a>
+        <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
+
+    </div>
+
+    <div class="header-container">
+
+        <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
+    </div>
+    <p>If you want multiple teams,it should be team1,team1,team1 and in First Team Abbreviation and team12,team2,team2 in Second Team Abbreviation </p>
+    <p>For example, if you want OKC vs SAS and HOU vs DEN, do First Team Abbreviation: OKC,HOU and Second Team Abbreviation: SAS,DEN</p>
+    <div class="filter-section">
+
+        <form method="POST">
+            <p>
+                <label>First Team Abbreviation:</label><br>
+                <input type="text" name="teams1" value="{{ teams1 or '' }}">
+            </p>
+            <p>
+                <label>Second Team Abbreviation:</label><br>
+                <input type="text" name="teams2" value="{{ teams2 or '' }}">
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    {% for col in colnames %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in records %}
+                <tr>
+                    {% for col in colnames %}
+                    <td class="{{ 'rank-col' if 'Rank' in col or 'RANK' in col else '' }}">
+                        {{ row[col] }}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+    {% else %}<!-- For main tab -->
+    <div class = "tabs">
+        <a href="/" class="tab-link active">Main Defense</a>
+        <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
+
+    </div>
+
+    <div class="header-container">
+
+        <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
+    </div>
+
+    <div class="filter-section">
+        <form method="POST">
+            <p>
+                <label>First Team Abbreviation:</label><br>
+                <input type="text" name="team1" value="{{ selected_teams[0] or '' }}">
+            </p>
+            <p>
+                <label>Second Team Abbreviation:</label><br>
+                <input type="text" name="team2" value="{{ selected_teams[1] or '' }}">
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    {% for col in colnames %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in records %}
+                <tr>
+                    {% for col in colnames %}
+                    <td class="{{ 'rank-col' if 'Rank' in col or 'RANK' in col else '' }}">
+                        {{ row[col] }}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+</body>
+</html>
