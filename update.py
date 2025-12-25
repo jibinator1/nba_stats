@@ -5,6 +5,15 @@ import time
 import os
 from datetime import datetime
 
+# Standard headers to prevent the NBA from blocking your request
+HEADERS = {
+    'Host': 'stats.nba.com',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Referer': 'https://stats.nba.com/',
+    'Connection': 'keep-alive'
+}
 
 def make_data(pos_df):
     #get positions for each players
@@ -12,7 +21,12 @@ def make_data(pos_df):
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
 
     #get the game logs
-    logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', last_n_games_nullable=20).get_data_frames()[0]
+    logs = playergamelogs.PlayerGameLogs(
+        season_nullable='2025-26', 
+        last_n_games_nullable=20,
+        headers=HEADERS,
+        timeout=60
+    ).get_data_frames()[0]
 
     #only select players who have more than 20 minutes play time
     logs = logs[logs['MIN'] >= 30] 
@@ -73,7 +87,12 @@ def create_matchups(pos_df, final_result, ALL_TEAMS, thresholds):
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
     
     # Fetching logs (Note: verify season string matches current year)
-    logs = playergamelogs.PlayerGameLogs(season_nullable='2024-25', last_n_games_nullable=20).get_data_frames()[0]
+    logs = playergamelogs.PlayerGameLogs(
+        season_nullable='2024-25', 
+        last_n_games_nullable=20,
+        headers=HEADERS,
+        timeout=60
+    ).get_data_frames()[0]
     logs = logs[logs['MIN'] >= 30] 
     merged = logs.merge(pos_map, on='PLAYER_NAME')
 
