@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from apscheduler.schedulers.background import BackgroundScheduler
 from update import make_data, create_matchups
 import pandas as pd
 import subprocess
+import os 
 
 app = Flask(__name__)
 
@@ -13,6 +14,10 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(func=make_data, trigger='cron', hour=4, minute=0, args=[pos_df_global])
 scheduler.start()
 
+@app.route('/manual_update', methods=['POST'])
+def manual_update():
+    make_data(pos_df_global)
+    return redirect(url_for('index'))
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
