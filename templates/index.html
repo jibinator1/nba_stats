@@ -5,9 +5,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    {% if page_type == 'matchup' %}<!--for matchups -->
-    
-    <div class = "tabs">
+    <div >
+        <form action="/manual_update" method="POST" >
+            <button type="submit" >Refresh NBA Data</button>
+        </form>
+        <br>
+    </div>
+
+    {% if page_type == 'matchup' %}<div class = "tabs">
         <a href="/" class="tab-link active">Main Defense</a>
         <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
 
@@ -59,8 +64,7 @@
     </div>
 
     
-    {% else %}<!-- For main tab -->
-    <div class = "tabs">
+    {% else %}<div class = "tabs">
         <a href="/" class="tab-link active">Main Defense</a>
         <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
 
