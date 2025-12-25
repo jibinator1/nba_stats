@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 
-def make_data(pos_df):
+def make_data(pos_df, minutes):
     #get positions for each players
     
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
@@ -15,7 +15,7 @@ def make_data(pos_df):
     logs = pd.read_csv("logs.csv")
 
     #only select players who have more than 20 minutes play time
-    logs = logs[logs['MIN'] >= 25] 
+    logs = logs[logs['MIN'] >= minutes] 
 
 
     merged = logs.merge(pos_map, on='PLAYER_NAME')
@@ -50,7 +50,7 @@ def make_data(pos_df):
 
     final_result[['TEAM', 'POSITION','PTS','PTS_Rank', 'REB','REB_Rank', 'AST','AST_Rank', 'FGM', 'FGA','FG3M', 'FG3A', 'OREB', 'DREB', 'STL', 'BLK', 'PF','TEAM_PTS', 'TEAM_REB', 'TEAM_AST']].to_csv('vs_Position_withavg.csv', index= False)
 
-def create_matchups(pos_df, final_result, ALL_TEAMS, thresholds=None):
+def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
     """
     Flags both 'High-Volume Clashes' (OVERS) and 'Stifling Defenses' (UNDERS)
     based on separate threshold dictionaries and buffers.
@@ -86,7 +86,7 @@ def create_matchups(pos_df, final_result, ALL_TEAMS, thresholds=None):
         # Prepare position and log data
         pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
         logs = pd.read_csv("logs.csv")
-        logs = logs[logs['MIN'] >= 25] # Using 20 as per your latest request
+        logs = logs[logs['MIN'] >= minutes] # Using 20 as per your latest request
         merged = logs.merge(pos_map, on='PLAYER_NAME')
 
         # Map Team ABV to IDs for opponent lookup

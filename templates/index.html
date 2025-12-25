@@ -5,21 +5,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div >
-        <form action="/manual_update" method="POST" >
-            <button type="submit" >Refresh NBA Data</button>
-        </form>
-        <br>
-    </div>
 
-    {% if page_type == 'matchup' %}<div class = "tabs">
+    {% if page_type == 'matchup' %}
+    <div class="tabs">
         <a href="/" class="tab-link active">Main Defense</a>
         <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
-
     </div>
 
     <div class="header-container">
-
         <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
     </div>
     <p>If you want multiple teams,it should be team1,team1,team1 and in First Team Abbreviation and team12,team2,team2 in Second Team Abbreviation </p>
@@ -28,6 +21,11 @@
 
         <form method="POST">
             <p>
+                <label>Minutes: (Update Data & Filter View)</label><br>
+                <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 20 }}" required>
+            </p>
+
+            <p>
                 <label>First Team Abbreviation:</label><br>
                 <input type="text" name="teams1" value="{{ teams1 or '' }}">
             </p>
@@ -35,10 +33,9 @@
                 <label>Second Team Abbreviation:</label><br>
                 <input type="text" name="teams2" value="{{ teams2 or '' }}">
             </p>
-            <button type="submit">Submit</button>
+            <button type="submit">Submit (Refresh & Filter)</button>
         </form>
     </div>
-
 
     <div class="table-container">
         <table>
@@ -63,20 +60,23 @@
         </table>
     </div>
 
-    
-    {% else %}<div class = "tabs">
+    {% else %}
+    <div class="tabs">
         <a href="/" class="tab-link active">Main Defense</a>
         <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
-
     </div>
 
     <div class="header-container">
-
         <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
     </div>
 
     <div class="filter-section">
         <form method="POST">
+            <p>
+                <label>Minutes: (Update Data & Filter View)</label><br>
+                <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 20 }}" required>
+            </p>
+
             <p>
                 <label>First Team Abbreviation:</label><br>
                 <input type="text" name="team1" value="{{ selected_teams[0] or '' }}">
@@ -85,10 +85,9 @@
                 <label>Second Team Abbreviation:</label><br>
                 <input type="text" name="team2" value="{{ selected_teams[1] or '' }}">
             </p>
-            <button type="submit">Submit</button>
+            <button type="submit">Submit (Refresh & Filter)</button>
         </form>
     </div>
-
 
     <div class="table-container">
         <table>
