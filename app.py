@@ -87,5 +87,7 @@ def matchup():
     return render_template('index.html', records=matchup_df.to_dict('records'), colnames=matchup_df.columns.values,team_vs_list=team_vs_list, teams1 = teams1, teams2 = teams2,selected_teams=["", ""],page_type='matchup')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
 
