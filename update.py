@@ -130,5 +130,8 @@ def create_matchups(pos_df, final_result, ALL_TEAMS, thresholds):
             new_results_df.to_csv(output_file, mode='a', index=False, header=not file_exists)
             
             print(f"Added {len(new_results_df)} rows to {output_file} for date {current_date}")
+            return new_results_df
         else:
             print("No matches found for these thresholds today.")
+            return pd.DataFrame()
+    return pd.DataFrame()
