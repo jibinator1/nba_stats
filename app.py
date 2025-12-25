@@ -9,8 +9,6 @@ app = Flask(__name__)
 df_global = pd.read_csv('vs_Position_withavg.csv')
 pos_df_global = pd.read_csv('positions.csv')
 
-
-
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
     make_data(pos_df_global)
@@ -47,47 +45,50 @@ def index():
 
 @app.route('/matchup', methods=['GET', 'POST'])
 def matchup():
-    
-    df = df_global.copy()
-    pos_df = pos_df_global.copy()
-    
-    thresholds = {
-
-        'PG': {'PTS': 22.5, 'REB': 5.2, 'AST': 8.5}, 
-        'SG': {'PTS': 21.0, 'REB': 5.0, 'AST': 4.5}, 
-        'SF': {'PTS': 20.5, 'REB': 6.8, 'AST': 5.0}, 
-        'PF': {'PTS': 19.5, 'REB': 8.5, 'AST': 3.5}, 
-        'C':  {'PTS': 18.5, 'REB': 12.0, 'AST': 3.5} 
-    }
-    if request.method == 'POST':
-        team_vs_list = []
-        teams1 = request.form.get('teams1').replace(" ", "")#remove all spaces so when i accidently do ", " it ignores spaces
-        teams2 = request.form.get('teams2').replace(" ", "")
-
-        teams1_list = teams1.split(",")
-        teams2_list = teams2.split(",")
-
-        length = min(len(teams1_list), len(teams2_list))
-
-        for i in range(length):
-            team_vs_list.append([teams1_list[i], teams2_list[i]])
+    try:
+        df = df_global.copy()
+        pos_df = pos_df_global.copy()
         
-
-    else:
+        thresholds = {
+            'PG': {'PTS': 22.5, 'REB': 5.2, 'AST': 8.5}, 
+            'SG': {'PTS': 21.0, 'REB': 5.0, 'AST': 4.5}, 
+            'SF': {'PTS': 20.5, 'REB': 6.8, 'AST': 5.0}, 
+            'PF': {'PTS': 19.5, 'REB': 8.5, 'AST': 3.5}, 
+            'C':  {'PTS': 18.5, 'REB': 12.0, 'AST': 3.5} 
+        }
 
         team_vs_list = []
         teams1 = ""
         teams2 = ""
-        
 
-    if team_vs_list:
-        matchup_df = create_matchups(pos_df, df, team_vs_list, thresholds)
-    else:
-        matchup_df = pd.DataFrame()
-    return render_template('index.html', records=matchup_df.to_dict('records'), colnames=matchup_df.columns.values,team_vs_list=team_vs_list, teams1 = teams1, teams2 = teams2,selected_teams=["", ""],page_type='matchup')
+        if request.method == 'POST':
+            teams1 = request.form.get('teams1', '').replace(" ", "")
+            teams2 = request.form.get('teams2', '').replace(" ", "")
 
+            if teams1 and teams2:
+                teams1_list = teams1.split(",")
+                teams2_list = teams2.split(",")
+                length = min(len(teams1_list), len(teams2_list))
+                for i in range(length):
+                    team_vs_list.append([teams1_list[i].upper(), teams2_list[i].upper()])
+
+        if team_vs_list:
+            matchup_df = create_matchups(pos_df, df, team_vs_list, thresholds)
+        else:
+            matchup_df = pd.DataFrame()
+
+        return render_template('index.html', 
+                               records=matchup_df.to_dict('records'), 
+                               colnames=matchup_df.columns.values,
+                               team_vs_list=team_vs_list, 
+                               teams1=teams1, 
+                               teams2=teams2,
+                               selected_teams=["", ""],
+                               page_type='matchup')
+                               
+    except Exception as e:
+        # This prints the actual error to your Render Logs so you can see it
+        print(f"Matchup Error: {e}")
+        return f"Error in Matchup Calculation: {e}", 500
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-
-
+    app.run(debug=True)
