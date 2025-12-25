@@ -5,15 +5,6 @@ import time
 import os
 from datetime import datetime
 
-# Standard headers to prevent the NBA from blocking your request
-HEADERS = {
-    'Host': 'stats.nba.com',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
-    'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'en-US,en;q=0.5',
-    'Referer': 'https://stats.nba.com/',
-    'Connection': 'keep-alive'
-}
 
 def make_data(pos_df):
     #get positions for each players
@@ -21,12 +12,7 @@ def make_data(pos_df):
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
 
     #get the game logs
-    logs = playergamelogs.PlayerGameLogs(
-        season_nullable='2025-26', 
-        last_n_games_nullable=20,
-        headers=HEADERS,
-        timeout=60
-    ).get_data_frames()[0]
+    logs = pd.read_csv("logs.csv")
 
     #only select players who have more than 20 minutes play time
     logs = logs[logs['MIN'] >= 30] 
@@ -70,80 +56,79 @@ def make_data(pos_df):
 
 
 def create_matchups(pos_df, final_result, ALL_TEAMS, thresholds):
-    output_file = 'threshold_test_results.csv'
-    column_names = ['Date', 'Team', 'Player', 'Role', 'Stat']
     
-    # 1. Handle empty input immediately
-    if not ALL_TEAMS:
-        empty_df = pd.DataFrame(columns=column_names)
-        empty_df.to_csv(output_file, index=False)
-        return empty_df
+    if ALL_TEAMS:
+        positions = ['C', 'PF', 'PG', 'SF', 'SG']
+        output_file = 'threshold_test_results.csv'
 
-    positions = ['C', 'PF', 'PG', 'SF', 'SG']
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    good_matchups = []
+        # Add current date for tracking
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        thresholds = {
 
-    # 2. Prepare Reference Data
-    pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
-    
-    # Fetching logs (Note: verify season string matches current year)
-    logs = playergamelogs.PlayerGameLogs(
-        season_nullable='2024-25', 
-        last_n_games_nullable=20,
-        headers=HEADERS,
-        timeout=60
-    ).get_data_frames()[0]
-    logs = logs[logs['MIN'] >= 30] 
-    merged = logs.merge(pos_map, on='PLAYER_NAME')
+            'PG': {'PTS': 22.5, 'REB': 5.2, 'AST': 8.5}, 
+            'SG': {'PTS': 21.0, 'REB': 5.0, 'AST': 4.5}, 
+            'SF': {'PTS': 20.5, 'REB': 6.8, 'AST': 5.0}, 
+            'PF': {'PTS': 19.5, 'REB': 8.5, 'AST': 3.5}, 
+            'C':  {'PTS': 18.5, 'REB': 12.0, 'AST': 3.5} 
+        }
 
-    # 3. Logic Loop
-    for team_pair in ALL_TEAMS:
-        T1, T2 = team_pair
-        selected_teams = final_result[final_result['TEAM'].isin([T1, T2])]
+        good_matchups = []
+
+        pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
+
+        #get the game logs
+        logs = pd.read_csv("logs.csv")
+
+        #only select players who have more than 20 minutes play time
+        logs = logs[logs['MIN'] >= 30] 
+
+
+        merged = logs.merge(pos_map, on='PLAYER_NAME')
+
+
+        team_id_map = merged[['TEAM_ABBREVIATION', 'TEAM_ID']].drop_duplicates()
+        team_id_lookup = dict(zip(team_id_map['TEAM_ABBREVIATION'], team_id_map['TEAM_ID']))
+
+        merged['OPPONENT_ABV'] = merged['MATCHUP'].str.split(' ').str[-1]
+        merged['OPPONENT_ID'] = merged['OPPONENT_ABV'].map(team_id_lookup)
         
-        for pos in positions:
-            t1_row = selected_teams[(selected_teams['TEAM'] == T1) & (selected_teams['POSITION'] == pos)]
-            t2_row = selected_teams[(selected_teams['TEAM'] == T2) & (selected_teams['POSITION'] == pos)]
+        # 2. Logic Loop (Applied across ALL_TEAMS pairs)
+        for team_pair in ALL_TEAMS:
+            T1, T2 = team_pair
+            selected_teams = final_result[final_result['TEAM'].isin([T1, T2])]
+            
+            for pos in positions:
+                t1_row = selected_teams[(selected_teams['TEAM'] == T1) & (selected_teams['POSITION'] == pos)]
+                t2_row = selected_teams[(selected_teams['TEAM'] == T2) & (selected_teams['POSITION'] == pos)]
 
-            if not t1_row.empty and not t2_row.empty:
-                limit = thresholds[pos]
-                
-                for stat in ['PTS', 'REB', 'AST']:
-                    # T1 Check (Team 1 Player vs Team 2 Defense)
-                    if t1_row[f'TEAM_{stat}'].values[0] >= limit[stat] and t2_row[stat].values[0] >= limit[stat]:
-                        players = merged[(merged['TEAM_ABBREVIATION'] == T1) & (merged['POSITION'] == pos)]['PLAYER_NAME'].unique()
-                        for p in players:
-                            good_matchups.append({
-                                'Date': current_date, 
-                                'Team': T1, 
-                                'Player': p, 
-                                'Role': pos, 
-                                'Stat': stat
-                            })
+                if not t1_row.empty and not t2_row.empty:
+                    limit = thresholds[pos]
                     
-                    # T2 Check (Team 2 Player vs Team 1 Defense)
-                    if t2_row[f'TEAM_{stat}'].values[0] >= limit[stat] and t1_row[stat].values[0] >= limit[stat]:
-                        players = merged[(merged['TEAM_ABBREVIATION'] == T2) & (merged['POSITION'] == pos)]['PLAYER_NAME'].unique()
-                        for p in players:
-                            good_matchups.append({
-                                'Date': current_date, 
-                                'Team': T2, 
-                                'Player': p, 
-                                'Role': pos, 
-                                'Stat': stat
-                            })
+                    # Internal helper to find players from the 'merged' dataframe
+                    def get_players(team_abv, position):
+                        return merged[(merged['TEAM_ABBREVIATION'] == team_abv) & 
+                                    (merged['POSITION'] == position)]['PLAYER_NAME'].unique().tolist()
 
-    # 4. Finalize, Save (Replace), and Return
-    if good_matchups:
-        # Create DataFrame and ensure specific column order
-        results_df = pd.DataFrame(good_matchups)
-        results_df = results_df[column_names].drop_duplicates()
-        
-        # Saves and overwrites existing file
-        results_df.to_csv(output_file, index=False)
-        return results_df
-    else:
-        # Create empty file with headers if no matches found
-        empty_df = pd.DataFrame(columns=column_names)
-        empty_df.to_csv(output_file, index=False)
-        return empty_df
+                    # Check PTS, REB, AST for "High-Volume Clash"
+                    for stat in ['PTS', 'REB', 'AST']:
+                        # T1 Check
+                        if t1_row[f'TEAM_{stat}'].values[0] >= limit[stat] and t2_row[stat].values[0] >= limit[stat]:
+                            for p in get_players(T1, pos):
+                                good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T1} vs {T2}", 'Player': p, 'Pos': pos, 'Stat': stat})
+                        
+                        # T2 Check
+                        if t2_row[f'TEAM_{stat}'].values[0] >= limit[stat] and t1_row[stat].values[0] >= limit[stat]:
+                            for p in get_players(T2, pos):
+                                good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T2} vs {T1}", 'Player': p, 'Pos': pos, 'Stat': stat})
+
+        # 3. Create DataFrame and APPEND to CSV
+        if good_matchups:
+            new_results_df = pd.DataFrame(good_matchups).drop_duplicates()
+
+            # If file exists, don't write header. If it doesn't exist, write header.
+            file_exists = os.path.isfile(output_file)
+            new_results_df.to_csv(output_file, mode='a', index=False, header=not file_exists)
+            
+            print(f"Added {len(new_results_df)} rows to {output_file} for date {current_date}")
+        else:
+            print("No matches found for these thresholds today.")
