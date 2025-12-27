@@ -48,19 +48,23 @@ def make_data(pos_df, minutes):
     final_result['AST_Rank'] = final_result.groupby('POSITION')['AST'].rank(ascending=False, method='min')
     final_result['FG3A_RANK'] = final_result.groupby('POSITION')['FG3A'].rank(ascending=False, method='min')
 
-    final_result[['TEAM', 'POSITION','PTS','PTS_Rank', 'REB','REB_Rank', 'AST','AST_Rank', 'FGM', 'FGA','FG3M', 'FG3A', 'OREB', 'DREB', 'STL', 'BLK', 'PF','TEAM_PTS', 'TEAM_REB', 'TEAM_AST']].to_csv('vs_Position_withavg.csv', index= False)
+    final_result[['TEAM', 'POSITION','PTS','PTS_Rank', 'REB','REB_Rank', 'AST','AST_Rank', 'FGM', 'FGA','FG3M', 'FG3A','FG3A_RANK', 'OREB', 'DREB', 'STL', 'BLK', 'PF','TEAM_PTS', 'TEAM_REB', 'TEAM_AST']].to_csv('vs_Position_withavg.csv', index= False)
+
+import pandas as pd
+import os
+from datetime import datetime
 
 def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
     """
-    Flags both 'High-Volume Clashes' (OVERS) and 'Stifling Defenses' (UNDERS)
-    based on separate threshold dictionaries and buffers.
+    Flags only 'High-Volume Clashes' (OVERS) and 'Death Trap Matchups' (UNDERS).
+    Includes a 'Stifling Ratio' to ensure the defensive mismatch is severe.
     """
     if ALL_TEAMS:
         positions = ['C', 'PF', 'PG', 'SF', 'SG']
         output_file = 'threshold_test_results.csv'
         current_date = datetime.now().strftime("%Y-%m-%d")
 
-        # 1. OVER Thresholds (High Volume Clash)
+        # 1. OVER Thresholds (Unchanged)
         over_thresholds = {
             'PG': {'PTS': 22.5, 'REB': 5.2, 'AST': 8.5}, 
             'SG': {'PTS': 21.0, 'REB': 5.0, 'AST': 4.5}, 
@@ -69,27 +73,31 @@ def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
             'C':  {'PTS': 18.5, 'REB': 12.0, 'AST': 3.5} 
         }
 
-        # 2. UNDER Thresholds (Stifling Defense Baseline)
+        # 2. UNDER Thresholds (TIGHTENED for Elite Defense only)
+        # I have lowered these by ~10-15% to target only top-tier defenses.
         under_thresholds = {
-            'PG': {'PTS': 18.7, 'REB': 4.2, 'AST': 5.75},
-            'SG': {'PTS': 16.5, 'REB': 3.9, 'AST': 3.5},
-            'SF': {'PTS': 17.1, 'REB': 5.6, 'AST': 3.5},
-            'PF': {'PTS': 15.5, 'REB': 5.5, 'AST': 2.4},
-            'C':  {'PTS': 15.0, 'REB': 9.0, 'AST': 2.5}
+            'PG': {'PTS': 16.5, 'REB': 3.8, 'AST': 4.5},  # Lowered from 18.7
+            'SG': {'PTS': 15.0, 'REB': 3.5, 'AST': 3.0},  # Lowered from 16.5
+            'SF': {'PTS': 15.5, 'REB': 5.0, 'AST': 3.0},  # Lowered from 17.1
+            'PF': {'PTS': 14.0, 'REB': 5.0, 'AST': 2.0},  # Lowered from 15.5
+            'C':  {'PTS': 13.5, 'REB': 8.0, 'AST': 2.0}   # Lowered from 15.0
         }
 
-        # Buffers for Under: Team avg must be baseline + buffer
+        # 3. Buffers (Offense must be this much higher than the defensive limit)
         under_buffers = {'PTS': 8.0, 'REB': 4.0, 'AST': 4.0}
+        
+        # 4. NEW: Stifling Ratio (The Defense must be X% stricter than the Offense's Avg)
+        # Defense must allow < 80% of what the Offense usually scores to trigger an Under.
+        stifling_ratio = 0.80 
 
         good_matchups = []
         
-        # Prepare position and log data
+        # --- Data Prep (Same as before) ---
         pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
         logs = pd.read_csv("logs.csv")
-        logs = logs[logs['MIN'] >= minutes] # Using 20 as per your latest request
+        logs = logs[logs['MIN'] >= minutes]
         merged = logs.merge(pos_map, on='PLAYER_NAME')
 
-        # Map Team ABV to IDs for opponent lookup
         team_id_map = merged[['TEAM_ABBREVIATION', 'TEAM_ID']].drop_duplicates()
         team_id_lookup = dict(zip(team_id_map['TEAM_ABBREVIATION'], team_id_map['TEAM_ID']))
         merged['OPPONENT_ABV'] = merged['MATCHUP'].str.split(' ').str[-1]
@@ -112,27 +120,41 @@ def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
                                     (merged['POSITION'] == position)]['PLAYER_NAME'].unique().tolist()
 
                     for stat in ['PTS', 'REB', 'AST']:
-                        # --- OVER LOGIC ---
-                        # T1 Over (High Offense vs Leaky Defense)
+                        # --- OVER LOGIC (Unchanged) ---
                         if t1_row[f'TEAM_{stat}'].values[0] >= o_limit[stat] and t2_row[stat].values[0] >= o_limit[stat]:
                             for p in get_players(T1, pos):
                                 good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T1} vs {T2}", 'Player': p, 'Pos': pos, 'Stat': stat, 'Direction': 'OVER'})
                         
-                        # T2 Over
                         if t2_row[f'TEAM_{stat}'].values[0] >= o_limit[stat] and t1_row[stat].values[0] >= o_limit[stat]:
                             for p in get_players(T2, pos):
                                 good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T2} vs {T1}", 'Player': p, 'Pos': pos, 'Stat': stat, 'Direction': 'OVER'})
 
-                        # --- UNDER LOGIC ---
+                        # --- NEW STRICT UNDER LOGIC ---
                         buff = under_buffers[stat]
                         
-                        # T1 Under (T1 produces high, but T2 defense is stingy)
-                        if t1_row[f'TEAM_{stat}'].values[0] >= (u_limit[stat] + buff) and t2_row[stat].values[0] <= u_limit[stat]:
+                        # Get actual values for readability
+                        t1_offense = t1_row[f'TEAM_{stat}'].values[0]
+                        t2_defense = t2_row[stat].values[0] # Points ALLOWED by T2
+                        
+                        t2_offense = t2_row[f'TEAM_{stat}'].values[0]
+                        t1_defense = t1_row[stat].values[0] # Points ALLOWED by T1
+
+                        # T1 Under Check
+                        # 1. Offense is high volume (Player usually scores a lot)
+                        # 2. Defense is ELITE (Below strict threshold)
+                        # 3. RATIO: Defense allows significantly less than Offense usually gets
+                        if (t1_offense >= (u_limit[stat] + buff)) and \
+                           (t2_defense <= u_limit[stat]) and \
+                           (t2_defense <= (t1_offense * stifling_ratio)): 
+                            
                             for p in get_players(T1, pos):
                                 good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T1} vs {T2}", 'Player': p, 'Pos': pos, 'Stat': stat, 'Direction': 'UNDER'})
 
-                        # T2 Under
-                        if t2_row[f'TEAM_{stat}'].values[0] >= (u_limit[stat] + buff) and t1_row[stat].values[0] <= u_limit[stat]:
+                        # T2 Under Check
+                        if (t2_offense >= (u_limit[stat] + buff)) and \
+                           (t1_defense <= u_limit[stat]) and \
+                           (t1_defense <= (t2_offense * stifling_ratio)):
+                            
                             for p in get_players(T2, pos):
                                 good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T2} vs {T1}", 'Player': p, 'Pos': pos, 'Stat': stat, 'Direction': 'UNDER'})
 
