@@ -1,2 +1,2 @@
-Access the Website using this link: https://nba-stats-backend.onrender.com/
+Access the Website using this link: https://nba-stats-backend.onrender.com/<br>
 Please allow a few seconds for the website to load. This may take a few minutes.
