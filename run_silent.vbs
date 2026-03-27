@@ -1,0 +1,4 @@
+Set WinScriptHost = CreateObject("WScript.Shell")
+' 0 = Hide the window, True = Wait for completion
+WinScriptHost.Run "python ""f:\learning to code\nba_website\daily_update.py""", 0, True
+Set WinScriptHost = Nothing

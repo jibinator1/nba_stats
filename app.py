@@ -2,21 +2,24 @@ from flask import Flask, render_template, request, redirect, url_for
 from update import make_data, create_matchups, fetch_logs
 import pandas as pd
 import os 
+from datetime import datetime
 
 app = Flask(__name__)
 
 # Helper to load global data frames
 def load_data():
-    df = pd.read_csv('vs_Position_withavg.csv')
+    csv_path = 'vs_Position_withavg.csv'
+    df = pd.read_csv(csv_path)
     pos_df = pd.read_csv('positions.csv')
     
     # Auto-update if missing rank columns
     if 'eFG_RANK' not in df.columns:
         from update import make_data
         make_data(pos_df, 25)
-        df = pd.read_csv('vs_Position_withavg.csv')
+        df = pd.read_csv(csv_path)
         
-    return df, pos_df
+    last_updated = datetime.fromtimestamp(os.path.getmtime(csv_path)).strftime('%Y-%m-%d %I:%M %p')
+    return df, pos_df, last_updated
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
@@ -29,14 +32,14 @@ def manual_update():
     # Fetch new data from NBA API before loading CSVs
     fetch_logs()
     
-    df, pos_df = load_data()
+    df, pos_df, last_updated = load_data()
     make_data(pos_df, min_val) 
     
     return redirect(url_for('index'))
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    df_global, pos_df_global = load_data()
+    df_global, pos_df_global, last_updated = load_data()
     team1 = ""
     team2 = ""
     minutes = 25
@@ -55,7 +58,7 @@ def index():
         make_data(pos_df_global, minutes)
         
         # 3. Reload the global dataframe after the file is updated
-        df_global, _ = load_data()
+        df_global, _, last_updated = load_data()
     else:
         selected_teams = ["", ""]
         sql_filter = ""
@@ -106,11 +109,12 @@ def index():
                            records=df.to_dict('records'), 
                            colnames=df.columns.values,
                            selected_teams=selected_teams, minutes = minutes,
-                           sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary)
+                           sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
+                           last_updated=last_updated)
 
 @app.route('/matchup', methods=['GET', 'POST'])
 def matchup():
-    df_global, pos_df_global = load_data()
+    df_global, pos_df_global, last_updated = load_data()
     df = df_global.copy()
     pos_df = pos_df_global.copy()
     
@@ -131,7 +135,7 @@ def matchup():
 
         # Rebuild data for matchups based on new minute threshold
         make_data(pos_df, minutes)
-        df, _ = load_data() # Reload updated data
+        df, _, last_updated = load_data() # Reload updated data
 
         teams1_list = teams1.split(",")
         teams2_list = teams2.split(",")
@@ -152,7 +156,8 @@ def matchup():
                            teams1=teams1, 
                            teams2=teams2,
                            selected_teams=["", ""],
-                           page_type='matchup', minutes = minutes)
+                           page_type='matchup', minutes = minutes,
+                           last_updated=last_updated)
 
 if __name__ == '__main__':
     app.run(debug=True)
