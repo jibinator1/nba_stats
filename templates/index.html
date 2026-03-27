@@ -14,6 +14,9 @@
 
     <div class="header-container">
         <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
+        <div class="defense-note">
+            <strong>Note:</strong> Lower ranking (e.g., 1) is highlighted in <span style="color:#d9534f;font-weight:bold;">Red</span> and means worse defense (the team allows more of that stat). Higher ranking (e.g., 30) is highlighted in <span style="color:#5cb85c;font-weight:bold;">Green</span> and means elite defense.
+        </div>
     </div>
     <p>If you want multiple teams,it should be team1,team1,team1 and in First Team Abbreviation and team12,team2,team2 in Second Team Abbreviation </p>
     <p>For example, if you want OKC vs SAS and HOU vs DEN, do First Team Abbreviation: OKC,HOU and Second Team Abbreviation: SAS,DEN</p>
@@ -50,8 +53,10 @@
                 {% for row in records %}
                 <tr>
                     {% for col in colnames %}
-                    <td class="{{ 'rank-col' if 'Rank' in col or 'RANK' in col else '' }}">
-                        {{ row[col] }}
+                    {% set b_rank = 'Rank' in col or 'RANK' in col %}
+                    {% set val = row[col] %}
+                    <td class="{{ 'rank-col' if b_rank else '' }} {% if b_rank and val is number %} {% if val <= 5 %}rank-bad{% elif val >= 25 %}rank-good{% else %}rank-avg{% endif %} {% endif %}">
+                        {{ val }}
                     </td>
                     {% endfor %}
                 </tr>
@@ -68,6 +73,9 @@
 
     <div class="header-container">
         <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
+        <div class="defense-note">
+            <strong>Note:</strong> Lower ranking (e.g., 1) is highlighted in <span style="color:#d9534f;font-weight:bold;">Red</span> and means worse defense (the team allows more of that stat). Higher ranking (e.g., 30) is highlighted in <span style="color:#5cb85c;font-weight:bold;">Green</span> and means elite defense.
+        </div>
     </div>
 
     <div class="filter-section">
@@ -85,9 +93,27 @@
                 <label>Second Team Abbreviation:</label><br>
                 <input type="text" name="team2" value="{{ selected_teams[1] or '' }}">
             </p>
-            <button type="submit">Submit (Refresh & Filter)</button>
+            <p>
+                <label>Custom SQL Search (e.g. POSITION == 'C' and AST_Rank < 5):</label><br>
+                <input type="text" name="sql_filter" value="{{ sql_filter or '' }}" placeholder="Enter custom filter...">
+            </p>
+            <div class="form-actions">
+                <button type="submit">Submit (Refresh & Filter)</button>
+            </div>
         </form>
     </div>
+
+    {% if error_msg %}
+    <div class="error-msg" style="color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 20px; background-color: #f8d7da;">
+        <strong>Error:</strong> {{ error_msg }}
+    </div>
+    {% endif %}
+
+    {% if team_summary %}
+    <div class="team-summary" style="padding: 15px; border-left: 5px solid #005A9C; border-radius: 5px; background-color: #e2f0fb; margin-bottom: 20px; font-size: 1.1rem; color: #003366;">
+        <strong>💡 Insight:</strong> {{ team_summary }}
+    </div>
+    {% endif %}
 
     <div class="table-container">
         <table>
@@ -102,8 +128,10 @@
                 {% for row in records %}
                 <tr>
                     {% for col in colnames %}
-                    <td class="{{ 'rank-col' if 'Rank' in col or 'RANK' in col else '' }}">
-                        {{ row[col] }}
+                    {% set b_rank = 'Rank' in col or 'RANK' in col %}
+                    {% set val = row[col] %}
+                    <td class="{{ 'rank-col' if b_rank else '' }} {% if b_rank and val is number %} {% if val <= 5 %}rank-bad{% elif val >= 25 %}rank-good{% else %}rank-avg{% endif %} {% endif %}">
+                        {{ val }}
                     </td>
                     {% endfor %}
                 </tr>

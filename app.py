@@ -39,6 +39,7 @@ def index():
         team1 = request.form.get('team1', '')
         team2 = request.form.get('team2', '')
         selected_teams = [team1, team2]
+        sql_filter = request.form.get('sql_filter', '')
         
         raw_minutes = request.form.get('minutes', '25')
         minutes = int(raw_minutes) if raw_minutes.isdigit() else 25
@@ -50,6 +51,7 @@ def index():
         df_global, _ = load_data()
     else:
         selected_teams = ["", ""]
+        sql_filter = ""
     
     df = df_global.copy()
     if team1 !="" and team2!="":
@@ -59,10 +61,45 @@ def index():
     elif team1=="" and  team2!="":
         df = df[df['TEAM']==team2]
 
+    error_msg = None
+    if sql_filter:
+        try:
+            # Simple translation from SQL-like to Pandas-like
+            query_str = sql_filter.replace('=', '==').replace('====', '==').replace(' AND ', ' and ').replace(' OR ', ' or ')
+            df = df.query(query_str)
+        except Exception as e:
+            error_msg = f"Invalid search query: {e}"
+
+    team_summary = ""
+    selected_team = team1 if (team1 and not team2) else team2 if (team2 and not team1) else ""
+    if selected_team and not df.empty and not error_msg:
+        rank_cols = [c for c in df.columns if 'Rank' in c]
+        if rank_cols:
+            df_team = df[df['TEAM'] == selected_team]
+            if not df_team.empty:
+                best_rank_val, worst_rank_val = -1, 999
+                best_stat, worst_stat = "", ""
+                best_pos, worst_pos = "", ""
+                for _, row in df_team.iterrows():
+                    pos = row['POSITION']
+                    for col in rank_cols:
+                        val = row[col]
+                        if pd.notna(val):
+                            stat_name = col.replace('_Rank', '')
+                            # Rank 1 is worst defense, Rank 30 is best
+                            if val < worst_rank_val:
+                                worst_rank_val, worst_stat, worst_pos = val, stat_name, pos
+                            if val > best_rank_val:
+                                best_rank_val, best_stat, best_pos = val, stat_name, pos
+                
+                if best_stat and worst_stat:
+                    team_summary = f"The {selected_team} are most vulnerable to {worst_pos} {worst_stat} (Rank {int(worst_rank_val)}) but have elite defense against {best_pos} {best_stat} (Rank {int(best_rank_val)})."
+
     return render_template('index.html', 
                            records=df.to_dict('records'), 
                            colnames=df.columns.values,
-                           selected_teams=selected_teams, minutes = minutes)
+                           selected_teams=selected_teams, minutes = minutes,
+                           sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary)
 
 @app.route('/matchup', methods=['GET', 'POST'])
 def matchup():
