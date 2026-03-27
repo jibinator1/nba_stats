@@ -46,7 +46,23 @@ def make_data(pos_df, minutes):
     merged['OPPONENT_ABV'] = merged['MATCHUP'].str.split(' ').str[-1]
     merged['OPPONENT_ID'] = merged['OPPONENT_ABV'].map(team_id_lookup)
 
-    opp_stats = merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST', 'FGM', 'FGA','FG3M', 'FG3A', 'OREB', 'DREB', 'STL', 'BLK', 'PF']].mean().reset_index()
+    merged['GAME_DATE'] = pd.to_datetime(merged['GAME_DATE'])
+    
+    # Calculate Last 5 games for each Opponent
+    opp_game_dates = merged[['OPPONENT_ID', 'GAME_DATE']].drop_duplicates().sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
+    l5_dates = opp_game_dates.groupby('OPPONENT_ID').head(5)
+    
+    l5_merged = pd.merge(merged, l5_dates, on=['OPPONENT_ID', 'GAME_DATE'], how='inner')
+    l5_opp_stats = l5_merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
+    l5_opp_stats.rename(columns={'PTS': 'L5_PTS', 'REB': 'L5_REB', 'AST': 'L5_AST'}, inplace=True)
+
+    opp_stats = merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST', 'FGM', 'FGA','FG3M', 'FG3A', 'FTA', 'FTM', 'TOV', 'MIN']].mean().reset_index()
+
+    opp_stats['eFG_PCT'] = ((opp_stats['FGM'] + 0.5 * opp_stats['FG3M']) / opp_stats['FGA']) * 100
+    opp_stats['TS_PCT'] = (opp_stats['PTS'] / (2 * (opp_stats['FGA'] + 0.44 * opp_stats['FTA']))) * 100
+    opp_stats['FTr'] = opp_stats['FTA'] / opp_stats['FGA']
+
+    opp_stats = pd.merge(opp_stats, l5_opp_stats, on=['OPPONENT_ID', 'POSITION'], how='left')
 
     #get the avg for the team stats as well
     team_stats = merged.groupby(['TEAM_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
@@ -62,13 +78,34 @@ def make_data(pos_df, minutes):
     final_result = final_result[~final_result['TEAM'].isin(['SEM', 'MEL', 'GUA', 'HAP'])]
 
     #rank pra and 3 pointers
-    final_result['PTS_Rank'] = final_result.groupby('POSITION')['PTS'].rank(ascending=False, method='min')
-    final_result['REB_Rank'] = final_result.groupby('POSITION')['REB'].rank(ascending=False, method='min')
-    final_result['AST_Rank'] = final_result.groupby('POSITION')['AST'].rank(ascending=False, method='min')
-    final_result['FG3M_Rank'] = final_result.groupby('POSITION')['FG3M'].rank(ascending=False, method='min')
-    final_result['FG3A_Rank'] = final_result.groupby('POSITION')['FG3A'].rank(ascending=False, method='min')
+    final_result['PTS_RANK'] = final_result.groupby('POSITION')['PTS'].rank(ascending=False, method='min')
+    final_result['REB_RANK'] = final_result.groupby('POSITION')['REB'].rank(ascending=False, method='min')
+    final_result['AST_RANK'] = final_result.groupby('POSITION')['AST'].rank(ascending=False, method='min')
+    final_result['FG3M_RANK'] = final_result.groupby('POSITION')['FG3M'].rank(ascending=False, method='min')
+    final_result['FG3A_RANK'] = final_result.groupby('POSITION')['FG3A'].rank(ascending=False, method='min')
+    
+    # rank new metrics
+    final_result['eFG_RANK'] = final_result.groupby('POSITION')['eFG_PCT'].rank(ascending=False, method='min')
+    final_result['TS_RANK'] = final_result.groupby('POSITION')['TS_PCT'].rank(ascending=False, method='min')
+    final_result['FTr_RANK'] = final_result.groupby('POSITION')['FTr'].rank(ascending=False, method='min')
+    # TOV is better when high, so ascending=True means lowest TOV gets rank 1 (worst defense)
+    final_result['TOV_RANK'] = final_result.groupby('POSITION')['TOV'].rank(ascending=True, method='min')
 
-    final_result[['TEAM', 'POSITION','PTS','PTS_Rank', 'REB','REB_Rank', 'AST','AST_Rank', 'FGM', 'FGA','FG3M','FG3M_Rank','FG3A','FG3A_Rank','OREB', 'DREB', 'STL', 'BLK', 'PF','TEAM_PTS', 'TEAM_REB', 'TEAM_AST']].to_csv('vs_Position_withavg.csv', index= False)
+    final_result = final_result.round(2)
+    export_cols = [
+        'TEAM', 'POSITION', 'OPP_MIN',
+        'PTS', 'PTS_RANK', 'L5_PTS',
+        'REB', 'REB_RANK', 'L5_REB',
+        'AST', 'AST_RANK', 'L5_AST',
+        'eFG_PCT', 'eFG_RANK', 'TS_PCT', 'TS_RANK',
+        'FGM', 'FGA', 'FG3M', 'FG3M_RANK', 'FG3A', 'FG3A_RANK', 
+        'FTA', 'FTM', 'FTr', 'FTr_RANK',
+        'TOV', 'TOV_RANK',
+        'TEAM_PTS', 'TEAM_REB', 'TEAM_AST'
+    ]
+    # Rename MIN to OPP_MIN
+    final_result.rename(columns={'MIN': 'OPP_MIN'}, inplace=True)
+    final_result[export_cols].to_csv('vs_Position_withavg.csv', index=False)
 
 def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
     """

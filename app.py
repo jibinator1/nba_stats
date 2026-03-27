@@ -9,6 +9,13 @@ app = Flask(__name__)
 def load_data():
     df = pd.read_csv('vs_Position_withavg.csv')
     pos_df = pd.read_csv('positions.csv')
+    
+    # Auto-update if missing rank columns
+    if 'eFG_RANK' not in df.columns:
+        from update import make_data
+        make_data(pos_df, 25)
+        df = pd.read_csv('vs_Position_withavg.csv')
+        
     return df, pos_df
 
 @app.route('/manual_update', methods=['POST'])
@@ -73,7 +80,7 @@ def index():
     team_summary = ""
     selected_team = team1 if (team1 and not team2) else team2 if (team2 and not team1) else ""
     if selected_team and not df.empty and not error_msg:
-        rank_cols = [c for c in df.columns if 'Rank' in c]
+        rank_cols = [c for c in df.columns if 'RANK' in c]
         if rank_cols:
             df_team = df[df['TEAM'] == selected_team]
             if not df_team.empty:
@@ -85,7 +92,7 @@ def index():
                     for col in rank_cols:
                         val = row[col]
                         if pd.notna(val):
-                            stat_name = col.replace('_Rank', '')
+                            stat_name = col.replace('_RANK', '')
                             # Rank 1 is worst defense, Rank 30 is best
                             if val < worst_rank_val:
                                 worst_rank_val, worst_stat, worst_pos = val, stat_name, pos

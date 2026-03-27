@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .table-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +21,13 @@
     <div class="header-container">
         <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
         <div class="defense-note">
-            <strong>Note:</strong> Lower ranking (e.g., 1) is highlighted in <span style="color:#d9534f;font-weight:bold;">Red</span> and means worse defense (the team allows more of that stat). Higher ranking (e.g., 30) is highlighted in <span style="color:#5cb85c;font-weight:bold;">Green</span> and means elite defense.
+            <p><strong>Note:</strong> Lower ranking (e.g., 1) is highlighted in <span style="color:#d9534f;font-weight:bold;">Red</span> and means worse defense (the team allows more of that stat). Higher ranking (e.g., 30) is highlighted in <span style="color:#5cb85c;font-weight:bold;">Green</span> and means elite defense.</p>
+            <ul style="font-size:0.9em; margin-top:5px; padding-left:20px;">
+                <li><strong>eFG_PCT & TS_PCT:</strong> Advanced shooting limits (Effective FG% & True Shooting %). Higher allowed = worse defense.</li>
+                <li><strong>FTr:</strong> Free Throw Rate allowed (FTA / FGA). High FTr = opponents get to the free throw line often.</li>
+                <li><strong>TOV:</strong> Turnovers forced. <em>Higher TOV means BETTER defense</em>, so Rank 1 = fewest turnovers forced (worst).</li>
+                <li><strong>L5:</strong> Opponent's average over their Last 5 games to show hot/cold trends.</li>
+            </ul>
         </div>
     </div>
     <p>If you want multiple teams,it should be team1,team1,team1 and in First Team Abbreviation and team12,team2,team2 in Second Team Abbreviation </p>
@@ -74,7 +86,13 @@
     <div class="header-container">
         <h2>NBA Opponent Stats by Position (Last 20 Games)</h2>
         <div class="defense-note">
-            <strong>Note:</strong> Lower ranking (e.g., 1) is highlighted in <span style="color:#d9534f;font-weight:bold;">Red</span> and means worse defense (the team allows more of that stat). Higher ranking (e.g., 30) is highlighted in <span style="color:#5cb85c;font-weight:bold;">Green</span> and means elite defense.
+            <p><strong>Note:</strong> Lower ranking (e.g., 1) is highlighted in <span style="color:#d9534f;font-weight:bold;">Red</span> and means worse defense (the team allows more of that stat). Higher ranking (e.g., 30) is highlighted in <span style="color:#5cb85c;font-weight:bold;">Green</span> and means elite defense.</p>
+            <ul style="font-size:0.9em; margin-top:5px; padding-left:20px;">
+                <li><strong>eFG_PCT & TS_PCT:</strong> Advanced shooting limits (Effective FG% & True Shooting %). Higher allowed = worse defense.</li>
+                <li><strong>FTr:</strong> Free Throw Rate allowed (FTA / FGA). High FTr = opponents get to the free throw line often.</li>
+                <li><strong>TOV:</strong> Turnovers forced. <em>Higher TOV means BETTER defense</em>, so Rank 1 = fewest turnovers forced (worst).</li>
+                <li><strong>L5:</strong> Opponent's average over their Last 5 games.</li>
+            </ul>
         </div>
     </div>
 
@@ -94,7 +112,7 @@
                 <input type="text" name="team2" value="{{ selected_teams[1] or '' }}">
             </p>
             <p>
-                <label>Custom SQL Search (e.g. POSITION == 'C' and AST_Rank < 5):</label><br>
+                <label>Custom SQL Search (e.g. POSITION == 'C' and AST_RANK < 5):</label><br>
                 <input type="text" name="sql_filter" value="{{ sql_filter or '' }}" placeholder="Enter custom filter...">
             </p>
             <div class="form-actions">
