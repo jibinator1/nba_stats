@@ -29,11 +29,11 @@
                 </p>
             </div>
             <div class="hero-notes">
-                <ul>
-                    <li>Lower rank = <strong>Softer</strong> exposure/Higher points allowed.</li>
-                    <li>Higher rank = <strong>Tighter</strong> defense/Elite coverage.</li>
-                    <li>Radar uses exploitability scaling (100 = weakest defense).</li>
-                </ul>
+                <span>Lower rank = <strong>Softer</strong></span>
+                <span class="note-sep">|</span>
+                <span>Higher rank = <strong>Tighter</strong></span>
+                <span class="note-sep">|</span>
+                <span>Radar: 100 = weakest defense</span>
             </div>
         </section>
 
@@ -83,46 +83,51 @@
             </form>
         </section>
 
-        <section class="controls-grid">
-            <div class="control-card">
-                <h4>Display Modes</h4>
-                <div class="btn-row">
-                    <button type="button" class="small-btn" onclick="setViewMode('quick')">Quick View</button>
-                    <button type="button" class="small-btn" onclick="setViewMode('full')">Full Details</button>
-                    <button type="button" class="small-btn" onclick="toggleLeagueAverage()">Toggle League Avg</button>
+        <section class="controls-bar">
+            <div class="controls-inner">
+                <div class="ctrl-group">
+                    <button type="button" class="small-btn" onclick="setViewMode('quick')">Quick</button>
+                    <button type="button" class="small-btn" onclick="setViewMode('full')">Full</button>
+                    <button type="button" class="small-btn" onclick="toggleLeagueAverage()">Avg</button>
                 </div>
-            </div>
-            <div class="control-card">
-                <h4>Matchup Presets</h4>
-                <div class="btn-row" id="presets-container">
-                    <button type="button" class="small-btn" data-preset="pg" onclick="applyPreset('pg')">Elite PGs</button>
-                    <button type="button" class="small-btn" data-preset="c" onclick="applyPreset('c')">Big Men Matchups</button>
-                    <button type="button" class="small-btn" data-preset="threept" onclick="applyPreset('threept')">Soft 3PT Lines</button>
-                    <button type="button" class="small-btn" onclick="clearPreset()">Reset All</button>
+                <span class="ctrl-divider"></span>
+                <div class="ctrl-group" id="presets-container">
+                    <button type="button" class="small-btn" data-preset="pg" onclick="applyPreset('pg')">PGs</button>
+                    <button type="button" class="small-btn" data-preset="c" onclick="applyPreset('c')">Bigs</button>
+                    <button type="button" class="small-btn" data-preset="threept" onclick="applyPreset('threept')">3PT</button>
+                    <button type="button" class="small-btn" onclick="clearPreset()">Reset</button>
                 </div>
-            </div>
-            <div class="control-card">
-                <h4>Export & Tuning</h4>
-                <div class="btn-row">
-                    <button type="button" class="small-btn" onclick="exportTableCsv()">Export CSV</button>
-                    <div class="slider-wrap">
-                        <label class="slider-label" for="heatSlider">Heatmap Intensity</label>
+                <span class="ctrl-divider"></span>
+                <div class="ctrl-group">
+                    <button type="button" class="small-btn" onclick="exportTableCsv()">CSV</button>
+                    <div class="slider-compact">
+                        <label for="heatSlider">Heat</label>
                         <input id="heatSlider" type="range" min="0" max="1" step="0.1" value="1" oninput="setHeatIntensity(this.value)">
                     </div>
                 </div>
+                {% if colnames|length > 0 %}
+                <span class="ctrl-divider"></span>
+                <div class="ctrl-group">
+                    <div class="col-dropdown-wrap">
+                        <button type="button" class="small-btn" id="colDropdownBtn" onclick="toggleColDropdown()">Columns ▾</button>
+                        <div class="col-dropdown" id="colDropdown">
+                            <div class="col-dropdown-actions">
+                                <button type="button" onclick="toggleAllCols(true)">All</button>
+                                <button type="button" onclick="toggleAllCols(false)">None</button>
+                            </div>
+                            <div class="col-dropdown-list">
+                                {% for col in colnames %}
+                                <label><input type="checkbox" class="col-toggle" data-col="{{ col }}" {% if col not in default_hidden_cols %}checked{% endif %}> {{ col }}</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </section>
 
         {% if colnames|length > 0 %}
-        <section class="column-toggle-wrap">
-            <h4 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px;">Toggle Specific Columns</h4>
-            <div class="column-toggle-list">
-                {% for col in colnames %}
-                <label><input type="checkbox" class="col-toggle" data-col="{{ col }}" {% if col not in default_hidden_cols %}checked{% endif %}> {{ col }}</label>
-                {% endfor %}
-            </div>
-        </section>
-
         <section class="table-section">
             <div class="table-container">
                 <table id="statsTable">
@@ -441,6 +446,25 @@
             link.download = "nba_matchup_analysis.csv";
             link.click();
         }
+
+        function toggleColDropdown() {
+            document.getElementById('colDropdown').classList.toggle('open');
+        }
+
+        function toggleAllCols(on) {
+            document.querySelectorAll('.col-toggle').forEach(cb => {
+                cb.checked = on;
+            });
+            setViewMode(viewMode);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const wrap = document.querySelector('.col-dropdown-wrap');
+            if (wrap && !wrap.contains(e.target)) {
+                document.getElementById('colDropdown')?.classList.remove('open');
+            }
+        });
 
         document.querySelectorAll('.col-toggle').forEach(cb => {
             cb.addEventListener('change', () => setViewMode(viewMode));
