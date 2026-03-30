@@ -3,44 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Stats | Matchup Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="page-shell">
-        <nav class="tabs">
-            <a href="/" class="tab-link active">Main Defense</a>
-            <a href="/matchup" target="_blank" class="tab-link">View Good Matchups (New Tab)</a>
+        <nav class="nav-bar">
+            <div class="brand">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                <span>NBA Matchup Hub</span>
+            </div>
+            <div class="tabs">
+                <a href="/" class="tab-link {{ 'active' if page_type != 'matchup' }}">Defense Ranks</a>
+                <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Good Matchups</a>
+            </div>
         </nav>
 
-        <header class="header-container hero-card">
-            <div>
-                <h2>NBA Opponent Stats by Position</h2>
-                <p class="updated-at">Data Last Refreshed: <strong>{{ last_updated }}</strong></p>
+        <section class="hero-container">
+            <div class="hero-content">
+                <h2>{{ 'Team Matchup Insights' if page_type == 'matchup' else 'Opponent Defensive Ranks' }}</h2>
+                <p class="updated-at">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                    Refreshed: <strong>{{ last_updated }}</strong>
+                </p>
             </div>
-            <div class="defense-note">
-                <p><strong>How to read this:</strong> lower ranks mean softer defense, higher ranks mean tougher defense.</p>
+            <div class="hero-notes">
                 <ul>
-                    <li><strong>Quick View:</strong> core ranks plus composite <strong>MATCHUP_SCORE</strong>.</li>
-                    <li><strong>Full View:</strong> every available metric with context columns.</li>
-                    <li><strong>Radar:</strong> rank-scaled to show exploitability, not raw stat volume.</li>
+                    <li>Lower rank = <strong>Softer</strong> exposure/Higher points allowed.</li>
+                    <li>Higher rank = <strong>Tighter</strong> defense/Elite coverage.</li>
+                    <li>Radar uses exploitability scaling (100 = weakest defense).</li>
                 </ul>
             </div>
-        </header>
+        </section>
+
+        {% if error_msg %}
+        <div class="error-msg"><strong>Query Error:</strong> {{ error_msg }}</div>
+        {% endif %}
+
+        {% if team_summary %}
+        <div class="team-summary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            {{ team_summary }}
+        </div>
+        {% endif %}
 
         <section class="filter-section">
             <form method="POST" class="filter-form">
                 <label>
-                    <span>Minutes</span>
+                    <span>Minutes Playtime Threshold</span>
                     <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 25 }}" required>
                 </label>
                 {% if page_type == 'matchup' %}
                 <label>
-                    <span>First Team Abbreviation(s)</span>
+                    <span>Teams Set A (OKC,HOU)</span>
                     <input type="text" name="teams1" value="{{ teams1 or '' }}" placeholder="OKC,HOU">
                 </label>
                 <label>
-                    <span>Second Team Abbreviation(s)</span>
+                    <span>Teams Set B (SAS,DEN)</span>
                     <input type="text" name="teams2" value="{{ teams2 or '' }}" placeholder="SAS,DEN">
                 </label>
                 {% else %}
@@ -53,67 +73,57 @@
                     <input type="text" name="team2" value="{{ selected_teams[1] or '' }}" placeholder="BOS">
                 </label>
                 <label class="wide-label">
-                    <span>Custom Query</span>
+                    <span>Power Query (SQL String)</span>
                     <input id="sql_filter" type="text" name="sql_filter" value="{{ sql_filter or '' }}" placeholder="POSITION == 'C' and MATCHUP_SCORE >= 20">
                 </label>
                 {% endif %}
-                <div class="form-actions">
-                    <button type="submit" class="primary-btn">Apply</button>
+                <div class="form-actions" style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="primary-btn">Update Analysis</button>
                 </div>
             </form>
         </section>
 
-        {% if error_msg %}
-        <div class="error-msg"><strong>Error:</strong> {{ error_msg }}</div>
-        {% endif %}
-
-        {% if team_summary %}
-        <div class="team-summary"><strong>Insight:</strong> {{ team_summary }}</div>
-        {% endif %}
-
         <section class="controls-grid">
             <div class="control-card">
-                <h4>View Mode</h4>
+                <h4>Display Modes</h4>
                 <div class="btn-row">
                     <button type="button" class="small-btn" onclick="setViewMode('quick')">Quick View</button>
-                    <button type="button" class="small-btn" onclick="setViewMode('full')">Full View</button>
+                    <button type="button" class="small-btn" onclick="setViewMode('full')">Full Details</button>
                     <button type="button" class="small-btn" onclick="toggleLeagueAverage()">Toggle League Avg</button>
                 </div>
             </div>
             <div class="control-card">
-                <h4>Presets</h4>
-                <div class="btn-row">
-                    <button type="button" class="small-btn" onclick="applyPreset('pg')">Best PG Matchups</button>
-                    <button type="button" class="small-btn" onclick="applyPreset('c')">Best C Matchups</button>
-                    <button type="button" class="small-btn" onclick="applyPreset('threept')">Worst 3PT Defense</button>
-                    <button type="button" class="small-btn" onclick="clearPreset()">Clear Preset</button>
+                <h4>Matchup Presets</h4>
+                <div class="btn-row" id="presets-container">
+                    <button type="button" class="small-btn" data-preset="pg" onclick="applyPreset('pg')">Elite PGs</button>
+                    <button type="button" class="small-btn" data-preset="c" onclick="applyPreset('c')">Big Men Matchups</button>
+                    <button type="button" class="small-btn" data-preset="threept" onclick="applyPreset('threept')">Soft 3PT Lines</button>
+                    <button type="button" class="small-btn" onclick="clearPreset()">Reset All</button>
                 </div>
             </div>
             <div class="control-card">
-                <h4>Table Tools</h4>
+                <h4>Export & Tuning</h4>
                 <div class="btn-row">
                     <button type="button" class="small-btn" onclick="exportTableCsv()">Export CSV</button>
-                    <label class="slider-label" for="heatSlider">Heatmap Intensity</label>
-                    <input id="heatSlider" type="range" min="0.2" max="1" step="0.1" value="1" oninput="setHeatIntensity(this.value)">
+                    <div class="slider-wrap">
+                        <label class="slider-label" for="heatSlider">Heatmap Intensity</label>
+                        <input id="heatSlider" type="range" min="0" max="1" step="0.1" value="1" oninput="setHeatIntensity(this.value)">
+                    </div>
                 </div>
             </div>
         </section>
 
         {% if colnames|length > 0 %}
         <section class="column-toggle-wrap">
-            <div class="section-head">
-                <h4>Column Visibility</h4>
-                <p id="presetStatus" class="preset-status">No preset active.</p>
-            </div>
+            <h4 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px;">Toggle Specific Columns</h4>
             <div class="column-toggle-list">
                 {% for col in colnames %}
                 <label><input type="checkbox" class="col-toggle" data-col="{{ col }}" {% if col not in default_hidden_cols %}checked{% endif %}> {{ col }}</label>
                 {% endfor %}
             </div>
         </section>
-        {% endif %}
 
-        <section class="table-chart-layout">
+        <section class="table-section">
             <div class="table-container">
                 <table id="statsTable">
                     <thead>
@@ -132,23 +142,17 @@
                         </tr>
                         {% endif %}
                         {% for row in records %}
-                        <tr class="data-row" onclick='showRadar({{ row|tojson|safe }})'>
+                        <tr class="data-row" onclick='openRadarPanel({{ row|tojson|safe }}, this)'>
                             {% for col in colnames %}
                             {% set val = row[col] %}
-                            {% set b_rank = 'RANK' in col %}
-                            {% set is_l5 = col.startswith('L5_') %}
-                            {% set base_stat = col.replace('L5_', '') %}
-                            {% set trend_key = base_stat ~ '_TREND' %}
-                            <td data-col="{{ col }}" class="{{ 'rank-col' if b_rank else '' }} {% if b_rank and val is number %}{% if val <= 5 %}rank-bad{% elif val >= 25 %}rank-good{% else %}rank-avg{% endif %}{% endif %}">
+                            {% set is_rank = 'RANK' in col %}
+                            <td data-col="{{ col }}" class="{{ 'rank-col' if is_rank else '' }} {% if is_rank and val is number %}{% if val <= 6 %}rank-bad{% elif val >= 25 %}rank-good{% else %}rank-avg{% endif %}{% endif %}">
                                 {% if col == 'TEAM' %}
-                                    {{ val }}
-                                {% elif is_l5 and trend_key in row %}
-                                    <span class="spark-cell">
-                                        <span class="spark-bar" style="width: {{ ((val if val is number else 0) * 3)|round(0, 'ceil') }}px;"></span>
-                                        <span>{{ val }} {{ row[trend_key] }}</span>
-                                    </span>
-                                {% elif col in ['PTS_RANK', 'REB_RANK', 'AST_RANK'] and trend_key in row %}
-                                    {{ val }} {{ row[trend_key] }}
+                                    <span style="font-weight: 800;">{{ val }}</span>
+                                {% elif col.startswith('L5_') %}
+                                    {% set base_stat = col.replace('L5_', '') %}
+                                    {% set trend = row[base_stat ~ '_TREND'] or '' %}
+                                    <span style="font-feature-settings: 'tnum';">{{ val }} <span style="font-size: 11px; opacity:0.7;">{{ trend }}</span></span>
                                 {% else %}
                                     {{ val }}
                                 {% endif %}
@@ -159,86 +163,201 @@
                     </tbody>
                 </table>
             </div>
-
-            <aside class="chart-panel">
-                <div class="section-head">
-                    <h4>Team Defensive Profile</h4>
-                    <p>Click a row to compare it against league average.</p>
-                </div>
-                <canvas id="radarChart" height="260"></canvas>
-            </aside>
         </section>
+        {% endif %}
+    </div>
+
+    <!-- Side Radar Panel -->
+    <div id="radarOverlay" class="radar-overlay" onclick="closeRadarPanel()"></div>
+    <div id="radarPanel" class="radar-panel">
+        <div class="radar-header">
+            <div>
+                <h3 id="panelTeam">Team Profile</h3>
+                <p id="panelSubtitle">Matched against League Average</p>
+            </div>
+            <button class="close-panel" onclick="closeRadarPanel()">&times;</button>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+
+        <div class="radar-legend">
+            <p><strong>Note:</strong> Scaled to 0-100 match quality score.</p>
+            <p>100 = Softest defense (best matchup).<br>0 = Toughest defense.</p>
+        </div>
     </div>
 
     <script>
         const quickCols = {{ quick_cols|tojson|safe }};
         const defaultHiddenCols = new Set({{ default_hidden_cols|tojson|safe }});
         const radarMetrics = {{ radar_metrics|tojson|safe }};
-        const leagueAvgRow = {% if league_avg_row %}{{ league_avg_row|tojson|safe }}{% else %}null{% endif %};
+        const leagueAvgRaw = {% if league_avg_row %}{{ league_avg_row|tojson|safe }}{% else %}null{% endif %};
+        
         let currentSort = { index: -1, asc: true };
         let radarInstance = null;
         let viewMode = 'full';
-        let activePreset = '';
 
         function setHeatIntensity(v) {
             document.documentElement.style.setProperty('--heat-opacity', v);
         }
 
-        function cellValue(row, col) {
+        // Improved value extractor
+        function getRawValue(row, col) {
             const cell = row.querySelector(`td[data-col="${col}"]`);
-            return cell ? cell.innerText.trim() : '';
+            if (!cell) return "";
+            // Handle cases where we have trends or extra spans
+            return Array.from(cell.childNodes)
+                        .filter(node => node.nodeType === 3 || (node.nodeType === 1 && !node.classList.contains('extra')))
+                        .map(node => node.textContent.trim())
+                        .join('')
+                        .replace(/[^\d.-]/g, '');
         }
 
-        function numericCellValue(row, col) {
-            const raw = cellValue(row, col).replace(/[^\d.-]/g, '');
-            const num = Number(raw);
-            return Number.isFinite(num) ? num : null;
+        function getCellValue(row, col) {
+            const cell = row.querySelector(`td[data-col="${col}"]`);
+            return cell ? cell.innerText.split(' ')[0].trim() : "";
         }
 
-        function setPresetStatus(text) {
-            const status = document.getElementById('presetStatus');
-            if (status) status.textContent = text;
+        function openRadarPanel(row, el) {
+            // Highlight selected row
+            document.querySelectorAll('tr.selected-row').forEach(r => r.classList.remove('selected-row'));
+            if (el) el.classList.add('selected-row');
+
+            const overlay = document.getElementById('radarOverlay');
+            const panel = document.getElementById('radarPanel');
+            
+            document.getElementById('panelTeam').textContent = `${row.TEAM} - ${row.POSITION}`;
+            document.getElementById('panelSubtitle').textContent = `Matchup Exploitability Profile`;
+
+            overlay.style.display = 'block';
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+                panel.classList.add('open');
+            }, 10);
+
+            renderRadar(row);
+        }
+
+        function closeRadarPanel() {
+            const overlay = document.getElementById('radarOverlay');
+            const panel = document.getElementById('radarPanel');
+            
+            overlay.style.opacity = '0';
+            panel.classList.remove('open');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+
+            document.querySelectorAll('tr.selected-row').forEach(r => r.classList.remove('selected-row'));
+        }
+
+        function renderRadar(row) {
+            const ctx = document.getElementById('radarChart');
+            if (radarInstance) radarInstance.destroy();
+
+            const labels = radarMetrics.map(m => m.label);
+            const teamData = radarMetrics.map(m => calcMatchupStrength(row[m.column]));
+            const leagueData = leagueAvgRaw ? radarMetrics.map(m => calcMatchupStrength(leagueAvgRaw[m.column])) : null;
+
+            radarInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: `${row.TEAM} ${row.POSITION}`,
+                            data: teamData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            pointBackgroundColor: '#3b82f6',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'League Average',
+                            data: leagueData,
+                            borderColor: '#94a3b8',
+                            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                            pointBackgroundColor: '#94a3b8',
+                            borderWidth: 2,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const score = context.parsed.r;
+                                    const rank = 30 - (score * 29 / 100);
+                                    return `${context.dataset.label}: Rank ${Math.round(rank)} (Score: ${score.toFixed(1)})`;
+                                }
+                            }
+                        }
+                    },
+
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            pointLabels: {
+                                font: { size: 11, weight: '700' },
+                                color: '#475569'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Better Scaling: Rank 1 -> 100 (Peak exposure), Rank 30 -> 10 (Elite defense)
+        function calcMatchupStrength(rank) {
+            const n = parseFloat(rank);
+            if (isNaN(n)) return 50;
+            // Linear mapping: 1 -> 100, 30 -> 0 (or slight floor)
+            return Math.max(0, Math.min(100, ((30 - n) / 29) * 100));
         }
 
         function applyPreset(key) {
-            activePreset = key;
+            // Update UI state
+            document.querySelectorAll('[data-preset]').forEach(btn => btn.classList.remove('active-preset'));
+            document.querySelector(`[data-preset="${key}"]`).classList.add('active-preset');
+
             const rows = Array.from(document.querySelectorAll('tr.data-row'));
-            let predicate = () => true;
+            let filterCol = 'POSITION';
+            let filterVal = '';
             let sortCol = 'MATCHUP_SCORE';
             let asc = false;
-            let status = 'Preset active.';
 
             if (key === 'pg') {
-                predicate = row => cellValue(row, 'POSITION') === 'PG';
-                status = 'Showing all PG rows sorted by MATCHUP_SCORE.';
+                filterVal = 'PG';
             } else if (key === 'c') {
-                predicate = row => cellValue(row, 'POSITION') === 'C';
-                status = 'Showing all C rows sorted by MATCHUP_SCORE.';
+                filterVal = 'C';
             } else if (key === 'threept') {
-                predicate = row => {
-                    const rank = numericCellValue(row, 'FG3M_RANK');
-                    return rank !== null && rank <= 10;
-                };
+                filterVal = ''; // All positions
                 sortCol = 'FG3M_RANK';
-                asc = true;
-                status = 'Showing the 10 weakest 3PT defenses.';
+                asc = true; // Lower rank = more 3PT allowed
             }
 
             rows.forEach(row => {
-                row.classList.toggle('hidden', !predicate(row));
+                const pos = getCellValue(row, 'POSITION');
+                const isMatch = (filterVal === "" || pos === filterVal);
+                row.classList.toggle('hidden', !isMatch);
             });
 
-            if (sortCol) {
-                sortTableByColumnValue(sortCol, asc);
-            }
-
-            setPresetStatus(status);
+            sortTableByColumnValue(sortCol, asc);
         }
 
         function clearPreset() {
-            activePreset = '';
+            document.querySelectorAll('[data-preset]').forEach(btn => btn.classList.remove('active-preset'));
             document.querySelectorAll('tr.data-row').forEach(row => row.classList.remove('hidden'));
-            setPresetStatus('No preset active.');
             setViewMode(viewMode);
         }
 
@@ -247,155 +366,87 @@
             const table = document.getElementById('statsTable');
             if (!table) return;
             const showCols = mode === 'quick' ? new Set(quickCols) : null;
+            
             table.querySelectorAll('[data-col]').forEach(el => {
                 const col = el.getAttribute('data-col');
                 let visible = true;
                 if (defaultHiddenCols.has(col) && mode === 'full') visible = false;
                 if (showCols && !showCols.has(col)) visible = false;
+                
                 const checkbox = document.querySelector(`.col-toggle[data-col="${col}"]`);
                 if (checkbox && !checkbox.checked) visible = false;
+                
                 el.style.display = visible ? '' : 'none';
             });
         }
 
         function toggleLeagueAverage() {
-            const row = document.getElementById('leagueAvgRow');
-            if (!row) return;
-            row.classList.toggle('hidden');
-        }
-
-        function sortTableByColumnValue(column, asc = true, rowsOverride = null) {
-            const table = document.getElementById('statsTable');
-            if (!table) return;
-            const ths = Array.from(table.tHead.rows[0].cells);
-            const index = ths.findIndex(th => th.getAttribute('data-col') === column);
-            if (index === -1) return;
-            const rows = rowsOverride || Array.from(table.tBodies[0].querySelectorAll('tr.data-row'));
-
-            rows.sort((a, b) => {
-                const av = a.cells[index].innerText.trim();
-                const bv = b.cells[index].innerText.trim();
-                const an = parseFloat(av);
-                const bn = parseFloat(bv);
-                const cmp = (!isNaN(an) && !isNaN(bn)) ? an - bn : av.localeCompare(bv);
-                return asc ? cmp : -cmp;
-            });
-
-            const tbody = table.tBodies[0];
-            rows.forEach(row => tbody.appendChild(row));
-
-            ths.forEach(h => {
-                const indicator = h.querySelector('.sort-indicator');
-                if (indicator) indicator.textContent = '';
-            });
-            const sortedHeader = ths[index].querySelector('.sort-indicator');
-            if (sortedHeader) sortedHeader.textContent = asc ? '▲' : '▼';
-            currentSort = { index, asc };
+            document.getElementById('leagueAvgRow').classList.toggle('hidden');
         }
 
         function sortTableByColumn(th) {
-            const column = th.getAttribute('data-col');
-            const ths = Array.from(document.getElementById('statsTable').tHead.rows[0].cells);
+            const col = th.getAttribute('data-col');
+            const ths = Array.from(th.parentNode.cells);
             const index = ths.indexOf(th);
             const asc = currentSort.index === index ? !currentSort.asc : true;
-            sortTableByColumnValue(column, asc);
+            sortTableByColumnValue(col, asc);
+        }
+
+        function sortTableByColumnValue(colName, asc) {
+            const table = document.getElementById('statsTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.querySelectorAll('tr.data-row'));
+            const ths = Array.from(table.tHead.rows[0].cells);
+            const colIndex = ths.findIndex(th => th.getAttribute('data-col') === colName);
+            
+            if (colIndex === -1) return;
+
+            rows.sort((a, b) => {
+                const av = getCellValue(a, colName);
+                const bv = getCellValue(b, colName);
+                const an = parseFloat(av);
+                const bn = parseFloat(bv);
+                
+                if (!isNaN(an) && !isNaN(bn)) {
+                    return asc ? an - bn : bn - an;
+                }
+                return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+            });
+
+            rows.forEach(r => tbody.appendChild(r));
+            
+            // Update arrows
+            ths.forEach(th => {
+                const ind = th.querySelector('.sort-indicator');
+                if (ind) ind.textContent = '';
+            });
+            const activeTh = ths[colIndex];
+            const ind = activeTh.querySelector('.sort-indicator');
+            if (ind) ind.textContent = asc ? ' ▲' : ' ▼';
+            
+            currentSort = { index: colIndex, asc };
         }
 
         function exportTableCsv() {
             const table = document.getElementById('statsTable');
-            const rows = Array.from(table.querySelectorAll('tr')).filter(r => !r.classList.contains('hidden'));
+            const rows = Array.from(table.rows).filter(r => r.offsetParent !== null);
             const csv = rows.map(r => {
-                const cells = Array.from(r.querySelectorAll('th,td')).filter(c => c.style.display !== 'none');
-                return cells.map(c => `"${c.innerText.replace(/"/g, '""')}"`).join(',');
+                const cells = Array.from(r.cells).filter(c => c.style.display !== 'none');
+                return cells.map(c => `"${c.innerText.trim().replace(/"/g, '""')}"`).join(',');
             }).join('\n');
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'nba_matchups.csv';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function radarValue(rank) {
-            const n = Number(rank);
-            if (!Number.isFinite(n)) return 0;
-            return Math.max(0, Math.min(100, ((30 - n) / 29) * 100));
-        }
-
-        function buildRadarDataset(row) {
-            return radarMetrics.map(metric => radarValue(row[metric.column]));
-        }
-
-        function showRadar(row) {
-            const ctx = document.getElementById('radarChart');
-            if (!ctx) return;
-
-            const labels = radarMetrics.map(metric => metric.label);
-            const teamValues = buildRadarDataset(row);
-            const leagueValues = leagueAvgRow ? buildRadarDataset(leagueAvgRow) : null;
-
-            if (radarInstance) radarInstance.destroy();
-            radarInstance = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: `${row.TEAM || ''} ${row.POSITION || ''}`.trim(),
-                            data: teamValues,
-                            borderColor: '#1a4371',
-                            backgroundColor: 'rgba(26, 67, 113, 0.18)',
-                            pointBackgroundColor: '#1a4371',
-                            borderWidth: 2
-                        },
-                        ...(leagueValues ? [{
-                            label: 'League Avg',
-                            data: leagueValues,
-                            borderColor: '#6c757d',
-                            backgroundColor: 'rgba(108, 117, 125, 0.12)',
-                            pointBackgroundColor: '#6c757d',
-                            borderWidth: 1.5
-                        }] : [])
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => `${context.dataset.label}: ${context.parsed.r.toFixed(1)}`
-                            }
-                        }
-                    },
-                    scales: {
-                        r: {
-                            min: 0,
-                            max: 100,
-                            ticks: {
-                                stepSize: 20,
-                                backdropColor: 'transparent'
-                            },
-                            pointLabels: {
-                                font: { size: 12, weight: '600' }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Exploitability score (higher = softer defense)'
-                            }
-                        }
-                    }
-                }
-            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "nba_matchup_analysis.csv";
+            link.click();
         }
 
         document.querySelectorAll('.col-toggle').forEach(cb => {
             cb.addEventListener('change', () => setViewMode(viewMode));
         });
 
+        // Initialize display
         setViewMode('full');
     </script>
 </body>
