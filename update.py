@@ -80,16 +80,16 @@ def make_data(pos_df, minutes):
         'TOV': 'sum'
     })
     game_team['POSS'] = game_team['FGA'] + 0.44 * game_team['FTA'] - game_team['OREB'] + game_team['TOV']
-    game_team = game_team.rename(columns={'TEAM_ID': 'TEAM_ID_ALLOWED', 'PTS': 'OPP_PTS', 'POSS': 'OPP_POSS'})
+    game_team = game_team.rename(columns={'PTS': 'OPP_PTS', 'POSS': 'OPP_POSS'})
 
     defense_games = game_team.merge(game_team, on='GAME_ID', suffixes=('_ALLOWED', '_DEF'))
     defense_games = defense_games[defense_games['TEAM_ID_ALLOWED'] != defense_games['TEAM_ID_DEF']]
 
     defense_context = defense_games.groupby('TEAM_ID_DEF', as_index=False).agg({
-        'OPP_PTS': 'sum',
-        'OPP_POSS': 'sum'
-    }).rename(columns={'TEAM_ID_DEF': 'TEAM_ID'})
-    defense_context['PACE'] = defense_games.groupby('TEAM_ID_DEF')['OPP_POSS'].mean().values
+        'OPP_PTS_ALLOWED': 'sum',
+        'OPP_POSS_ALLOWED': 'sum'
+    }).rename(columns={'TEAM_ID_DEF': 'TEAM_ID', 'OPP_PTS_ALLOWED': 'OPP_PTS', 'OPP_POSS_ALLOWED': 'OPP_POSS'})
+    defense_context['PACE'] = defense_games.groupby('TEAM_ID_DEF')['OPP_POSS_ALLOWED'].mean().values
     defense_context['DEF_RTG'] = (defense_context['OPP_PTS'] / defense_context['OPP_POSS']) * 100
 
     final_result = pd.merge(opp_stats, team_stats, left_on=['OPPONENT_ID', 'POSITION'], right_on=['TEAM_ID', 'POSITION'], how='left')
