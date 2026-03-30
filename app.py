@@ -13,6 +13,17 @@ QUICK_VIEW_COLUMNS = [
 
 DEFAULT_HIDDEN_COLUMNS = {'TS_PCT', 'TS_RANK'}
 
+RADAR_COLUMNS = [
+    ('PTS_RANK', 'PTS'),
+    ('REB_RANK', 'REB'),
+    ('AST_RANK', 'AST'),
+    ('eFG_RANK', 'eFG'),
+    ('FG3M_RANK', '3PM'),
+    ('TOV_RANK', 'TOV'),
+    ('DEF_RTG_RANK', 'DEF RTG'),
+    ('PACE_RANK', 'PACE'),
+]
+
 # Helper to load global data frames
 def load_data():
     csv_path = 'vs_Position_withavg.csv'
@@ -46,6 +57,15 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             df[trend_col] = diff.apply(lambda x: '↑' if x > 0.5 else ('↓' if x < -0.5 else '→'))
     return df
 
+def apply_query_filter(df: pd.DataFrame, sql_filter: str):
+    if not sql_filter:
+        return df, None
+
+    try:
+        return df.query(sql_filter, engine='python'), None
+    except Exception as e:
+        return df, f"Invalid search query: {e}"
+
 def build_league_average_row(df: pd.DataFrame):
     if df.empty:
         return None
@@ -61,6 +81,9 @@ def build_league_average_row(df: pd.DataFrame):
     if 'POSITION' in avg_row:
         avg_row['POSITION'] = 'ALL'
     return avg_row
+
+def build_radar_payload():
+    return [{'column': col, 'label': label} for col, label in RADAR_COLUMNS]
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
@@ -104,7 +127,7 @@ def index():
         selected_teams = ["", ""]
         sql_filter = ""
     
-    df = df_global.copy()
+    df = enrich_dataframe(df_global.copy())
     if team1 !="" and team2!="":
         df = df[df['TEAM'].isin(selected_teams)]
     elif team1!="" and team2=="":
@@ -114,12 +137,7 @@ def index():
 
     error_msg = None
     if sql_filter:
-        try:
-            # Simple translation from SQL-like to Pandas-like
-            query_str = sql_filter.replace('=', '==').replace('====', '==').replace(' AND ', ' and ').replace(' OR ', ' or ')
-            df = df.query(query_str)
-        except Exception as e:
-            error_msg = f"Invalid search query: {e}"
+        df, error_msg = apply_query_filter(df, sql_filter)
 
     team_summary = ""
     selected_team = team1 if (team1 and not team2) else team2 if (team2 and not team1) else ""
@@ -146,25 +164,26 @@ def index():
                 if best_stat and worst_stat:
                     team_summary = f"The {selected_team} are most vulnerable to {worst_pos} {worst_stat} (Rank {int(worst_rank_val)}) but have elite defense against {best_pos} {best_stat} (Rank {int(best_rank_val)})."
 
-    df = enrich_dataframe(df)
     league_avg_row = build_league_average_row(df)
     available_cols = list(df.columns.values)
     quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
+    radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
 
     return render_template('index.html', 
                            records=df.to_dict('records'), 
                            colnames=available_cols,
-                           quick_cols=quick_cols,
-                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
-                           league_avg_row=league_avg_row,
-                           selected_teams=selected_teams, minutes = minutes,
-                           sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
-                           last_updated=last_updated)
+                            quick_cols=quick_cols,
+                            default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
+                            radar_metrics=radar_metrics,
+                            league_avg_row=league_avg_row,
+                            selected_teams=selected_teams, minutes = minutes,
+                            sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
+                            last_updated=last_updated)
 
 @app.route('/matchup', methods=['GET', 'POST'])
 def matchup():
     df_global, pos_df_global, last_updated = load_data()
-    df = df_global.copy()
+    df = enrich_dataframe(df_global.copy())
     pos_df = pos_df_global.copy()
     
     team_vs_list = []
@@ -202,14 +221,16 @@ def matchup():
     league_avg_row = build_league_average_row(matchup_df)
     available_cols = list(matchup_df.columns.values) if not matchup_df.empty else []
     quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
+    radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
 
     return render_template('index.html', 
                            records=matchup_df.to_dict('records'), 
                            colnames=available_cols,
-                           quick_cols=quick_cols,
-                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
-                           league_avg_row=league_avg_row,
-                           team_vs_list=team_vs_list, 
+                            quick_cols=quick_cols,
+                            default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
+                            radar_metrics=radar_metrics,
+                            league_avg_row=league_avg_row,
+                            team_vs_list=team_vs_list, 
                            teams1=teams1, 
                            teams2=teams2,
                            selected_teams=["", ""],

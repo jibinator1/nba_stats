@@ -1,252 +1,301 @@
-/* General Layout */
+/* Base layout */
+:root {
+    --heat-opacity: 1;
+    --page-width: 1680px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background: linear-gradient(180deg, #f8f9fa 0%, #f3f6fb 100%);
     margin: 0;
-    padding: 20px;
-    color: #333;
+    padding: 24px;
+    color: #24303f;
+    line-height: 1.45;
+}
+
+.page-shell {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tabs a {
+    padding: 10px 16px;
+    background-color: #2e2e2e;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.tabs a:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* Cards / sections */
+.hero-card,
+.filter-section,
+.controls-grid .control-card,
+.column-toggle-wrap,
+.table-container,
+.chart-panel {
+    background: white;
+    border: 1px solid #d9e1ea;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
 }
 
 .header-container {
-    margin-bottom: 20px;
+    padding: 22px 24px;
+}
+
+.header-container h2 {
+    margin: 0 0 6px 0;
+    font-size: 2rem;
 }
 
 .updated-at {
-    color: #666;
+    color: #5b6777;
     font-style: italic;
-    margin-bottom: 10px;
-}
-
-/* Scrollable Container */
-.table-container {
-    width: 100%;
-    overflow-x: auto; /* Adds horizontal scroll for many columns */
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: white;
-}
-
-/* Table Styling */
-table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 1400px; /* Ensures columns don't squish */
-}
-
-/* Header Styling */
-thead th {
-    background-color: #2e2e2e; /* NBA Blue */
-    color: white;
-    padding: 15px;
-    text-align: left;
-    position: sticky;
-    top: 0;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-}
-
-/* Cell Styling */
-td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #eee;
-    font-size: 0.9rem;
-}
-
-/* Zebra Striping */
-tbody tr:nth-child(even) {
-    background-color: #fcfcfc;
-}
-
-/* Hover Highlight */
-tbody tr:hover {
-    background-color: #f1f4f9;
-}
-
-/* Rank Column Highlighting */
-.rank-col {
-    font-weight: bold;
-    color: #c8102e; /* NBA Red */
-    background-color: rgba(200, 16, 46, 0.03);
-}
-
-/* Heatmap Highlights */
-.rank-bad {
-    background-color: rgba(248, 215, 218, var(--heat-opacity, 1)) !important;
-    color: #721c24 !important;
-}
-.rank-good {
-    background-color: rgba(212, 237, 218, var(--heat-opacity, 1)) !important;
-    color: #155724 !important;
-}
-.rank-avg {
-    background-color: rgba(255, 243, 205, var(--heat-opacity, 1)) !important;
-    color: #856404 !important;
-}
-
-/* Clean Column Lines */
-td:not(:last-child), th:not(:last-child) {
-    border-right: 1px solid #f0f0f0;
-}   
-.filter-section {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.filter-section form {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 15px;
-    width: 100%;
-}
-
-.filter-section p {
     margin: 0;
+}
+
+.defense-note {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #edf1f6;
+    color: #4b5563;
+}
+
+.defense-note ul {
+    margin: 8px 0 0 18px;
+}
+
+.filter-section {
+    padding: 18px 20px;
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.filter-form label {
     display: flex;
     flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+    color: #344054;
 }
 
-.filter-section label {
-    font-weight: bold;
-    margin-bottom: 5px;
+.filter-form label span {
+    font-size: 0.92rem;
 }
 
-.filter-section input[type="text"],
-.filter-section input[type="number"] {
-    padding: 10px 12px;
-    border-radius: 4px;
-    border: 1px solid #ced4da;
-    min-width: 220px;
-    transition: border-color 0.2s;
+.filter-form input[type="text"],
+.filter-form input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #cfd8e3;
+    background: #fff;
+    min-width: 0;
 }
 
-.filter-section input[type="text"]:focus,
-.filter-section input[type="number"]:focus {
-    border-color: #2e2e2e;
-    outline: none;
+.wide-label {
+    grid-column: 1 / -1;
 }
 
-.filter-section button {
-    padding: 10px 20px;
-    background-color: #1a4371; /* Deep Modern Blue */
-    color: white;
-    border: none;
-    border-radius: 4px;
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.primary-btn,
+.small-btn {
+    border-radius: 10px;
+    border: 1px solid transparent;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
-.filter-section button:hover {
-    background-color: #a3a3a3;
-}
-
-.tabs a{
-    padding: 8px 20px;
-    background-color: #2e2e2e; /* NBA Blue */
+.primary-btn {
+    padding: 11px 18px;
+    background: #1a4371;
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 8px 16px rgba(26, 67, 113, 0.18);
 }
 
-
-.tabs a:hover {
-    color: rgb(172, 172, 172);       /* Changes to NBA Red on hover */
-    text-decoration: underline; 
+.small-btn {
+    padding: 8px 12px;
+    background: #fff;
+    border-color: #cfd8e3;
 }
 
+.primary-btn:hover,
+.small-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Controls */
 .controls-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 12px;
-    margin-bottom: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
 }
 
 .control-card {
-    background: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 12px;
+    padding: 16px;
 }
 
-.control-card h4 {
-    margin: 0 0 8px 0;
+.control-card h4,
+.column-toggle-wrap h4,
+.chart-panel h4 {
+    margin: 0 0 10px 0;
 }
 
 .btn-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
 }
 
-.small-btn {
-    padding: 6px 10px;
-    border: 1px solid #cfd4da;
-    border-radius: 4px;
-    background: #fff;
-    cursor: pointer;
+.slider-label {
+    font-weight: 600;
+    color: #344054;
 }
 
 .column-toggle-wrap {
-    background: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 12px;
+    padding: 16px;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
     margin-bottom: 12px;
+}
+
+.preset-status {
+    margin: 0;
+    color: #52606d;
+    font-size: 0.95rem;
 }
 
 .column-toggle-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px 10px;
 }
 
+/* Table / radar layout */
 .table-chart-layout {
     display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
+    gap: 16px;
+    align-items: start;
 }
 
-.chart-panel {
-    background: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 12px;
-    height: fit-content;
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1400px;
+}
+
+thead th {
+    background: linear-gradient(180deg, #243547 0%, #1c2a38 100%);
+    color: white;
+    padding: 14px 12px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px 12px;
+    border-bottom: 1px solid #edf1f6;
+    font-size: 0.92rem;
+    white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fbfdff;
+}
+
+tbody tr:hover {
+    background-color: #f1f6ff;
+}
+
+td:not(:last-child),
+th:not(:last-child) {
+    border-right: 1px solid #f2f5f9;
+}
+
+.rank-col {
+    font-weight: 700;
+}
+
+.rank-bad {
+    background-color: rgba(248, 215, 218, var(--heat-opacity, 1)) !important;
+    color: #721c24 !important;
+}
+
+.rank-good {
+    background-color: rgba(212, 237, 218, var(--heat-opacity, 1)) !important;
+    color: #155724 !important;
+}
+
+.rank-avg {
+    background-color: rgba(255, 243, 205, var(--heat-opacity, 1)) !important;
+    color: #856404 !important;
 }
 
 .league-avg-row {
-    background-color: #eef6ff !important;
-}
-
-.hidden {
-    display: none;
+    background: #eef6ff !important;
 }
 
 .spark-cell {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .spark-bar {
-    height: 6px;
-    border-radius: 6px;
+    height: 7px;
+    border-radius: 999px;
     background: #1a4371;
     display: inline-block;
-}
-
-.injury-flag {
-    font-size: 0.8rem;
-    opacity: 0.75;
 }
 
 .sort-indicator {
@@ -254,27 +303,57 @@ td:not(:last-child), th:not(:last-child) {
     font-size: 0.75rem;
 }
 
+.chart-panel {
+    padding: 16px;
+    min-height: 520px;
+}
+
+.chart-panel canvas {
+    width: 100% !important;
+    height: 420px !important;
+}
+
+.hidden {
+    display: none;
+}
+
 .error-msg {
     color: #721c24;
-    padding: 10px;
+    padding: 12px 14px;
     border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    border-radius: 10px;
     background-color: #f8d7da;
 }
 
 .team-summary {
-    padding: 15px;
+    padding: 14px 16px;
     border-left: 5px solid #005A9C;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #e2f0fb;
-    margin-bottom: 20px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #003366;
 }
 
 @media (max-width: 1200px) {
     .table-chart-layout {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 800px) {
+    body {
+        padding: 14px;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        justify-content: stretch;
+    }
+
+    .primary-btn {
+        width: 100%;
     }
 }
