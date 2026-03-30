@@ -6,6 +6,13 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+QUICK_VIEW_COLUMNS = [
+    'TEAM', 'POSITION', 'MATCHUP_SCORE',
+    'PTS_RANK', 'REB_RANK', 'AST_RANK', 'eFG_RANK', 'FG3M_RANK', 'TOV_RANK'
+]
+
+DEFAULT_HIDDEN_COLUMNS = {'TS_PCT', 'TS_RANK'}
+
 # Helper to load global data frames
 def load_data():
     csv_path = 'vs_Position_withavg.csv'
@@ -20,6 +27,40 @@ def load_data():
         
     last_updated = datetime.fromtimestamp(os.path.getmtime(csv_path)).strftime('%Y-%m-%d %I:%M %p')
     return df, pos_df, last_updated
+
+def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df
+
+    df = df.copy()
+    rank_cols = [c for c in df.columns if c.endswith('_RANK')]
+    if rank_cols:
+        df['MATCHUP_SCORE'] = (31 - df[rank_cols].mean(axis=1)).round(2)
+
+    for stat in ['PTS', 'REB', 'AST']:
+        base_col = stat
+        l5_col = f'L5_{stat}'
+        trend_col = f'{stat}_TREND'
+        if base_col in df.columns and l5_col in df.columns:
+            diff = df[l5_col] - df[base_col]
+            df[trend_col] = diff.apply(lambda x: '↑' if x > 0.5 else ('↓' if x < -0.5 else '→'))
+    return df
+
+def build_league_average_row(df: pd.DataFrame):
+    if df.empty:
+        return None
+    avg_row = {}
+    numeric_cols = df.select_dtypes(include='number').columns
+    for col in df.columns:
+        if col in numeric_cols:
+            avg_row[col] = round(df[col].mean(), 2)
+        else:
+            avg_row[col] = ''
+    if 'TEAM' in avg_row:
+        avg_row['TEAM'] = 'LEAGUE_AVG'
+    if 'POSITION' in avg_row:
+        avg_row['POSITION'] = 'ALL'
+    return avg_row
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
@@ -105,9 +146,17 @@ def index():
                 if best_stat and worst_stat:
                     team_summary = f"The {selected_team} are most vulnerable to {worst_pos} {worst_stat} (Rank {int(worst_rank_val)}) but have elite defense against {best_pos} {best_stat} (Rank {int(best_rank_val)})."
 
+    df = enrich_dataframe(df)
+    league_avg_row = build_league_average_row(df)
+    available_cols = list(df.columns.values)
+    quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
+
     return render_template('index.html', 
                            records=df.to_dict('records'), 
-                           colnames=df.columns.values,
+                           colnames=available_cols,
+                           quick_cols=quick_cols,
+                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
+                           league_avg_row=league_avg_row,
                            selected_teams=selected_teams, minutes = minutes,
                            sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
                            last_updated=last_updated)
@@ -149,9 +198,17 @@ def matchup():
     else:
         matchup_df = pd.DataFrame()
 
+    matchup_df = enrich_dataframe(matchup_df)
+    league_avg_row = build_league_average_row(matchup_df)
+    available_cols = list(matchup_df.columns.values) if not matchup_df.empty else []
+    quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
+
     return render_template('index.html', 
                            records=matchup_df.to_dict('records'), 
-                           colnames=matchup_df.columns.values,
+                           colnames=available_cols,
+                           quick_cols=quick_cols,
+                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
+                           league_avg_row=league_avg_row,
                            team_vs_list=team_vs_list, 
                            teams1=teams1, 
                            teams2=teams2,

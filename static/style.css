@@ -11,6 +11,12 @@ body {
     margin-bottom: 20px;
 }
 
+.updated-at {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
 /* Scrollable Container */
 .table-container {
     width: 100%;
@@ -38,6 +44,7 @@ thead th {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    cursor: pointer;
 }
 
 /* Cell Styling */
@@ -66,15 +73,15 @@ tbody tr:hover {
 
 /* Heatmap Highlights */
 .rank-bad {
-    background-color: #f8d7da !important;
+    background-color: rgba(248, 215, 218, var(--heat-opacity, 1)) !important;
     color: #721c24 !important;
 }
 .rank-good {
-    background-color: #d4edda !important;
+    background-color: rgba(212, 237, 218, var(--heat-opacity, 1)) !important;
     color: #155724 !important;
 }
 .rank-avg {
-    background-color: #fff3cd !important;
+    background-color: rgba(255, 243, 205, var(--heat-opacity, 1)) !important;
     color: #856404 !important;
 }
 
@@ -153,4 +160,121 @@ td:not(:last-child), th:not(:last-child) {
 .tabs a:hover {
     color: rgb(172, 172, 172);       /* Changes to NBA Red on hover */
     text-decoration: underline; 
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.control-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.control-card h4 {
+    margin: 0 0 8px 0;
+}
+
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.small-btn {
+    padding: 6px 10px;
+    border: 1px solid #cfd4da;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.column-toggle-wrap {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.column-toggle-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 6px;
+}
+
+.table-chart-layout {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 12px;
+}
+
+.chart-panel {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    height: fit-content;
+}
+
+.league-avg-row {
+    background-color: #eef6ff !important;
+}
+
+.hidden {
+    display: none;
+}
+
+.spark-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.spark-bar {
+    height: 6px;
+    border-radius: 6px;
+    background: #1a4371;
+    display: inline-block;
+}
+
+.injury-flag {
+    font-size: 0.8rem;
+    opacity: 0.75;
+}
+
+.sort-indicator {
+    margin-left: 4px;
+    font-size: 0.75rem;
+}
+
+.error-msg {
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #f8d7da;
+}
+
+.team-summary {
+    padding: 15px;
+    border-left: 5px solid #005A9C;
+    border-radius: 5px;
+    background-color: #e2f0fb;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #003366;
+}
+
+@media (max-width: 1200px) {
+    .table-chart-layout {
+        grid-template-columns: 1fr;
+    }
 }
