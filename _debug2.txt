@@ -1,0 +1,8 @@
+CHI L5 dates: [numpy.datetime64('2026-03-19T00:00:00.000000'), numpy.datetime64('2026-03-23T00:00:00.000000'), numpy.datetime64('2026-03-25T00:00:00.000000'), numpy.datetime64('2026-03-27T00:00:00.000000'), numpy.datetime64('2026-03-28T00:00:00.000000')]
+SF players L5 vs CHI (1 rows):
+      PLAYER_NAME  GAME_DATE  PTS        MIN TEAM_ABBREVIATION
+396  Kevin Durant 2026-03-23   40  39.666667               HOU
+L5 avg PTS: 40.00
+
+Full season SF vs CHI (78 rows):
+Season avg: 18.95

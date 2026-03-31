@@ -49,11 +49,19 @@ def make_data(pos_df, minutes):
 
     merged['GAME_DATE'] = pd.to_datetime(merged['GAME_DATE'])
     
-    # Calculate Last 5 games for each Opponent
-    opp_game_dates = merged[['OPPONENT_ID', 'GAME_DATE']].drop_duplicates().sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
+    # Calculate Last 5 games for each Opponent using FULL logs (not minutes-filtered)
+    # to avoid tiny sample sizes where 1 player skews the average
+    l5_base = logs_raw.copy()
+    l5_base = l5_base[l5_base['MIN'] >= 10]  # low floor just to exclude garbage time
+    l5_base = l5_base.merge(pos_map, on='PLAYER_NAME')
+    l5_base['OPPONENT_ABV'] = l5_base['MATCHUP'].str.split(' ').str[-1]
+    l5_base['OPPONENT_ID'] = l5_base['OPPONENT_ABV'].map(team_id_lookup)
+    l5_base['GAME_DATE'] = pd.to_datetime(l5_base['GAME_DATE'])
+
+    opp_game_dates = l5_base[['OPPONENT_ID', 'GAME_DATE']].drop_duplicates().sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
     l5_dates = opp_game_dates.groupby('OPPONENT_ID').head(5)
     
-    l5_merged = pd.merge(merged, l5_dates, on=['OPPONENT_ID', 'GAME_DATE'], how='inner')
+    l5_merged = pd.merge(l5_base, l5_dates, on=['OPPONENT_ID', 'GAME_DATE'], how='inner')
     l5_opp_stats = l5_merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
     l5_opp_stats.rename(columns={'PTS': 'L5_PTS', 'REB': 'L5_REB', 'AST': 'L5_AST'}, inplace=True)
 
