@@ -59,7 +59,7 @@ def push_to_github():
     print("Pushing updates to GitHub...")
     # Using 'git push' assuming it's already configured with credentials
     os.system('git add .')
-    commit_msg = f"Auto-update NBA stats: {datetime.now().strftime('%Y-%m-%d')}"
+    commit_msg = f"Auto-update NBA stats: {datetime.now().strftime('%Y-%m-%d %I:%M %p EDT')}"
     os.system(f'git commit -m "{commit_msg}"')
     os.system('git push')
     print("GitHub push complete.")
