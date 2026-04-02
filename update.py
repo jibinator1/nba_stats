@@ -95,20 +95,37 @@ def make_data(pos_df, minutes, last_n_games=20):
     merged['GAME_DATE'] = pd.to_datetime(merged['GAME_DATE'])
     
     # Calculate Last N games stats for each Opponent
-    # Use the SAME minutes filter as main data for consistency
-    ln_base = merged.copy()  # already minutes-filtered and merged with positions
+    # Use the REAL team schedule (unfiltered logs) to determine game dates,
+    # then apply minutes filter within those dates.
+    # This prevents old games from leaking in when no player meets the
+    # minutes threshold in recent games.
 
-    # Get unique opponent games using GAME_ID for precise game identification
-    opp_games = ln_base[['OPPONENT_ID', 'GAME_ID', 'GAME_DATE']].drop_duplicates()
-    opp_games = opp_games.sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
-    # Drop duplicate dates per opponent (one game per date per opponent)
-    opp_games = opp_games.drop_duplicates(subset=['OPPONENT_ID', 'GAME_DATE'])
-    ln_dates = opp_games.groupby('OPPONENT_ID').head(last_n_games)
-    
-    # Keep only the OPPONENT_ID + GAME_DATE columns for the merge key
+    # Step 1: Build opponent game schedule from UNFILTERED logs
+    logs_with_opp = logs_raw.copy()
+    logs_with_opp['OPPONENT_ABV'] = logs_with_opp['MATCHUP'].str.split(' ').str[-1]
+    logs_with_opp['OPPONENT_ID'] = logs_with_opp['OPPONENT_ABV'].map(team_id_lookup)
+    logs_with_opp['GAME_DATE'] = pd.to_datetime(logs_with_opp['GAME_DATE'])
+
+    # Get each team's actual game schedule (all games, regardless of minutes)
+    all_opp_games = logs_with_opp[['OPPONENT_ID', 'GAME_ID', 'GAME_DATE']].drop_duplicates()
+    all_opp_games = all_opp_games.sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
+    all_opp_games = all_opp_games.drop_duplicates(subset=['OPPONENT_ID', 'GAME_DATE'])
+    ln_dates = all_opp_games.groupby('OPPONENT_ID').head(last_n_games)
+
+    # Step 2: Keep only the OPPONENT_ID + GAME_DATE columns for the merge key
     ln_keys = ln_dates[['OPPONENT_ID', 'GAME_DATE']].drop_duplicates()
+
+    # Step 3: Filter the minutes-filtered + position-merged data to those dates
+    ln_base = merged.copy()  # already minutes-filtered and merged with positions
     ln_merged = pd.merge(ln_base, ln_keys, on=['OPPONENT_ID', 'GAME_DATE'], how='inner')
-    ln_opp_stats = ln_merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
+
+    # Step 4: Average per game first, then average across games
+    # This prevents a single outlier player from dominating the average
+    if not ln_merged.empty:
+        ln_per_game = ln_merged.groupby(['OPPONENT_ID', 'POSITION', 'GAME_DATE'])[['PTS', 'REB', 'AST']].mean().reset_index()
+        ln_opp_stats = ln_per_game.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
+    else:
+        ln_opp_stats = pd.DataFrame(columns=['OPPONENT_ID', 'POSITION', 'PTS', 'REB', 'AST'])
     ln_opp_stats.rename(columns={'PTS': 'L5_PTS', 'REB': 'L5_REB', 'AST': 'L5_AST'}, inplace=True)
 
     opp_stats = merged.groupby(['OPPONENT_ID', 'POSITION'])[
