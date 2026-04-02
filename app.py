@@ -33,16 +33,12 @@ RADAR_COLUMNS = [
 ]
 
 def fetch_todays_games_cache():
-    global TODAYS_GAMES_CACHE, TODAYS_CACHE_DATE
-    current_date = datetime.now().date()
-    
-    # If date changed OR cache is currently empty (due to a previous failed fetch), try again
-    if TODAYS_CACHE_DATE != current_date or not TODAYS_GAMES_CACHE:
-        print(f"Fetching games for {current_date}...")
-        TODAYS_GAMES_CACHE = get_todays_games()
-        TODAYS_CACHE_DATE = current_date
-        print(f"Found {len(TODAYS_GAMES_CACHE)} matches.")
-    return TODAYS_GAMES_CACHE
+    """
+    Returns today's matches from the local CSV.
+    No longer caches by date in memory because the source is now a local file
+    that is updated by a background process.
+    """
+    return get_todays_games()
 
 # Helper to load global data frames
 def load_data():
@@ -119,8 +115,8 @@ def manual_update():
     except ValueError:
         last_n = 20
 
-    # Fetch new data from NBA API before loading CSVs
-    fetch_logs()
+    # Manual update only regenerates stats from local logs.csv 
+    # fetch_logs() is REMOVED to avoid API dependency in the web app
     
     df, pos_df, last_updated = load_data()
     make_data(pos_df, min_val, last_n) 

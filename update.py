@@ -29,10 +29,12 @@ def fetch_logs():
 import requests
 import json
 
-def get_todays_games():
+def update_todays_games_local():
     """
-    Fetch today's games directly from NBA stats API to bypass nba_api's ScoreboardV2 bug.
+    Fetch today's games from NBA API and save to todays_games.csv.
+    This is called by the background update script.
     """
+    print("Fetching today's schedule from NBA API...")
     url = "https://stats.nba.com/stats/scoreboardv2"
     params = {
         'DayOffset': '0',
@@ -41,38 +43,32 @@ def get_todays_games():
     }
     try:
         r = requests.get(url, params=params, headers=headers, timeout=12)
-        if r.status_code != 200:
-            print(f"NBA API error: {r.status_code}")
-            return []
-        
-        data = r.json()
-        result_sets = data.get('resultSets', [])
-        
-        # Find the 'LineScore' table
-        line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
-        if not line_score: 
-            return []
-            
-        headers_list = line_score['headers']
-        rows = line_score['rowSet']
-        
-        game_id_idx = headers_list.index('GAME_ID')
-        team_abv_idx = headers_list.index('TEAM_ABBREVIATION')
-        
-        # Group teams by Game ID
-        games = {}
-        for row in rows:
-            gid = row[game_id_idx]
-            tabv = row[team_abv_idx]
-            if gid not in games:
-                games[gid] = []
-            games[gid].append(tabv)
-            
-        # Return list of team pairs
-        return [teams for teams in games.values() if len(teams) == 2]
-        
+        if r.status_code == 200:
+            data = r.json()
+            result_sets = data.get('resultSets', [])
+            line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
+            if line_score:
+                df = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
+                df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv('todays_games.csv', index=False)
+                print(f"Successfully saved today's games to todays_games.csv")
+                return True
     except Exception as e:
-        print(f"Error fetching today's games: {e}")
+        print(f"Error updating today's games CSV: {e}")
+    return False
+
+def get_todays_games():
+    """
+    Read today's games from the local todays_games.csv file.
+    This is called by the web app to avoid live API hits.
+    """
+    if not os.path.exists('todays_games.csv'):
+        return []
+    try:
+        df = pd.read_csv('todays_games.csv')
+        games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
+        return [g for g in games_list if len(g) == 2]
+    except Exception as e:
+        print(f"Error reading local todays_games.csv: {e}")
         return []
 
 def make_data(pos_df, minutes, last_n_games=20):

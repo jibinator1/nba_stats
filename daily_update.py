@@ -8,7 +8,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-from update import fetch_logs, make_data
+from update import fetch_logs, make_data, update_todays_games_local
 
 # --- Configuration ---
 CSV_FILE = os.path.join(current_dir, 'vs_Position_withavg.csv')
@@ -37,14 +37,17 @@ def run_update():
         # 1. Fetch newest logs
         fetch_logs()
         
-        # 2. Load positions
+        # 2. Fetch today's schedule
+        update_todays_games_local()
+        
+        # 3. Load positions
         if not os.path.exists(POSITIONS_FILE):
             print(f"Error: {POSITIONS_FILE} not found.")
             return
             
         pos_df = pd.read_csv(POSITIONS_FILE)
         
-        # 3. Generate data
+        # 4. Generate data
         make_data(pos_df, MINUTES_CUTOFF)
         
         print("Data update complete.")
