@@ -38,7 +38,7 @@ def load_data():
     # Auto-update if missing rank columns
     if 'eFG_RANK' not in df.columns:
         from update import make_data
-        make_data(pos_df, 25)
+        make_data(pos_df, 20)
         df = pd.read_csv(csv_path)
         
     last_updated = datetime.fromtimestamp(os.path.getmtime(csv_path)).strftime('%Y-%m-%d %I:%M %p')
@@ -92,17 +92,23 @@ def build_radar_payload():
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
-    min_val = request.form.get('minutes', 25)
+    min_val = request.form.get('minutes', 20)
     try:
         min_val = int(min_val)
     except ValueError:
-        min_val = 25
+        min_val = 20
+
+    last_n = request.form.get('last_n_games', 20)
+    try:
+        last_n = int(last_n)
+    except ValueError:
+        last_n = 20
 
     # Fetch new data from NBA API before loading CSVs
     fetch_logs()
     
     df, pos_df, last_updated = load_data()
-    make_data(pos_df, min_val) 
+    make_data(pos_df, min_val, last_n) 
     
     return redirect(url_for('index'))
 
@@ -111,7 +117,8 @@ def index():
     df_global, pos_df_global, last_updated = load_data()
     team1 = ""
     team2 = ""
-    minutes = 25
+    minutes = 20
+    last_n_games = 20
     
     if request.method == 'POST':
         # 1. Get user input
@@ -120,11 +127,14 @@ def index():
         selected_teams = [team1, team2]
         sql_filter = request.form.get('sql_filter', '')
         
-        raw_minutes = request.form.get('minutes', '25')
-        minutes = int(raw_minutes) if raw_minutes.isdigit() else 25
+        raw_minutes = request.form.get('minutes', '20')
+        minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
+
+        raw_last_n = request.form.get('last_n_games', '20')
+        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 20
 
         # 2. Rebuild the CSV first so the view reflects the new threshold
-        make_data(pos_df_global, minutes)
+        make_data(pos_df_global, minutes, last_n_games)
         
         # 3. Reload the global dataframe after the file is updated
         df_global, _, last_updated = load_data()
@@ -181,7 +191,8 @@ def index():
                             default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
                             radar_metrics=radar_metrics,
                             league_avg_row=league_avg_row,
-                            selected_teams=selected_teams, minutes = minutes,
+                            selected_teams=selected_teams, minutes=minutes,
+                            last_n_games=last_n_games,
                             sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
                             last_updated=last_updated)
 
@@ -194,7 +205,8 @@ def matchup():
     team_vs_list = []
     teams1 = ""
     teams2 = ""
-    minutes = 25
+    minutes = 20
+    last_n_games = 20
 
     if request.method == 'POST':
         raw_t1 = request.form.get('teams1', '')
@@ -203,11 +215,14 @@ def matchup():
         teams1 = raw_t1.replace(" ", "").upper()
         teams2 = raw_t2.replace(" ", "").upper()
         
-        raw_minutes = request.form.get('minutes', '25')
-        minutes = int(raw_minutes) if raw_minutes.isdigit() else 25
+        raw_minutes = request.form.get('minutes', '20')
+        minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
+
+        raw_last_n = request.form.get('last_n_games', '20')
+        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 20
 
         # Rebuild data for matchups based on new minute threshold
-        make_data(pos_df, minutes)
+        make_data(pos_df, minutes, last_n_games)
         df, _, last_updated = load_data() # Reload updated data
 
         teams1_list = teams1.split(",")
@@ -239,7 +254,8 @@ def matchup():
                            teams1=teams1, 
                            teams2=teams2,
                            selected_teams=["", ""],
-                           page_type='matchup', minutes = minutes,
+                           page_type='matchup', minutes=minutes,
+                           last_n_games=last_n_games,
                            last_updated=last_updated)
 
 if __name__ == '__main__':

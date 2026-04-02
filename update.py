@@ -25,7 +25,7 @@ def fetch_logs():
     logs.to_csv("logs.csv", index=False)
     print("Successfully updated logs.csv!")
 
-def make_data(pos_df, minutes):
+def make_data(pos_df, minutes, last_n_games=20):
     #get positions for each players
     
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
@@ -34,36 +34,36 @@ def make_data(pos_df, minutes):
     logs_raw = pd.read_csv("logs.csv")
     logs = logs_raw.copy()
 
-    #only select players who have more than 20 minutes play time
+    # Build team_id_lookup from RAW (unfiltered) logs to avoid missing teams
+    team_id_map = logs_raw[['TEAM_ABBREVIATION', 'TEAM_ID']].drop_duplicates()
+    team_id_lookup = dict(zip(team_id_map['TEAM_ABBREVIATION'], team_id_map['TEAM_ID']))
+
+    #only select players who have more than the threshold minutes play time
     logs = logs[logs['MIN'] >= minutes] 
 
-
     merged = logs.merge(pos_map, on='PLAYER_NAME')
-
-
-    team_id_map = merged[['TEAM_ABBREVIATION', 'TEAM_ID']].drop_duplicates()
-    team_id_lookup = dict(zip(team_id_map['TEAM_ABBREVIATION'], team_id_map['TEAM_ID']))
 
     merged['OPPONENT_ABV'] = merged['MATCHUP'].str.split(' ').str[-1]
     merged['OPPONENT_ID'] = merged['OPPONENT_ABV'].map(team_id_lookup)
 
     merged['GAME_DATE'] = pd.to_datetime(merged['GAME_DATE'])
     
-    # Calculate Last 5 games for each Opponent using FULL logs (not minutes-filtered)
-    # to avoid tiny sample sizes where 1 player skews the average
-    l5_base = logs_raw.copy()
-    l5_base = l5_base[l5_base['MIN'] >= 10]  # low floor just to exclude garbage time
-    l5_base = l5_base.merge(pos_map, on='PLAYER_NAME')
-    l5_base['OPPONENT_ABV'] = l5_base['MATCHUP'].str.split(' ').str[-1]
-    l5_base['OPPONENT_ID'] = l5_base['OPPONENT_ABV'].map(team_id_lookup)
-    l5_base['GAME_DATE'] = pd.to_datetime(l5_base['GAME_DATE'])
+    # Calculate Last N games stats for each Opponent
+    # Use the SAME minutes filter as main data for consistency
+    ln_base = merged.copy()  # already minutes-filtered and merged with positions
 
-    opp_game_dates = l5_base[['OPPONENT_ID', 'GAME_DATE']].drop_duplicates().sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
-    l5_dates = opp_game_dates.groupby('OPPONENT_ID').head(5)
+    # Get unique opponent games using GAME_ID for precise game identification
+    opp_games = ln_base[['OPPONENT_ID', 'GAME_ID', 'GAME_DATE']].drop_duplicates()
+    opp_games = opp_games.sort_values(by=['OPPONENT_ID', 'GAME_DATE'], ascending=[True, False])
+    # Drop duplicate dates per opponent (one game per date per opponent)
+    opp_games = opp_games.drop_duplicates(subset=['OPPONENT_ID', 'GAME_DATE'])
+    ln_dates = opp_games.groupby('OPPONENT_ID').head(last_n_games)
     
-    l5_merged = pd.merge(l5_base, l5_dates, on=['OPPONENT_ID', 'GAME_DATE'], how='inner')
-    l5_opp_stats = l5_merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
-    l5_opp_stats.rename(columns={'PTS': 'L5_PTS', 'REB': 'L5_REB', 'AST': 'L5_AST'}, inplace=True)
+    # Keep only the OPPONENT_ID + GAME_DATE columns for the merge key
+    ln_keys = ln_dates[['OPPONENT_ID', 'GAME_DATE']].drop_duplicates()
+    ln_merged = pd.merge(ln_base, ln_keys, on=['OPPONENT_ID', 'GAME_DATE'], how='inner')
+    ln_opp_stats = ln_merged.groupby(['OPPONENT_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()
+    ln_opp_stats.rename(columns={'PTS': 'L5_PTS', 'REB': 'L5_REB', 'AST': 'L5_AST'}, inplace=True)
 
     opp_stats = merged.groupby(['OPPONENT_ID', 'POSITION'])[
         ['PTS', 'REB', 'AST', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTA', 'FTM', 'TOV', 'STL', 'BLK', 'MIN']
@@ -73,7 +73,7 @@ def make_data(pos_df, minutes):
     opp_stats['TS_PCT'] = (opp_stats['PTS'] / (2 * (opp_stats['FGA'] + 0.44 * opp_stats['FTA']))) * 100
     opp_stats['FTr'] = opp_stats['FTA'] / opp_stats['FGA']
 
-    opp_stats = pd.merge(opp_stats, l5_opp_stats, on=['OPPONENT_ID', 'POSITION'], how='left')
+    opp_stats = pd.merge(opp_stats, ln_opp_stats, on=['OPPONENT_ID', 'POSITION'], how='left')
 
     # get the avg for the team stats as well
     team_stats = merged.groupby(['TEAM_ID', 'POSITION'])[['PTS', 'REB', 'AST']].mean().reset_index()

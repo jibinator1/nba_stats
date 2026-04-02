@@ -52,7 +52,15 @@
             <form method="POST" class="filter-form">
                 <label>
                     <span>Minutes Playtime Threshold</span>
-                    <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 25 }}" required>
+                    <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 20 }}" required>
+                </label>
+                <label>
+                    <span>Last X Games</span>
+                    <select name="last_n_games">
+                        {% for n in [5, 10, 15, 20] %}
+                        <option value="{{ n }}" {{ 'selected' if (last_n_games or 20)|int == n }}>Last {{ n }}</option>
+                        {% endfor %}
+                    </select>
                 </label>
                 {% if page_type == 'matchup' %}
                 <label>
@@ -134,7 +142,7 @@
                     <thead>
                         <tr>
                             {% for col in colnames %}
-                            <th data-col="{{ col }}" onclick="sortTableByColumn(this)">{{ col }} <span class="sort-indicator"></span></th>
+                            <th data-col="{{ col }}" onclick="sortTableByColumn(this)">{{ col.replace('L5_', 'L' ~ (last_n_games or 20)|string ~ '_') }} <span class="sort-indicator"></span></th>
                             {% endfor %}
                         </tr>
                     </thead>
