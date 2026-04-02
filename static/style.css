@@ -561,44 +561,38 @@ td {
     gap: 6px;
 }
 
-.games-scroll {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none; /* Firefox */
+.matchup-dropdown-container {
+    max-width: 300px;
 }
 
-.games-scroll::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-}
-
-.game-pill {
-    background: white;
+.matchup-dropdown {
+    width: 100%;
+    padding: 8px 12px;
     border: 1.5px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    white-space: nowrap;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--primary);
+    background-color: white;
     cursor: pointer;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-down' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+}
+
+.matchup-dropdown:hover {
+    border-color: var(--accent);
     box-shadow: var(--shadow-sm);
 }
 
-.game-pill:hover {
+.matchup-dropdown:focus {
+    outline: none;
     border-color: var(--accent);
-    background: #f8faff;
-    transform: translateY(-1px);
-}
-
-.game-pill .vs {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    font-weight: 500;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Pick Finder Section */
