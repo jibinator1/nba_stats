@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
-from update import make_data, create_matchups, fetch_logs
+from update import make_data, create_matchups, fetch_logs, get_todays_games
 import pandas as pd
 import os 
 from datetime import datetime
+
+TODAYS_GAMES_CACHE = []
+TODAYS_CACHE_DATE = None
 
 app = Flask(__name__)
 
@@ -28,6 +31,14 @@ RADAR_COLUMNS = [
     ('DEF_RTG_RANK', 'DEF RTG'),
     ('PACE_RANK', 'PACE'),
 ]
+
+def fetch_todays_games_cache():
+    global TODAYS_GAMES_CACHE, TODAYS_CACHE_DATE
+    current_date = datetime.now().date()
+    if TODAYS_CACHE_DATE != current_date:
+        TODAYS_GAMES_CACHE = get_todays_games()
+        TODAYS_CACHE_DATE = current_date
+    return TODAYS_GAMES_CACHE
 
 # Helper to load global data frames
 def load_data():
@@ -115,6 +126,7 @@ def manual_update():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     df_global, pos_df_global, last_updated = load_data()
+    todays_games = fetch_todays_games_cache()
     team1 = ""
     team2 = ""
     minutes = 20
@@ -194,11 +206,12 @@ def index():
                             selected_teams=selected_teams, minutes=minutes,
                             last_n_games=last_n_games,
                             sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
-                            last_updated=last_updated)
+                            last_updated=last_updated, todays_games=todays_games)
 
 @app.route('/matchup', methods=['GET', 'POST'])
 def matchup():
     df_global, pos_df_global, last_updated = load_data()
+    todays_games = fetch_todays_games_cache()
     df = enrich_dataframe(df_global.copy())
     pos_df = pos_df_global.copy()
     
@@ -238,6 +251,11 @@ def matchup():
         matchup_df = pd.DataFrame()
 
     matchup_df = enrich_dataframe(matchup_df)
+    
+    # Generate today's picks
+    todays_picks_df = create_matchups(pos_df, df_global.copy(), todays_games, minutes)
+    todays_picks = todays_picks_df.to_dict('records') if not todays_picks_df.empty else []
+
     league_avg_row = build_league_average_row(matchup_df)
     available_cols = list(matchup_df.columns.values) if not matchup_df.empty else []
     quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
@@ -256,7 +274,9 @@ def matchup():
                            selected_teams=["", ""],
                            page_type='matchup', minutes=minutes,
                            last_n_games=last_n_games,
-                           last_updated=last_updated)
+                           last_updated=last_updated,
+                           todays_games=todays_games,
+                           todays_picks=todays_picks)
 
 if __name__ == '__main__':
     app.run(debug=True)

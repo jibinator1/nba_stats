@@ -17,6 +17,7 @@ headers = {
     "x-nba-stats-token": "true",
     "Accept-Language": "en-US,en;q=0.9"
 }
+from nba_api.stats.endpoints import scoreboardv2
 
 def fetch_logs():
     print("Fetching newest game logs from NBA API...")
@@ -24,6 +25,17 @@ def fetch_logs():
     logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', headers=headers).get_data_frames()[0]
     logs.to_csv("logs.csv", index=False)
     print("Successfully updated logs.csv!")
+
+def get_todays_games():
+    try:
+        sb = scoreboardv2.ScoreboardV2(headers=headers, timeout=10)
+        df = sb.line_score.get_data_frame()
+        if df.empty: return []
+        games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
+        return [g for g in games_list if len(g) == 2]
+    except Exception as e:
+        print(f"Error fetching today's games: {e}")
+        return []
 
 def make_data(pos_df, minutes, last_n_games=20):
     #get positions for each players
@@ -101,9 +113,13 @@ def make_data(pos_df, minutes, last_n_games=20):
     defense_context['DEF_RTG'] = (defense_context['OPP_PTS'] / defense_context['OPP_POSS']) * 100
 
     final_result = pd.merge(opp_stats, team_stats, left_on=['OPPONENT_ID', 'POSITION'], right_on=['TEAM_ID', 'POSITION'], how='left')
-    final_result = pd.merge(final_result, defense_context[['TEAM_ID', 'PACE', 'DEF_RTG']], on='TEAM_ID', how='left')
+    
+    if 'TEAM_ID' in final_result.columns:
+        final_result.drop(columns=['TEAM_ID'], inplace=True)
 
-    final_result['TEAM'] = final_result['TEAM_ID'].map({v: k for k, v in team_id_lookup.items()})
+    final_result = pd.merge(final_result, defense_context[['TEAM_ID', 'PACE', 'DEF_RTG']], left_on='OPPONENT_ID', right_on='TEAM_ID', how='left')
+
+    final_result['TEAM'] = final_result['OPPONENT_ID'].map({v: k for k, v in team_id_lookup.items()})
 
     final_result = final_result.round(2)
     final_result[['TEAM_PTS', 'TEAM_REB', 'TEAM_AST']] = final_result[['TEAM_PTS', 'TEAM_REB', 'TEAM_AST']].fillna(0)

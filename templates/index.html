@@ -48,6 +48,24 @@
         </div>
         {% endif %}
 
+        {% if todays_games %}
+        <section class="todays-games-section">
+            <div class="section-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Today's Matchups
+            </div>
+            <div class="games-scroll">
+                {% for game in todays_games %}
+                <div class="game-pill" onclick="populateMatchup('{{ game[0] }}', '{{ game[1] }}')">
+                    <span>{{ game[0] }}</span>
+                    <span class="vs">vs</span>
+                    <span>{{ game[1] }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
         <section class="filter-section">
             <form method="POST" class="filter-form">
                 <label>
@@ -56,11 +74,7 @@
                 </label>
                 <label>
                     <span>Last X Games</span>
-                    <select name="last_n_games">
-                        {% for n in [5, 10, 15, 20] %}
-                        <option value="{{ n }}" {{ 'selected' if (last_n_games or 20)|int == n }}>Last {{ n }}</option>
-                        {% endfor %}
-                    </select>
+                    <input type="number" name="last_n_games" min="1" max="82" step="1" value="{{ last_n_games or 20 }}" required>
                 </label>
                 {% if page_type == 'matchup' %}
                 <label>
@@ -90,6 +104,31 @@
                 </div>
             </form>
         </section>
+
+        {% if page_type == 'matchup' %}
+        <section class="pick-finder-section">
+            <div class="section-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Pick Finder (Today's Automated Analysis)
+            </div>
+            <div class="pick-finder-container">
+                <div class="picks-grid">
+                    {% for pick in todays_picks %}
+                    <div class="pick-card" onclick="populateMatchup('{{ pick.Matchup.split(' vs ')[0] }}', '{{ pick.Matchup.split(' vs ')[1] }}')">
+                        <div class="pick-header">
+                            <span class="pick-player">{{ pick.Player }}</span>
+                            <span class="pick-badge badge-{{ pick.Direction.lower() }}">{{ pick.Direction }}</span>
+                        </div>
+                        <div class="pick-stat-info">{{ pick.Pos }} • {{ pick.Stat }}</div>
+                        <div class="pick-matchup">{{ pick.Matchup }}</div>
+                    </div>
+                    {% else %}
+                    <div class="no-picks">No high-confidence picks found for the current thresholds. Try lowering the Minutes requirement.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
 
         <section class="controls-bar">
             <div class="controls-inner">
@@ -210,6 +249,27 @@
         let currentSort = { index: -1, asc: true };
         let radarInstance = null;
         let viewMode = 'full';
+
+        function populateMatchup(t1, t2) {
+            const isMatchupPage = '{{ page_type }}' === 'matchup';
+            if (isMatchupPage) {
+                const i1 = document.querySelector('input[name="teams1"]');
+                const i2 = document.querySelector('input[name="teams2"]');
+                if (i1 && i2) {
+                    i1.value = t1;
+                    i2.value = t2;
+                }
+            } else {
+                const i1 = document.querySelector('input[name="team1"]');
+                const i2 = document.querySelector('input[name="team2"]');
+                if (i1 && i2) {
+                    i1.value = t1;
+                    i2.value = t2;
+                }
+            }
+            // Optional: trigger form submit automatically? 
+            // document.querySelector('.filter-form').submit();
+        }
 
         function setHeatIntensity(v) {
             document.documentElement.style.setProperty('--heat-opacity', v);

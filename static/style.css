@@ -544,6 +544,140 @@ td {
     line-height: 1.4;
 }
 
+/* Today's Games Bar */
+.todays-games-section {
+    margin-bottom: 5px;
+}
+
+.section-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.games-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.games-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.game-pill {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.game-pill:hover {
+    border-color: var(--accent);
+    background: #f8faff;
+    transform: translateY(-1px);
+}
+
+.game-pill .vs {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Pick Finder Section */
+.pick-finder-container {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+}
+
+.picks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+.pick-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: transform 0.2s;
+    background: #fcfcfc;
+}
+
+.pick-card:hover {
+    transform: scale(1.02);
+    border-color: var(--accent);
+}
+
+.pick-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.pick-player {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.pick-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.badge-over { background: #dcfce7; color: #166534; }
+.badge-under { background: #fee2e2; color: #991b1b; }
+
+.pick-stat-info {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.pick-matchup {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 4px;
+}
+
+/* Empty Picks State */
+.no-picks {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 10px;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
 /* Utilities */
 .hidden { display: none !important; }
 
