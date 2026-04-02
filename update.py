@@ -26,13 +26,51 @@ def fetch_logs():
     logs.to_csv("logs.csv", index=False)
     print("Successfully updated logs.csv!")
 
+import requests
+import json
+
 def get_todays_games():
+    """
+    Fetch today's games directly from NBA stats API to bypass nba_api's ScoreboardV2 bug.
+    """
+    url = "https://stats.nba.com/stats/scoreboardv2"
+    params = {
+        'DayOffset': '0',
+        'LeagueID': '00',
+        'gameDate': datetime.now().strftime('%m/%d/%Y')
+    }
     try:
-        sb = scoreboardv2.ScoreboardV2(headers=headers, timeout=10)
-        df = sb.line_score.get_data_frame()
-        if df.empty: return []
-        games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
-        return [g for g in games_list if len(g) == 2]
+        r = requests.get(url, params=params, headers=headers, timeout=12)
+        if r.status_code != 200:
+            print(f"NBA API error: {r.status_code}")
+            return []
+        
+        data = r.json()
+        result_sets = data.get('resultSets', [])
+        
+        # Find the 'LineScore' table
+        line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
+        if not line_score: 
+            return []
+            
+        headers_list = line_score['headers']
+        rows = line_score['rowSet']
+        
+        game_id_idx = headers_list.index('GAME_ID')
+        team_abv_idx = headers_list.index('TEAM_ABBREVIATION')
+        
+        # Group teams by Game ID
+        games = {}
+        for row in rows:
+            gid = row[game_id_idx]
+            tabv = row[team_abv_idx]
+            if gid not in games:
+                games[gid] = []
+            games[gid].append(tabv)
+            
+        # Return list of team pairs
+        return [teams for teams in games.values() if len(teams) == 2]
+        
     except Exception as e:
         print(f"Error fetching today's games: {e}")
         return []

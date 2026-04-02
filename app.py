@@ -38,8 +38,10 @@ def fetch_todays_games_cache():
     
     # If date changed OR cache is currently empty (due to a previous failed fetch), try again
     if TODAYS_CACHE_DATE != current_date or not TODAYS_GAMES_CACHE:
+        print(f"Fetching games for {current_date}...")
         TODAYS_GAMES_CACHE = get_todays_games()
         TODAYS_CACHE_DATE = current_date
+        print(f"Found {len(TODAYS_GAMES_CACHE)} matches.")
     return TODAYS_GAMES_CACHE
 
 # Helper to load global data frames
