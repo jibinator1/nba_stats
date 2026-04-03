@@ -291,6 +291,7 @@ def matchup():
 
 @app.route('/history')
 def history():
+    _, _, last_updated = load_data()
     hist_path = 'prediction_history.csv'
     logs_path = 'logs.csv'
     history_data = []
