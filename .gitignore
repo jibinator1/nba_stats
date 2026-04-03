@@ -1,3 +1,15 @@
+# Data and Environment
+logs.csv
+positions.csv
+injuries.csv
+todays_games.csv
+rf_results_active.csv
+vs_Position_withavg.csv
+nba_env/
+
+# Logs and Temp
+*.txt
+!requirements.txt
 __pycache__/
 *.pyc
 *.pyo
@@ -10,3 +22,4 @@ venv/
 env.bak/
 venv.bak/
 .DS_Store
+
