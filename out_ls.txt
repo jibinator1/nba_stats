@@ -1,0 +1,8 @@
+total 9336
+-rw-r--r-- 1 jibinim4e jibinim4e    1820 Apr  3 03:50 injuries.csv
+-rw-r--r-- 1 jibinim4e jibinim4e 9441550 Apr  3 03:50 logs.csv
+drwxr-xr-x 5 jibinim4e jibinim4e    4096 Apr  3 03:46 nba_env
+-rw-r--r-- 1 jibinim4e jibinim4e   10213 Apr  3 16:28 nba_model.py
+-rw-r--r-- 1 jibinim4e jibinim4e   63113 Apr  3 03:50 positions.csv
+-rw-r--r-- 1 jibinim4e jibinim4e       1 Apr  3 16:45 rf_predictions.csv
+-rw-r--r-- 1 jibinim4e jibinim4e   23467 Apr  3 03:56 rf_results_active.csv

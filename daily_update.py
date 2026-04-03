@@ -1,74 +1,166 @@
 import os
 import sys
-from datetime import datetime
+import time
+import subprocess
+import requests
 import pandas as pd
-
-# Add the current directory to sys.path to ensure we can import update.py
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.append(current_dir)
-
-from update import fetch_logs, make_data, update_todays_games_local
+from datetime import datetime
+from bs4 import BeautifulSoup
+from nba_api.stats.endpoints import playergamelogs
 
 # --- Configuration ---
-CSV_FILE = os.path.join(current_dir, 'vs_Position_withavg.csv')
-POSITIONS_FILE = os.path.join(current_dir, 'positions.csv')
-LOGS_FILE = os.path.join(current_dir, 'logs.csv')
-MINUTES_CUTOFF = 25
-AUTO_PUSH = True  # Set to True to push to GitHub automatically
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+VM_NAME = "instance-20260403-034225"
+ZONE = "us-central1-b"
+VM_REMOTE_CMD = "source ~/nba_env/bin/activate && python ~/nba_model.py"
+REQUIRED_CSVS = ['logs.csv', 'positions.csv', 'injuries.csv', 'todays_games.csv']
+AUTO_PUSH = True
 
-def should_update():
-    if not os.path.exists(CSV_FILE):
-        return True
-    
-    # Get last modified time
-    last_modified = os.path.getmtime(CSV_FILE)
-    last_modified_date = datetime.fromtimestamp(last_modified).date()
-    today = datetime.now().date()
-    
-    return last_modified_date < today
+# NBA API Headers
+headers = {
+    "Host": "stats.nba.com",
+    "Connection": "keep-alive",
+    "Accept": "application/json, text/plain, */*",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+    "Referer": "https://www.nba.com/",
+    "Origin": "https://www.nba.com",
+    "x-nba-stats-origin": "stats",
+    "x-nba-stats-token": "true",
+    "Accept-Language": "en-US,en;q=0.9"
+}
 
-def run_update():
-    print(f"[{datetime.now()}] Starting NBA stats update...")
+def fetch_logs():
+    print("Fetching latest game logs from NBA API...")
     try:
-        # Change to the project directory to ensure git and relative paths work
-        os.chdir(current_dir)
+        logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', headers=headers).get_data_frames()[0]
+        logs.to_csv(os.path.join(SCRIPT_DIR, "logs.csv"), index=False)
+        print("Successfully updated logs.csv!")
+        return True
+    except Exception as e:
+        print(f"Error fetching logs: {e}")
+        return False
+
+def update_todays_games():
+    print("Fetching today's schedule from NBA API...")
+    url = "https://stats.nba.com/stats/scoreboardv2"
+    params = {
+        'DayOffset': '0',
+        'LeagueID': '00',
+        'gameDate': datetime.now().strftime('%m/%d/%Y')
+    }
+    try:
+        r = requests.get(url, params=params, headers=headers, timeout=12)
+        if r.status_code == 200:
+            data = r.json()
+            result_sets = data.get('resultSets', [])
+            line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
+            if line_score:
+                df = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
+                df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv(os.path.join(SCRIPT_DIR, 'todays_games.csv'), index=False)
+                print("Successfully updated todays_games.csv")
+                return True
+    except Exception as e:
+        print(f"Error updating today's games: {e}")
+    return False
+
+def fetch_injuries():
+    print("Fetching injury report from CBS Sports...")
+    try:
+        url = "https://www.cbssports.com/nba/injuries/"
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        soup = BeautifulSoup(r.text, 'html.parser')
+        injured_players = [a.text.strip() for a in soup.select('span.CellPlayerName--long a')]
+        pd.Series(injured_players, name="Player").to_csv(os.path.join(SCRIPT_DIR, "injuries.csv"), index=False)
+        print(f"Successfully updated injuries.csv ({len(injured_players)} players)")
+        return True
+    except Exception as e:
+        print(f"Error fetching injuries: {e}")
+    return False
+
+def run_gcloud(cmd_list):
+    """Wait for gcloud command to finish and return result."""
+    try:
+        result = subprocess.run(cmd_list, capture_output=True, text=True, check=True)
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Gcloud error: {e.stderr}")
+        return None
+
+def manage_cloud_execution():
+    print(f"\n--- Cloud Orchestration: {VM_NAME} ---")
+    
+    # 1. Start VM if needed
+    print(f"Starting VM {VM_NAME}...")
+    subprocess.run(f"gcloud compute instances start {VM_NAME} --zone {ZONE}", shell=True, check=True)
+    
+    # Wait for SSH to be ready (approximate)
+    print("Waiting for VM to be ready...")
+    time.sleep(20) 
+
+    # 2. Upload CSV files
+    print(f"Uploading CSV files to @{VM_NAME}...")
+    scp_cmd = f"gcloud compute scp {' '.join(REQUIRED_CSVS)} {VM_NAME}: --zone {ZONE}"
+    subprocess.run(scp_cmd, shell=True, check=True)
+
+    # 3. Execute Model Remote
+    print("Executing model remotely (Estimated time: 10-15 minutes)...")
+    # Using 'python -u' for unbuffered output to keep the connection alive with real-time logs
+    remote_cmd = VM_REMOTE_CMD.replace("python", "python -u")
+    ssh_cmd = f'gcloud compute ssh {VM_NAME} --zone {ZONE} --command "bash -c \'{remote_cmd}\'"'
+    
+    try:
+        subprocess.run(ssh_cmd, shell=True, check=True)
         
-        # 1. Fetch newest logs
-        fetch_logs()
+        # 4. Pull Results Back (Only if model finishes successfully)
+        print("Downloading results...")
+        pull_cmd = f"gcloud compute scp {VM_NAME}:rf_predictions.csv . --zone {ZONE}"
+        subprocess.run(pull_cmd, shell=True, check=True)
         
-        # 2. Fetch today's schedule
-        update_todays_games_local()
-        
-        # 3. Load positions
-        if not os.path.exists(POSITIONS_FILE):
-            print(f"Error: {POSITIONS_FILE} not found.")
+        # 5. Stop VM to save costs (Only if successful)
+        print(f"Shutting down {VM_NAME}...")
+        subprocess.run(f"gcloud compute instances stop {VM_NAME} --zone {ZONE}", shell=True, check=True)
+
+    except subprocess.CalledProcessError as e:
+        print(f"\n[!] Model execution failed or connection dropped: {e}")
+        print(f"[!] Leaving {VM_NAME} RUNNING for debugging. Please check manually.")
+        raise e
+
+
+def push_to_github():
+    print("\n--- Syncing to GitHub ---")
+    try:
+        os.chdir(SCRIPT_DIR)
+        subprocess.run('git add .', shell=True, check=True)
+        commit_msg = f"Auto-update: {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+        subprocess.run(f'git commit -m "{commit_msg}"', shell=True, check=True)
+        subprocess.run('git push', shell=True, check=True)
+        print("Successfully pushed to GitHub!")
+
+    except Exception as e:
+        print(f"Git sync failed: {e}")
+
+def main():
+    start_time = datetime.now()
+    print(f"[{start_time}] Starting consolidated NBA daily update...")
+    
+    # Local Data Fetching
+    if fetch_logs() and update_todays_games() and fetch_injuries():
+        # Cloud Execution
+        try:
+            manage_cloud_execution()
+        except Exception as cloud_err:
+            print(f"Cloud workflow failed: {cloud_err}")
             return
-            
-        pos_df = pd.read_csv(POSITIONS_FILE)
-        
-        # 4. Generate data
-        make_data(pos_df, MINUTES_CUTOFF)
-        
-        print("Data update complete.")
-        
+
+        # GitHub Sync
         if AUTO_PUSH:
             push_to_github()
             
-    except Exception as e:
-        print(f"Error during update: {e}")
-
-def push_to_github():
-    print("Pushing updates to GitHub...")
-    # Using 'git push' assuming it's already configured with credentials
-    os.system('git add .')
-    commit_msg = f"Auto-update NBA stats: {datetime.now().strftime('%Y-%m-%d %I:%M %p EDT')}"
-    os.system(f'git commit -m "{commit_msg}"')
-    os.system('git push')
-    print("GitHub push complete.")
+        end_time = datetime.now()
+        duration = end_time - start_time
+        print(f"\n[{end_time}] Process complete! Time taken: {duration}")
+    else:
+        print("Data fetching failed. Aborting cloud execution.")
 
 if __name__ == "__main__":
-    if should_update():
-        run_update()
-    else:
-        print(f"[{datetime.now()}] Data is already up to date for today. Exiting.")
+    main()
