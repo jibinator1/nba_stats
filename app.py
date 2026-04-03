@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from update import make_data, create_matchups, fetch_logs, get_todays_games
 import pandas as pd
+import os
 from datetime import datetime
 import requests
 
