@@ -1,15 +1,11 @@
-# Data and Environment
-logs.csv
-positions.csv
-injuries.csv
-todays_games.csv
-rf_results_active.csv
-vs_Position_withavg.csv
+# Environment
 nba_env/
 
 # Logs and Temp
 *.txt
 !requirements.txt
+!rf_predictions.csv
+
 __pycache__/
 *.pyc
 *.pyo
