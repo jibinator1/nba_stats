@@ -13,7 +13,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 VM_NAME = "instance-20260403-034225"
 ZONE = "us-central1-b"
 VM_REMOTE_CMD = "source ~/nba_env/bin/activate && python ~/nba_model.py"
-REQUIRED_CSVS = ['logs.csv', 'positions.csv', 'injuries.csv', 'todays_games.csv']
+REQUIRED_CSVS = ['logs.csv', 'positions.csv', 'injuries.csv', 'todays_games.csv', 'nba_model.py']
 AUTO_PUSH = True
 
 # NBA API Headers
