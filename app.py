@@ -360,7 +360,8 @@ def history():
                            radar_metrics=[],
                            league_avg_row=None,
                            minutes=20,
-                           last_n_games=20)
+                           last_n_games=20,
+                           todays_games=fetch_todays_games_cache())
 
 if __name__ == '__main__':
     app.run(debug=True)
