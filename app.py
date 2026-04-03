@@ -205,6 +205,7 @@ def index():
                             league_avg_row=league_avg_row,
                             selected_teams=selected_teams, minutes=minutes,
                             last_n_games=last_n_games,
+                            page_type='defense',
                             sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
                             last_updated=last_updated, todays_games=todays_games)
 
@@ -287,6 +288,69 @@ def matchup():
                            last_updated=last_updated,
                            todays_games=todays_games,
                            todays_picks=todays_picks)
+
+@app.route('/history')
+def history():
+    hist_path = 'prediction_history.csv'
+    logs_path = 'logs.csv'
+    history_data = []
+    summary = {"wins": 0, "losses": 0, "pending": 0, "pct": 0}
+
+    if os.path.exists(hist_path):
+        hist_df = pd.read_csv(hist_path)
+        if not hist_df.empty:
+            # Load logs for matching
+            actuals = {}
+            if os.path.exists(logs_path):
+                logs_df = pd.read_csv(logs_path)
+                # Normalize log dates to YYYY-MM-DD
+                logs_df['normalized_date'] = pd.to_datetime(logs_df['GAME_DATE']).dt.strftime('%Y-%m-%d')
+                # Create lookup for (Date, Player) -> PTS
+                for _, row in logs_df.iterrows():
+                    actuals[(row['normalized_date'], row['PLAYER_NAME'])] = row['PTS']
+            
+            # Process history
+            for _, row in hist_df.iterrows():
+                p_date = str(row['Date'])
+                p_name = row['Player']
+                line = row['Line']
+                prediction = row['O/U'] # OVER / UNDER
+                actual = actuals.get((p_date, p_name))
+                
+                result = "PENDING"
+                if actual is not None:
+                    if prediction == 'OVER':
+                        result = "WIN" if actual > line else "LOSS"
+                    else:
+                        result = "WIN" if actual < line else "LOSS"
+                    
+                    if result == "WIN": summary["wins"] += 1
+                    else: summary["losses"] += 1
+                else:
+                    summary["pending"] += 1
+                
+                history_data.append({
+                    "Date": p_date,
+                    "Player": p_name,
+                    "Matchup": row['Matchup'],
+                    "Line": line,
+                    "Prediction": prediction,
+                    "Actual": actual if actual is not None else "N/A",
+                    "Result": result
+                })
+            
+            total_resolved = summary["wins"] + summary["losses"]
+            if total_resolved > 0:
+                summary["pct"] = round((summary["wins"] / total_resolved) * 100, 1)
+
+    # Sort history by date descending
+    history_data = sorted(history_data, key=lambda x: x['Date'], reverse=True)
+
+    return render_template('index.html',
+                           page_type='history',
+                           history_data=history_data,
+                           summary=summary,
+                           last_updated=last_updated)
 
 if __name__ == '__main__':
     app.run(debug=True)

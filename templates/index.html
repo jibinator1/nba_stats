@@ -15,14 +15,19 @@
                 <span>NBA Matchup Hub</span>
             </div>
             <div class="tabs">
-                <a href="/" class="tab-link {{ 'active' if page_type != 'matchup' }}">Defense Ranks</a>
+                <a href="/" class="tab-link {{ 'active' if page_type == 'defense' }}">Defense Ranks</a>
                 <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Featured Picks</a>
+                <a href="/history" class="tab-link {{ 'active' if page_type == 'history' }}">Model History</a>
             </div>
         </nav>
 
         <section class="hero-container">
             <div class="hero-content">
-                <h2>{{ 'Team Matchup Insights' if page_type == 'matchup' else 'Opponent Defensive Ranks' }}</h2>
+                <h2>
+                    {% if page_type == 'matchup' %}Team Matchup Insights
+                    {% elif page_type == 'history' %}Model Performance History
+                    {% else %}Opponent Defensive Ranks{% endif %}
+                </h2>
                 <p class="updated-at">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
                     Refreshed: <strong>{{ last_updated }}</strong>
@@ -146,6 +151,68 @@
                     <div class="no-picks">No high-confidence picks found for the current thresholds. Try lowering the Minutes requirement.</div>
                     {% endfor %}
                 </div>
+            </div>
+        </section>
+        {% endif %}
+
+        {% if page_type == 'history' %}
+        <section class="performance-dashboard" style="margin-bottom: 2rem;">
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Win Rate</div>
+                    <div style="font-size: 2rem; font-weight: 800; color: #10b981;">{{ summary.pct }}%</div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Record (W-L)</div>
+                    <div style="font-size: 2rem; font-weight: 800;">{{ summary.wins }} - {{ summary.losses }}</div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Pending</div>
+                    <div style="font-size: 2rem; font-weight: 800; opacity: 0.5;">{{ summary.pending }}</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="history-section">
+            <div class="table-container" style="background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead style="background: rgba(0,0,0,0.2);">
+                        <tr>
+                            <th style="padding: 1rem;">Date</th>
+                            <th style="padding: 1rem;">Player</th>
+                            <th style="padding: 1rem;">Market</th>
+                            <th style="padding: 1rem;">Model</th>
+                            <th style="padding: 1rem;">Actual</th>
+                            <th style="padding: 1rem;">Result</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.9rem;">
+                        {% for row in history_data %}
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 1rem; opacity: 0.7;">{{ row.Date }}</td>
+                            <td style="padding: 1rem;">
+                                <strong>{{ row.Player }}</strong><br>
+                                <small style="opacity: 0.5;">{{ row.Matchup }}</small>
+                            </td>
+                            <td style="padding: 1rem;">{{ row.Line }}</td>
+                            <td style="padding: 1rem;"><span class="badge {{ row.Prediction|lower }}">{{ row.Prediction }}</span></td>
+                            <td style="padding: 1rem; font-weight: 700;">{{ row.Actual }}</td>
+                            <td style="padding: 1rem;">
+                                <span class="result-badge {{ row.Result|lower }}" style="padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase;">
+                                    {% if row.Result == 'WIN' %}✅ WIN
+                                    {% elif row.Result == 'LOSS' %}❌ LOSS
+                                    {% else %}⏳ PENDING{% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if not history_data %}
+                        <tr>
+                            <td colspan="6" style="padding: 3rem; text-align: center; opacity: 0.5;">No model history available yet.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
         </section>
         {% endif %}

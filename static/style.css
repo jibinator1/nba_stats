@@ -749,6 +749,76 @@ td {
 /* Utilities */
 .hidden { display: none !important; }
 
+/* History Dashboard Styling */
+.performance-dashboard {
+    margin-top: 10px;
+    animation: slideIn 0.4s ease-out;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.performance-dashboard.dark .stat-card {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.history-section {
+    margin-top: 30px;
+    animation: slideIn 0.5s ease-out;
+}
+
+.history-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.result-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.result-badge.win { background: #dcfce7; color: #15803d; }
+.result-badge.loss { background: #fee2e2; color: #b91c1c; }
+.result-badge.pending { background: #f1f5f9; color: #64748b; }
+
+.badge.over { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+.badge.under { background: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+
 @media (max-width: 1024px) {
     .radar-panel {
         width: 100%;
@@ -761,4 +831,5 @@ td {
     .hero-container { padding: 12px 16px; flex-direction: column; }
     .hero-content h2 { font-size: 1.1rem; }
     .hero-notes { flex-wrap: wrap; }
+    .stats-grid { grid-template-columns: 1fr; }
 }

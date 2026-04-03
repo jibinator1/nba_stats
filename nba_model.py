@@ -470,6 +470,25 @@ if predictions:
             
             out_path = os.path.join(SCRIPT_DIR, "rf_predictions.csv")
             df_final[col_order].to_csv(out_path, index=False)
+            
+            # HISTORY PERSISTENCE
+            hist_path = os.path.join(SCRIPT_DIR, "prediction_history.csv")
+            if os.path.exists(hist_path):
+                hist_df = pd.read_csv(hist_path)
+                # Filter out current picks that already exist in history
+                # Normalize types for comparison
+                df_final['Date'] = df_final['Date'].astype(str)
+                hist_df['Date'] = hist_df['Date'].astype(str)
+                
+                new_picks = df_final[~df_final.set_index(['Date', 'Player']).index.isin(hist_df.set_index(['Date', 'Player']).index)]
+                if not new_picks.empty:
+                    updated_hist = pd.concat([hist_df, new_picks[col_order]], ignore_index=True)
+                    updated_hist.to_csv(hist_path, index=False)
+                    print(f"Added {len(new_picks)} new picks to history.")
+            else:
+                df_final[col_order].to_csv(hist_path, index=False)
+                print("Created new prediction history file.")
+
             print(f"Process Complete. Data saved to {out_path}")
         else:
             print("No players met line conditions.")
