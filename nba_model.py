@@ -203,23 +203,42 @@ for home, away in TODAYS_GAMES:
                 ]
                 
                 input_vec = np.nan_to_num(raw_input, nan=0.0)
-                pred_pts = model_pts.predict([input_vec])[0]
-                edge = abs(pred_pts - last_15_avg)
-                
-                ou_call = "OVER" if pred_pts > last_15_avg else "UNDER"
-                
-                if edge >= 2.5:
-                    predictions.append({
-                        'Date': datetime.today().date(),
-                        'Player': p_name,
-                        'Matchup': f"{team} vs {opp}" if is_home_tonight else f"{team} @ {opp}",
-                        'Pos': p_pos,
-                        'Def Rank': int(d_data['Def_Rank'].iloc[-1]),
-                        'Avg': round(last_15_avg, 1),
-                        'PRED': round(pred_pts, 1),
-                        'Edge': round(edge, 2),
-                        'O/U': ou_call
-                    })
+                predictions.append({
+                    'Player': p_name,
+                    'Matchup': f"{team} vs {opp}" if is_home_tonight else f"{team} @ {opp}",
+                    'Pos': p_pos,
+                    'Def Rank': int(d_data['Def_Rank'].iloc[-1]),
+                    'Avg': last_15_avg,
+                    'Input': input_vec
+                })
+
+# Batch prediction to prevent thread contention overhead
+if predictions:
+    # Set n_jobs to 1 to stop thread explosion on small predictions
+    model_pts.n_jobs = 1 
+    
+    input_matrix = [p['Input'] for p in predictions]
+    all_preds = model_pts.predict(input_matrix)
+    
+    final_predictions = []
+    for p, pred_pts in zip(predictions, all_preds):
+        edge = abs(pred_pts - p['Avg'])
+        ou_call = "OVER" if pred_pts > p['Avg'] else "UNDER"
+        
+        if edge >= 2.5:
+            final_predictions.append({
+                'Date': datetime.today().date(),
+                'Player': p['Player'],
+                'Matchup': p['Matchup'],
+                'Pos': p['Pos'],
+                'Def Rank': p['Def Rank'],
+                'Avg': round(p['Avg'], 1),
+                'PRED': round(pred_pts, 1),
+                'Edge': round(edge, 2),
+                'O/U': ou_call
+            })
+    predictions = final_predictions
+
 
 df_final = pd.DataFrame(predictions)
 if not df_final.empty:
