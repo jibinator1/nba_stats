@@ -351,7 +351,16 @@ def history():
                            page_type='history',
                            history_data=history_data,
                            summary=summary,
-                           last_updated=last_updated)
+                           last_updated=last_updated,
+                           selected_teams=["", ""],
+                           colnames=[],
+                           records=[],
+                           quick_cols=[],
+                           default_hidden_cols=[],
+                           radar_metrics=[],
+                           league_avg_row=None,
+                           minutes=20,
+                           last_n_games=20)
 
 if __name__ == '__main__':
     app.run(debug=True)
