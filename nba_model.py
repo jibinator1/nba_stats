@@ -22,7 +22,7 @@ SPORT = 'basketball_nba'
 MARKET = 'player_points'
 BOOKMAKER = 'draftkings'
 
-MIN_MINUTES = 20
+MIN_MINUTES = 17
 ROLLING_WINDOW = 20   # defense stats lookback
 PRED_WINDOW = 15      # offense stats lookback
 RECENT_GAMES = 4

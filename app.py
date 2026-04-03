@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 from update import make_data, create_matchups, fetch_logs, get_todays_games
 import pandas as pd
-import os 
 from datetime import datetime
+import requests
+
+# --- Vercel Sync Configuration ---
+# Point to your repository's raw content
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
+IS_VERCEL = os.environ.get('VERCEL') == '1'
 
 TODAYS_GAMES_CACHE = []
 TODAYS_CACHE_DATE = None
@@ -34,25 +39,39 @@ RADAR_COLUMNS = [
 
 def fetch_todays_games_cache():
     """
-    Returns today's matches from the local CSV.
-    No longer caches by date in memory because the source is now a local file
-    that is updated by a background process.
+    Returns today's matches. On Vercel, it uses the remote source.
     """
+    if IS_VERCEL:
+        try:
+            url = f"{GITHUB_RAW_BASE}todays_games.csv"
+            return pd.read_csv(url).to_dict('records')
+        except Exception as e:
+            print(f"Error fetching remote games: {e}")
+            return []
     return get_todays_games()
 
 # Helper to load global data frames
 def load_data():
-    csv_path = 'vs_Position_withavg.csv'
-    df = pd.read_csv(csv_path)
-    pos_df = pd.read_csv('positions.csv')
+    csv_filename = 'vs_Position_withavg.csv'
+    pos_filename = 'positions.csv'
     
-    # Auto-update if missing rank columns
-    if 'eFG_RANK' not in df.columns:
-        from update import make_data
-        make_data(pos_df, 20)
-        df = pd.read_csv(csv_path)
+    if IS_VERCEL:
+        # Fetch from GitHub Raw
+        df = pd.read_csv(f"{GITHUB_RAW_BASE}{csv_filename}")
+        pos_df = pd.read_csv(f"{GITHUB_RAW_BASE}{pos_filename}")
+        last_updated = "Remote Sync" # Could fetch commit date if needed
+    else:
+        # Local fallback
+        df = pd.read_csv(csv_filename)
+        pos_df = pd.read_csv(pos_filename)
         
-    last_updated = datetime.fromtimestamp(os.path.getmtime(csv_path)).strftime('%Y-%m-%d %I:%M %p')
+        # Auto-update if missing rank columns
+        if 'eFG_RANK' not in df.columns:
+            from update import make_data
+            make_data(pos_df, 20)
+            df = pd.read_csv(csv_filename)
+        last_updated = datetime.fromtimestamp(os.path.getmtime(csv_filename)).strftime('%Y-%m-%d %I:%M %p')
+        
     return df, pos_df, last_updated
 
 def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
@@ -103,6 +122,9 @@ def build_radar_payload():
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
+    if IS_VERCEL:
+        return redirect(url_for('index')) # No manual updates in serverless
+
     min_val = request.form.get('minutes', 20)
     try:
         min_val = int(min_val)
@@ -115,9 +137,6 @@ def manual_update():
     except ValueError:
         last_n = 20
 
-    # Manual update only regenerates stats from local logs.csv 
-    # fetch_logs() is REMOVED to avoid API dependency in the web app
-    
     df, pos_df, last_updated = load_data()
     make_data(pos_df, min_val, last_n) 
     
@@ -132,7 +151,7 @@ def index():
     minutes = 20
     last_n_games = 20
     
-    if request.method == 'POST':
+    if request.method == 'POST' and not IS_VERCEL:
         # 1. Get user input
         team1 = request.form.get('team1', '')
         team2 = request.form.get('team2', '')
@@ -151,8 +170,11 @@ def index():
         # 3. Reload the global dataframe after the file is updated
         df_global, _, last_updated = load_data()
     else:
-        selected_teams = ["", ""]
-        sql_filter = ""
+        # On Vercel, we can still parse inputs but cannot rebuild CSV
+        team1 = request.form.get('team1', '')
+        team2 = request.form.get('team2', '')
+        selected_teams = [team1, team2]
+        sql_filter = request.form.get('sql_filter', '')
     
     df = enrich_dataframe(df_global.copy())
     if team1 !="" and team2!="":
@@ -235,9 +257,10 @@ def matchup():
         raw_last_n = request.form.get('last_n_games', '20')
         last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 20
 
-        # Rebuild data for matchups based on new minute threshold
-        make_data(pos_df, minutes, last_n_games)
-        df, _, last_updated = load_data() # Reload updated data
+        if not IS_VERCEL:
+            # Rebuild data for matchups based on new minute threshold
+            make_data(pos_df, minutes, last_n_games)
+            df, _, last_updated = load_data() # Reload updated data
 
         teams1_list = teams1.split(",")
         teams2_list = teams2.split(",")
@@ -254,15 +277,16 @@ def matchup():
     matchup_df = enrich_dataframe(matchup_df)
     
     # Load Featured Picks from the new stacking model output
-    rf_path = 'rf_predictions.csv'
+    rf_filename = 'rf_predictions.csv'
     todays_picks = []
-    if os.path.exists(rf_path):
-        try:
-            rf_df = pd.read_csv(rf_path)
+    try:
+        path = f"{GITHUB_RAW_BASE}{rf_filename}" if IS_VERCEL else rf_filename
+        if IS_VERCEL or os.path.exists(rf_filename):
+            rf_df = pd.read_csv(path)
             if not rf_df.empty:
                 todays_picks = rf_df.to_dict('records')
-        except Exception as e:
-            print(f"Error loading rf_predictions.csv: {e}")
+    except Exception as e:
+        print(f"Error loading {rf_filename}: {e}")
     
     # If no automated picks yet, we still check todays_games to allow picking
     # but the 'Pick Finder' will mostly rely on the stacking model's rf_predictions.
@@ -297,52 +321,54 @@ def history():
     history_data = []
     summary = {"wins": 0, "losses": 0, "pending": 0, "pct": 0}
 
-    if os.path.exists(hist_path):
-        hist_df = pd.read_csv(hist_path)
+    if IS_VERCEL or os.path.exists(hist_path):
+        hist_path_remote = f"{GITHUB_RAW_BASE}{hist_path}" if IS_VERCEL else hist_path
+        hist_df = pd.read_csv(hist_path_remote)
         if not hist_df.empty:
             # Load logs for matching
             actuals = {}
-            if os.path.exists(logs_path):
-                logs_df = pd.read_csv(logs_path)
+            local_logs_path = f"{GITHUB_RAW_BASE}{logs_path}" if IS_VERCEL else logs_path
+            if IS_VERCEL or os.path.exists(logs_path):
+                logs_df = pd.read_csv(local_logs_path)
                 # Normalize log dates to YYYY-MM-DD
                 logs_df['normalized_date'] = pd.to_datetime(logs_df['GAME_DATE']).dt.strftime('%Y-%m-%d')
                 # Create lookup for (Date, Player) -> PTS
                 for _, row in logs_df.iterrows():
                     actuals[(row['normalized_date'], row['PLAYER_NAME'])] = row['PTS']
+        
+        # Process history
+        for _, row in hist_df.iterrows():
+            p_date = str(row['Date'])
+            p_name = row['Player']
+            line = row['Line']
+            prediction = row['O/U'] # OVER / UNDER
+            actual = actuals.get((p_date, p_name))
             
-            # Process history
-            for _, row in hist_df.iterrows():
-                p_date = str(row['Date'])
-                p_name = row['Player']
-                line = row['Line']
-                prediction = row['O/U'] # OVER / UNDER
-                actual = actuals.get((p_date, p_name))
-                
-                result = "PENDING"
-                if actual is not None:
-                    if prediction == 'OVER':
-                        result = "WIN" if actual > line else "LOSS"
-                    else:
-                        result = "WIN" if actual < line else "LOSS"
-                    
-                    if result == "WIN": summary["wins"] += 1
-                    else: summary["losses"] += 1
+            result = "PENDING"
+            if actual is not None:
+                if prediction == 'OVER':
+                    result = "WIN" if actual > line else "LOSS"
                 else:
-                    summary["pending"] += 1
+                    result = "WIN" if actual < line else "LOSS"
                 
-                history_data.append({
-                    "Date": p_date,
-                    "Player": p_name,
-                    "Matchup": row['Matchup'],
-                    "Line": line,
-                    "Prediction": prediction,
-                    "Actual": actual if actual is not None else "N/A",
-                    "Result": result
-                })
+                if result == "WIN": summary["wins"] += 1
+                else: summary["losses"] += 1
+            else:
+                summary["pending"] += 1
             
-            total_resolved = summary["wins"] + summary["losses"]
-            if total_resolved > 0:
-                summary["pct"] = round((summary["wins"] / total_resolved) * 100, 1)
+            history_data.append({
+                "Date": p_date,
+                "Player": p_name,
+                "Matchup": row['Matchup'],
+                "Line": line,
+                "Prediction": prediction,
+                "Actual": actual if actual is not None else "N/A",
+                "Result": result
+            })
+        
+        total_resolved = summary["wins"] + summary["losses"]
+        if total_resolved > 0:
+            summary["pct"] = round((summary["wins"] / total_resolved) * 100, 1)
 
     # Sort history by date descending
     history_data = sorted(history_data, key=lambda x: x['Date'], reverse=True)
