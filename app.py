@@ -252,9 +252,19 @@ def matchup():
 
     matchup_df = enrich_dataframe(matchup_df)
     
-    # Generate today's picks
-    todays_picks_df = create_matchups(pos_df, df_global.copy(), todays_games, minutes)
-    todays_picks = todays_picks_df.to_dict('records') if not todays_picks_df.empty else []
+    # Load Featured Picks from the new stacking model output
+    rf_path = 'rf_predictions.csv'
+    todays_picks = []
+    if os.path.exists(rf_path):
+        try:
+            rf_df = pd.read_csv(rf_path)
+            if not rf_df.empty:
+                todays_picks = rf_df.to_dict('records')
+        except Exception as e:
+            print(f"Error loading rf_predictions.csv: {e}")
+    
+    # If no automated picks yet, we still check todays_games to allow picking
+    # but the 'Pick Finder' will mostly rely on the stacking model's rf_predictions.
 
     league_avg_row = build_league_average_row(matchup_df)
     available_cols = list(matchup_df.columns.values) if not matchup_df.empty else []

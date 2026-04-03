@@ -260,7 +260,7 @@ print("Building Time-Aware Stacking Ensemble...")
 lgbm_base = LGBMRegressor(objective='quantile', alpha=0.5, random_state=RF_RANDOM_STATE, verbose=-1, n_jobs=1)
 lgbm_search = RandomizedSearchCV(
     estimator=lgbm_base, param_distributions=lgbm_param_grid,
-    n_iter=20, cv=TimeSeriesSplit(n_splits=3), verbose=1, n_jobs=-1, random_state=RF_RANDOM_STATE
+    n_iter=60, cv=TimeSeriesSplit(n_splits=5), verbose=1, n_jobs=-1, random_state=RF_RANDOM_STATE
 )
 lgbm_search.fit(X, y)
 lgbm = lgbm_search.best_estimator_
@@ -268,7 +268,7 @@ lgbm = lgbm_search.best_estimator_
 xgb_base = XGBRegressor(objective='reg:squarederror', random_state=RF_RANDOM_STATE, verbosity=0, n_jobs=1)
 xgb_search = RandomizedSearchCV(
     estimator=xgb_base, param_distributions=xgb_param_grid,
-    n_iter=20, cv=TimeSeriesSplit(n_splits=3), verbose=1, n_jobs=-1, random_state=RF_RANDOM_STATE
+    n_iter=60, cv=TimeSeriesSplit(n_splits=5), verbose=1, n_jobs=-1, random_state=RF_RANDOM_STATE
 )
 xgb_search.fit(X, y)
 xgb = xgb_search.best_estimator_

@@ -16,7 +16,7 @@
             </div>
             <div class="tabs">
                 <a href="/" class="tab-link {{ 'active' if page_type != 'matchup' }}">Defense Ranks</a>
-                <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Good Matchups</a>
+                <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Featured Picks</a>
             </div>
         </nav>
 
@@ -108,18 +108,37 @@
         <section class="pick-finder-section">
             <div class="section-label">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                Pick Finder (Today's Automated Analysis)
+                Featured Picks (Automated Ensemble Model)
             </div>
             <div class="pick-finder-container">
                 <div class="picks-grid">
                     {% for pick in todays_picks %}
-                    <div class="pick-card" onclick="populateMatchup('{{ pick.Matchup.split(' vs ')[0] }}', '{{ pick.Matchup.split(' vs ')[1] }}')">
+                    <div class="pick-card" onclick="populateMatchup('{{ pick.Matchup.split(' vs ')[0] if ' vs ' in pick.Matchup else pick.Matchup.split(' @ ')[0] }}', '{{ pick.Matchup.split(' vs ')[1] if ' vs ' in pick.Matchup else pick.Matchup.split(' @ ')[1] }}')">
                         <div class="pick-header">
-                            <span class="pick-player">{{ pick.Player }}</span>
-                            <span class="pick-badge badge-{{ pick.Direction.lower() }}">{{ pick.Direction }}</span>
+                            <div class="pick-player-info">
+                                <span class="pick-player">{{ pick.Player }}</span>
+                                <span class="pick-matchup-small">{{ pick.Matchup }}</span>
+                            </div>
+                            <span class="pick-badge badge-risk-{{ pick.Risk|lower }}">{{ pick.Risk }}</span>
                         </div>
-                        <div class="pick-stat-info">{{ pick.Pos }} • {{ pick.Stat }}</div>
-                        <div class="pick-matchup">{{ pick.Matchup }}</div>
+                        <div class="pick-comparison">
+                            <div class="comp-col">
+                                <span class="comp-label">Market</span>
+                                <span class="comp-val">{{ pick.Line }}</span>
+                            </div>
+                            <div class="comp-col">
+                                <span class="comp-label">Model</span>
+                                <span class="comp-val val-pred">{{ pick.PRED }}</span>
+                            </div>
+                            <div class="comp-col col-edge">
+                                <span class="comp-label">Edge</span>
+                                <span class="comp-val val-edge">{{ '+' if pick.True_Edge > 0 else '' }}{{ pick.True_Edge }}</span>
+                            </div>
+                        </div>
+                        <div class="pick-footer">
+                            <span class="pick-ou">{{ pick['O/U'] }}</span>
+                            <span class="pick-info">{{ pick.Pos }} • Conf: {{ pick.Confidence }}</span>
+                        </div>
                     </div>
                     {% else %}
                     <div class="no-picks">No high-confidence picks found for the current thresholds. Try lowering the Minutes requirement.</div>
