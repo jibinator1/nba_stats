@@ -362,10 +362,13 @@ def history():
                     "Date": p_date,
                     "Player": p_name,
                     "Matchup": row['Matchup'],
+                    "Pos": row['Pos'] if 'Pos' in row else 'N/A',
                     "Line": line,
                     "Prediction": prediction,
                     "Actual": actual if actual is not None else "N/A",
-                    "Result": result
+                    "Result": result,
+                    "True_Edge": row['True_Edge'] if 'True_Edge' in row else 'N/A',
+                    "Confidence": row['Confidence'] if 'Confidence' in row else 'N/A'
                 })
         
         total_resolved = summary["wins"] + summary["losses"]
