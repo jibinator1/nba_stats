@@ -21,9 +21,11 @@ QUICK_VIEW_COLUMNS = [
 ]
 
 DEFAULT_HIDDEN_COLUMNS = {
-    'TS_PCT', 'TS_RANK',
-    'FGM', 'FGA', 'FG3A', 'FG3A_RANK',
+    'TS_PCT', 'TS_RANK', 'eFG_PCT', 'eFG_RANK',
+    'FGM', 'FGA', 'FG3A', 'FG3A_RANK', 'FG3M_RANK',
     'FTA', 'FTM', 'FTr', 'FTr_RANK',
+    'STL_RANK', 'BLK_RANK', 'TOV_RANK',
+    'PACE_RANK', 'DEF_RTG_RANK',
     'TEAM_PTS', 'TEAM_REB', 'TEAM_AST',
 }
 
@@ -93,7 +95,29 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         if base_col in df.columns and l5_col in df.columns:
             diff = df[l5_col] - df[base_col]
             df[trend_col] = diff.apply(lambda x: '↑' if x > 0.5 else ('↓' if x < -0.5 else '→'))
-    return df
+            
+    # Remove IDs
+    if 'OPPONENT_ID' in df.columns: df = df.drop(columns=['OPPONENT_ID'])
+    if 'TEAM_ID' in df.columns: df = df.drop(columns=['TEAM_ID'])
+
+    # Reorder columns logically
+    preferred_order = [
+         'TEAM', 'POSITION', 'MATCHUP_SCORE', 'OPP_MIN', 
+         'PTS', 'L5_PTS', 'PTS_TREND', 'PTS_RANK',
+         'REB', 'L5_REB', 'REB_TREND', 'REB_RANK',
+         'AST', 'L5_AST', 'AST_TREND', 'AST_RANK',
+         'FG3M', 'FG3M_RANK', 'STL', 'STL_RANK', 'BLK', 'BLK_RANK', 'TOV', 'TOV_RANK',
+         'PACE', 'PACE_RANK', 'DEF_RTG', 'DEF_RTG_RANK',
+         'eFG_PCT', 'eFG_RANK', 'TS_PCT', 'TS_RANK',
+         'FGA', 'FG3A', 'FTA', 'FTr', 'FTr_RANK',
+         'TEAM_PTS', 'TEAM_REB', 'TEAM_AST'
+    ]
+    
+    # Keep columns that exist in the preferred order, then any remaining ones
+    final_cols = [c for c in preferred_order if c in df.columns]
+    final_cols += [c for c in df.columns if c not in final_cols]
+    
+    return df[final_cols]
 
 def apply_query_filter(df: pd.DataFrame, sql_filter: str):
     if not sql_filter:
