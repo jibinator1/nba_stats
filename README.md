@@ -1,6 +1,6 @@
 # NBA Matchup Hub 🏀
 
-A premium, data-driven dashboard for analyzing NBA defensive vulnerabilities and finding exploitable player matchups. You can access it using this link: https://nba-stats-backend.onrender.com/
+A premium, data-driven dashboard for analyzing NBA defensive vulnerabilities and finding exploitable player matchups. You can access it using this link: https://nba-stats-silk.vercel.app/
 
 ## 🚀 How It Works
 
