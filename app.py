@@ -45,7 +45,9 @@ def fetch_todays_games_cache():
     if IS_VERCEL:
         try:
             url = f"{GITHUB_RAW_BASE}todays_games.csv"
-            return pd.read_csv(url).to_dict('records')
+            df = pd.read_csv(url)
+            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
+            return [g for g in games_list if len(g) == 2]
         except Exception as e:
             print(f"Error fetching remote games: {e}")
             return []
@@ -151,8 +153,10 @@ def index():
     team2 = ""
     minutes = 20
     last_n_games = 20
+    selected_teams = ["", ""]
+    sql_filter = ""
     
-    if request.method == 'POST' and not IS_VERCEL:
+    if request.method == 'POST':
         # 1. Get user input
         team1 = request.form.get('team1', '')
         team2 = request.form.get('team2', '')
@@ -165,17 +169,12 @@ def index():
         raw_last_n = request.form.get('last_n_games', '20')
         last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 20
 
-        # 2. Rebuild the CSV first so the view reflects the new threshold
-        make_data(pos_df_global, minutes, last_n_games)
-        
-        # 3. Reload the global dataframe after the file is updated
-        df_global, _, last_updated = load_data()
-    else:
-        # On Vercel, we can still parse inputs but cannot rebuild CSV
-        team1 = request.form.get('team1', '')
-        team2 = request.form.get('team2', '')
-        selected_teams = [team1, team2]
-        sql_filter = request.form.get('sql_filter', '')
+        if not IS_VERCEL:
+            # 2. Rebuild the CSV first so the view reflects the new threshold
+            make_data(pos_df_global, minutes, last_n_games)
+            
+            # 3. Reload the global dataframe after the file is updated
+            df_global, _, last_updated = load_data()
     
     df = enrich_dataframe(df_global.copy())
     if team1 !="" and team2!="":
