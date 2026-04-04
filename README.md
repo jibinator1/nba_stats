@@ -2,7 +2,7 @@
 
 A premium, data-driven dashboard for analyzing NBA defensive vulnerabilities and finding exploitable player matchups. You can access it using this link: https://nba-stats-silk.vercel.app/
 
-## 🚀 How It Works
+## How It Works
 
 ### 1. Opponent Defensive Ranks
 The main dashboard provides a "Heatmap" of the league's defensive performance against specific positions (PG, SG, SF, PF, C).
@@ -26,7 +26,7 @@ Click on any team row to slide out the **Team Profile Panel**. This shows a rada
 
 ---
 
-## 🛠️ Running Locally
+## Running Locally
 
 1. **Install Dependencies**:
    ```bash
@@ -41,7 +41,7 @@ Click on any team row to slide out the **Team Profile Panel**. This shows a rada
 3. **Open in Browser**:
    Visit [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-## 📊 Data Refresh
+## Data Refresh
 The data is cached daily. To force a refresh:
 - Click **"Update Analysis"** on the website to rebuild the `vs_Position_withavg.csv` with your custom thresholds.
 - The `app.py` automatically fetches the latest logs from the NBA API if they are missing or outdated.
