@@ -138,31 +138,33 @@ def manage_cloud_execution():
         
         # 4. Pull Results Back (Only if model finishes successfully)
         print("Downloading results...")
-        local_result_path = os.path.join(SCRIPT_DIR, "rf_predictions.csv")
+        local_rf_path = os.path.join(SCRIPT_DIR, "rf_predictions.csv")
+        local_hist_path = os.path.join(SCRIPT_DIR, "prediction_history.csv")
         temp_result_path = os.path.join(SCRIPT_DIR, "new_predictions.csv")
+        
         pull_cmd = f"gcloud compute scp {VM_NAME}:rf_predictions.csv {temp_result_path} --zone {ZONE}"
         subprocess.run(pull_cmd, shell=True, check=True, timeout=TIMEOUT_SCP)
         
-        # Merge with existing predictions to maintain history
-        if os.path.exists(local_result_path):
-            try:
-                existing_df = pd.read_csv(local_result_path)
-                new_df = pd.read_csv(temp_result_path)
-                # Combine, deduplicate by Date/Player/Matchup, and sort by Date (descending)
-                updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['Date', 'Player', 'Matchup'], keep='last')
-                updated_df['Date'] = pd.to_datetime(updated_df['Date'])
-                updated_df.sort_values(by='Date', ascending=False, inplace=True)
-                updated_df.to_csv(local_result_path, index=False)
-                print(f"Successfully merged new predictions. History preserved.")
-            except Exception as e:
-                print(f"Error merging predictions: {e}. Defaulting to overwrite.")
-                os.replace(temp_result_path, local_result_path)
-        else:
-            os.replace(temp_result_path, local_result_path)
-            print("Created new rf_predictions.csv.")
+        # 1. Update Featured Picks (Today only - simply overwrite)
+        os.replace(temp_result_path, local_rf_path)
+        print("Updated Featured Picks (rf_predictions.csv) with today's results.")
         
-        if os.path.exists(temp_result_path):
-            os.remove(temp_result_path)
+        # 2. Update Model History (Append and deduplicate)
+        try:
+            new_df = pd.read_csv(local_rf_path)
+            if os.path.exists(local_hist_path):
+                hist_df = pd.read_csv(local_hist_path)
+                # Combine, deduplicate by Date/Player/Matchup, and sort by Date (descending)
+                updated_hist = pd.concat([hist_df, new_df]).drop_duplicates(subset=['Date', 'Player', 'Matchup'], keep='last')
+                updated_hist['Date'] = pd.to_datetime(updated_hist['Date'])
+                updated_hist.sort_values(by='Date', ascending=False, inplace=True)
+                updated_hist.to_csv(local_hist_path, index=False)
+                print(f"Successfully archived results to {local_hist_path}.")
+            else:
+                new_df.to_csv(local_hist_path, index=False)
+                print(f"Initialized history log: {local_hist_path}.")
+        except Exception as e:
+            print(f"Warning: Could not update history log: {e}")
         
         # 5. Stop VM to save costs
         print(f"Shutting down {VM_NAME}...")
