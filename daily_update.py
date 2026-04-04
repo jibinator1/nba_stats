@@ -15,6 +15,9 @@ ZONE = "us-central1-b"
 VM_REMOTE_CMD = "source ~/nba_env/bin/activate && python ~/nba_model.py"
 REQUIRED_CSVS = ['logs.csv', 'positions.csv', 'injuries.csv', 'todays_games.csv', 'nba_model.py']
 AUTO_PUSH = True
+SCP_RETRIES = 3
+TIMEOUT_SSH = 1800  # 30 minutes
+TIMEOUT_SCP = 300   # 5 minutes
 
 # NBA API Headers
 headers = {
@@ -89,18 +92,39 @@ def run_gcloud(cmd_list):
 def manage_cloud_execution():
     print(f"\n--- Cloud Orchestration: {VM_NAME} ---")
     
-    # 1. Start VM if needed
-    print(f"Starting VM {VM_NAME}...")
-    subprocess.run(f"gcloud compute instances start {VM_NAME} --zone {ZONE}", shell=True, check=True)
+    # 1. Check VM Status and Start if needed
+    print(f"Checking status of VM {VM_NAME}...")
+    status = run_gcloud(["compute", "instances", "describe", VM_NAME, "--zone", ZONE, "--format", "get(status)"])
     
-    # Wait for SSH to be ready (approximate)
-    print("Waiting for VM to be ready...")
-    time.sleep(20) 
+    if status != "RUNNING":
+        print(f"Starting VM {VM_NAME} (Current status: {status})...")
+        subprocess.run(f"gcloud compute instances start {VM_NAME} --zone {ZONE}", shell=True, check=True)
+        # Wait for SSH to be ready (approximate)
+        print("Waiting 30 seconds for VM to boot...")
+        time.sleep(30)
+    else:
+        print(f"VM {VM_NAME} is already running.")
 
-    # 2. Upload CSV files
-    print(f"Uploading CSV files to @{VM_NAME}...")
-    scp_cmd = f"gcloud compute scp {' '.join(REQUIRED_CSVS)} {VM_NAME}: --zone {ZONE}"
-    subprocess.run(scp_cmd, shell=True, check=True)
+    # 2. Upload CSV files with absolute paths and retries
+    print(f"Uploading files to @{VM_NAME}...")
+    abs_csvs = [os.path.join(SCRIPT_DIR, f) for f in REQUIRED_CSVS]
+    scp_cmd = f"gcloud compute scp {' '.join(abs_csvs)} {VM_NAME}: --zone {ZONE}"
+    
+    success = False
+    for i in range(SCP_RETRIES):
+        try:
+            print(f"Attempt {i+1}/{SCP_RETRIES} to upload files...")
+            subprocess.run(scp_cmd, shell=True, check=True, timeout=TIMEOUT_SCP)
+            success = True
+            break
+        except Exception as e:
+            print(f"Upload attempt {i+1} failed: {e}")
+            if i < SCP_RETRIES - 1:
+                time.sleep(10)
+    
+    if not success:
+        print("[!] All upload attempts failed.")
+        raise Exception("Failed to upload required files to VM.")
 
     # 3. Execute Model Remote
     print("Executing model remotely (Estimated time: 10-15 minutes)...")
@@ -109,20 +133,55 @@ def manage_cloud_execution():
     ssh_cmd = f'gcloud compute ssh {VM_NAME} --zone {ZONE} --command "bash -c \'{remote_cmd}\'"'
     
     try:
-        subprocess.run(ssh_cmd, shell=True, check=True)
+        # Run with a generous timeout to prevent infinite hangs
+        subprocess.run(ssh_cmd, shell=True, check=True, timeout=TIMEOUT_SSH)
         
         # 4. Pull Results Back (Only if model finishes successfully)
         print("Downloading results...")
-        pull_cmd = f"gcloud compute scp {VM_NAME}:rf_predictions.csv . --zone {ZONE}"
-        subprocess.run(pull_cmd, shell=True, check=True)
+        local_result_path = os.path.join(SCRIPT_DIR, "rf_predictions.csv")
+        temp_result_path = os.path.join(SCRIPT_DIR, "new_predictions.csv")
+        pull_cmd = f"gcloud compute scp {VM_NAME}:rf_predictions.csv {temp_result_path} --zone {ZONE}"
+        subprocess.run(pull_cmd, shell=True, check=True, timeout=TIMEOUT_SCP)
         
-        # 5. Stop VM to save costs (Only if successful)
+        # Merge with existing predictions to maintain history
+        if os.path.exists(local_result_path):
+            try:
+                existing_df = pd.read_csv(local_result_path)
+                new_df = pd.read_csv(temp_result_path)
+                # Combine, deduplicate by Date/Player/Matchup, and sort by Date (descending)
+                updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['Date', 'Player', 'Matchup'], keep='last')
+                updated_df['Date'] = pd.to_datetime(updated_df['Date'])
+                updated_df.sort_values(by='Date', ascending=False, inplace=True)
+                updated_df.to_csv(local_result_path, index=False)
+                print(f"Successfully merged new predictions. History preserved.")
+            except Exception as e:
+                print(f"Error merging predictions: {e}. Defaulting to overwrite.")
+                os.replace(temp_result_path, local_result_path)
+        else:
+            os.replace(temp_result_path, local_result_path)
+            print("Created new rf_predictions.csv.")
+        
+        if os.path.exists(temp_result_path):
+            os.remove(temp_result_path)
+        
+        # 5. Stop VM to save costs
         print(f"Shutting down {VM_NAME}...")
         subprocess.run(f"gcloud compute instances stop {VM_NAME} --zone {ZONE}", shell=True, check=True)
 
+    except subprocess.TimeoutExpired:
+        print(f"\n[!] Model execution TIMED OUT after {TIMEOUT_SSH/60} minutes.")
+        print(f"[!] Stopping VM {VM_NAME} for cost safety.")
+        subprocess.run(f"gcloud compute instances stop {VM_NAME} --zone {ZONE}", shell=True)
+        raise Exception("Remote execution timed out.")
     except subprocess.CalledProcessError as e:
         print(f"\n[!] Model execution failed or connection dropped: {e}")
-        print(f"[!] Leaving {VM_NAME} RUNNING for debugging. Please check manually.")
+        print(f"[!] Stopping VM {VM_NAME} for cost safety.")
+        subprocess.run(f"gcloud compute instances stop {VM_NAME} --zone {ZONE}", shell=True)
+        raise e
+    except Exception as e:
+        print(f"\n[!] An unexpected error occurred: {e}")
+        print(f"[!] Stopping VM {VM_NAME} for cost safety.")
+        subprocess.run(f"gcloud compute instances stop {VM_NAME} --zone {ZONE}", shell=True)
         raise e
 
 
