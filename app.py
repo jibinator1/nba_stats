@@ -367,8 +367,8 @@ def history():
                     "Prediction": prediction,
                     "Actual": actual if actual is not None else "N/A",
                     "Result": result,
-                    "True_Edge": row['True_Edge'] if 'True_Edge' in row else 'N/A',
-                    "Confidence": row['Confidence'] if 'Confidence' in row else 'N/A'
+                    "True_Edge": row['True_Edge'] if 'True_Edge' in row else 0,
+                    "Confidence": row['Confidence'] if 'Confidence' in row else 0
                 })
         
         total_resolved = summary["wins"] + summary["losses"]
