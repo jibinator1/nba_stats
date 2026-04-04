@@ -537,11 +537,13 @@
             table.querySelectorAll('[data-col]').forEach(el => {
                 const col = el.getAttribute('data-col');
                 let visible = true;
-                if (defaultHiddenCols.has(col) && mode === 'full') visible = false;
-                if (showCols && !showCols.has(col)) visible = false;
                 
-                const checkbox = document.querySelector(`.col-toggle[data-col="${col}"]`);
-                if (checkbox && !checkbox.checked) visible = false;
+                if (mode === 'quick') {
+                    if (showCols && !showCols.has(col)) visible = false;
+                } else {
+                    const checkbox = document.querySelector(`.col-toggle[data-col="${col}"]`);
+                    if (checkbox && !checkbox.checked) visible = false;
+                }
                 
                 el.style.display = visible ? '' : 'none';
             });

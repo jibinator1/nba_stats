@@ -21,11 +21,11 @@ QUICK_VIEW_COLUMNS = [
 ]
 
 DEFAULT_HIDDEN_COLUMNS = {
-    'TS_PCT', 'TS_RANK', 'eFG_PCT', 'eFG_RANK',
-    'FGM', 'FGA', 'FG3A', 'FG3A_RANK', 'FG3M_RANK',
-    'FTA', 'FTM', 'FTr', 'FTr_RANK',
-    'STL_RANK', 'BLK_RANK', 'TOV_RANK',
-    'PACE_RANK', 'DEF_RTG_RANK',
+    'PTS_TREND', 'REB_TREND', 'AST_TREND',
+    'eFG_PCT', 'eFG_RANK',
+    'FGM', 'FGA', 'FTA', 'FTM', 'FTr', 'FTr_RANK',
+    'STL', 'STL_RANK', 'BLK', 'BLK_RANK', 'TOV', 'TOV_RANK',
+    'PACE_RANK', 'DEF_RTG', 'DEF_RTG_RANK',
     'TEAM_PTS', 'TEAM_REB', 'TEAM_AST',
 }
 
