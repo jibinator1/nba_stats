@@ -175,6 +175,15 @@ def index():
             
             # 3. Reload the global dataframe after the file is updated
             df_global, _, last_updated = load_data()
+        else:
+            try:
+                logs_url = f"{GITHUB_RAW_BASE}logs.csv"
+                logs_df = pd.read_csv(logs_url)
+                new_df = make_data(pos_df_global, minutes, last_n_games, logs_df=logs_df, return_df=True)
+                if new_df is not None and not new_df.empty:
+                    df_global = new_df
+            except Exception as e:
+                print(f"Error rebuilding dynamically on Vercel: {e}")
     
     df = enrich_dataframe(df_global.copy())
     if team1 !="" and team2!="":
@@ -261,6 +270,16 @@ def matchup():
             # Rebuild data for matchups based on new minute threshold
             make_data(pos_df, minutes, last_n_games)
             df, _, last_updated = load_data() # Reload updated data
+            df = enrich_dataframe(df.copy())
+        else:
+            try:
+                logs_url = f"{GITHUB_RAW_BASE}logs.csv"
+                logs_df = pd.read_csv(logs_url)
+                new_df = make_data(pos_df, minutes, last_n_games, logs_df=logs_df, return_df=True)
+                if new_df is not None and not new_df.empty:
+                    df = enrich_dataframe(new_df.copy())
+            except Exception as e:
+                print(f"Error rebuilding dynamically on Vercel: {e}")
 
         teams1_list = teams1.split(",")
         teams2_list = teams2.split(",")

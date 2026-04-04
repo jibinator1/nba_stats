@@ -54,15 +54,17 @@ def get_todays_games():
     except Exception:
         return []
 
-def make_data(pos_df, minutes, last_n_games=20):
+def make_data(pos_df, minutes, last_n_games=20, logs_df=None, return_df=False):
     """Core data processing for the web dashboard."""
     #get positions for each players
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
 
-    if not os.path.exists("logs.csv"):
-        return
-        
-    logs_raw = pd.read_csv("logs.csv")
+    if logs_df is not None:
+        logs_raw = logs_df.copy()
+    else:
+        if not os.path.exists("logs.csv"):
+            return None if return_df else None
+        logs_raw = pd.read_csv("logs.csv")
     team_id_map = logs_raw[['TEAM_ABBREVIATION', 'TEAM_ID']].drop_duplicates()
     team_id_lookup = dict(zip(team_id_map['TEAM_ABBREVIATION'], team_id_map['TEAM_ID']))
 
@@ -139,7 +141,10 @@ def make_data(pos_df, minutes, last_n_games=20):
     final_result = final_result.round(2)
     export_cols = ['TEAM', 'POSITION', 'MIN', 'PTS', 'PTS_RANK', 'L5_PTS','REB', 'REB_RANK', 'L5_REB','AST', 'AST_RANK', 'L5_AST','PACE', 'PACE_RANK', 'DEF_RTG', 'DEF_RTG_RANK','eFG_PCT', 'eFG_RANK', 'TS_PCT', 'TS_RANK','FGA', 'FG3M', 'FG3M_RANK', 'FG3A', 'FG3A_RANK','FTA', 'FTr', 'FTr_RANK','STL', 'STL_RANK', 'BLK', 'BLK_RANK','TOV', 'TOV_RANK','TEAM_PTS', 'TEAM_REB', 'TEAM_AST']
     final_result.rename(columns={'MIN': 'OPP_MIN'}, inplace=True)
-    final_result.to_csv('vs_Position_withavg.csv', index=False)
+    if return_df:
+        return final_result
+    else:
+        final_result.to_csv('vs_Position_withavg.csv', index=False)
 
 def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
     """Generates matchup picks for the web app UI."""
