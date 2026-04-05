@@ -83,7 +83,13 @@ def fetch_injuries():
 def run_gcloud(cmd_list):
     """Wait for gcloud command to finish and return result."""
     try:
-        result = subprocess.run(cmd_list, capture_output=True, text=True, check=True)
+        # Prepend 'gcloud' if not present
+        if cmd_list[0] != "gcloud":
+            cmd_list = ["gcloud"] + cmd_list
+        
+        # Use shell=True for simple command resolution on Windows
+        cmd_str = " ".join(cmd_list)
+        result = subprocess.run(cmd_str, shell=True, capture_output=True, text=True, check=True)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"Gcloud error: {e.stderr}")
@@ -107,7 +113,7 @@ def manage_cloud_execution():
 
     # 2. Upload CSV files with absolute paths and retries
     print(f"Uploading files to @{VM_NAME}...")
-    abs_csvs = [os.path.join(SCRIPT_DIR, f) for f in REQUIRED_CSVS]
+    abs_csvs = [f'"{os.path.join(SCRIPT_DIR, f)}"' for f in REQUIRED_CSVS]
     scp_cmd = f"gcloud compute scp {' '.join(abs_csvs)} {VM_NAME}: --zone {ZONE}"
     
     success = False
@@ -142,7 +148,7 @@ def manage_cloud_execution():
         local_hist_path = os.path.join(SCRIPT_DIR, "prediction_history.csv")
         temp_result_path = os.path.join(SCRIPT_DIR, "new_predictions.csv")
         
-        pull_cmd = f"gcloud compute scp {VM_NAME}:rf_predictions.csv {temp_result_path} --zone {ZONE}"
+        pull_cmd = f"gcloud compute scp {VM_NAME}:rf_predictions.csv \"{temp_result_path}\" --zone {ZONE}"
         subprocess.run(pull_cmd, shell=True, check=True, timeout=TIMEOUT_SCP)
         
         # 1. Update Featured Picks (Today only - simply overwrite)
