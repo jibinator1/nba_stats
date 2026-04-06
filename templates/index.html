@@ -16,16 +16,14 @@
             </div>
             <div class="tabs">
                 <a href="/" class="tab-link {{ 'active' if page_type == 'defense' }}">Defense Ranks</a>
-                <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Featured Picks</a>
-                <a href="/history" class="tab-link {{ 'active' if page_type == 'history' }}">Model History</a>
+                <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Matchups</a>
             </div>
         </nav>
 
         <section class="hero-container">
             <div class="hero-content">
                 <h2>
-                    {% if page_type == 'matchup' %}Team Matchup Insights
-                    {% elif page_type == 'history' %}Model Performance History
+                    {% if page_type == 'matchup' %}Team Matchups
                     {% else %}Opponent Defensive Ranks{% endif %}
                 </h2>
                 <p class="updated-at">
@@ -111,112 +109,9 @@
         </section>
         {% endif %}
 
-        {% if page_type == 'matchup' %}
-        <section class="pick-finder-section">
-            <div class="section-label">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                Featured Picks (Automated Ensemble Model)
-            </div>
-            <div class="pick-finder-container">
-                <div class="picks-grid">
-                    {% for pick in todays_picks %}
-                    <div class="pick-card" onclick="populateMatchup('{{ pick.Matchup.split(' vs ')[0] if ' vs ' in pick.Matchup else pick.Matchup.split(' @ ')[0] }}', '{{ pick.Matchup.split(' vs ')[1] if ' vs ' in pick.Matchup else pick.Matchup.split(' @ ')[1] }}')">
-                        <div class="pick-header">
-                            <div class="pick-player-info">
-                                <span class="pick-player">{{ pick.Player }}</span>
-                                <span class="pick-matchup-small">{{ pick.Matchup }}</span>
-                            </div>
-                        </div>
-                        <div class="pick-comparison">
-                            <div class="comp-col">
-                                <span class="comp-label">Market</span>
-                                <span class="comp-val">{{ pick.Line }}</span>
-                            </div>
-                            <div class="comp-col">
-                                <span class="comp-label">Model</span>
-                                <span class="comp-val val-pred">{{ pick.PRED }}</span>
-                            </div>
-                            <div class="comp-col col-edge">
-                                <span class="comp-label">Edge</span>
-                                <span class="comp-val val-edge">{{ '+' if pick.True_Edge > 0 else '' }}{{ pick.True_Edge }}</span>
-                            </div>
-                        </div>
-                        <div class="pick-footer">
-                            <span class="pick-ou">{{ pick['O/U'] }}</span>
-                            <span class="pick-info">{{ pick.Pos }}</span>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="no-picks">No high-confidence picks found for the current thresholds. Try lowering the Minutes requirement.</div>
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-        {% endif %}
 
-        {% if page_type == 'history' %}
-        <section class="performance-dashboard" style="margin-bottom: 2rem;">
-            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Win Rate</div>
-                    <div style="font-size: 2rem; font-weight: 800; color: #10b981;">{{ summary.pct }}%</div>
-                </div>
-                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Record (W-L)</div>
-                    <div style="font-size: 2rem; font-weight: 800;">{{ summary.wins }} - {{ summary.losses }}</div>
-                </div>
-                <div class="stat-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Pending</div>
-                    <div style="font-size: 2rem; font-weight: 800; opacity: 0.5;">{{ summary.pending }}</div>
-                </div>
-            </div>
-        </section>
 
-        <section class="history-section">
-            <div class="table-container" style="background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead style="background: rgba(0,0,0,0.2);">
-                        <tr>
-                            <th style="padding: 1rem;">Date</th>
-                            <th style="padding: 1rem;">Player</th>
-                            <th style="padding: 1rem;">Pos</th>
-                            <th style="padding: 1rem;">Matchup</th>
-                            <th style="padding: 1rem;">Market</th>
-                            <th style="padding: 1rem;">Pred</th>
-                            <th style="padding: 1rem;">Edge</th>
-                            <th style="padding: 1rem;">Actual</th>
-                            <th style="padding: 1rem;">Result</th>
-                        </tr>
-                    </thead>
-                    <tbody style="font-size: 0.9rem;">
-                        {% for row in history_data %}
-                        <tr style="border-top: 1px solid rgba(255,255,255,0.05);">
-                            <td style="padding: 1rem; opacity: 0.7;">{{ row.Date }}</td>
-                            <td style="padding: 1rem;"><strong>{{ row.Player }}</strong></td>
-                            <td style="padding: 1rem; opacity: 0.8;">{{ row.Pos }}</td>
-                            <td style="padding: 1rem; opacity: 0.8;">{{ row.Matchup }}</td>
-                            <td style="padding: 1rem;">{{ row.Line }}</td>
-                            <td style="padding: 1rem; font-weight: 700; color: {{ '#10b981' if row.True_Edge > 0 else '#ef4444' }}">{{ '+' if row.True_Edge > 0 else '' }}{{ row.True_Edge }}</td>
-                            <td style="padding: 1rem; font-weight: 700;">{{ row.Actual }}</td>
-                            <td style="padding: 1rem;">
-                                <span class="result-badge {{ row.Result|lower }}" style="padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase;">
-                                    {% if row.Result == 'WIN' %}✅ WIN
-                                    {% elif row.Result == 'LOSS' %}❌ LOSS
-                                    {% else %}⏳ PENDING{% endif %}
-                                </span>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        {% if not history_data %}
-                        <tr>
-                            <td colspan="10" style="padding: 3rem; text-align: center; opacity: 0.5;">No model history available yet.</td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        {% endif %}
+
 
         {% if page_type == 'defense' %}
         <section class="controls-bar">

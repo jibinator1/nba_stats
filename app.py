@@ -320,20 +320,7 @@ def matchup():
 
     matchup_df = enrich_dataframe(matchup_df)
     
-    # Load Featured Picks from the new stacking model output
-    rf_filename = 'rf_predictions.csv'
     todays_picks = []
-    try:
-        path = f"{GITHUB_RAW_BASE}{rf_filename}" if IS_VERCEL else rf_filename
-        if IS_VERCEL or os.path.exists(rf_filename):
-            rf_df = pd.read_csv(path)
-            if not rf_df.empty:
-                todays_picks = rf_df.to_dict('records')
-    except Exception as e:
-        print(f"Error loading {rf_filename}: {e}")
-    
-    # If no automated picks yet, we still check todays_games to allow picking
-    # but the 'Pick Finder' will mostly rely on the stacking model's rf_predictions.
 
     league_avg_row = build_league_average_row(matchup_df)
     available_cols = list(matchup_df.columns.values) if not matchup_df.empty else []
@@ -357,86 +344,7 @@ def matchup():
                            todays_games=todays_games,
                            todays_picks=todays_picks)
 
-@app.route('/history')
-def history():
-    _, _, last_updated = load_data()
-    hist_path = 'prediction_history.csv'
-    logs_path = 'logs.csv'
-    history_data = []
-    actuals = {}
-    summary = {"wins": 0, "losses": 0, "pending": 0, "pct": 0}
 
-    try:
-        if IS_VERCEL or os.path.exists(hist_path):
-            hist_path_remote = f"{GITHUB_RAW_BASE}{hist_path}" if IS_VERCEL else hist_path
-            hist_df = pd.read_csv(hist_path_remote)
-            if not hist_df.empty:
-                # Load logs for matching
-                local_logs_path = f"{GITHUB_RAW_BASE}{logs_path}" if IS_VERCEL else logs_path
-                if IS_VERCEL or os.path.exists(logs_path):
-                    logs_df = pd.read_csv(local_logs_path)
-                    # Normalize log dates to YYYY-MM-DD
-                    logs_df['normalized_date'] = pd.to_datetime(logs_df['GAME_DATE']).dt.strftime('%Y-%m-%d')
-                    # Create lookup for (Date, Player) -> PTS
-                    for _, row in logs_df.iterrows():
-                        actuals[(row['normalized_date'], row['PLAYER_NAME'])] = row['PTS']
-            
-            # Process history
-            for _, row in hist_df.iterrows():
-                p_date = str(row['Date'])
-                p_name = row['Player']
-                line = row['Line']
-                prediction = row['O/U'] # OVER / UNDER
-                actual = actuals.get((p_date, p_name))
-                
-                result = "PENDING"
-                if actual is not None:
-                    if prediction == 'OVER':
-                        result = "WIN" if actual > line else "LOSS"
-                    else:
-                        result = "WIN" if actual < line else "LOSS"
-                    
-                    if result == "WIN": summary["wins"] += 1
-                    else: summary["losses"] += 1
-                else:
-                    summary["pending"] += 1
-                
-                history_data.append({
-                    "Date": p_date,
-                    "Player": p_name,
-                    "Matchup": row['Matchup'],
-                    "Pos": row['Pos'] if 'Pos' in row else 'N/A',
-                    "Line": line,
-                    "Prediction": prediction,
-                    "Actual": actual if actual is not None else "N/A",
-                    "Result": result,
-                    "True_Edge": row['True Edge'] if 'True Edge' in row else (row['True_Edge'] if 'True_Edge' in row else 0)
-                })
-        
-        total_resolved = summary["wins"] + summary["losses"]
-        if total_resolved > 0:
-            summary["pct"] = round((summary["wins"] / total_resolved) * 100, 1)
-    except Exception as e:
-        print(f"Error loading history: {e}")
-
-    # Sort history by date descending
-    history_data = sorted(history_data, key=lambda x: x['Date'], reverse=True)
-
-    return render_template('index.html',
-                           page_type='history',
-                           history_data=history_data,
-                           summary=summary,
-                           last_updated=last_updated,
-                           selected_teams=["", ""],
-                           colnames=[],
-                           records=[],
-                           quick_cols=[],
-                           default_hidden_cols=[],
-                           radar_metrics=[],
-                           league_avg_row=None,
-                           minutes=20,
-                           last_n_games=20,
-                           todays_games=fetch_todays_games_cache())
 
 if __name__ == '__main__':
     app.run(debug=True)
