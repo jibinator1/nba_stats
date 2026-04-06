@@ -158,17 +158,22 @@ def manage_cloud_execution():
         # 2. Update Model History (Append and deduplicate)
         try:
             new_df = pd.read_csv(local_rf_path)
-            if os.path.exists(local_hist_path):
-                hist_df = pd.read_csv(local_hist_path)
-                # Combine, deduplicate by Date/Player/Matchup, and sort by Date (descending)
-                updated_hist = pd.concat([hist_df, new_df]).drop_duplicates(subset=['Date', 'Player', 'Matchup'], keep='last')
-                updated_hist['Date'] = pd.to_datetime(updated_hist['Date'])
-                updated_hist.sort_values(by='Date', ascending=False, inplace=True)
-                updated_hist.to_csv(local_hist_path, index=False)
-                print(f"Successfully archived results to {local_hist_path}.")
+            if not new_df.empty:
+                new_df['Date'] = new_df['Date'].astype(str)
+                if os.path.exists(local_hist_path) and os.path.getsize(local_hist_path) > 10:
+                    hist_df = pd.read_csv(local_hist_path)
+                    hist_df['Date'] = hist_df['Date'].astype(str)
+                    # Combine with outer join to handle column differences, deduplicate
+                    updated_hist = pd.concat([hist_df, new_df], ignore_index=True)
+                    updated_hist = updated_hist.drop_duplicates(subset=['Date', 'Player', 'Matchup'], keep='last')
+                    updated_hist.sort_values(by='Date', ascending=False, inplace=True)
+                    updated_hist.to_csv(local_hist_path, index=False)
+                    print(f"Successfully archived {len(new_df)} results to {local_hist_path}.")
+                else:
+                    new_df.to_csv(local_hist_path, index=False)
+                    print(f"Initialized history log: {local_hist_path}.")
             else:
-                new_df.to_csv(local_hist_path, index=False)
-                print(f"Initialized history log: {local_hist_path}.")
+                print("Warning: No predictions to archive (empty rf_predictions.csv).")
         except Exception as e:
             print(f"Warning: Could not update history log: {e}")
         

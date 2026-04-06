@@ -126,7 +126,6 @@
                                 <span class="pick-player">{{ pick.Player }}</span>
                                 <span class="pick-matchup-small">{{ pick.Matchup }}</span>
                             </div>
-                            <span class="pick-badge badge-risk-{{ pick.Risk|lower }}">Risk: {{ pick.Risk }}</span>
                         </div>
                         <div class="pick-comparison">
                             <div class="comp-col">
@@ -144,7 +143,7 @@
                         </div>
                         <div class="pick-footer">
                             <span class="pick-ou">{{ pick['O/U'] }}</span>
-                            <span class="pick-info">{{ pick.Pos }} • Conf: {{ pick.Confidence }}</span>
+                            <span class="pick-info">{{ pick.Pos }}</span>
                         </div>
                     </div>
                     {% else %}
@@ -185,7 +184,6 @@
                             <th style="padding: 1rem;">Market</th>
                             <th style="padding: 1rem;">Pred</th>
                             <th style="padding: 1rem;">Edge</th>
-                            <th style="padding: 1rem;">Conf</th>
                             <th style="padding: 1rem;">Actual</th>
                             <th style="padding: 1rem;">Result</th>
                         </tr>
@@ -198,9 +196,7 @@
                             <td style="padding: 1rem; opacity: 0.8;">{{ row.Pos }}</td>
                             <td style="padding: 1rem; opacity: 0.8;">{{ row.Matchup }}</td>
                             <td style="padding: 1rem;">{{ row.Line }}</td>
-                            <td style="padding: 1rem;"><span class="badge {{ row.Prediction|lower }}">{{ row.Prediction }}</span></td>
                             <td style="padding: 1rem; font-weight: 700; color: {{ '#10b981' if row.True_Edge > 0 else '#ef4444' }}">{{ '+' if row.True_Edge > 0 else '' }}{{ row.True_Edge }}</td>
-                            <td style="padding: 1rem; opacity: 0.9;">{{ row.Confidence }}</td>
                             <td style="padding: 1rem; font-weight: 700;">{{ row.Actual }}</td>
                             <td style="padding: 1rem;">
                                 <span class="result-badge {{ row.Result|lower }}" style="padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase;">

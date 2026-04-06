@@ -110,7 +110,8 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
          'PACE', 'PACE_RANK', 'DEF_RTG', 'DEF_RTG_RANK',
          'eFG_PCT', 'eFG_RANK', 'TS_PCT', 'TS_RANK',
          'FGA', 'FG3A', 'FTA', 'FTr', 'FTr_RANK',
-         'TEAM_PTS', 'TEAM_REB', 'TEAM_AST'
+         'TEAM_PTS', 'TEAM_REB', 'TEAM_AST',
+         'PRED', 'Edge', 'O/U', 'Line', 'True Edge'
     ]
     
     # Keep columns that exist in the preferred order, then any remaining ones
@@ -409,8 +410,7 @@ def history():
                     "Prediction": prediction,
                     "Actual": actual if actual is not None else "N/A",
                     "Result": result,
-                    "True_Edge": row['True_Edge'] if 'True_Edge' in row else 0,
-                    "Confidence": row['Confidence'] if 'Confidence' in row else 0
+                    "True_Edge": row['True Edge'] if 'True Edge' in row else (row['True_Edge'] if 'True_Edge' in row else 0)
                 })
         
         total_resolved = summary["wins"] + summary["losses"]
