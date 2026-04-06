@@ -48,12 +48,12 @@ PRED_WINDOW = 15 # offense stats for last 15
 SEASON = '2025-26'    
 RECENT_GAMES = 4 #number of games for recent column
 
-# High-Performance Parameters for your computer
+# Optimized Parameters for VM to finish under 30 minutes
 PARAM_DIST = {
-    'n_estimators': [500, 800, 1000, 1500],
-    'max_depth': [10, 15, 20, None],
-    'min_samples_leaf': [1, 2, 4],
-    'max_features': ['sqrt', 'log2', None]
+    'n_estimators': [200, 300, 400],
+    'max_depth': [10, 15, None],
+    'min_samples_leaf': [2, 4],
+    'max_features': ['sqrt', 'log2']
 }
 RF_RANDOM_STATE = 42  
 
@@ -189,16 +189,16 @@ features = [
 progress(5, f"Training data ready: {len(training_data)} rows, {len(features)} features.")
 
 # ===== STEP 6: MODEL TRAINING (SLOWEST STEP) =====
-progress(6, f"Starting RandomForest training: n_iter=20, cv=5, total=100 fits...")
+progress(6, f"Starting RandomForest training: n_iter=40, cv=5, total=200 fits...")
 model_search = RandomizedSearchCV(
-    # SAFEGUARD: n_jobs=1 here prevents nested parallelism which crashes VMs
+    # CPU INTENSIVE: n_jobs=-1 uses all CPU cores to build trees concurrently
     estimator=RandomForestRegressor(random_state=RF_RANDOM_STATE, n_jobs=1),
     param_distributions=PARAM_DIST,
-    n_iter=20, 
+    n_iter=40, 
     cv=TimeSeriesSplit(n_splits=5), 
     verbose=1,
-    # SAFEGUARD: Use all 16 cores for the parallel fits
-    n_jobs=-1,
+    # MEMORY SAFE: n_jobs=1 runs one fit at a time so memory doesn't duplicate datasets
+    n_jobs=1,
     random_state=RF_RANDOM_STATE
 )
 
@@ -406,12 +406,15 @@ progress(9, f"Got lines for {len(live_lines_map)} players.")
 df_final['Line'] = df_final['Player'].apply(lambda x: live_lines_map.get(normalize_name(x)))
 
 # 3. Calculate True Edge (PRED - Line) and apply Line Deviation Safeguard
-df_final['True Edge'] = df_final['PRED'] - df_final['Line']
+df_final['True Edge'] = (df_final['PRED'] - df_final['Line']).round(2)
 
 # Safeguard 2: Line Deviation Filter
 # Filters out lines that are more than 35% away from the player's average (blowout/role risk)
 df_final['Line_Dev'] = (abs(df_final['Line'] - df_final['Avg']) / df_final['Avg'])
 df_final = df_final[df_final['Line_Dev'] < 0.35]
+
+# Safeguard 3: True Edge Minimum Threshold
+df_final = df_final[abs(df_final['True Edge']) >= 2.5]
 
 # 4. Set the final column order
 column_order = [
