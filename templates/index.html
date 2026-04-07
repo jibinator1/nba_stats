@@ -74,7 +74,7 @@
 
         {% if page_type == 'defense' %}
         <section class="filter-section">
-            <form method="POST" class="filter-form">
+            <form method="POST" class="filter-form" id="filterForm">
                 <label>
                     <span>Minutes Playtime Threshold</span>
                     <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 20 }}" required>
@@ -250,7 +250,10 @@
                 }
             }
             // trigger form submit automatically
-            document.querySelector('.filter-form').submit();
+            const form = document.getElementById('filterForm');
+            if (form) {
+                form.submit();
+            }
         }
 
         function setHeatIntensity(v) {

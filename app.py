@@ -164,7 +164,7 @@ def manual_update():
     try:
         last_n = int(last_n)
     except ValueError:
-        last_n = 20
+        last_n = 5 # Default to 5 now
 
     df, pos_df, last_updated = load_data()
     make_data(pos_df, min_val, last_n) 
