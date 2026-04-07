@@ -833,3 +833,82 @@ td {
     .hero-notes { flex-wrap: wrap; }
     .stats-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Advanced Insights Styling */
+[data-col="EXPLOIT_SCORE"] {
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+}
+
+[data-col="FORM"] {
+    font-size: 18px;
+    text-align: center;
+}
+
+[data-col="RECORD"] {
+    font-weight: 600;
+    font-family: 'Monaco', 'Courier New', monospace;
+}
+
+[data-col="REST_STATUS"] {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+td[data-col="REST_STATUS"]:has(text="B2B") {
+    background: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+[data-col="PTS_MOMENTUM"],
+[data-col="PTS_STD"],
+[data-col="REB_STD"],
+[data-col="AST_STD"] {
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* Highlight high volatility */
+tbody td[data-col="PTS_STD"]:not(:empty) {
+    position: relative;
+}
+
+/* Consistency badges */
+.consistency-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.consistency-badge.high {
+    background: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+.consistency-badge.low {
+    background: rgba(34, 197, 94, 0.15);
+    color: #15803d;
+}
+
+/* Exploit score gradient coloring */
+td[data-col="EXPLOIT_SCORE"] {
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Team summary improvements */
+.team-summary {
+    line-height: 1.8;
+}
+
+.team-summary br {
+    display: block;
+    content: "";
+    margin: 8px 0;
+}

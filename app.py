@@ -177,7 +177,7 @@ def index():
     team1 = ""
     team2 = ""
     minutes = 20
-    last_n_games = 20
+    last_n_games = 5
     selected_teams = ["", ""]
     sql_filter = ""
     
@@ -191,8 +191,8 @@ def index():
         raw_minutes = request.form.get('minutes', '20')
         minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
 
-        raw_last_n = request.form.get('last_n_games', '20')
-        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 20
+        raw_last_n = request.form.get('last_n_games', '5')
+        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
 
         if not IS_VERCEL:
             # 2. Rebuild the CSV first so the view reflects the new threshold
@@ -276,7 +276,7 @@ def matchup():
     teams1 = ""
     teams2 = ""
     minutes = 20
-    last_n_games = 20
+    last_n_games = 5
 
     if request.method == 'POST':
         raw_t1 = request.form.get('teams1', '')
@@ -288,8 +288,8 @@ def matchup():
         raw_minutes = request.form.get('minutes', '20')
         minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
 
-        raw_last_n = request.form.get('last_n_games', '20')
-        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 20
+        raw_last_n = request.form.get('last_n_games', '5')
+        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
 
         if not IS_VERCEL:
             # Rebuild data for matchups based on new minute threshold
