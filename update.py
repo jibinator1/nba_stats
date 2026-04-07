@@ -163,8 +163,11 @@ def find_streaks(pos_df, minutes, streak_len=5, pts_thresh=3.0, reb_thresh=1.5, 
     season_avgs = logs_raw.groupby('PLAYER_NAME')[['PTS', 'REB', 'AST']].mean().reset_index()
     season_avgs.rename(columns={'PTS': 'AVG_PTS', 'REB': 'AVG_REB', 'AST': 'AVG_AST'}, inplace=True)
     
-    # Filter for streak identification (only games where they play 'minutes' or more)
-    logs_filtered = logs_raw[logs_raw['MIN'] >= minutes].copy()
+    # Filter for players who AVERAGE at least the 'minutes' threshold over the season
+    avg_mins = logs_raw.groupby('PLAYER_NAME')['MIN'].mean().reset_index()
+    valid_rotation_players = avg_mins[avg_mins['MIN'] >= minutes]['PLAYER_NAME'].tolist()
+    
+    logs_filtered = logs_raw[logs_raw['PLAYER_NAME'].isin(valid_rotation_players)].copy()
     if logs_filtered.empty:
         return pd.DataFrame()
     
