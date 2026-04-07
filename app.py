@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from update import make_data, create_matchups, fetch_logs, get_todays_games
+from update import make_data, find_streaks, fetch_logs, get_todays_games
 import pandas as pd
 import os
 from datetime import datetime
@@ -14,6 +14,7 @@ TODAYS_GAMES_CACHE = []
 TODAYS_CACHE_DATE = None
 
 app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 QUICK_VIEW_COLUMNS = [
     'TEAM', 'POSITION', 'MATCHUP_SCORE',
@@ -57,8 +58,8 @@ def fetch_todays_games_cache():
 
 # Helper to load global data frames
 def load_data():
-    csv_filename = 'vs_Position_withavg.csv'
-    pos_filename = 'positions.csv'
+    csv_filename = os.path.join(BASE_DIR, 'vs_Position_withavg.csv')
+    pos_filename = os.path.join(BASE_DIR, 'positions.csv')
     
     if IS_VERCEL:
         # Fetch from GitHub Raw
@@ -210,6 +211,9 @@ def index():
             except Exception as e:
                 print(f"Error rebuilding dynamically on Vercel: {e}")
     
+    # Reload local files if not on Vercel to ensure any dynamic changes in update.py are picked up
+    # (Though logic above usually handles it, this makes it safer)
+    
     df = enrich_dataframe(df_global.copy())
     if team1 !="" and team2!="":
         df = df[df['TEAM'].isin(selected_teams)]
@@ -265,26 +269,17 @@ def index():
                             sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
                             last_updated=last_updated, todays_games=todays_games)
 
-@app.route('/matchup', methods=['GET', 'POST'])
-def matchup():
+@app.route('/streak', methods=['GET', 'POST'])
+def streak():
     df_global, pos_df_global, last_updated = load_data()
     todays_games = fetch_todays_games_cache()
-    df = enrich_dataframe(df_global.copy())
     pos_df = pos_df_global.copy()
     
-    team_vs_list = []
-    teams1 = ""
-    teams2 = ""
     minutes = 20
     last_n_games = 5
+    streak_df = pd.DataFrame()
 
     if request.method == 'POST':
-        raw_t1 = request.form.get('teams1', '')
-        raw_t2 = request.form.get('teams2', '')
-        
-        teams1 = raw_t1.replace(" ", "").upper()
-        teams2 = raw_t2.replace(" ", "").upper()
-        
         raw_minutes = request.form.get('minutes', '20')
         minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
 
@@ -292,57 +287,40 @@ def matchup():
         last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
 
         if not IS_VERCEL:
-            # Rebuild data for matchups based on new minute threshold
-            make_data(pos_df, minutes, last_n_games)
-            df, _, last_updated = load_data() # Reload updated data
-            df = enrich_dataframe(df.copy())
+            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games)
         else:
             try:
                 logs_url = f"{GITHUB_RAW_BASE}logs.csv"
                 logs_df = pd.read_csv(logs_url)
-                new_df = make_data(pos_df, minutes, last_n_games, logs_df=logs_df, return_df=True)
-                if new_df is not None and not new_df.empty:
-                    df = enrich_dataframe(new_df.copy())
+                streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
             except Exception as e:
-                print(f"Error rebuilding dynamically on Vercel: {e}")
-
-        teams1_list = teams1.split(",")
-        teams2_list = teams2.split(",")
-        
-        length = min(len(teams1_list), len(teams2_list))
-        for i in range(length):
-            team_vs_list.append([teams1_list[i], teams2_list[i]])
-        
-    if team_vs_list:
-        matchup_df = create_matchups(pos_df, df, team_vs_list, minutes)
+                print(f"Error finding streaks dynamically on Vercel: {e}")
     else:
-        matchup_df = pd.DataFrame()
+        # Default load
+        if not IS_VERCEL:
+            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games)
+        else:
+            try:
+                logs_url = f"{GITHUB_RAW_BASE}logs.csv"
+                logs_df = pd.read_csv(logs_url)
+                streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
+            except Exception as e:
+                print(f"Error finding streaks on Vercel: {e}")
 
-    matchup_df = enrich_dataframe(matchup_df)
+    available_cols = list(streak_df.columns.values) if not streak_df.empty else []
     
-    todays_picks = []
-
-    league_avg_row = build_league_average_row(matchup_df)
-    available_cols = list(matchup_df.columns.values) if not matchup_df.empty else []
-    quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
-    radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
-
     return render_template('index.html', 
-                           records=matchup_df.to_dict('records'), 
+                           records=streak_df.to_dict('records') if not streak_df.empty else [], 
                            colnames=available_cols,
-                            quick_cols=quick_cols,
-                            default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
-                            radar_metrics=radar_metrics,
-                            league_avg_row=league_avg_row,
-                            team_vs_list=team_vs_list, 
-                           teams1=teams1, 
-                           teams2=teams2,
-                           selected_teams=["", ""],
-                           page_type='matchup', minutes=minutes,
+                           quick_cols=available_cols, # Show all for streaks by default
+                           default_hidden_cols=[],
+                           radar_metrics=[],
+                           league_avg_row=None,
+                           page_type='streak', 
+                           minutes=minutes,
                            last_n_games=last_n_games,
                            last_updated=last_updated,
-                           todays_games=todays_games,
-                           todays_picks=todays_picks)
+                           todays_games=todays_games)
 
 
 

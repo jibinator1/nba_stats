@@ -16,14 +16,14 @@
             </div>
             <div class="tabs">
                 <a href="/" class="tab-link {{ 'active' if page_type == 'defense' }}">Defense Ranks</a>
-                <a href="/matchup" class="tab-link {{ 'active' if page_type == 'matchup' }}">Matchups</a>
+                <a href="/streak" class="tab-link {{ 'active' if page_type == 'streak' }}">Streaks</a>
             </div>
         </nav>
 
         <section class="hero-container">
             <div class="hero-content">
                 <h2>
-                    {% if page_type == 'matchup' %}Team Matchups
+                    {% if page_type == 'streak' %}Player Streaks
                     {% else %}Opponent Defensive Ranks{% endif %}
                 </h2>
                 <p class="updated-at">
@@ -32,11 +32,15 @@
                 </p>
             </div>
             <div class="hero-notes">
+                {% if page_type == 'defense' %}
                 <span>Lower rank = <strong>Softer</strong></span>
                 <span class="note-sep">|</span>
                 <span>Higher rank = <strong>Tighter</strong></span>
                 <span class="note-sep">|</span>
                 <span>Radar: 100 = weakest defense</span>
+                {% else %}
+                <span>Hot Streaks: Players exceeding season avg by threshold for {{ last_n_games }} straight games</span>
+                {% endif %}
             </div>
         </section>
 
@@ -79,15 +83,8 @@
                     <span>Last X Games</span>
                     <input type="number" name="last_n_games" min="1" max="82" step="1" value="{{ last_n_games or 5 }}" required>
                 </label>
-                {% if page_type == 'matchup' %}
-                <label>
-                    <span>Teams Set A (OKC,HOU)</span>
-                    <input type="text" name="teams1" value="{{ teams1 or '' }}" placeholder="OKC,HOU">
-                </label>
-                <label>
-                    <span>Teams Set B (SAS,DEN)</span>
-                    <input type="text" name="teams2" value="{{ teams2 or '' }}" placeholder="SAS,DEN">
-                </label>
+                {% if page_type == 'streak' %}
+                <!-- No extra fields for now -->
                 {% else %}
                 <label>
                     <span>First Team</span>
@@ -159,7 +156,7 @@
         </section>
         {% endif %}
 
-        {% if colnames|length > 0 and page_type != 'matchup' %}
+        {% if colnames|length > 0 and page_type != 'match_never' %}
         <section class="table-section">
             <div class="table-container">
                 <table id="statsTable">
@@ -174,12 +171,12 @@
                         {% if league_avg_row %}
                         <tr id="leagueAvgRow" class="league-avg-row hidden">
                             {% for col in colnames %}
-                            <td data-col="{{ col }}"><strong>{{ league_avg_row[col] }}</strong></td>
+                            <td data-col="{{ col }}"><strong>{% if league_avg_row %}{{ league_avg_row[col] }}{% endif %}</strong></td>
                             {% endfor %}
                         </tr>
                         {% endif %}
                         {% for row in records %}
-                        <tr class="data-row" onclick='openRadarPanel({{ row|tojson|safe }}, this)'>
+                        <tr class="data-row" {% if page_type == 'defense' %}onclick='openRadarPanel({{ row|tojson|safe }}, this)'{% endif %}>
                             {% for col in colnames %}
                             {% set val = row[col] %}
                             {% set is_rank = 'RANK' in col %}
@@ -229,7 +226,7 @@
         const quickCols = {{ quick_cols|tojson|safe }};
         const defaultHiddenCols = new Set({{ default_hidden_cols|tojson|safe }});
         const radarMetrics = {{ radar_metrics|tojson|safe }};
-        const leagueAvgRaw = {% if league_avg_row %}{{ league_avg_row|tojson|safe }}{% else %}null{% endif %};
+        const leagueAvgRaw = {{ (league_avg_row|tojson|safe) if league_avg_row else 'null' }};
         
         let currentSort = { index: -1, asc: true };
         let radarInstance = null;

@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 from datetime import datetime
 from nba_api.stats.endpoints import playergamelogs
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Configuration & Headers (Shared with daily_update.py) ---
 headers = {
@@ -21,7 +22,7 @@ def fetch_logs():
     """Manual fallback to fetch logs locally."""
     print("Fetching newest game logs from NBA API...")
     logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', headers=headers).get_data_frames()[0]
-    logs.to_csv("logs.csv", index=False)
+    logs.to_csv(os.path.join(BASE_DIR, "logs.csv"), index=False)
     print("Successfully updated logs.csv!")
 
 def update_todays_games_local():
@@ -37,7 +38,7 @@ def update_todays_games_local():
             line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
             if line_score:
                 df = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
-                df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv('todays_games.csv', index=False)
+                df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv(os.path.join(BASE_DIR, 'todays_games.csv'), index=False)
                 return True
     except Exception as e:
         print(f"Error updating today's games: {e}")
@@ -45,10 +46,11 @@ def update_todays_games_local():
 
 def get_todays_games():
     """Used by app.py to read the local schedule."""
-    if not os.path.exists('todays_games.csv'):
+    path = os.path.join(BASE_DIR, 'todays_games.csv')
+    if not os.path.exists(path):
         return []
     try:
-        df = pd.read_csv('todays_games.csv')
+        df = pd.read_csv(path)
         games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
         return [g for g in games_list if len(g) == 2]
     except Exception:
@@ -62,9 +64,10 @@ def make_data(pos_df, minutes, last_n_games=20, logs_df=None, return_df=False):
     if logs_df is not None:
         logs_raw = logs_df.copy()
     else:
-        if not os.path.exists("logs.csv"):
+        path = os.path.join(BASE_DIR, "logs.csv")
+        if not os.path.exists(path):
             return None if return_df else None
-        logs_raw = pd.read_csv("logs.csv")
+        logs_raw = pd.read_csv(path)
     team_id_map = logs_raw[['TEAM_ABBREVIATION', 'TEAM_ID']].drop_duplicates()
     team_id_lookup = dict(zip(team_id_map['TEAM_ABBREVIATION'], team_id_map['TEAM_ID']))
 
@@ -144,36 +147,119 @@ def make_data(pos_df, minutes, last_n_games=20, logs_df=None, return_df=False):
     if return_df:
         return final_result
     else:
-        final_result.to_csv('vs_Position_withavg.csv', index=False)
+        final_result.to_csv(os.path.join(BASE_DIR, 'vs_Position_withavg.csv'), index=False)
 
-def create_matchups(pos_df, final_result, ALL_TEAMS, minutes):
-    """Generates matchup picks for the web app UI."""
-    if not ALL_TEAMS: return pd.DataFrame()
+def find_streaks(pos_df, minutes, streak_len=5, pts_thresh=3.0, reb_thresh=1.5, ast_thresh=1.5, logs_df=None):
+    """Finds players on a 5-game streak where they exceed their season averages."""
+    if logs_df is not None:
+        logs_raw = logs_df.copy()
+    else:
+        path = os.path.join(BASE_DIR, "logs.csv")
+        if not os.path.exists(path):
+            return pd.DataFrame()
+        logs_raw = pd.read_csv(path)
     
-    positions = ['C', 'PF', 'PG', 'SF', 'SG']
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    over_thresholds = {'PG': {'PTS': 22.5, 'REB': 5.2, 'AST': 8.5}, 'SG': {'PTS': 21.0, 'REB': 5.0, 'AST': 4.5}, 'SF': {'PTS': 20.5, 'REB': 6.8, 'AST': 5.0}, 'PF': {'PTS': 19.5, 'REB': 8.5, 'AST': 3.5}, 'C':  {'PTS': 18.5, 'REB': 12.0, 'AST': 3.5} }
-    under_thresholds = {'PG': {'PTS': 18.7, 'REB': 4.2, 'AST': 5.75}, 'SG': {'PTS': 16.5, 'REB': 3.9, 'AST': 3.5}, 'SF': {'PTS': 17.1, 'REB': 5.6, 'AST': 3.5}, 'PF': {'PTS': 15.5, 'REB': 5.5, 'AST': 2.4}, 'C':  {'PTS': 15.0, 'REB': 9.0, 'AST': 2.5}}
-    under_buffers = {'PTS': 8.0, 'REB': 4.0, 'AST': 4.0}
+    # Calculate season averages using ALL games (not just the ones that meet the min threshold)
+    season_avgs = logs_raw.groupby('PLAYER_NAME')[['PTS', 'REB', 'AST']].mean().reset_index()
+    season_avgs.rename(columns={'PTS': 'AVG_PTS', 'REB': 'AVG_REB', 'AST': 'AVG_AST'}, inplace=True)
+    
+    # Filter for streak identification (only games where they play 'minutes' or more)
+    logs_filtered = logs_raw[logs_raw['MIN'] >= minutes].copy()
+    if logs_filtered.empty:
+        return pd.DataFrame()
+    
+    logs_filtered['GAME_DATE'] = pd.to_datetime(logs_filtered['GAME_DATE'])
+    
+    # Get last N games from the filtered logs
+    logs_sorted = logs_filtered.sort_values(by=['PLAYER_NAME', 'GAME_DATE'], ascending=[True, False])
+    recent_games = logs_sorted.groupby('PLAYER_NAME').head(streak_len)
+    
+    # Only keep players who have exactly 'streak_len' recent games
+    game_counts = recent_games.groupby('PLAYER_NAME').size()
+    valid_players = game_counts[game_counts == streak_len].index
+    recent_games = recent_games[recent_games['PLAYER_NAME'].isin(valid_players)]
+    
+    if recent_games.empty:
+        return pd.DataFrame()
 
-    good_matchups = []
+    # Get the minimum stat values in the recent stretch
+    recent_mins = recent_games.groupby('PLAYER_NAME')[['PTS', 'REB', 'AST']].min().reset_index()
+    recent_mins.rename(columns={'PTS': 'MIN_STREAK_PTS', 'REB': 'MIN_STREAK_REB', 'AST': 'MIN_STREAK_AST'}, inplace=True)
+    
+    # Get the average of the streak
+    recent_avgs = recent_games.groupby('PLAYER_NAME')[['PTS', 'REB', 'AST']].mean().reset_index()
+    recent_avgs.rename(columns={'PTS': 'STREAK_AVG_PTS', 'REB': 'STREAK_AVG_REB', 'AST': 'STREAK_AVG_AST'}, inplace=True)
+
+    # NEW: Get the individual game logs for display
+    def get_logs_str(group, col):
+        return ", ".join(group.sort_values('GAME_DATE', ascending=True)[col].astype(str).tolist())
+
+    game_logs = recent_games.groupby('PLAYER_NAME').apply(lambda x: pd.Series({
+        'LOGS_PTS': get_logs_str(x, 'PTS'),
+        'LOGS_REB': get_logs_str(x, 'REB'),
+        'LOGS_AST': get_logs_str(x, 'AST')
+    })).reset_index()
+
+    # Merge everything together
+    player_data = pd.merge(season_avgs, recent_mins, on='PLAYER_NAME')
+    player_data = pd.merge(player_data, recent_avgs, on='PLAYER_NAME')
+    player_data = pd.merge(player_data, game_logs, on='PLAYER_NAME')
+    
+    # Merge with position and team info
     pos_map = pos_df[['Player', 'Pos']].rename(columns={'Player': 'PLAYER_NAME', 'Pos': 'POSITION'})
-    logs = pd.read_csv("logs.csv")
-    logs = logs[logs['MIN'] >= minutes]
-    merged = logs.merge(pos_map, on='PLAYER_NAME')
-    
-    for T1, T2 in ALL_TEAMS:
-        selected_teams = final_result[final_result['TEAM'].isin([T1, T2])]
-        for pos in positions:
-            t1_r = selected_teams[(selected_teams['TEAM'] == T1) & (selected_teams['POSITION'] == pos)]
-            t2_r = selected_teams[(selected_teams['TEAM'] == T2) & (selected_teams['POSITION'] == pos)]
-            if not t1_r.empty and not t2_r.empty:
-                for stat in ['PTS', 'REB', 'AST']:
-                    if t1_r[f'TEAM_{stat}'].values[0] >= over_thresholds[pos][stat] and t2_r[stat].values[0] >= over_thresholds[pos][stat]:
-                        ps = merged[(merged['TEAM_ABBREVIATION'] == T1) & (merged['POSITION'] == pos)]['PLAYER_NAME'].unique()
-                        for p in ps: good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T1} vs {T2}", 'Player': p, 'Pos': pos, 'Stat': stat, 'Direction': 'OVER'})
-                    if t1_r[f'TEAM_{stat}'].values[0] >= (under_thresholds[pos][stat] + under_buffers[stat]) and t2_r[stat].values[0] <= under_thresholds[pos][stat]:
-                        ps = merged[(merged['TEAM_ABBREVIATION'] == T1) & (merged['POSITION'] == pos)]['PLAYER_NAME'].unique()
-                        for p in ps: good_matchups.append({'Run_Date': current_date, 'Matchup': f"{T1} vs {T2}", 'Player': p, 'Pos': pos, 'Stat': stat, 'Direction': 'UNDER'})
+    team_map = recent_games.drop_duplicates('PLAYER_NAME', keep='first')[['PLAYER_NAME', 'TEAM_ABBREVIATION']]
+    team_map.rename(columns={'TEAM_ABBREVIATION': 'TEAM'}, inplace=True)
 
-    return pd.DataFrame(good_matchups).drop_duplicates() if good_matchups else pd.DataFrame()
+    player_data = pd.merge(player_data, pos_map, on='PLAYER_NAME', how='left')
+    player_data = pd.merge(player_data, team_map, on='PLAYER_NAME', how='left')
+
+    streaks = []
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
+    for _, row in player_data.iterrows():
+        if row['MIN_STREAK_PTS'] >= row['AVG_PTS'] + pts_thresh:
+            streaks.append({
+                'Run_Date': current_date,
+                'Player': row['PLAYER_NAME'],
+                'Team': row['TEAM'],
+                'Pos': row['POSITION'],
+                'Stat': 'PTS',
+                'Direction': 'OVER',
+                'Season_Avg': round(row['AVG_PTS'], 1),
+                'Streak_Avg': round(row['STREAK_AVG_PTS'], 1),
+                'Min_In_Streak': row['MIN_STREAK_PTS'],
+                'Threshold': f"+{pts_thresh}",
+                'Game_Logs': row['LOGS_PTS']
+            })
+        
+        if row['MIN_STREAK_REB'] >= row['AVG_REB'] + reb_thresh:
+            streaks.append({
+                'Run_Date': current_date,
+                'Player': row['PLAYER_NAME'],
+                'Team': row['TEAM'],
+                'Pos': row['POSITION'],
+                'Stat': 'REB',
+                'Direction': 'OVER',
+                'Season_Avg': round(row['AVG_REB'], 1),
+                'Streak_Avg': round(row['STREAK_AVG_REB'], 1),
+                'Min_In_Streak': row['MIN_STREAK_REB'],
+                'Threshold': f"+{reb_thresh}",
+                'Game_Logs': row['LOGS_REB']
+            })
+
+        if row['MIN_STREAK_AST'] >= row['AVG_AST'] + ast_thresh:
+            streaks.append({
+                'Run_Date': current_date,
+                'Player': row['PLAYER_NAME'],
+                'Team': row['TEAM'],
+                'Pos': row['POSITION'],
+                'Stat': 'AST',
+                'Direction': 'OVER',
+                'Season_Avg': round(row['AVG_AST'], 1),
+                'Streak_Avg': round(row['STREAK_AVG_AST'], 1),
+                'Min_In_Streak': row['MIN_STREAK_AST'],
+                'Threshold': f"+{ast_thresh}",
+                'Game_Logs': row['LOGS_AST']
+            })
+
+    return pd.DataFrame(streaks).drop_duplicates() if streaks else pd.DataFrame()
