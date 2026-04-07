@@ -62,9 +62,9 @@ def load_data():
     pos_filename = os.path.join(BASE_DIR, 'positions.csv')
     
     if IS_VERCEL:
-        # Fetch from GitHub Raw
-        df = pd.read_csv(f"{GITHUB_RAW_BASE}{csv_filename}")
-        pos_df = pd.read_csv(f"{GITHUB_RAW_BASE}{pos_filename}")
+        # Fetch from GitHub Raw - use only the basename of the file
+        df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(csv_filename)}")
+        pos_df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(pos_filename)}")
         last_updated = "Remote Sync" # Could fetch commit date if needed
     else:
         # Local fallback
