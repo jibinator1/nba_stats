@@ -149,7 +149,7 @@ def make_data(pos_df, minutes, last_n_games=20, logs_df=None, return_df=False):
     else:
         final_result.to_csv(os.path.join(BASE_DIR, 'vs_Position_withavg.csv'), index=False)
 
-def find_streaks(pos_df, minutes, streak_len=5, pts_thresh=3.0, reb_thresh=1.5, ast_thresh=1.5, logs_df=None):
+def find_streaks(pos_df, minutes, streak_len=5, pts_thresh=2.0, reb_thresh=1.0, ast_thresh=1.0, logs_df=None):
     """Finds players on a 5-game streak where they exceed their season averages."""
     if logs_df is not None:
         logs_raw = logs_df.copy()
