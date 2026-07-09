@@ -1,50 +1,103 @@
 # NBA Matchup Hub 🏀
 
-A premium, data-driven dashboard for analyzing NBA defensive vulnerabilities and finding exploitable player matchups. You can access it using this link: https://nba-stats-silk.vercel.app/
+A data-driven dashboard for analyzing NBA defensive vulnerabilities and finding exploitable player matchups.
 
-## How It Works
-
-### 1. Opponent Defensive Ranks
-The main dashboard provides a "Heatmap" of the league's defensive performance against specific positions (PG, SG, SF, PF, C).
-- **Ranking System**: A **Rank 1** indicates the *worst* defense (most points/rebounds/assists allowed), while a **Rank 30** indicates the *stinger* defense.
-- **Matchup Score**: An aggregated metric (0-30+) that summarizes how "soft" a team is across all major stats. The higher the score, the better the matchup.
-- **Trend Indicators**: The arrows ($\uparrow, \downarrow, \rightarrow$) compare a team's **Season Average** vs. their **Last X Games** (default 20). 
-    - $\uparrow$ means they are allowing *more* of that stat recently (getting softer).
-    - $\downarrow$ means they are tightening up.
-
-### 2. Today's Matchups (Dropdown)
-Located at the top of the page, this dropdown automatically fetches the current day's NBA schedule. Selecting a game will auto-fill the team inputs for instantaneous comparison.
-
-### 3. Pick Finder (Automated Analysis)
-Navigate to the **Good Matchups** tab to see the **Pick Finder**. 
-- It automatically evaluates tonight's games against our defensive depth charts.
-- **OVER**: Flags players facing a leaky defense that allows high volume in a specific stat.
-- **UNDER**: Flags players facing a stifling, elite defense.
-
-### 4. Interactive Radar Profile
-Click on any team row to slide out the **Team Profile Panel**. This shows a radar chart of their "Exploitability" across 8 key metrics (Points, Rebounds, Assists, eFG, 3PM, TOV, Def Rating, and Pace). A score of **100** on the radar represents a peak exploitability (the softest possible matchup).
+**Live site:** https://nba-stats-silk.vercel.app/
 
 ---
 
-## Running Locally
+## Quick Start (Local)
 
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Prerequisites
+- Python 3.9+
 
-2. **Start the Server**:
-   ```bash
-   python app.py
-   ```
+### Setup
 
-3. **Open in Browser**:
-   Visit [http://127.0.0.1:5000](http://127.0.0.1:5000)
+```bash
+# 1. Navigate to the project folder
+cd "f:\learning to code\nba_website\nba_stats"
 
-## Data Refresh
-The data is cached daily. To force a refresh:
-- Click **"Update Analysis"** on the website to rebuild the `vs_Position_withavg.csv` with your custom thresholds.
-- The `app.py` automatically fetches the latest logs from the NBA API if they are missing or outdated.
+# 2. (Recommended) Create a virtual environment
+python -m venv venv
+venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run the server
+python app.py
+```
+
+Then open **http://127.0.0.1:5000** in your browser.
+
+> **Note:** On first run, the app will automatically fetch the latest NBA game logs from the NBA API if `logs.csv` is missing or outdated. This can take a minute.
 
 ---
+
+## Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `Flask` | Web server |
+| `pandas` | Data processing |
+| `nba_api` | NBA stats data source |
+| `scikit-learn` | ML scoring |
+| `requests` | HTTP calls |
+| `gunicorn` | Production server (Vercel) |
+
+---
+
+## Features
+
+### Defensive Heatmap (Home Tab)
+- Ranks all 30 teams on how much they give up to each position (PG, SG, SF, PF, C)
+- **Rank 1** = worst defense (most exploitable), **Rank 30** = stingiest
+- **Matchup Score** = aggregated softness score across all stats (higher = better matchup)
+- **Trend arrows** (↑↓→) compare season avg vs. last N games
+
+### Today's Matchups
+- Dropdown at the top auto-loads today's NBA schedule
+- Selecting a game auto-fills the team comparison inputs
+
+### Pick Finder (Good Matchups Tab)
+- Automatically flags players facing weak defenses tonight
+- **OVER**: player faces a leaky defense for a specific stat
+- **UNDER**: player faces an elite, stifling defense
+
+### Team Radar Profile
+- Click any team row to open a radar chart
+- Shows exploitability across 8 metrics: PTS, REB, AST, eFG, 3PM, TOV, DEF RTG, PACE
+- Score of **100** = peak exploitability
+
+---
+
+## Refreshing Data
+
+Data is cached daily in `vs_Position_withavg.csv`.
+
+- **Manual refresh:** Click **"Update Analysis"** on the website to rebuild with custom thresholds.
+- **Custom filters:** Set the minimum minutes played and last-N-games window from the UI.
+- The app auto-updates logs from the NBA API on startup if they are stale.
+
+---
+
+## Project Structure
+
+```
+nba_stats/
+├── app.py              # Flask routes and data logic
+├── update.py           # NBA API fetching & CSV generation
+├── daily_update.py     # Scheduled refresh script
+├── vs_Position_withavg.csv  # Pre-computed defensive stats (cached)
+├── positions.csv       # Player position data
+├── logs.csv            # Raw game logs
+├── todays_games.csv    # Today's schedule
+├── requirements.txt
+├── templates/          # Jinja2 HTML templates
+├── static/             # CSS, JS, assets
+└── vercel.json         # Vercel serverless config
+```
+
+---
+
 *Created by Jibin Im*
