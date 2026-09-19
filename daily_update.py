@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import argparse
 import subprocess
 import requests
 import pandas as pd
@@ -11,6 +12,7 @@ from nba_api.stats.endpoints import playergamelogs
 # --- Configuration ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 AUTO_PUSH = True
+LAST_RUN_FILE = os.path.join(SCRIPT_DIR, "last_run.txt")
 
 # NBA API Headers
 headers = {
@@ -24,6 +26,28 @@ headers = {
     "x-nba-stats-token": "true",
     "Accept-Language": "en-US,en;q=0.9"
 }
+
+def has_run_today():
+    """Checks if the daily update has already executed today."""
+    if not os.path.exists(LAST_RUN_FILE):
+        return False
+    try:
+        with open(LAST_RUN_FILE, 'r', encoding='utf-8') as f:
+            last_date = f.read().strip().split()[0]
+        today_str = datetime.now().strftime('%Y-%m-%d')
+        return last_date == today_str
+    except Exception:
+        return False
+
+def record_run_success():
+    """Records successful execution timestamp to last_run.txt."""
+    try:
+        now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        with open(LAST_RUN_FILE, 'w', encoding='utf-8') as f:
+            f.write(now_str + '\n')
+        print(f"[Tracker] Recorded successful sync at {now_str} in last_run.txt")
+    except Exception as e:
+        print(f"[Tracker Warning] Could not record last run timestamp: {e}")
 
 def fetch_logs():
     print("Fetching latest game logs from NBA API...")
@@ -87,13 +111,24 @@ def push_to_github():
         print(f"Git sync failed: {e}")
 
 def main():
+    parser = argparse.ArgumentParser(description="NBA Website Daily Data Ingestion")
+    parser.add_argument("--force", action="store_true", help="Force run even if already executed today")
+    args = parser.parse_args()
+
     start_time = datetime.now()
+    today_str = start_time.strftime('%Y-%m-%d')
     print(f"[{start_time}] Starting NBA daily update...")
+
+    if not args.force and has_run_today():
+        print(f"[SKIP] NBA daily update has already completed today ({today_str}).")
+        print("Use '--force' if you wish to override and run again.")
+        return
     
     # Local Data Fetching
     if fetch_logs() and update_todays_games() and fetch_injuries():
         if AUTO_PUSH:
             push_to_github()
+        record_run_success()
             
         end_time = datetime.now()
         duration = end_time - start_time
