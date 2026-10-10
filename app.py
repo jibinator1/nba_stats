@@ -3,6 +3,7 @@ from update import make_data, find_streaks, fetch_logs, get_todays_games
 import pandas as pd
 import os
 from datetime import datetime
+from urllib.parse import urlparse
 import requests
 
 # --- Vercel Sync Configuration ---
@@ -46,8 +47,46 @@ RADAR_COLUMNS = [
     ('PACE_RANK', 'PACE'),
 ]
 
+class VercelPathMiddleware:
+    """
+    Normalizes Vercel serverless request paths.
+    Vercel rewrites requests to /app.py and supplies the original client path
+    in HTTP_X_MATCHED_PATH or HTTP_X_VERCEL_MATCHED_PATH headers.
+    This middleware restores PATH_INFO and QUERY_STRING so Flask routing matches correctly.
+    """
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        matched_path = environ.get('HTTP_X_MATCHED_PATH') or environ.get('HTTP_X_VERCEL_MATCHED_PATH')
+        if matched_path:
+            parsed = urlparse(matched_path)
+            # If the matched path is not literally /app.py, restore original client path
+            if not parsed.path.endswith('app.py') and not parsed.path.endswith('index.py'):
+                environ['PATH_INFO'] = parsed.path
+                if parsed.query and not environ.get('QUERY_STRING'):
+                    environ['QUERY_STRING'] = parsed.query
+            else:
+                environ['PATH_INFO'] = '/'
+        elif environ.get('PATH_INFO') in ('/app.py', 'app.py', '/api/index.py', 'api/index.py'):
+            environ['PATH_INFO'] = '/'
+
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
+handler = app
+
 def fetch_todays_games_cache():
-    """Returns today's matches. On Vercel, it uses the remote source."""
+    """Returns today's matches. Checks local file first, then remote source."""
+    local_path = os.path.join(BASE_DIR, 'todays_games.csv')
+    if os.path.exists(local_path):
+        try:
+            df = pd.read_csv(local_path)
+            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
+            return [g for g in games_list if len(g) == 2]
+        except Exception:
+            pass
+
     if IS_VERCEL:
         try:
             url = f"{GITHUB_RAW_BASE}todays_games.csv"
@@ -60,25 +99,31 @@ def fetch_todays_games_cache():
     return get_todays_games()
 
 def load_data():
-    """Helper to load global data frames."""
+    """Helper to load global data frames (local first, GitHub raw fallback)."""
     csv_filename = os.path.join(BASE_DIR, 'vs_Position_withavg.csv')
     pos_filename = os.path.join(BASE_DIR, 'positions.csv')
     
-    if IS_VERCEL:
+    if os.path.exists(csv_filename) and os.path.exists(pos_filename):
+        try:
+            df = pd.read_csv(csv_filename)
+            pos_df = pd.read_csv(pos_filename)
+            if 'eFG_RANK' not in df.columns:
+                from update import make_data
+                make_data(pos_df, 20)
+                df = pd.read_csv(csv_filename)
+            last_updated = datetime.fromtimestamp(os.path.getmtime(csv_filename)).strftime('%Y-%m-%d %I:%M %p')
+            return df, pos_df, last_updated
+        except Exception as e:
+            print(f"Local file load error: {e}")
+
+    try:
         df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(csv_filename)}")
         pos_df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(pos_filename)}")
         last_updated = "Remote Sync"
-    else:
-        df = pd.read_csv(csv_filename)
-        pos_df = pd.read_csv(pos_filename)
-        
-        if 'eFG_RANK' not in df.columns:
-            from update import make_data
-            make_data(pos_df, 20)
-            df = pd.read_csv(csv_filename)
-        last_updated = datetime.fromtimestamp(os.path.getmtime(csv_filename)).strftime('%Y-%m-%d %I:%M %p')
-        
-    return df, pos_df, last_updated
+        return df, pos_df, last_updated
+    except Exception as e:
+        print(f"Remote file load error: {e}")
+        return pd.DataFrame(), pd.DataFrame(), "Sync Error"
 
 def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
@@ -216,16 +261,24 @@ def compute_streak_kpis(streak_df: pd.DataFrame):
     }
 
 def get_streak_dataframe(pos_df: pd.DataFrame, minutes: int, last_n_games: int):
-    if not IS_VERCEL:
-        return find_streaks(pos_df, minutes, streak_len=last_n_games)
-    else:
+    local_logs = os.path.join(BASE_DIR, "logs.csv")
+    if os.path.exists(local_logs):
         try:
-            logs_url = f"{GITHUB_RAW_BASE}logs.csv"
-            logs_df = pd.read_csv(logs_url)
-            return find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
+            return find_streaks(pos_df, minutes, streak_len=last_n_games)
         except Exception as e:
-            print(f"Error finding streaks on Vercel: {e}")
-            return pd.DataFrame()
+            print(f"Local streak error: {e}")
+
+    try:
+        logs_url = f"{GITHUB_RAW_BASE}logs.csv"
+        logs_df = pd.read_csv(logs_url)
+        return find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
+    except Exception as e:
+        print(f"Remote streak error: {e}")
+        return pd.DataFrame()
+
+@app.route('/favicon.ico')
+def favicon():
+    return ('', 204)
 
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
@@ -249,6 +302,7 @@ def manual_update():
     return redirect(url_for('index'))
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/app.py', methods=['GET', 'POST'])
 def index():
     df_global, pos_df_global, last_updated = load_data()
     todays_games = fetch_todays_games_cache()
