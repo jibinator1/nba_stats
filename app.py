@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from update import make_data, find_streaks, fetch_logs, get_todays_games
 import pandas as pd
 import os
+import json
 from datetime import datetime
 from urllib.parse import urlparse
 import requests
@@ -177,9 +178,7 @@ def compute_team_stats_map(df: pd.DataFrame):
         pace_val = float(c_row.get('PACE', 100.0))
         pace_rank = int(c_row.get('PACE_RANK', 15))
 
-        # Overall character based on Defensive Rating Rank (Lower def rtg is better, rank 25-30 or 1-10 depending on scale)
-        # In this dataset OKC is rank 30 (105.05) and UTA is rank 1 (120.34).
-        # We invert rank so #1 is the best defense in the league!
+        # Invert DEF_RTG_RANK so #1 is the best defense in the league
         league_def_rank = int(31 - def_rtg_rank) if 1 <= def_rtg_rank <= 30 else def_rtg_rank
 
         if league_def_rank <= 10:
@@ -221,52 +220,94 @@ def compute_team_stats_map(df: pd.DataFrame):
 
     return stats_map
 
-def build_matchups(team_stats_map, todays_games):
-    """Builds matchup cards comparing Away vs Home teams."""
-    pairs = todays_games if todays_games else DEFAULT_PAIRINGS
-    matchups = []
-    today_str = datetime.now().strftime("%Y-%m-%d")
+def load_all_schedule_games(team_stats_map):
+    """Loads all schedule games for the season and attaches team defense stats."""
+    json_path = os.path.join(BASE_DIR, 'schedule_games.json')
+    raw_games = []
 
-    for idx, pair in enumerate(pairs):
-        away, home = pair[0], pair[1]
-        a_stats = team_stats_map.get(away, {
-            'team': away, 'team_name': NBA_TEAM_NAMES.get(away, away),
-            'def_overall_character': 'Active Defense', 'def_rtg': 112.0, 'rank_def_rtg': 15,
-            'pace': 100.0, 'rank_pace': 15, 'pts_allowed': 114.0, 'rank_pts': 15,
-            'reb_allowed': 44.0, 'rank_reb': 15, 'ast_allowed': 26.0, 'rank_ast': 15,
-            'fg3m_allowed': 12.5, 'rank_fg3m': 15, 'tov_forced': 14.0, 'rank_tov': 15,
-            'vs_pg_pts': 22.0, 'rank_vs_pg': 15, 'vs_sg_pts': 20.0, 'rank_vs_sg': 15,
-            'vs_sf_pts': 19.0, 'rank_vs_sf': 15, 'vs_pf_pts': 21.0, 'rank_vs_pf': 15,
-            'vs_c_pts': 23.0, 'rank_vs_c': 15
-        })
-        h_stats = team_stats_map.get(home, {
-            'team': home, 'team_name': NBA_TEAM_NAMES.get(home, home),
-            'def_overall_character': 'Active Defense', 'def_rtg': 112.0, 'rank_def_rtg': 15,
-            'pace': 100.0, 'rank_pace': 15, 'pts_allowed': 114.0, 'rank_pts': 15,
-            'reb_allowed': 44.0, 'rank_reb': 15, 'ast_allowed': 26.0, 'rank_ast': 15,
-            'fg3m_allowed': 12.5, 'rank_fg3m': 15, 'tov_forced': 14.0, 'rank_tov': 15,
-            'vs_pg_pts': 22.0, 'rank_vs_pg': 15, 'vs_sg_pts': 20.0, 'rank_vs_sg': 15,
-            'vs_sf_pts': 19.0, 'rank_vs_sf': 15, 'vs_pf_pts': 21.0, 'rank_vs_pf': 15,
-            'vs_c_pts': 23.0, 'rank_vs_c': 15
-        })
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, 'r') as f:
+                raw_games = json.load(f)
+        except Exception as e:
+            print(f"Error loading schedule_games.json: {e}")
 
-        matchups.append({
-            'game_id': f"NBA_{away}_{home}",
-            'game_label': f"G{idx + 1}",
-            'gameday': today_str,
-            'gametime': '7:30 PM ET',
-            'is_final': False,
+    if not raw_games and IS_VERCEL:
+        try:
+            url = f"{GITHUB_RAW_BASE}schedule_games.json"
+            r = requests.get(url, timeout=5)
+            if r.status_code == 200:
+                raw_games = r.json()
+        except Exception as e:
+            print(f"Error fetching remote schedule_games.json: {e}")
+
+    # Fallback to generating from logs.csv if json not available
+    if not raw_games:
+        logs_path = os.path.join(BASE_DIR, 'logs.csv')
+        if os.path.exists(logs_path):
+            try:
+                df = pd.read_csv(logs_path, usecols=['GAME_ID', 'GAME_DATE', 'MATCHUP', 'TEAM_ABBREVIATION', 'WL', 'PTS'])
+                df['DATE'] = pd.to_datetime(df['GAME_DATE']).dt.strftime('%Y-%m-%d')
+                team_pts = df.groupby(['GAME_ID', 'TEAM_ABBREVIATION', 'DATE', 'MATCHUP', 'WL'])['PTS'].sum().reset_index()
+                away_df = team_pts[team_pts['MATCHUP'].str.contains('@')].rename(columns={'TEAM_ABBREVIATION': 'AWAY_TEAM', 'PTS': 'AWAY_PTS', 'WL': 'AWAY_WL'})
+                home_df = team_pts[team_pts['MATCHUP'].str.contains('vs.')].rename(columns={'TEAM_ABBREVIATION': 'HOME_TEAM', 'PTS': 'HOME_PTS', 'WL': 'HOME_WL'})
+                paired = pd.merge(away_df[['GAME_ID', 'DATE', 'AWAY_TEAM', 'AWAY_PTS', 'AWAY_WL']], 
+                                 home_df[['GAME_ID', 'HOME_TEAM', 'HOME_PTS', 'HOME_WL']], 
+                                 on='GAME_ID').sort_values('DATE', ascending=False)
+                for _, row in paired.iterrows():
+                    raw_games.append({
+                        'game_id': str(row['GAME_ID']),
+                        'gameday': row['DATE'],
+                        'away_team': row['AWAY_TEAM'],
+                        'home_team': row['HOME_TEAM'],
+                        'away_score': int(row['AWAY_PTS']),
+                        'home_score': int(row['HOME_PTS']),
+                        'is_final': True
+                    })
+            except Exception as e:
+                print(f"Error building from logs.csv: {e}")
+
+    # Fallback to default pairings if still empty
+    if not raw_games:
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        for idx, (a, h) in enumerate(DEFAULT_PAIRINGS):
+            raw_games.append({
+                'game_id': f"NBA_{a}_{h}",
+                'gameday': today_str,
+                'away_team': a,
+                'home_team': h,
+                'away_score': None,
+                'home_score': None,
+                'is_final': False
+            })
+
+    # Enrich each game with full team names and stats
+    enriched = []
+    for g in raw_games:
+        away = g['away_team']
+        home = g['home_team']
+        a_stats = team_stats_map.get(away, {})
+        h_stats = team_stats_map.get(home, {})
+        is_fin = bool(g.get('is_final', False))
+
+        enriched.append({
+            'game_id': g['game_id'],
+            'gameday': g['gameday'],
+            'gametime': 'FINAL' if is_fin else '7:30 PM ET',
             'away_team': away,
             'away_team_name': NBA_TEAM_NAMES.get(away, away),
             'away_record': '42-20' if away in ['BOS', 'OKC', 'DEN', 'MIN', 'CLE'] else '35-27',
             'home_team': home,
             'home_team_name': NBA_TEAM_NAMES.get(home, home),
             'home_record': '40-22' if home in ['BOS', 'OKC', 'DEN', 'MIN', 'CLE', 'MIA'] else '32-30',
+            'away_score': g.get('away_score'),
+            'home_score': g.get('home_score'),
+            'is_final': is_fin,
             'away_stats': a_stats,
             'home_stats': h_stats
         })
 
-    return matchups
+    return enriched
 
 def get_floor_streaks(pos_df: pd.DataFrame, minutes: int = 20, last_n_games: int = 5):
     """Calculates player production floor streaks."""
@@ -349,12 +390,23 @@ def index():
     df, pos_df, last_updated = load_data()
     todays_games = fetch_todays_games()
     team_stats_map = compute_team_stats_map(df)
-    matchups = build_matchups(team_stats_map, todays_games)
+    all_games = load_all_schedule_games(team_stats_map)
     floor_streaks, streak_kpis = get_floor_streaks(pos_df, minutes=20, last_n_games=5)
+
+    # All unique dates where games occurred
+    all_game_dates = sorted(set(g['gameday'] for g in all_games), reverse=True)
+    dates_2026 = [d for d in all_game_dates if d.startswith('2026')]
+
+    # Default Date Range for 2026 Season
+    default_start_date = '2026-01-01'
+    default_end_date = '2026-06-13'
 
     return render_template('index.html',
                            page_type='schedule',
-                           matchups=matchups,
+                           all_games=all_games,
+                           dates_2026=dates_2026,
+                           start_date=default_start_date,
+                           end_date=default_end_date,
                            floor_streaks=floor_streaks,
                            streak_kpis=streak_kpis,
                            all_teams=NBA_TEAMS,
@@ -368,12 +420,18 @@ def streak():
     df, pos_df, last_updated = load_data()
     todays_games = fetch_todays_games()
     team_stats_map = compute_team_stats_map(df)
-    matchups = build_matchups(team_stats_map, todays_games)
+    all_games = load_all_schedule_games(team_stats_map)
     floor_streaks, streak_kpis = get_floor_streaks(pos_df, minutes=20, last_n_games=5)
+
+    all_game_dates = sorted(set(g['gameday'] for g in all_games), reverse=True)
+    dates_2026 = [d for d in all_game_dates if d.startswith('2026')]
 
     return render_template('index.html',
                            page_type='floor-streak',
-                           matchups=matchups,
+                           all_games=all_games,
+                           dates_2026=dates_2026,
+                           start_date='2026-01-01',
+                           end_date='2026-06-13',
                            floor_streaks=floor_streaks,
                            streak_kpis=streak_kpis,
                            all_teams=NBA_TEAMS,
@@ -386,13 +444,30 @@ def streak():
 @app.route('/api/schedule')
 def api_schedule():
     df, _, _ = load_data()
-    todays_games = fetch_todays_games()
     team_stats_map = compute_team_stats_map(df)
-    matchups = build_matchups(team_stats_map, todays_games)
+    all_games = load_all_schedule_games(team_stats_map)
+
+    season = request.args.get('season', '2026')
+    s_date = request.args.get('start_date', '2026-01-01')
+    e_date = request.args.get('end_date', '2026-06-13')
+
+    filtered = [g for g in all_games if s_date <= g['gameday'] <= e_date]
+    if season == '2026':
+        filtered = [g for g in filtered if g['gameday'].startswith('2026')]
+    elif season == '2025':
+        filtered = [g for g in filtered if g['gameday'].startswith('2025')]
+
+    unique_dates = sorted(set(g['gameday'] for g in filtered), reverse=True)
+    completed = [g for g in filtered if g.get('is_final')]
+
     return jsonify({
-        'total_games': len(matchups),
-        'completed_games': 0,
-        'games': matchups
+        'season': season,
+        'start_date': s_date,
+        'end_date': e_date,
+        'total_games': len(filtered),
+        'completed_games': len(completed),
+        'dates': unique_dates,
+        'games': filtered
     })
 
 @app.route('/api/floor-streak')

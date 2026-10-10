@@ -155,7 +155,7 @@
 <body class="min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white">
 
     <!-- ============================================================== -->
-    <!-- TOP NAVIGATION BAR (Muted Dark Theme Matching NFL Hub) -->
+    <!-- TOP NAVIGATION BAR (Matching NFL Hub Header with Date Range)  -->
     <!-- ============================================================== -->
     <header class="glass-panel sticky top-0 z-50 border-b border-[#30363d]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -167,21 +167,27 @@
                 <div>
                     <h1 class="text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
                         <span>NBA PREDICTION & ANALYTICS</span>
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#21262d] text-slate-400 border border-[#30363d] font-normal">2025-26</span>
+                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#21262d] text-slate-400 border border-[#30363d] font-normal" id="header-season-pill">2026 Season</span>
                     </h1>
                     <p class="text-xs text-slate-400 -mt-0.5">Volume x Efficiency Metrics • Matchup Lab H2H • Positional Defense</p>
                 </div>
             </div>
 
-            <!-- Global Actions & Refresh -->
+            <!-- Global Matchup Date Range (Matching NFL Hub Top-Right Date Range) -->
             <div class="flex items-center gap-3">
-                <div class="text-[11px] text-slate-400 font-mono hidden sm:flex items-center gap-1.5 bg-[#21262d] border border-[#30363d] px-2.5 py-1.5 rounded-lg">
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span>Last Refreshed: {{ last_updated }}</span>
+                <div class="flex items-center bg-[#21262d] border border-[#30363d] rounded-lg p-1.5 space-x-2 text-xs">
+                    <div class="flex items-center space-x-1.5 px-2">
+                        <span class="text-slate-400 font-medium text-[11px]">From:</span>
+                        <input type="date" id="input-start-date" value="{{ start_date }}" onchange="onDateRangeChange()" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-1 outline-none focus:border-slate-500 font-mono text-xs cursor-pointer">
+                    </div>
+                    <div class="flex items-center space-x-1.5 px-2 border-l border-[#30363d]">
+                        <span class="text-slate-400 font-medium text-[11px]">To:</span>
+                        <input type="date" id="input-end-date" value="{{ end_date }}" onchange="onDateRangeChange()" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-1 outline-none focus:border-slate-500 font-mono text-xs cursor-pointer">
+                    </div>
                 </div>
 
                 <!-- Refresh Button -->
-                <button onclick="location.reload()" class="p-2 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition" title="Refresh Data">
+                <button onclick="reloadAllData()" class="p-2 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition" title="Refresh Data">
                     <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -191,7 +197,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 border-t border-[#30363d] overflow-x-auto no-scrollbar">
             <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type != 'floor-streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
                 <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
-                <span id="nav-schedule-label">Schedule & Matchups (2025-26)</span>
+                <span id="nav-schedule-label">Schedule & Matchups (2026 / 2025)</span>
             </button>
             <button onclick="switchTab('floor-streak')" id="tab-btn-floor-streak" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type == 'floor-streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
                 <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
@@ -214,23 +220,22 @@
                     <div>
                         <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
                             <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
-                            <span id="schedule-title">2025-26 NBA Season Schedule & Matchup Stats</span>
+                            <span id="schedule-title">2026 NBA Season Schedule & Matchup Stats</span>
                         </h2>
                         <p class="text-xs text-slate-400 mt-0.5" id="schedule-subtitle">
-                            Head-to-head matchup breakdown with team pace, defensive rating, scoring, 3PT & positional defense with league rankings
+                            Full 2026 schedule with verified scores, completed stats & defensive rankings
                         </p>
                     </div>
 
-                    <!-- Filter Controls -->
+                    <!-- Filter Controls (Mobile Responsive) -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <!-- Matchup Slate Filter -->
+                        <!-- Season Selector -->
                         <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5">
-                            <span class="text-[11px] text-slate-400 font-medium">Slate:</span>
-                            <select id="schedule-slate-select" onchange="onScheduleSlateChange(this.value)" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
-                                <option value="all" class="bg-[#161b22]">All Matchups ({{ matchups|length }})</option>
-                                {% if todays_games %}
-                                <option value="today" selected class="bg-[#161b22]">Today's Games ({{ todays_games|length }})</option>
-                                {% endif %}
+                            <span class="text-[11px] text-slate-400 font-medium">Season:</span>
+                            <select id="schedule-season-select" onchange="onScheduleSeasonChange(this.value)" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
+                                <option value="2026" selected class="bg-[#161b22]">2026 (Cur)</option>
+                                <option value="2025" class="bg-[#161b22]">2025</option>
+                                <option value="ALL" class="bg-[#161b22]">All Seasons</option>
                             </select>
                         </div>
 
@@ -252,7 +257,7 @@
                         </div>
 
                         <!-- Refresh -->
-                        <button onclick="location.reload()" class="p-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition active:scale-95" title="Refresh Schedule">
+                        <button onclick="reloadAllData()" class="p-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition active:scale-95" title="Refresh Schedule">
                             <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                         </button>
                     </div>
@@ -297,14 +302,14 @@
                 <div class="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="px-2.5 py-1 rounded bg-[#21262d] border border-[#30363d] text-slate-300 font-medium">
-                            <strong id="sched-stat-total-games" class="text-slate-100 font-bold">{{ matchups|length }}</strong> Total Matchups
+                            <strong id="sched-stat-total-games" class="text-slate-100 font-bold">0</strong> Total Games
                         </span>
                         <span class="px-2.5 py-1 rounded bg-[#21262d] border border-[#30363d] text-slate-300 font-medium">
-                            <strong class="text-slate-100 font-bold">30</strong> Teams Tracked
+                            <strong id="sched-stat-completed-games" class="text-slate-100 font-bold">0</strong> Final
                         </span>
-                        <span class="px-2.5 py-1 rounded bg-sky-500/10 border border-sky-500/25 text-sky-300 font-medium text-[11px] flex items-center space-x-1.5">
-                            <i data-lucide="shield" class="w-3.5 h-3.5 text-sky-400"></i>
-                            <span>Positional Defense Ranks (PG, SG, SF, PF, C)</span>
+                        <span id="sched-stat-baseline-badge" class="px-2.5 py-1 rounded bg-sky-500/10 border border-sky-500/25 text-sky-300 font-medium text-[11px] flex items-center space-x-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400"></i>
+                            <span id="sched-stat-baseline-note">Timeline: {{ start_date }} to {{ end_date }}</span>
                         </span>
                     </div>
 
@@ -315,11 +320,29 @@
                         <span class="text-[10px] px-1.5 py-0.5 rounded rank-bot">#21-#30 (Lockdown Defense)</span>
                     </div>
                 </div>
+
+                <!-- Select Date where Games are on for the 2026 Season (Pill Bar & Custom Date Picker) -->
+                <div class="space-y-1.5 pt-2 border-t border-[#30363d]">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Select Date where games are on for the 2026 season:</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] text-slate-400">Pick Specific Date:</span>
+                            <input type="date" id="schedule-date-picker" onchange="filterScheduleDate(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-mono cursor-pointer" title="Select specific game date">
+                        </div>
+                    </div>
+                    <!-- Date Pills Container -->
+                    <div id="schedule-date-pills" class="flex items-center space-x-1.5 overflow-x-auto pb-2 touch-scroll">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
             </div>
 
             <!-- Schedule Games List Container (2-Column Matchup Card Grid) -->
             <div id="schedule-games-container" class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                <!-- Dynamically populated via renderMatchups() -->
+                <!-- Dynamically populated via renderScheduleGames() -->
             </div>
         </section>
 
@@ -347,9 +370,9 @@
                     <div class="flex items-center gap-3">
                         <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1.5">
                             <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                            <span>Active 2025-26 Season Data</span>
+                            <span id="floor-active-timeline-text">2026 Season Active</span>
                         </div>
-                        <button onclick="location.reload()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Floor Streaks">
+                        <button onclick="reloadAllData()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Floor Streaks">
                             <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-slate-400"></i>
                             <span>Refresh Streaks</span>
                         </button>
@@ -384,6 +407,18 @@
                     <div class="relative w-56">
                         <input type="text" id="floor-search-input" oninput="onFloorSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-slate-500 font-medium">
                         <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
+                    </div>
+
+                    <!-- Date Filter: Select Game Date (Matching NFL Hub Game Slate Chips) -->
+                    <div class="flex items-center gap-1.5 bg-[#161b22] px-2.5 py-1 rounded-lg border border-[#30363d] min-w-0 max-w-full overflow-hidden">
+                        <span class="text-xs text-slate-400 font-semibold flex items-center gap-1 shrink-0">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span>Game Slate:</span>
+                        </span>
+                        <div id="floor-date-chips" class="flex items-center gap-1 overflow-x-auto max-w-[240px] sm:max-w-[320px] md:max-w-[420px] py-0.5 whitespace-nowrap scrollbar-thin shrink">
+                            <button id="btn-floor-all-dates" onclick="clearFloorDateFilter()" class="chip active text-[11px] py-0.5 px-2.5 rounded shrink-0 bg-[#30363d] text-slate-100 font-bold" title="Show all dates">All</button>
+                        </div>
+                        <input type="date" id="floor-date-picker" onchange="onFloorDateChange(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-mono cursor-pointer shrink-0" title="Select custom slate date">
                     </div>
 
                     <!-- Position Filter Chips (PG, SG, SF, PF, C) -->
@@ -463,17 +498,21 @@
     <!-- Frontend Application Logic (Matching NFL Website Architecture) -->
     <script>
         // Data injected from Flask backend
-        const initialMatchups = {{ matchups | tojson }};
+        const allScheduleGames = {{ all_games | tojson }};
         const initialStreaks = {{ floor_streaks | tojson }};
         const allTeamStats = {{ team_stats | tojson }};
         const teamNamesMap = {{ team_names | tojson }};
 
         // State variables
-        let globalMatchups = [...initialMatchups];
-        let globalFloorStreaks = [...initialStreaks];
+        let startDate = '{{ start_date }}';
+        let endDate = '{{ end_date }}';
+        let currentScheduleSeason = '2026';
+        let selectedScheduleDate = 'all';
         let currentScheduleTeam = 'ALL';
         let scheduleSearchQuery = '';
 
+        let floorSelectedDate = '';
+        let globalFloorStreaks = [...initialStreaks];
         let floorFilterPos = 'ALL';
         let floorFilterStat = 'ALL';
         let floorFilterStreak = '1';
@@ -506,6 +545,31 @@
             return 'rank-bot'; // Red
         }
 
+        // Global Date Range Handler (From & To inputs in header)
+        function onDateRangeChange() {
+            startDate = document.getElementById('input-start-date').value;
+            endDate = document.getElementById('input-end-date').value;
+
+            // Update baseline note
+            const baselineNoteEl = document.getElementById('sched-stat-baseline-note');
+            if (baselineNoteEl) {
+                baselineNoteEl.textContent = `Timeline: ${startDate} to ${endDate}`;
+            }
+
+            renderScheduleDatePills();
+            renderScheduleGames();
+            renderFloorDateChips();
+            renderFloorStreaks();
+        }
+
+        function reloadAllData() {
+            renderScheduleDatePills();
+            renderScheduleGames();
+            renderFloorDateChips();
+            renderFloorStreaks();
+            if (window.lucide) lucide.createIcons();
+        }
+
         // Tab Switching
         function switchTab(tabId) {
             const schedSection = document.getElementById('tab-schedule');
@@ -527,12 +591,155 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        // Matchup Card HTML Builder (Matching NFL Hub renderGameCardHtml)
+        // Filter games by Season and Date Range
+        function getFilteredScheduleGames() {
+            let games = [...allScheduleGames];
+
+            // Filter by season
+            if (currentScheduleSeason === '2026') {
+                games = games.filter(g => g.gameday && g.gameday.startsWith('2026'));
+            } else if (currentScheduleSeason === '2025') {
+                games = games.filter(g => g.gameday && g.gameday.startsWith('2025'));
+            }
+
+            // Filter by global date range
+            if (startDate) games = games.filter(g => g.gameday >= startDate);
+            if (endDate) games = games.filter(g => g.gameday <= endDate);
+
+            // Filter by selected specific date
+            if (selectedScheduleDate && selectedScheduleDate !== 'all') {
+                games = games.filter(g => g.gameday === selectedScheduleDate);
+            }
+
+            // Filter by team
+            if (currentScheduleTeam && currentScheduleTeam !== 'ALL') {
+                games = games.filter(g => g.away_team === currentScheduleTeam || g.home_team === currentScheduleTeam);
+            }
+
+            // Filter by search query
+            if (scheduleSearchQuery) {
+                const q = scheduleSearchQuery.toLowerCase().trim();
+                games = games.filter(g =>
+                    g.away_team.toLowerCase().includes(q) ||
+                    g.home_team.toLowerCase().includes(q) ||
+                    (g.away_team_name && g.away_team_name.toLowerCase().includes(q)) ||
+                    (g.home_team_name && g.home_team_name.toLowerCase().includes(q))
+                );
+            }
+
+            return games;
+        }
+
+        // Render Date Pills for Dates where games actually occurred
+        function renderScheduleDatePills() {
+            const container = document.getElementById('schedule-date-pills');
+            if (!container) return;
+
+            // Get games in the date range for the active season
+            let seasonGames = allScheduleGames.filter(g => {
+                if (currentScheduleSeason === '2026' && !g.gameday.startsWith('2026')) return false;
+                if (currentScheduleSeason === '2025' && !g.gameday.startsWith('2025')) return false;
+                if (startDate && g.gameday < startDate) return false;
+                if (endDate && g.gameday > endDate) return false;
+                return true;
+            });
+
+            // Count games per date
+            const dateCounts = {};
+            seasonGames.forEach(g => {
+                const d = g.gameday;
+                dateCounts[d] = (dateCounts[d] || 0) + 1;
+            });
+
+            // Sort dates descending (most recent first)
+            const sortedDates = Object.keys(dateCounts).sort().reverse();
+
+            const isAll = selectedScheduleDate === 'all';
+            let html = `
+                <button onclick="filterScheduleDate('all')" id="sched-date-pill-all" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
+                    All Dates (${sortedDates.length})
+                </button>
+            `;
+
+            sortedDates.forEach(d => {
+                const isActive = selectedScheduleDate === d;
+                html += `
+                    <button onclick="filterScheduleDate('${d}')" id="sched-date-pill-${d}" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isActive ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
+                        ${d} <span class="text-[10px] text-slate-500 font-mono ml-0.5">(${dateCounts[d]})</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function filterScheduleDate(date) {
+            selectedScheduleDate = date || 'all';
+            const picker = document.getElementById('schedule-date-picker');
+            if (picker) {
+                picker.value = (date !== 'all') ? date : '';
+            }
+            renderScheduleDatePills();
+            renderScheduleGames();
+        }
+
+        function onScheduleSeasonChange(season) {
+            currentScheduleSeason = season;
+            const titleEl = document.getElementById('schedule-title');
+            const subTitle = document.getElementById('schedule-subtitle');
+            const seasonPill = document.getElementById('header-season-pill');
+
+            if (season === '2026') {
+                if (titleEl) titleEl.textContent = '2026 NBA Season Schedule & Matchup Stats';
+                if (subTitle) subTitle.textContent = 'Full 2026 schedule with verified scores, completed stats & defensive rankings';
+                if (seasonPill) seasonPill.textContent = '2026 Season';
+                startDate = '2026-01-01';
+                endDate = '2026-06-13';
+            } else if (season === '2025') {
+                if (titleEl) titleEl.textContent = '2025 NBA Season Schedule & Matchup Stats';
+                if (subTitle) subTitle.textContent = '2025 season games with verified box scores & defensive rankings';
+                if (seasonPill) seasonPill.textContent = '2025 Season';
+                startDate = '2025-10-02';
+                endDate = '2025-12-31';
+            } else {
+                if (titleEl) titleEl.textContent = 'Full NBA Schedule & Matchup Stats';
+                if (subTitle) subTitle.textContent = 'All regular season & playoff games across 2025-26';
+                if (seasonPill) seasonPill.textContent = 'All Seasons';
+                startDate = '2025-10-02';
+                endDate = '2026-06-13';
+            }
+
+            document.getElementById('input-start-date').value = startDate;
+            document.getElementById('input-end-date').value = endDate;
+
+            selectedScheduleDate = 'all';
+            onDateRangeChange();
+        }
+
+        function filterScheduleTeam(team) {
+            currentScheduleTeam = team || 'ALL';
+            renderScheduleGames();
+        }
+
+        function onScheduleSearch(query) {
+            scheduleSearchQuery = query || '';
+            renderScheduleGames();
+        }
+
+        // Render Game Card HTML (Matching NFL Hub format)
         function renderGameCardHtml(g) {
-            const a = g.away_stats || {};
-            const h = g.home_stats || {};
+            const a = g.away_stats || allTeamStats[g.away_team] || {};
+            const h = g.home_stats || allTeamStats[g.home_team] || {};
             const awayRec = g.away_record || '0-0';
             const homeRec = g.home_record || '0-0';
+            const isFinal = g.is_final;
+
+            let oddsBadgeHtml = '';
+            if (isFinal) {
+                oddsBadgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>FINAL</span></span>`;
+            } else {
+                oddsBadgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">UPCOMING</span>`;
+            }
 
             const formatRow = (label, awayVal, awayRank, homeVal, homeRank) => {
                 const awayBadge = awayRank ? `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${getRankBadge(awayRank)}">#${awayRank}</span>` : '';
@@ -578,16 +785,13 @@
                     <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#30363d] pb-2.5">
                         <div class="flex items-center space-x-2">
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">
-                                ${g.game_label || 'NBA'}
-                            </span>
-                            <span class="font-medium text-slate-300">
                                 ${g.gameday}
                             </span>
                             <span class="text-slate-500">•</span>
-                            <span class="font-mono text-slate-400">${g.gametime}</span>
+                            <span class="font-mono text-slate-400">${g.gametime || '7:30 PM ET'}</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">MATCHUP</span>
+                            ${oddsBadgeHtml}
                         </div>
                     </div>
 
@@ -611,9 +815,18 @@
 
                         <!-- Center vs / Scores (2 cols) -->
                         <div class="col-span-2 text-center flex flex-col items-center justify-center">
-                            <div class="w-7 h-7 mx-auto rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center font-bold text-slate-400 text-xs">
-                                @
-                            </div>
+                            ${isFinal && g.away_score != null && g.home_score != null ? `
+                                <div class="flex items-center justify-center space-x-1.5 font-mono font-extrabold text-lg sm:text-xl text-slate-100">
+                                    <span class="${g.away_score > g.home_score ? 'text-emerald-400 font-black' : 'text-slate-300'}">${g.away_score}</span>
+                                    <span class="text-slate-600 text-xs">-</span>
+                                    <span class="${g.home_score > g.away_score ? 'text-emerald-400 font-black' : 'text-slate-300'}">${g.home_score}</span>
+                                </div>
+                                <span class="text-[9px] font-bold font-mono text-emerald-400 tracking-wider uppercase">FINAL</span>
+                            ` : `
+                                <div class="w-7 h-7 mx-auto rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center font-bold text-slate-400 text-xs">
+                                    @
+                                </div>
+                            `}
                         </div>
 
                         <!-- Home Team (5 cols) -->
@@ -681,66 +894,32 @@
         }
 
         // Render Matchup Cards Grid
-        function renderMatchups() {
+        function renderScheduleGames() {
             const container = document.getElementById('schedule-games-container');
             if (!container) return;
 
-            let filtered = [...globalMatchups];
-
-            if (currentScheduleTeam && currentScheduleTeam !== 'ALL') {
-                filtered = filtered.filter(g => g.away_team === currentScheduleTeam || g.home_team === currentScheduleTeam);
-            }
-
-            if (scheduleSearchQuery) {
-                const q = scheduleSearchQuery.toLowerCase().trim();
-                filtered = filtered.filter(g =>
-                    g.away_team.toLowerCase().includes(q) ||
-                    g.home_team.toLowerCase().includes(q) ||
-                    (g.away_team_name && g.away_team_name.toLowerCase().includes(q)) ||
-                    (g.home_team_name && g.home_team_name.toLowerCase().includes(q))
-                );
-            }
+            const games = getFilteredScheduleGames();
 
             const countEl = document.getElementById('sched-stat-total-games');
-            if (countEl) countEl.textContent = filtered.length;
+            if (countEl) countEl.textContent = games.length;
 
-            if (filtered.length === 0) {
+            const compEl = document.getElementById('sched-stat-completed-games');
+            if (compEl) compEl.textContent = games.filter(g => g.is_final).length;
+
+            if (games.length === 0) {
+                const targetDisplay = (selectedScheduleDate !== 'all' ? selectedScheduleDate : `${startDate} to ${endDate}`);
                 container.innerHTML = `
-                    <div class="col-span-full glass-panel rounded-xl p-12 text-center text-slate-500 space-y-2">
-                        <i data-lucide="inbox" class="w-6 h-6 mx-auto text-slate-600 mb-1"></i>
-                        <p class="font-medium text-slate-400">No matchups match the selected filter.</p>
-                        <p class="text-xs text-slate-500">Try choosing "All Teams" or clearing your search term.</p>
+                    <div class="col-span-full glass-panel rounded-xl p-12 text-center text-slate-400 space-y-2 border border-[#30363d]">
+                        <i data-lucide="calendar-x" class="w-8 h-8 mx-auto text-slate-500 mb-1"></i>
+                        <p class="font-medium text-slate-300">No scheduled NBA matchups found for ${targetDisplay}.</p>
+                        <p class="text-xs text-slate-500">Pick another date from the date pills above or expand your date range.</p>
                     </div>
                 `;
             } else {
-                container.innerHTML = filtered.map(renderGameCardHtml).join('');
+                container.innerHTML = games.slice(0, 40).map(renderGameCardHtml).join('');
             }
 
             if (window.lucide) lucide.createIcons({ root: container });
-        }
-
-        function filterScheduleTeam(team) {
-            currentScheduleTeam = team || 'ALL';
-            renderMatchups();
-        }
-
-        function onScheduleSearch(query) {
-            scheduleSearchQuery = query || '';
-            renderMatchups();
-        }
-
-        function onScheduleSlateChange(val) {
-            if (val === 'today') {
-                const todayGames = {{ todays_games | tojson }};
-                if (todayGames && todayGames.length > 0) {
-                    const todayCodes = new Set();
-                    todayGames.forEach(p => { todayCodes.add(p[0]); todayCodes.add(p[1]); });
-                    globalMatchups = initialMatchups.filter(g => todayCodes.has(g.away_team) && todayCodes.has(g.home_team));
-                }
-            } else {
-                globalMatchups = [...initialMatchups];
-            }
-            renderMatchups();
         }
 
         function compareCustomMatchup() {
@@ -753,7 +932,6 @@
 
             const customMatchup = {
                 game_id: `NBA_${away}_${home}_custom`,
-                game_label: 'LAB H2H',
                 gameday: 'Custom Matchup Lab',
                 gametime: 'Head-to-Head',
                 is_final: false,
@@ -768,25 +946,117 @@
             };
 
             // Prepend custom matchup to the top of the cards list and re-render
-            globalMatchups = [customMatchup, ...initialMatchups.filter(g => !(g.away_team === away && g.home_team === home))];
-            currentScheduleTeam = 'ALL';
-            const teamSelect = document.getElementById('schedule-team-select');
-            if (teamSelect) teamSelect.value = 'ALL';
-            renderMatchups();
-
-            // Smooth scroll down to the card
-            document.getElementById('schedule-games-container')?.scrollIntoView({ behavior: 'smooth' });
+            const container = document.getElementById('schedule-games-container');
+            if (container) {
+                container.innerHTML = renderGameCardHtml(customMatchup) + container.innerHTML;
+                if (window.lucide) lucide.createIcons({ root: container });
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // =========================================================================
-        // Floor Streaks Table & Filtering (Matching NFL Hub renderFloorStreaks)
+        // Floor Streaks Table & Game Slate Date Chips (Matching NFL Hub)
         // =========================================================================
+        function renderFloorDateChips() {
+            const container = document.getElementById('floor-date-chips');
+            if (!container) return;
+
+            // Map each gameday in the active date range to teams playing on that date
+            const dateTeamsMap = {};
+            allScheduleGames.forEach(g => {
+                const d = g.gameday;
+                if (!d || (startDate && d < startDate) || (endDate && d > endDate)) return;
+                if (!dateTeamsMap[d]) dateTeamsMap[d] = new Set();
+                if (g.home_team) dateTeamsMap[d].add(g.home_team.toUpperCase());
+                if (g.away_team) dateTeamsMap[d].add(g.away_team.toUpperCase());
+            });
+
+            // Count how many active streak players play on each date
+            const dateCounts = {};
+            Object.keys(dateTeamsMap).forEach(d => {
+                const teams = dateTeamsMap[d];
+                let count = 0;
+                (globalFloorStreaks || []).forEach(p => {
+                    const t = (p.team || '').toUpperCase();
+                    if (teams.has(t)) count++;
+                });
+                if (count > 0) dateCounts[d] = count;
+            });
+
+            const sortedDates = Object.keys(dateCounts).sort().reverse().slice(0, 15);
+
+            let html = `
+                <button id="btn-floor-all-dates" onclick="clearFloorDateFilter()" class="chip ${!floorSelectedDate ? 'active bg-[#30363d] text-slate-100 font-bold' : 'text-slate-400 hover:text-slate-200 bg-[#21262d]'} text-[11px] py-0.5 px-2.5 rounded shrink-0 transition" title="Show all dates">
+                    All
+                </button>
+            `;
+
+            sortedDates.forEach(d => {
+                const isActive = floorSelectedDate === d;
+                html += `
+                    <button onclick="setFloorDate('${d}')" class="chip ${isActive ? 'active bg-[#30363d] text-slate-100 font-bold' : 'text-slate-400 hover:text-slate-200 bg-[#21262d]'} text-[11px] py-0.5 px-2 rounded shrink-0 transition">
+                        ${d} <span class="text-[10px] text-slate-500 font-mono">(${dateCounts[d]})</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function setFloorDate(d) {
+            floorSelectedDate = d;
+            const datePicker = document.getElementById('floor-date-picker');
+            if (datePicker) datePicker.value = d;
+            renderFloorDateChips();
+            renderFloorStreaks();
+        }
+
+        function clearFloorDateFilter() {
+            floorSelectedDate = '';
+            const datePicker = document.getElementById('floor-date-picker');
+            if (datePicker) datePicker.value = '';
+            renderFloorDateChips();
+            renderFloorStreaks();
+        }
+
+        function onFloorDateChange(val) {
+            floorSelectedDate = val || '';
+            renderFloorDateChips();
+            renderFloorStreaks();
+        }
+
         function renderFloorStreaks() {
             const tbody = document.getElementById('floor-streak-table-body');
             const countEl = document.getElementById('floor-visible-count');
             if (!tbody) return;
 
             let filtered = [...globalFloorStreaks];
+
+            // Filter by Selected Game Date
+            if (floorSelectedDate) {
+                const gamesOnDate = allScheduleGames.filter(g => g.gameday === floorSelectedDate);
+                const teamsOnDate = {};
+                gamesOnDate.forEach(g => {
+                    const h = (g.home_team || '').toUpperCase();
+                    const a = (g.away_team || '').toUpperCase();
+                    if (h) teamsOnDate[h] = { opponent: a, matchup: `${h} vs ${a}` };
+                    if (a) teamsOnDate[a] = { opponent: h, matchup: `${a} @ ${h}` };
+                });
+
+                filtered = filtered.filter(p => {
+                    const t = (p.team || '').toUpperCase();
+                    return Boolean(teamsOnDate[t]);
+                });
+
+                filtered = filtered.map(p => {
+                    const t = (p.team || '').toUpperCase();
+                    const mInfo = teamsOnDate[t];
+                    return {
+                        ...p,
+                        matchup: mInfo ? mInfo.matchup : p.matchup
+                    };
+                });
+            }
 
             // Filter by Position
             if (floorFilterPos && floorFilterPos !== 'ALL') {
@@ -861,7 +1131,7 @@
                         <td class="text-center font-mono text-slate-500 py-2.5 px-3">${idx + 1}</td>
                         <td class="py-2.5 px-3">
                             <div class="font-semibold text-slate-100">${p.player_name || 'Unknown'}</div>
-                            <div class="text-[10px] text-slate-500 font-mono">${p.team || '--'} • Pos ${p.position || '--'}</div>
+                            <div class="text-[10px] text-slate-500 font-mono">${p.matchup || (p.team + ' • Pos ' + p.position)}</div>
                         </td>
                         <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.position || '--'}</td>
                         <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.team || '--'}</td>
@@ -937,7 +1207,9 @@
 
         // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
-            renderMatchups();
+            renderScheduleDatePills();
+            renderScheduleGames();
+            renderFloorDateChips();
             renderFloorStreaks();
             if (window.lucide) lucide.createIcons();
         });
