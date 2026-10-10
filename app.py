@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from update import make_data, find_streaks, fetch_logs, get_todays_games
 import pandas as pd
 import os
@@ -6,7 +6,6 @@ from datetime import datetime
 import requests
 
 # --- Vercel Sync Configuration ---
-# Point to your repository's raw content
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
 IS_VERCEL = os.environ.get('VERCEL') == '1'
 
@@ -15,6 +14,12 @@ TODAYS_CACHE_DATE = None
 
 app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+NBA_TEAMS = [
+    'ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW',
+    'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK',
+    'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'
+]
 
 QUICK_VIEW_COLUMNS = [
     'TEAM', 'POSITION', 'MATCHUP_SCORE',
@@ -42,9 +47,7 @@ RADAR_COLUMNS = [
 ]
 
 def fetch_todays_games_cache():
-    """
-    Returns today's matches. On Vercel, it uses the remote source.
-    """
+    """Returns today's matches. On Vercel, it uses the remote source."""
     if IS_VERCEL:
         try:
             url = f"{GITHUB_RAW_BASE}todays_games.csv"
@@ -56,22 +59,19 @@ def fetch_todays_games_cache():
             return []
     return get_todays_games()
 
-# Helper to load global data frames
 def load_data():
+    """Helper to load global data frames."""
     csv_filename = os.path.join(BASE_DIR, 'vs_Position_withavg.csv')
     pos_filename = os.path.join(BASE_DIR, 'positions.csv')
     
     if IS_VERCEL:
-        # Fetch from GitHub Raw - use only the basename of the file
         df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(csv_filename)}")
         pos_df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(pos_filename)}")
-        last_updated = "Remote Sync" # Could fetch commit date if needed
+        last_updated = "Remote Sync"
     else:
-        # Local fallback
         df = pd.read_csv(csv_filename)
         pos_df = pd.read_csv(pos_filename)
         
-        # Auto-update if missing rank columns
         if 'eFG_RANK' not in df.columns:
             from update import make_data
             make_data(pos_df, 20)
@@ -97,11 +97,9 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             diff = df[l5_col] - df[base_col]
             df[trend_col] = diff.apply(lambda x: '↑' if x > 0.5 else ('↓' if x < -0.5 else '→'))
             
-    # Remove IDs
     if 'OPPONENT_ID' in df.columns: df = df.drop(columns=['OPPONENT_ID'])
     if 'TEAM_ID' in df.columns: df = df.drop(columns=['TEAM_ID'])
 
-    # Reorder columns logically
     preferred_order = [
          'TEAM', 'POSITION', 'MATCHUP_SCORE', 'OPP_MIN', 
          'PTS', 'L5_PTS', 'PTS_TREND', 'PTS_RANK',
@@ -115,7 +113,6 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
          'PRED', 'Edge', 'O/U', 'Line', 'True Edge'
     ]
     
-    # Keep columns that exist in the preferred order, then any remaining ones
     final_cols = [c for c in preferred_order if c in df.columns]
     final_cols += [c for c in df.columns if c not in final_cols]
     
@@ -124,7 +121,6 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 def apply_query_filter(df: pd.DataFrame, sql_filter: str):
     if not sql_filter:
         return df, None
-
     try:
         return df.query(sql_filter, engine='python'), None
     except Exception as e:
@@ -149,10 +145,92 @@ def build_league_average_row(df: pd.DataFrame):
 def build_radar_payload():
     return [{'column': col, 'label': label} for col, label in RADAR_COLUMNS]
 
+def compute_defense_kpis(df: pd.DataFrame):
+    fallback = {
+        'top_target': {'team': '--', 'pos': '--', 'score': '--'},
+        'toughest_def': {'team': '--', 'pos': '--', 'score': '--'},
+        'total_units': 0,
+        'fastest_pace': {'team': '--', 'pace': '--'}
+    }
+    if df is None or df.empty:
+        return fallback
+
+    df_clean = df[df['TEAM'] != 'LEAGUE_AVG'] if 'TEAM' in df.columns else df
+    if df_clean.empty:
+        return fallback
+
+    top_target = {'team': '--', 'pos': '--', 'score': '--'}
+    if 'MATCHUP_SCORE' in df_clean.columns:
+        valid_scores = df_clean.dropna(subset=['MATCHUP_SCORE'])
+        if not valid_scores.empty:
+            max_row = valid_scores.loc[valid_scores['MATCHUP_SCORE'].idxmax()]
+            top_target = {
+                'team': str(max_row.get('TEAM', '--')),
+                'pos': str(max_row.get('POSITION', '--')),
+                'score': f"{float(max_row['MATCHUP_SCORE']):.2f}"
+            }
+
+    toughest_def = {'team': '--', 'pos': '--', 'score': '--'}
+    if 'MATCHUP_SCORE' in df_clean.columns:
+        valid_scores = df_clean.dropna(subset=['MATCHUP_SCORE'])
+        if not valid_scores.empty:
+            min_row = valid_scores.loc[valid_scores['MATCHUP_SCORE'].idxmin()]
+            toughest_def = {
+                'team': str(min_row.get('TEAM', '--')),
+                'pos': str(min_row.get('POSITION', '--')),
+                'score': f"{float(min_row['MATCHUP_SCORE']):.2f}"
+            }
+
+    fastest_pace = {'team': '--', 'pace': '--'}
+    if 'PACE' in df_clean.columns:
+        valid_pace = df_clean.dropna(subset=['PACE'])
+        if not valid_pace.empty:
+            p_row = valid_pace.loc[valid_pace['PACE'].idxmax()]
+            fastest_pace = {
+                'team': str(p_row.get('TEAM', '--')),
+                'pace': f"{float(p_row['PACE']):.1f}"
+            }
+
+    return {
+        'top_target': top_target,
+        'toughest_def': toughest_def,
+        'total_units': len(df_clean),
+        'fastest_pace': fastest_pace
+    }
+
+def compute_streak_kpis(streak_df: pd.DataFrame):
+    if streak_df is None or streak_df.empty:
+        return {
+            'total_streaks': 0,
+            'pts_streaks': 0,
+            'reb_streaks': 0,
+            'ast_streaks': 0,
+            'longest_run': 0
+        }
+    return {
+        'total_streaks': len(streak_df),
+        'pts_streaks': int((streak_df['Stat'] == 'PTS').sum()) if 'Stat' in streak_df.columns else 0,
+        'reb_streaks': int((streak_df['Stat'] == 'REB').sum()) if 'Stat' in streak_df.columns else 0,
+        'ast_streaks': int((streak_df['Stat'] == 'AST').sum()) if 'Stat' in streak_df.columns else 0,
+        'longest_run': int(streak_df['Min_In_Streak'].max()) if 'Min_In_Streak' in streak_df.columns and not streak_df['Min_In_Streak'].isna().all() else 0
+    }
+
+def get_streak_dataframe(pos_df: pd.DataFrame, minutes: int, last_n_games: int):
+    if not IS_VERCEL:
+        return find_streaks(pos_df, minutes, streak_len=last_n_games)
+    else:
+        try:
+            logs_url = f"{GITHUB_RAW_BASE}logs.csv"
+            logs_df = pd.read_csv(logs_url)
+            return find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
+        except Exception as e:
+            print(f"Error finding streaks on Vercel: {e}")
+            return pd.DataFrame()
+
 @app.route('/manual_update', methods=['POST'])
 def manual_update():
     if IS_VERCEL:
-        return redirect(url_for('index')) # No manual updates in serverless
+        return redirect(url_for('index'))
 
     min_val = request.form.get('minutes', 20)
     try:
@@ -160,15 +238,14 @@ def manual_update():
     except ValueError:
         min_val = 20
 
-    last_n = request.form.get('last_n_games', 20)
+    last_n = request.form.get('last_n_games', 5)
     try:
         last_n = int(last_n)
     except ValueError:
-        last_n = 5 # Default to 5 now
+        last_n = 5
 
     df, pos_df, last_updated = load_data()
     make_data(pos_df, min_val, last_n) 
-    
     return redirect(url_for('index'))
 
 @app.route('/', methods=['GET', 'POST'])
@@ -183,11 +260,10 @@ def index():
     sql_filter = ""
     
     if request.method == 'POST':
-        # 1. Get user input
-        team1 = request.form.get('team1', '')
-        team2 = request.form.get('team2', '')
+        team1 = request.form.get('team1', '').strip().upper()
+        team2 = request.form.get('team2', '').strip().upper()
         selected_teams = [team1, team2]
-        sql_filter = request.form.get('sql_filter', '')
+        sql_filter = request.form.get('sql_filter', '').strip()
         
         raw_minutes = request.form.get('minutes', '20')
         minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
@@ -196,10 +272,7 @@ def index():
         last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
 
         if not IS_VERCEL:
-            # 2. Rebuild the CSV first so the view reflects the new threshold
             make_data(pos_df_global, minutes, last_n_games)
-            
-            # 3. Reload the global dataframe after the file is updated
             df_global, _, last_updated = load_data()
         else:
             try:
@@ -210,17 +283,14 @@ def index():
                     df_global = new_df
             except Exception as e:
                 print(f"Error rebuilding dynamically on Vercel: {e}")
-    
-    # Reload local files if not on Vercel to ensure any dynamic changes in update.py are picked up
-    # (Though logic above usually handles it, this makes it safer)
-    
+
     df = enrich_dataframe(df_global.copy())
-    if team1 !="" and team2!="":
-        df = df[df['TEAM'].isin(selected_teams)]
-    elif team1!="" and team2=="":
-        df = df[df['TEAM']==team1]
-    elif team1=="" and  team2!="":
-        df = df[df['TEAM']==team2]
+    if team1 != "" and team2 != "":
+        df = df[df['TEAM'].isin([t for t in selected_teams if t])]
+    elif team1 != "" and team2 == "":
+        df = df[df['TEAM'] == team1]
+    elif team1 == "" and team2 != "":
+        df = df[df['TEAM'] == team2]
 
     error_msg = None
     if sql_filter:
@@ -242,32 +312,45 @@ def index():
                         val = row[col]
                         if pd.notna(val):
                             stat_name = col.replace('_RANK', '')
-                            # Rank 1 is worst defense, Rank 30 is best
                             if val < worst_rank_val:
                                 worst_rank_val, worst_stat, worst_pos = val, stat_name, pos
                             if val > best_rank_val:
                                 best_rank_val, best_stat, best_pos = val, stat_name, pos
                 
                 if best_stat and worst_stat:
-                    team_summary = f"The {selected_team} are most vulnerable to {worst_pos} {worst_stat} (Rank {int(worst_rank_val)}) but have elite defense against {best_pos} {best_stat} (Rank {int(best_rank_val)})."
+                    team_summary = f"The {selected_team} are most vulnerable to {worst_pos} {worst_stat} (Rank #{int(worst_rank_val)} allowed) but maintain elite defense against {best_pos} {best_stat} (Rank #{int(best_rank_val)} allowed)."
 
+    defense_kpis = compute_defense_kpis(df)
     league_avg_row = build_league_average_row(df)
     available_cols = list(df.columns.values)
     quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
     radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
 
+    # Pre-fetch streaks so tab switching is instantaneous
+    streak_df = get_streak_dataframe(pos_df_global, minutes, last_n_games)
+    streak_kpis = compute_streak_kpis(streak_df)
+    streak_records = streak_df.to_dict('records') if not streak_df.empty else []
+
     return render_template('index.html', 
                            records=df.to_dict('records'), 
                            colnames=available_cols,
-                            quick_cols=quick_cols,
-                            default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
-                            radar_metrics=radar_metrics,
-                            league_avg_row=league_avg_row,
-                            selected_teams=selected_teams, minutes=minutes,
-                            last_n_games=last_n_games,
-                            page_type='defense',
-                            sql_filter=sql_filter, error_msg=error_msg, team_summary=team_summary,
-                            last_updated=last_updated, todays_games=todays_games)
+                           quick_cols=quick_cols,
+                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
+                           radar_metrics=radar_metrics,
+                           league_avg_row=league_avg_row,
+                           selected_teams=selected_teams, 
+                           minutes=minutes,
+                           last_n_games=last_n_games,
+                           page_type='defense',
+                           sql_filter=sql_filter, 
+                           error_msg=error_msg, 
+                           team_summary=team_summary,
+                           last_updated=last_updated, 
+                           todays_games=todays_games,
+                           defense_kpis=defense_kpis,
+                           streak_records=streak_records,
+                           streak_kpis=streak_kpis,
+                           all_teams=NBA_TEAMS)
 
 @app.route('/streak', methods=['GET', 'POST'])
 def streak():
@@ -277,7 +360,6 @@ def streak():
     
     minutes = 20
     last_n_games = 5
-    streak_df = pd.DataFrame()
 
     if request.method == 'POST':
         raw_minutes = request.form.get('minutes', '20')
@@ -286,43 +368,69 @@ def streak():
         raw_last_n = request.form.get('last_n_games', '5')
         last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
 
-        if not IS_VERCEL:
-            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games)
-        else:
-            try:
-                logs_url = f"{GITHUB_RAW_BASE}logs.csv"
-                logs_df = pd.read_csv(logs_url)
-                streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
-            except Exception as e:
-                print(f"Error finding streaks dynamically on Vercel: {e}")
-    else:
-        # Default load
-        if not IS_VERCEL:
-            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games)
-        else:
-            try:
-                logs_url = f"{GITHUB_RAW_BASE}logs.csv"
-                logs_df = pd.read_csv(logs_url)
-                streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
-            except Exception as e:
-                print(f"Error finding streaks on Vercel: {e}")
+    streak_df = get_streak_dataframe(pos_df, minutes, last_n_games)
+    streak_kpis = compute_streak_kpis(streak_df)
+    streak_records = streak_df.to_dict('records') if not streak_df.empty else []
 
-    available_cols = list(streak_df.columns.values) if not streak_df.empty else []
-    
+    df = enrich_dataframe(df_global.copy())
+    defense_kpis = compute_defense_kpis(df)
+    available_cols = list(df.columns.values)
+    quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
+    radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
+    league_avg_row = build_league_average_row(df)
+
     return render_template('index.html', 
-                           records=streak_df.to_dict('records') if not streak_df.empty else [], 
+                           records=df.to_dict('records') if not df.empty else [], 
                            colnames=available_cols,
-                           quick_cols=available_cols, # Show all for streaks by default
-                           default_hidden_cols=[],
-                           radar_metrics=[],
-                           league_avg_row=None,
-                           page_type='streak', 
+                           quick_cols=quick_cols,
+                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
+                           radar_metrics=radar_metrics,
+                           league_avg_row=league_avg_row,
+                           selected_teams=["", ""],
                            minutes=minutes,
                            last_n_games=last_n_games,
+                           page_type='streak', 
+                           sql_filter="", 
+                           error_msg=None, 
+                           team_summary="",
                            last_updated=last_updated,
-                           todays_games=todays_games)
+                           todays_games=todays_games,
+                           defense_kpis=defense_kpis,
+                           streak_records=streak_records,
+                           streak_kpis=streak_kpis,
+                           all_teams=NBA_TEAMS)
 
+@app.route('/api/status')
+def api_status():
+    df, pos_df, last_updated = load_data()
+    return jsonify({
+        'status': 'OPERATIONAL',
+        'last_updated': last_updated,
+        'teams_tracked': len(NBA_TEAMS),
+        'total_units': len(df) if not df.empty else 0,
+        'is_vercel': IS_VERCEL
+    })
 
+@app.route('/api/streaks')
+def api_streaks():
+    min_val = request.args.get('minutes', 20, type=int)
+    last_n = request.args.get('last_n_games', 5, type=int)
+    _, pos_df, _ = load_data()
+    streak_df = get_streak_dataframe(pos_df, min_val, last_n)
+    return jsonify({
+        'records': streak_df.to_dict('records') if not streak_df.empty else [],
+        'kpis': compute_streak_kpis(streak_df)
+    })
+
+@app.route('/api/defense')
+def api_defense():
+    df, _, last_updated = load_data()
+    df = enrich_dataframe(df)
+    return jsonify({
+        'records': df.to_dict('records') if not df.empty else [],
+        'last_updated': last_updated,
+        'kpis': compute_defense_kpis(df)
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)
