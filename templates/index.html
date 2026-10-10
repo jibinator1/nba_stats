@@ -37,22 +37,131 @@
     <!-- Lucide Icons (Pinned CDN) -->
     <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
 
-    <!-- Chart.js CDN (For Radar Exploitability Profile) -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Base Styling matching NFL Hub -->
+    <style>
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+        }
+        /* Mobile touch scrolling */
+        .touch-scroll {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Sticky table column for mobile */
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background-color: #161b22;
+        }
+        th.sticky-col {
+            z-index: 20;
+            background-color: #21262d;
+        }
+        .rank-top { background-color: rgba(63, 185, 80, 0.12); color: #7ee787; border: 1px solid rgba(63, 185, 80, 0.25); }
+        .rank-mid { background-color: rgba(88, 166, 255, 0.1); color: #a5d6ff; border: 1px solid rgba(88, 166, 255, 0.2); }
+        .rank-bot { background-color: rgba(248, 81, 73, 0.12); color: #ffa198; border: 1px solid rgba(248, 81, 73, 0.25); }
+        .glass-panel {
+            background: #161b22;
+            border: 1px solid #30363d;
+        }
+        .th-sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.15s ease, background-color 0.15s ease;
+        }
+        .th-sortable:hover {
+            color: #58a6ff;
+            background-color: #21262d;
+        }
+        /* Per-Game Stat Hover Info Box (Snappy Lingering Tooltip) */
+        .stat-info-trigger {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: help;
+            border-bottom: 1px dotted rgba(148, 163, 184, 0.45);
+            padding-bottom: 1px;
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+        .stat-info-trigger:hover {
+            color: #ffffff;
+            border-bottom-color: rgba(226, 232, 240, 0.85);
+        }
+        .stat-info-box {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            width: 250px;
+            max-width: calc(100vw - 32px);
+            padding: 8px 11px;
+            background: rgba(18, 22, 28, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.5);
+            color: #c9d1d9;
+            font-size: 11px;
+            line-height: 1.45;
+            text-transform: none;
+            letter-spacing: normal;
+            pointer-events: none;
+            z-index: 100;
+            transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
+            transition-delay: 0s;
+        }
+        .stat-info-box::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #30363d transparent transparent transparent;
+        }
+        .stat-info-trigger:hover .stat-info-box {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            transition-delay: 0.12s;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0d1117; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white bg-[#0d1117] text-[#c9d1d9]">
+<body class="min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white">
 
     <!-- ============================================================== -->
-    <!-- TOP NAVIGATION BAR (Matching NFL Hub Header) -->
+    <!-- TOP NAVIGATION BAR (Muted Dark Theme Matching NFL Hub) -->
     <!-- ============================================================== -->
     <header class="glass-panel sticky top-0 z-50 border-b border-[#30363d]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <!-- Logo & Title -->
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-slate-300 shadow-sm">
+                <div class="w-9 h-9 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-slate-300">
                     <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-300"></i>
                 </div>
                 <div>
@@ -60,28 +169,19 @@
                         <span>NBA PREDICTION & ANALYTICS</span>
                         <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#21262d] text-slate-400 border border-[#30363d] font-normal">2025-26</span>
                     </h1>
-                    <p class="text-xs text-slate-400 -mt-0.5">Positional Defense Matrix • Matchup Exploitability • Player Streaks</p>
+                    <p class="text-xs text-slate-400 -mt-0.5">Volume x Efficiency Metrics • Matchup Lab H2H • Positional Defense</p>
                 </div>
             </div>
 
-            <!-- Quick Action Toolbar -->
-            <div class="flex items-center gap-2.5 flex-wrap">
-                {% if todays_games %}
-                <!-- Today's Slate Dropdown -->
-                <div class="flex items-center bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5 text-xs text-slate-300 gap-1.5 shadow-sm">
-                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
-                    <span class="text-[11px] text-slate-400 font-medium">Slate:</span>
-                    <select onchange="if(this.value){ const p = this.value.split(':'); if(p.length===2) populateMatchup(p[0], p[1]); }" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-semibold cursor-pointer">
-                        <option value="" disabled selected>Today's Games ({{ todays_games|length }})</option>
-                        {% for game in todays_games %}
-                        <option value="{{ game[0] }}:{{ game[1] }}">{{ game[0] }} vs {{ game[1] }}</option>
-                        {% endfor %}
-                    </select>
+            <!-- Global Actions & Refresh -->
+            <div class="flex items-center gap-3">
+                <div class="text-[11px] text-slate-400 font-mono hidden sm:flex items-center gap-1.5 bg-[#21262d] border border-[#30363d] px-2.5 py-1.5 rounded-lg">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Last Refreshed: {{ last_updated }}</span>
                 </div>
-                {% endif %}
 
                 <!-- Refresh Button -->
-                <button onclick="location.reload()" class="p-2 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition active:scale-95" title="Refresh Dashboard Data">
+                <button onclick="location.reload()" class="p-2 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition" title="Refresh Data">
                     <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -89,502 +189,264 @@
 
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 border-t border-[#30363d] overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('defense')" id="tab-btn-defense" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type != 'streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
-                <i data-lucide="shield" class="w-4 h-4 text-slate-400"></i>
-                <span>Opponent Defense Ranks</span>
+            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type != 'floor-streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+                <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                <span id="nav-schedule-label">Schedule & Matchups (2025-26)</span>
             </button>
-            <button onclick="switchTab('streaks')" id="tab-btn-streaks" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type == 'streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+            <button onclick="switchTab('floor-streak')" id="tab-btn-floor-streak" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type == 'floor-streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
                 <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
-                <span>Player Streaks</span>
-                <span id="streaks-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#30363d] text-slate-300 font-mono">{{ streak_records|length }}</span>
+                <span>Player Floor Streaks</span>
+                <span id="streaks-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#30363d] text-slate-300 font-mono">{{ floor_streaks|length }}</span>
             </button>
         </div>
     </header>
 
-    <!-- ============================================================== -->
-    <!-- MAIN APPLICATION CONTAINER -->
-    <!-- ============================================================== -->
+    <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
 
         <!-- ============================================================== -->
-        <!-- TAB 1: OPPONENT DEFENSIVE RANKS (Defense Matrix) -->
+        <!-- TAB 1: SCHEDULE & MATCHUP STATS -->
         <!-- ============================================================== -->
-        <section id="tab-defense" class="{{ 'hidden' if page_type == 'streak' else '' }} space-y-5">
-            <!-- Header & Concept Overview -->
+        <section id="tab-schedule" class="{{ 'hidden' if page_type == 'floor-streak' else '' }} space-y-5">
+            <!-- Header & Control Bar -->
             <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#30363d] pb-4">
                     <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
-                                <i data-lucide="shield" class="w-4 h-4 text-slate-400"></i>
-                                <span>Opponent Defensive Ranks</span>
-                            </h2>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-200 border border-[#30363d]">1-30 League Vulnerability Matrix</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-1">
-                            Ranks all 30 NBA teams across 5 positions (PG, SG, SF, PF, C). Lower Rank (1-6) = Soft / Leaky defense (prime offensive target). Higher Rank (25-30) = Stingy / Elite defense.
+                        <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
+                            <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                            <span id="schedule-title">2025-26 NBA Season Schedule & Matchup Stats</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5" id="schedule-subtitle">
+                            Head-to-head matchup breakdown with team pace, defensive rating, scoring, 3PT & positional defense with league rankings
                         </p>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1.5">
-                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span>Refreshed: {{ last_updated }}</span>
-                        </div>
-                        <span class="hidden sm:inline-flex px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-400 border border-[#30363d]">
-                            Click row for Radar Profile
-                        </span>
-                    </div>
-                </div>
-
-                <!-- KPI Metric Summary Ribbon (Matching NFL Hub) -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#30363d]">
-                    <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Top Matchup Target</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1 flex items-center justify-between">
-                            <span>{{ defense_kpis.top_target.team }} (vs {{ defense_kpis.top_target.pos }})</span>
-                            <span class="text-emerald-400 font-bold text-[11px]">{{ defense_kpis.top_target.score }}</span>
-                        </div>
-                    </div>
-                    <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Toughest Defense</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1 flex items-center justify-between">
-                            <span>{{ defense_kpis.toughest_def.team }} (vs {{ defense_kpis.toughest_def.pos }})</span>
-                            <span class="text-rose-400 font-bold text-[11px]">{{ defense_kpis.toughest_def.score }}</span>
-                        </div>
-                    </div>
-                    <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Fastest Pace Unit</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1 flex items-center justify-between">
-                            <span>{{ defense_kpis.fastest_pace.team }}</span>
-                            <span class="text-sky-300 font-bold text-[11px]">{{ defense_kpis.fastest_pace.pace }} Pace</span>
-                        </div>
-                    </div>
-                    <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Positional Units</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1">
-                            <span>{{ defense_kpis.total_units }} Matchups (30 Teams)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Team Summary Spotlight Banner -->
-            {% if team_summary %}
-            <div class="glass-panel rounded-xl p-4 border border-sky-500/30 bg-sky-950/20 text-sky-200 flex items-start gap-3 text-xs">
-                <i data-lucide="sparkles" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
-                <div class="leading-relaxed">
-                    <strong class="text-sky-100 font-semibold uppercase tracking-wider text-[11px]">Team Spotlight:</strong>
-                    {{ team_summary }}
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Query Error Banner -->
-            {% if error_msg %}
-            <div class="glass-panel rounded-xl p-4 border border-rose-500/30 bg-rose-950/20 text-rose-300 flex items-start gap-3 text-xs">
-                <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
-                <div>
-                    <strong class="text-rose-100 font-semibold">Query Error:</strong> {{ error_msg }}
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Controls & Filter Toolbar -->
-            <div class="glass-panel rounded-xl p-4 border border-[#30363d] space-y-3">
-                <!-- Form Filter Parameters -->
-                <form method="POST" action="/" id="filterForm" class="space-y-3">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                        <!-- Minutes Threshold -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Min Playtime (min)</label>
-                            <input type="number" name="minutes" min="15" max="35" step="1" value="{{ minutes or 20 }}" required class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2.5 py-1.5 text-xs outline-none focus:border-slate-500 font-mono">
-                        </div>
-
-                        <!-- Last N Games -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Last X Games</label>
-                            <input type="number" name="last_n_games" min="1" max="82" step="1" value="{{ last_n_games or 5 }}" required class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2.5 py-1.5 text-xs outline-none focus:border-slate-500 font-mono">
-                        </div>
-
-                        <!-- Team 1 -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">First Team</label>
-                            <select name="team1" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-1.5 text-xs outline-none focus:border-slate-500 font-medium cursor-pointer">
-                                <option value="">-- All / Any --</option>
-                                {% for t in all_teams %}
-                                <option value="{{ t }}" {% if selected_teams[0] == t %}selected{% endif %}>{{ t }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <!-- Team 2 -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Second Team</label>
-                            <select name="team2" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-1.5 text-xs outline-none focus:border-slate-500 font-medium cursor-pointer">
-                                <option value="">-- All / Any --</option>
-                                {% for t in all_teams %}
-                                <option value="{{ t }}" {% if selected_teams[1] == t %}selected{% endif %}>{{ t }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <!-- Power Query (SQL Filter) -->
-                        <div class="flex flex-col gap-1 col-span-2 sm:col-span-1 lg:col-span-1">
-                            <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Power SQL Query</label>
-                            <input type="text" id="sql_filter" name="sql_filter" value="{{ sql_filter or '' }}" placeholder="POSITION == 'C' and MATCHUP_SCORE >= 20" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2.5 py-1.5 text-xs outline-none focus:border-slate-500 font-mono text-[11px] placeholder-slate-500">
-                        </div>
-
-                        <!-- Action Submit Button -->
-                        <div class="flex flex-col justify-end col-span-2 sm:col-span-1 lg:col-span-1">
-                            <button type="submit" class="w-full bg-[#58a6ff] hover:bg-[#4a92e6] text-slate-900 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm">
-                                <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-                                <span>Update Analysis</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Secondary Quick View & Filter Bar -->
-                <div class="pt-3 border-t border-[#30363d] flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <!-- Filter Controls -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <!-- Position Filter Chips -->
-                        <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                            <span class="text-[11px] text-slate-400 font-semibold px-1.5">Pos:</span>
-                            <button type="button" onclick="filterDefensePosition('ALL')" id="def-pos-ALL" class="def-chip px-2.5 py-0.5 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
-                            <button type="button" onclick="filterDefensePosition('PG')" id="def-pos-PG" class="def-chip px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
-                            <button type="button" onclick="filterDefensePosition('SG')" id="def-pos-SG" class="def-chip px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
-                            <button type="button" onclick="filterDefensePosition('SF')" id="def-pos-SF" class="def-chip px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
-                            <button type="button" onclick="filterDefensePosition('PF')" id="def-pos-PF" class="def-chip px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
-                            <button type="button" onclick="filterDefensePosition('C')" id="def-pos-C" class="def-chip px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
+                        <!-- Matchup Slate Filter -->
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5">
+                            <span class="text-[11px] text-slate-400 font-medium">Slate:</span>
+                            <select id="schedule-slate-select" onchange="onScheduleSlateChange(this.value)" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
+                                <option value="all" class="bg-[#161b22]">All Matchups ({{ matchups|length }})</option>
+                                {% if todays_games %}
+                                <option value="today" selected class="bg-[#161b22]">Today's Games ({{ todays_games|length }})</option>
+                                {% endif %}
+                            </select>
                         </div>
 
-                        <!-- Presets -->
-                        <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                            <span class="text-[11px] text-slate-400 font-semibold px-1.5">Presets:</span>
-                            <button type="button" onclick="applyPreset('pg')" class="px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">PGs</button>
-                            <button type="button" onclick="applyPreset('c')" class="px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">Bigs</button>
-                            <button type="button" onclick="applyPreset('threept')" class="px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">3PT</button>
-                            <button type="button" onclick="clearPreset()" class="px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">Reset</button>
+                        <!-- Team Selector -->
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5">
+                            <span class="text-[11px] text-slate-400 font-medium">Team:</span>
+                            <select id="schedule-team-select" onchange="filterScheduleTeam(this.value)" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
+                                <option value="ALL" class="bg-[#161b22]">All Teams</option>
+                                {% for t in all_teams %}
+                                <option value="{{ t }}" class="bg-[#161b22]">{{ t }} - {{ team_names.get(t, t) }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
-                        <!-- View Mode Chips -->
-                        <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                            <button type="button" onclick="setViewMode('quick')" id="btn-view-quick" class="px-2.5 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium">Quick</button>
-                            <button type="button" onclick="setViewMode('full')" id="btn-view-full" class="px-2.5 py-0.5 rounded bg-[#30363d] text-slate-100 font-semibold">Full</button>
-                            <button type="button" onclick="toggleLeagueAverage()" id="btn-view-avg" class="px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium" title="Toggle League Average Row">Avg</button>
+                        <!-- Search Input -->
+                        <div class="relative w-full sm:w-44">
+                            <input type="text" id="schedule-search-input" oninput="onScheduleSearch(this.value)" placeholder="Search team..." class="bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-7 pr-3 py-1.5 focus:border-slate-500 outline-none font-medium placeholder-slate-500 w-full">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2 pointer-events-none"></i>
                         </div>
 
-                        <!-- Heatmap Intensity Slider -->
-                        <div class="flex items-center gap-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1 text-xs">
-                            <span class="text-[11px] text-slate-400 font-medium">Heat:</span>
-                            <input id="heatSlider" type="range" min="0" max="1" step="0.1" value="1" oninput="setHeatIntensity(this.value)" class="w-16 cursor-pointer" title="Adjust Rank Heatmap Intensity">
-                        </div>
-
-                        <!-- Column Visibility Dropdown -->
-                        {% if colnames|length > 0 %}
-                        <div class="col-dropdown-wrap">
-                            <button type="button" id="colDropdownBtn" onclick="toggleColDropdown()" class="flex items-center space-x-1.5 px-2.5 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition" title="Show or hide columns">
-                                <i data-lucide="columns" class="w-3.5 h-3.5 text-slate-400"></i>
-                                <span>Columns ▾</span>
-                            </button>
-                            <div class="col-dropdown" id="colDropdown">
-                                <div class="col-dropdown-actions">
-                                    <button type="button" onclick="toggleAllCols(true)">All</button>
-                                    <button type="button" onclick="toggleAllCols(false)">None</button>
-                                </div>
-                                <div class="col-dropdown-list">
-                                    {% for col in colnames %}
-                                    <label>
-                                        <input type="checkbox" class="col-toggle" data-col="{{ col }}" {% if col not in default_hidden_cols %}checked{% endif %}>
-                                        <span>{{ col }}</span>
-                                    </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        <!-- Export CSV Button -->
-                        <button type="button" onclick="exportTableCsv()" class="flex items-center space-x-1.5 px-2.5 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition" title="Export Table as CSV">
-                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-emerald-400"></i>
-                            <span>CSV</span>
+                        <!-- Refresh -->
+                        <button onclick="location.reload()" class="p-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition active:scale-95" title="Refresh Schedule">
+                            <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                         </button>
                     </div>
+                </div>
 
-                    <!-- Showing Count Indicator -->
-                    <div class="text-xs text-slate-400 font-mono ml-auto">
-                        Showing <span id="defense-visible-count" class="text-slate-100 font-bold">{{ records|length }}</span> of {{ records|length }} units
+                <!-- Custom Matchup Lab Bar (Head-to-Head Comparison) -->
+                <div class="bg-[#12161c] rounded-lg p-3 border border-[#30363d]/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shuffle" class="w-4 h-4 text-cyan-400"></i>
+                        <span class="text-xs font-bold text-slate-200">Matchup Lab H2H:</span>
+                        <span class="text-[11px] text-slate-400">Compare any two NBA teams head-to-head:</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2 py-1 text-xs">
+                            <span class="text-[11px] text-slate-400">Away:</span>
+                            <select id="lab-away-select" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
+                                {% for t in all_teams %}
+                                <option value="{{ t }}" class="bg-[#161b22]" {% if t == 'BOS' %}selected{% endif %}>{{ t }} ({{ team_names.get(t, t) }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <span class="text-slate-500 text-xs font-bold">@</span>
+
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2 py-1 text-xs">
+                            <span class="text-[11px] text-slate-400">Home:</span>
+                            <select id="lab-home-select" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
+                                {% for t in all_teams %}
+                                <option value="{{ t }}" class="bg-[#161b22]" {% if t == 'MIA' %}selected{% endif %}>{{ t }} ({{ team_names.get(t, t) }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button onclick="compareCustomMatchup()" class="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-lg transition active:scale-95 shadow-sm">
+                            Compare
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Badges & Quick Stats -->
+                <div class="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-[#21262d] border border-[#30363d] text-slate-300 font-medium">
+                            <strong id="sched-stat-total-games" class="text-slate-100 font-bold">{{ matchups|length }}</strong> Total Matchups
+                        </span>
+                        <span class="px-2.5 py-1 rounded bg-[#21262d] border border-[#30363d] text-slate-300 font-medium">
+                            <strong class="text-slate-100 font-bold">30</strong> Teams Tracked
+                        </span>
+                        <span class="px-2.5 py-1 rounded bg-sky-500/10 border border-sky-500/25 text-sky-300 font-medium text-[11px] flex items-center space-x-1.5">
+                            <i data-lucide="shield" class="w-3.5 h-3.5 text-sky-400"></i>
+                            <span>Positional Defense Ranks (PG, SG, SF, PF, C)</span>
+                        </span>
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 flex items-center space-x-2">
+                        <span>Rank badges:</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded rank-top">#1-#10 (Easiest / Top Target)</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded rank-mid">#11-#20 (Mid)</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded rank-bot">#21-#30 (Lockdown Defense)</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Rank Badges Legend Ribbon (NFL Style) -->
-            <div class="flex flex-wrap items-center justify-between gap-3 text-xs bg-[#161b22]/70 px-4 py-2.5 rounded-xl border border-[#30363d]">
-                <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-[11px] text-slate-400 font-medium">Vulnerability tiers:</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded rank-top font-semibold">Rank 1-6 (Softest / Prime Target)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded rank-mid font-semibold">Rank 7-24 (Mid Defense)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded rank-bot font-semibold">Rank 25-30 (Stingiest / Tough)</span>
-                </div>
-
-                <div class="text-[11px] text-slate-400 flex items-center space-x-1.5">
-                    <i data-lucide="info" class="w-3.5 h-3.5 text-slate-400"></i>
-                    <span>Click any team row to open Matchup Radar Profile</span>
-                </div>
-            </div>
-
-            <!-- Mobile Horizontal Swipe Tip -->
-            <p class="text-[10px] text-slate-400 sm:hidden flex items-center space-x-1">
-                <i data-lucide="chevrons-right" class="w-3.5 h-3.5 text-slate-400"></i>
-                <span>Swipe table horizontally to view stats, trends & rankings</span>
-            </p>
-
-            <!-- Defense Table Container -->
-            <div class="glass-panel rounded-xl overflow-hidden border border-[#30363d]">
-                <div class="overflow-x-auto max-h-[700px] overflow-y-auto touch-scroll">
-                    <table id="statsTable" class="w-full text-left text-xs border-collapse data-table">
-                        <thead class="bg-[#21262d] sticky top-0 z-20 text-slate-400 font-medium border-b border-[#30363d]">
-                            <tr>
-                                {% for col in colnames %}
-                                <th data-col="{{ col }}" onclick="sortTableByColumn(this)" class="th-sortable py-2.5 px-3 whitespace-nowrap {{ 'sticky-col' if loop.first else '' }}">
-                                    <span>{{ col.replace('L5_', 'L' ~ (last_n_games or 5)|string ~ '_') }}</span>
-                                    <span class="sort-indicator text-[10px] text-slate-500 ml-1"></span>
-                                </th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody id="defense-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
-                            {% if league_avg_row %}
-                            <tr id="leagueAvgRow" class="hidden bg-[#21262d]/90 font-bold border-y-2 border-slate-600 text-slate-100">
-                                {% for col in colnames %}
-                                <td data-col="{{ col }}" class="py-2 px-3 whitespace-nowrap {{ 'sticky-col' if loop.first else '' }}">
-                                    <span>{{ league_avg_row[col] }}</span>
-                                </td>
-                                {% endfor %}
-                            </tr>
-                            {% endif %}
-
-                            {% for row in records %}
-                            <tr class="defense-row hover:bg-[#21262d]/60 transition cursor-pointer" data-position="{{ row.POSITION }}" onclick='openRadarPanel({{ row|tojson|safe }}, this)'>
-                                {% for col in colnames %}
-                                {% set val = row[col] %}
-                                {% set is_rank = 'RANK' in col %}
-                                <td data-col="{{ col }}" class="py-2.5 px-3 whitespace-nowrap {{ 'sticky-col' if loop.first else '' }} {{ 'text-center font-bold' if is_rank else '' }} {% if is_rank and val is number %}{% if val <= 6 %}rank-bad{% elif val >= 25 %}rank-good{% else %}rank-avg{% endif %}{% endif %}">
-                                    {% if col == 'TEAM' %}
-                                        <div class="flex items-center gap-1.5 font-extrabold text-slate-100 font-mono">
-                                            <span>{{ val }}</span>
-                                        </div>
-                                    {% elif col == 'POSITION' %}
-                                        <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-300 border border-[#30363d] font-semibold">{{ val }}</span>
-                                    {% elif col == 'MATCHUP_SCORE' %}
-                                        <span class="font-mono font-bold text-slate-100">{{ val }}</span>
-                                    {% elif col.startswith('L5_') %}
-                                        {% set base_stat = col.replace('L5_', '') %}
-                                        {% set trend = row[base_stat ~ '_TREND'] or '' %}
-                                        <span class="font-mono">{{ val }}</span>
-                                        {% if trend == '↑' %}
-                                            <span class="text-emerald-400 font-bold text-[11px] ml-0.5">↑</span>
-                                        {% elif trend == '↓' %}
-                                            <span class="text-rose-400 font-bold text-[11px] ml-0.5">↓</span>
-                                        {% elif trend == '→' %}
-                                            <span class="text-slate-400 font-bold text-[11px] ml-0.5">→</span>
-                                        {% endif %}
-                                    {% else %}
-                                        <span class="font-mono">{{ val }}</span>
-                                    {% endif %}
-                                </td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Schedule Games List Container (2-Column Matchup Card Grid) -->
+            <div id="schedule-games-container" class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                <!-- Dynamically populated via renderMatchups() -->
             </div>
         </section>
 
+
         <!-- ============================================================== -->
-        <!-- TAB 2: PLAYER STREAKS (Hot Streaks Explorer) -->
+        <!-- TAB 2: PLAYER FLOOR BREACH STREAKS -->
         <!-- ============================================================== -->
-        <section id="tab-streaks" class="{{ 'hidden' if page_type != 'streak' else '' }} space-y-5">
+        <section id="tab-floor-streak" class="{{ 'hidden' if page_type != 'floor-streak' else '' }} space-y-5">
             <!-- Header & Concept Overview -->
             <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <div class="flex items-center gap-2 flex-wrap">
+                        <div class="flex items-center gap-2">
                             <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
                                 <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
-                                <span>Player Production Streaks</span>
+                                <span>Player Floor Streaks</span>
                             </h2>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-200 border border-[#30363d]">Hot Streaks (Exceeding Season Average)</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-200 border border-[#30363d]">Hard Line Threshold (+Margin / Baseline)</span>
                         </div>
                         <p class="text-xs text-slate-400 mt-1">
-                            Tracks players who have exceeded their season average production by threshold for {{ last_n_games }} straight games.
+                            Tracks consecutive games where player production meets or exceeds established hard floor thresholds across Points, Rebounds, and Assists.
                         </p>
                     </div>
 
                     <div class="flex items-center gap-3">
                         <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1.5">
                             <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                            <span>Refreshed: {{ last_updated }}</span>
+                            <span>Active 2025-26 Season Data</span>
                         </div>
+                        <button onclick="location.reload()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Floor Streaks">
+                            <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span>Refresh Streaks</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- KPI Metric Summary Ribbon -->
+                <!-- KPI Metric Summary Ribbon (Matching NFL Hub) -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#30363d]">
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Total Active Streaks</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1">
-                            <span class="text-emerald-400 font-bold text-sm">{{ streak_kpis.total_streaks }}</span> Players Active
-                        </div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Longest Active Streak</span>
+                        <div id="floor-kpi-longest" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.longest }}</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Scoring Streaks (PTS)</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1">
-                            <span class="text-sky-300 font-bold text-sm">{{ streak_kpis.pts_streaks }}</span> Players Hot
-                        </div>
+                        <span class="text-[11px] text-slate-400 block font-medium">High Consistency (8+ Games)</span>
+                        <div id="floor-kpi-elite" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.elite }}</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Rebounds Streaks (REB)</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1">
-                            <span class="text-amber-300 font-bold text-sm">{{ streak_kpis.reb_streaks }}</span> Players Hot
-                        </div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Solid Floor (5-7 Games)</span>
+                        <div id="floor-kpi-solid" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.solid }}</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Playmaking Streaks (AST)</span>
-                        <div class="text-xs font-semibold font-mono text-slate-100 mt-1">
-                            <span class="text-purple-300 font-bold text-sm">{{ streak_kpis.ast_streaks }}</span> Players Hot
-                        </div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Developing (1-4 Games)</span>
+                        <div id="floor-kpi-breached" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.developing }}</div>
                     </div>
                 </div>
             </div>
 
             <!-- Controls & Filter Toolbar -->
-            <div class="glass-panel rounded-xl p-4 border border-[#30363d] space-y-3">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <!-- Search Input -->
-                        <div class="relative w-56">
-                            <input type="text" id="streak-search-input" oninput="onStreakSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-slate-500 font-medium">
-                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
-                        </div>
-
-                        <!-- Position Filter Chips -->
-                        <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                            <button type="button" onclick="filterStreakPos('ALL')" id="streak-pos-ALL" class="str-pos-chip px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
-                            <button type="button" onclick="filterStreakPos('PG')" id="streak-pos-PG" class="str-pos-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
-                            <button type="button" onclick="filterStreakPos('SG')" id="streak-pos-SG" class="str-pos-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
-                            <button type="button" onclick="filterStreakPos('SF')" id="streak-pos-SF" class="str-pos-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
-                            <button type="button" onclick="filterStreakPos('PF')" id="streak-pos-PF" class="str-pos-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
-                            <button type="button" onclick="filterStreakPos('C')" id="streak-pos-C" class="str-pos-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
-                        </div>
-
-                        <!-- Metric Filter Chips -->
-                        <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                            <button type="button" onclick="filterStreakStat('ALL')" id="streak-stat-ALL" class="str-stat-chip px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
-                            <button type="button" onclick="filterStreakStat('PTS')" id="streak-stat-PTS" class="str-stat-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PTS</button>
-                            <button type="button" onclick="filterStreakStat('REB')" id="streak-stat-REB" class="str-stat-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
-                            <button type="button" onclick="filterStreakStat('AST')" id="streak-stat-AST" class="str-stat-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
-                        </div>
+            <div class="glass-panel rounded-xl p-4 border border-[#30363d] flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative w-56">
+                        <input type="text" id="floor-search-input" oninput="onFloorSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-slate-500 font-medium">
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
                     </div>
 
-                    <!-- Recalculate Threshold Form -->
-                    <form method="POST" action="/streak" class="flex items-center gap-2 text-xs">
-                        <div class="flex items-center gap-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
-                            <span class="text-[11px] text-slate-400 font-medium">Min:</span>
-                            <input type="number" name="minutes" min="15" max="35" value="{{ minutes or 20 }}" class="w-12 bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-1.5 py-0.5 text-xs text-center font-mono">
-                        </div>
-                        <div class="flex items-center gap-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
-                            <span class="text-[11px] text-slate-400 font-medium">Games:</span>
-                            <input type="number" name="last_n_games" min="1" max="20" value="{{ last_n_games or 5 }}" class="w-12 bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-1.5 py-0.5 text-xs text-center font-mono">
-                        </div>
-                        <button type="submit" class="bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs px-2.5 py-1.5 rounded-lg transition" title="Recalculate Streaks">
-                            <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </form>
+                    <!-- Position Filter Chips (PG, SG, SF, PF, C) -->
+                    <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
+                        <button onclick="setFloorPosFilter('ALL')" id="floor-filter-pos-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
+                        <button onclick="setFloorPosFilter('PG')" id="floor-filter-pos-PG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
+                        <button onclick="setFloorPosFilter('SG')" id="floor-filter-pos-SG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
+                        <button onclick="setFloorPosFilter('SF')" id="floor-filter-pos-SF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
+                        <button onclick="setFloorPosFilter('PF')" id="floor-filter-pos-PF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
+                        <button onclick="setFloorPosFilter('C')" id="floor-filter-pos-C" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
+                    </div>
+
+                    <!-- Metric Filter Chips (PTS, REB, AST) -->
+                    <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
+                        <button onclick="setFloorStatFilter('ALL')" id="floor-filter-stat-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
+                        <button onclick="setFloorStatFilter('PTS')" id="floor-filter-stat-PTS" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PTS</button>
+                        <button onclick="setFloorStatFilter('REB')" id="floor-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
+                        <button onclick="setFloorStatFilter('AST')" id="floor-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
+                    </div>
+
+                    <!-- Minimum Streak Filter -->
+                    <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
+                        <span class="text-[11px] font-medium">Streak:</span>
+                        <select id="floor-streak-filter-select" onchange="setFloorStreakFilter(this.value)" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-medium cursor-pointer">
+                            <option value="1" selected>All Active (1+)</option>
+                            <option value="2">Active (2+)</option>
+                            <option value="5">Solid (5+)</option>
+                            <option value="8">Elite (8+)</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="text-xs text-slate-400 font-mono pt-2 border-t border-[#30363d] flex justify-between items-center">
-                    <div>
-                        Showing <span id="streak-visible-count" class="text-slate-100 font-bold">{{ streak_records|length }}</span> tracked players
-                    </div>
-                    <div class="text-[11px] text-slate-400 flex items-center gap-1">
-                        <i data-lucide="info" class="w-3 h-3 text-slate-400"></i>
-                        <span>Recent game logs shown in reverse chronological order</span>
-                    </div>
+                <div class="text-xs text-slate-400 font-mono">
+                    Showing <span id="floor-visible-count" class="text-slate-100 font-bold">{{ floor_streaks|length }}</span> tracked players
                 </div>
             </div>
 
             <!-- Mobile Horizontal Swipe Tip -->
             <p class="text-[10px] text-slate-400 sm:hidden flex items-center space-x-1">
                 <i data-lucide="chevrons-right" class="w-3.5 h-3.5 text-slate-400"></i>
-                <span>Swipe table horizontally to view streak baselines and game logs</span>
+                <span>Swipe table horizontally to view floor thresholds & reliability tiers</span>
             </p>
 
             <!-- Floor Streaks Data Table -->
             <div class="glass-panel rounded-xl overflow-hidden border border-[#30363d]">
                 <div class="overflow-x-auto max-h-[700px] overflow-y-auto touch-scroll">
-                    <table id="streaksTable" class="w-full text-left text-xs border-collapse data-table">
+                    <table class="w-full text-left text-xs border-collapse">
                         <thead class="bg-[#21262d] sticky top-0 z-10 text-slate-400 font-medium border-b border-[#30363d]">
                             <tr>
-                                <th class="text-center w-12 py-2.5 px-3">#</th>
-                                <th class="th-sortable py-2.5 px-3" onclick="sortStreaksTable('Player')">Player</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortStreaksTable('Pos')">Pos</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortStreaksTable('Team')">Team</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortStreaksTable('Stat')">Tracked Metric</th>
-                                <th class="text-center py-2.5 px-3">Direction</th>
-                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortStreaksTable('Season_Avg')">Season Avg</th>
-                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortStreaksTable('Streak_Avg')">Streak Avg</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortStreaksTable('Min_In_Streak')">Min in Run</th>
+                                <th class="th-sortable text-center w-12 py-2.5 px-3" onclick="sortFloorStreaks('rank')">#</th>
+                                <th class="th-sortable py-2.5 px-3" onclick="sortFloorStreaks('player_name')">Player</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('position')">Pos</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('team')">Team</th>
+                                <th class="text-left py-2.5 px-3">Tracked Production Metric</th>
+                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortFloorStreaks('baseline')">Baseline (Season Avg)</th>
                                 <th class="text-center py-2.5 px-3">Threshold</th>
-                                <th class="py-2.5 px-3">Recent Game Logs</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('streak')">Streak</th>
+                                <th class="text-center py-2.5 px-3">Reliability Tier</th>
+                                <th class="text-left py-2.5 px-3 min-w-[200px]">Recent Game Logs</th>
                             </tr>
                         </thead>
-                        <tbody id="streaks-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
-                            {% for s in streak_records %}
-                            <tr class="streak-row hover:bg-[#21262d]/50 transition" data-player="{{ s.Player|lower }}" data-team="{{ s.Team|lower }}" data-pos="{{ s.Pos }}" data-stat="{{ s.Stat }}">
-                                <td class="text-center py-2.5 px-3 text-slate-500 font-mono">{{ loop.index }}</td>
-                                <td class="py-2.5 px-3 font-bold text-slate-100 whitespace-nowrap">{{ s.Player }}</td>
-                                <td class="text-center py-2.5 px-3">
-                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-300 border border-[#30363d]">{{ s.Pos }}</span>
-                                </td>
-                                <td class="text-center py-2.5 px-3 font-mono font-bold text-slate-200">{{ s.Team }}</td>
-                                <td class="text-center py-2.5 px-3">
-                                    {% if s.Stat == 'PTS' %}
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20">PTS</span>
-                                    {% elif s.Stat == 'REB' %}
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">REB</span>
-                                    {% elif s.Stat == 'AST' %}
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">AST</span>
-                                    {% else %}
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-500/10 text-slate-300 border border-slate-500/20">{{ s.Stat }}</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-center py-2.5 px-3">
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">OVER</span>
-                                </td>
-                                <td class="text-right py-2.5 px-3 font-mono text-slate-400">{{ s.Season_Avg }}</td>
-                                <td class="text-right py-2.5 px-3 font-mono font-bold text-slate-100">{{ s.Streak_Avg }}</td>
-                                <td class="text-center py-2.5 px-3 font-mono text-slate-300">{{ s.Min_In_Streak }}</td>
-                                <td class="text-center py-2.5 px-3 font-mono text-emerald-400 font-semibold">{{ s.Threshold }}</td>
-                                <td class="py-2.5 px-3">
-                                    <div class="flex items-center gap-1 overflow-x-auto whitespace-nowrap">
-                                        {% for log in s.Game_Logs.split(',') %}
-                                        <span class="px-1.5 py-0.5 rounded bg-[#21262d] text-slate-200 font-mono text-[11px] border border-[#30363d]">{{ log.strip() }}</span>
-                                        {% endfor %}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr id="streaks-empty-row">
-                                <td colspan="11" class="py-12 text-center text-slate-400">
-                                    <i data-lucide="calendar-x" class="w-8 h-8 text-slate-500 mx-auto mb-2"></i>
-                                    <p class="font-medium text-slate-300">No active player streaks match current criteria</p>
-                                    <p class="text-xs text-slate-500 mt-1">Try lowering the minutes played threshold or the streak game length.</p>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                        <tbody id="floor-streak-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
+                            <!-- Injected via JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -593,551 +455,492 @@
 
     </main>
 
-    <!-- ============================================================== -->
-    <!-- SIDE RADAR PROFILE DRAWER (Chart.js Exploitability Radar) -->
-    <!-- ============================================================== -->
-    <div id="radarOverlay" class="radar-overlay" onclick="closeRadarPanel()"></div>
-    <div id="radarPanel" class="radar-panel">
-        <div class="flex items-center justify-between pb-4 border-b border-[#30363d]">
-            <div>
-                <h3 id="panelTeam" class="text-base font-bold text-slate-100 font-mono">Team Profile</h3>
-                <p id="panelSubtitle" class="text-xs text-slate-400 mt-0.5">Positional Exploitability Profile</p>
-            </div>
-            <button onclick="closeRadarPanel()" class="p-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-400 hover:text-slate-200 transition" title="Close Panel">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
-
-        <div class="py-2 flex-1 min-h-[300px] flex items-center justify-center">
-            <div class="w-full h-[320px] relative">
-                <canvas id="radarChart"></canvas>
-            </div>
-        </div>
-
-        <div class="pt-4 border-t border-[#30363d] text-xs text-slate-400 space-y-1.5">
-            <div class="font-semibold text-slate-300">Match Quality Score (0–100 Scale):</div>
-            <p><strong class="text-emerald-400">100 = Peak exploitability</strong> (Softest defense, best target for offense).</p>
-            <p><strong class="text-rose-400">0 = Toughest defense</strong> (Stingiest unit, unfavorable matchup).</p>
-        </div>
-    </div>
-
-    <!-- ============================================================== -->
-    <!-- FOOTER -->
-    <!-- ============================================================== -->
-    <footer class="border-t border-[#30363d] py-3 text-center text-xs text-slate-500 mt-auto">
-        NBA Analytics & Prediction System • Powered by Official NBA API
+    <!-- Footer -->
+    <footer class="border-t border-[#30363d] py-3 text-center text-xs text-slate-500">
+        NBA Analytics & Matchup Hub • Powered by NBA Official Game Logs & Positional Defense Matrix
     </footer>
 
-    <!-- ============================================================== -->
-    <!-- APPLICATION CLIENT LOGIC -->
-    <!-- ============================================================== -->
+    <!-- Frontend Application Logic (Matching NFL Website Architecture) -->
     <script>
-        const quickCols = {{ quick_cols|tojson|safe }};
-        const defaultHiddenCols = new Set({{ default_hidden_cols|tojson|safe }});
-        const radarMetrics = {{ radar_metrics|tojson|safe }};
-        const leagueAvgRaw = {{ (league_avg_row|tojson|safe) if league_avg_row else 'null' }};
+        // Data injected from Flask backend
+        const initialMatchups = {{ matchups | tojson }};
+        const initialStreaks = {{ floor_streaks | tojson }};
+        const allTeamStats = {{ team_stats | tojson }};
+        const teamNamesMap = {{ team_names | tojson }};
 
-        let currentSort = { col: '', asc: true };
-        let currentStreakSort = { col: '', asc: true };
-        let radarInstance = null;
-        let viewMode = 'full';
-        let currentDefPos = 'ALL';
-        let currentStreakPos = 'ALL';
-        let currentStreakStat = 'ALL';
-        let currentStreakQuery = '';
+        // State variables
+        let globalMatchups = [...initialMatchups];
+        let globalFloorStreaks = [...initialStreaks];
+        let currentScheduleTeam = 'ALL';
+        let scheduleSearchQuery = '';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            applyInitialView();
-            updateStreakCount();
-        });
+        let floorFilterPos = 'ALL';
+        let floorFilterStat = 'ALL';
+        let floorFilterStreak = '1';
+        let floorSearchQuery = '';
+        let floorSortCol = 'streak';
+        let floorSortAsc = false;
 
-        // -------------------------------------------------------------
-        // TAB SWITCHING (Matching NFL Hub)
-        // -------------------------------------------------------------
+        // Metric Explanations Dictionary for Hover Tooltips
+        const STAT_EXPLANATIONS = {
+            'Defensive Rating': 'Points allowed per 100 defensive possessions. Core efficiency metric measuring overall defensive lockdown capability.',
+            'Pace (Poss/48m)': 'Number of offensive and defensive possessions per 48 minutes. Faster pace inflates game possessions and scoring opportunities.',
+            'Pts Allowed/G': 'Total points conceded per game by team defense. Ranked #1 (stingiest) to #30 (most generous allowed).',
+            'Reb Allowed/G': 'Total rebounds surrendered per game to opponent offenses.',
+            'Ast Allowed/G': 'Total assists conceded per game, evaluating ball movement containment and defensive rotations.',
+            'Opp 3PM Allowed/G': 'Three-pointers made per game by opposing offenses against perimeter defense.',
+            'Turnovers Forced/G': 'Average turnovers forced per game through active hands, steals, and shot clock pressure.',
+            'vs Point Guards (PG)': 'Points allowed per game specifically to opponent starting and primary Point Guards.',
+            'vs Shooting Guards (SG)': 'Points allowed per game to opponent Shooting Guards, evaluating wing isolation defense.',
+            'vs Small Forwards (SF)': 'Points allowed per game to opponent Small Forwards and secondary slashers.',
+            'vs Power Forwards (PF)': 'Points allowed per game to opponent Power Forwards, assessing stretch-big and paint defense.',
+            'vs Centers (C)': 'Points allowed per game to opponent Centers, evaluating interior rim protection.'
+        };
+
+        // Rank Badge Class Resolver
+        function getRankBadge(rank) {
+            if (!rank) return '';
+            const r = parseInt(rank, 10);
+            if (r <= 10) return 'rank-top'; // Green
+            if (r <= 20) return 'rank-mid'; // Blue
+            return 'rank-bot'; // Red
+        }
+
+        // Tab Switching
         function switchTab(tabId) {
-            const tabs = ['defense', 'streaks'];
-            tabs.forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (el) {
-                    if (t === tabId) {
-                        el.classList.remove('hidden');
-                    } else {
-                        el.classList.add('hidden');
-                    }
-                }
-                if (btn) {
-                    if (t === tabId) {
-                        btn.className = 'py-2.5 px-1 border-b-2 border-slate-300 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
-                    } else {
-                        btn.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
-                    }
-                }
-            });
+            const schedSection = document.getElementById('tab-schedule');
+            const floorSection = document.getElementById('tab-floor-streak');
+            const btnSched = document.getElementById('tab-btn-schedule');
+            const btnFloor = document.getElementById('tab-btn-floor-streak');
 
-            // Update browser URL without reload
-            const newPath = tabId === 'streaks' ? '/streak' : '/';
-            if (window.location.pathname !== newPath) {
-                history.replaceState(null, '', newPath);
-            }
-
-            lucide.createIcons();
-        }
-
-        // -------------------------------------------------------------
-        // TODAY'S GAME POPULATE
-        // -------------------------------------------------------------
-        function populateMatchup(t1, t2) {
-            const select1 = document.querySelector('select[name="team1"]');
-            const select2 = document.querySelector('select[name="team2"]');
-            if (select1) select1.value = t1;
-            if (select2) select2.value = t2;
-            const form = document.getElementById('filterForm');
-            if (form) form.submit();
-        }
-
-        // -------------------------------------------------------------
-        // DEFENSE: POSITION CHIPS FILTER
-        // -------------------------------------------------------------
-        function filterDefensePosition(pos) {
-            currentDefPos = pos;
-            document.querySelectorAll('.def-chip').forEach(btn => {
-                btn.className = 'def-chip px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium';
-            });
-            const activeBtn = document.getElementById(`def-pos-${pos}`);
-            if (activeBtn) {
-                activeBtn.className = 'def-chip px-2.5 py-0.5 rounded bg-[#30363d] text-slate-100 font-semibold';
-            }
-
-            const rows = document.querySelectorAll('.defense-row');
-            let visibleCount = 0;
-            rows.forEach(r => {
-                const rPos = r.getAttribute('data-position');
-                if (pos === 'ALL' || rPos === pos) {
-                    r.style.display = '';
-                    visibleCount++;
-                } else {
-                    r.style.display = 'none';
-                }
-            });
-            const counter = document.getElementById('defense-visible-count');
-            if (counter) counter.textContent = visibleCount;
-        }
-
-        // -------------------------------------------------------------
-        // DEFENSE: VIEW MODES & PRESETS
-        // -------------------------------------------------------------
-        function setViewMode(mode) {
-            viewMode = mode;
-            const quickBtn = document.getElementById('btn-view-quick');
-            const fullBtn = document.getElementById('btn-view-full');
-
-            if (mode === 'quick') {
-                if (quickBtn) quickBtn.className = 'px-2.5 py-0.5 rounded bg-[#30363d] text-slate-100 font-semibold';
-                if (fullBtn) fullBtn.className = 'px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium';
-                document.querySelectorAll('#statsTable th, #statsTable td').forEach(cell => {
-                    const col = cell.getAttribute('data-col');
-                    if (col && !quickCols.includes(col)) {
-                        cell.classList.add('hidden');
-                    } else if (col) {
-                        cell.classList.remove('hidden');
-                    }
-                });
+            if (tabId === 'schedule') {
+                schedSection.classList.remove('hidden');
+                floorSection.classList.add('hidden');
+                btnSched.className = 'py-2.5 px-1 border-b-2 border-slate-300 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
+                btnFloor.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
             } else {
-                if (quickBtn) quickBtn.className = 'px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium';
-                if (fullBtn) fullBtn.className = 'px-2.5 py-0.5 rounded bg-[#30363d] text-slate-100 font-semibold';
-                document.querySelectorAll('#statsTable th, #statsTable td').forEach(cell => {
-                    const col = cell.getAttribute('data-col');
-                    if (col) {
-                        const cb = document.querySelector(`.col-toggle[data-col="${col}"]`);
-                        if (cb && !cb.checked) {
-                            cell.classList.add('hidden');
-                        } else {
-                            cell.classList.remove('hidden');
-                        }
-                    }
-                });
+                schedSection.classList.add('hidden');
+                floorSection.classList.remove('hidden');
+                btnFloor.className = 'py-2.5 px-1 border-b-2 border-slate-300 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
+                btnSched.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
             }
+            if (window.lucide) lucide.createIcons();
         }
 
-        function applyInitialView() {
-            document.querySelectorAll('.col-toggle').forEach(cb => {
-                const col = cb.getAttribute('data-col');
-                if (defaultHiddenCols.has(col)) {
-                    cb.checked = false;
-                    document.querySelectorAll(`[data-col="${col}"]`).forEach(c => c.classList.add('hidden'));
-                }
-            });
-        }
+        // Matchup Card HTML Builder (Matching NFL Hub renderGameCardHtml)
+        function renderGameCardHtml(g) {
+            const a = g.away_stats || {};
+            const h = g.home_stats || {};
+            const awayRec = g.away_record || '0-0';
+            const homeRec = g.home_record || '0-0';
 
-        function toggleLeagueAverage() {
-            const avgRow = document.getElementById('leagueAvgRow');
-            const avgBtn = document.getElementById('btn-view-avg');
-            if (avgRow) {
-                const isHidden = avgRow.classList.contains('hidden');
-                if (isHidden) {
-                    avgRow.classList.remove('hidden');
-                    if (avgBtn) avgBtn.className = 'px-2 py-0.5 rounded bg-[#30363d] text-slate-100 font-semibold';
-                } else {
-                    avgRow.classList.add('hidden');
-                    if (avgBtn) avgBtn.className = 'px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 font-medium';
-                }
-            }
-        }
+            const formatRow = (label, awayVal, awayRank, homeVal, homeRank) => {
+                const awayBadge = awayRank ? `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${getRankBadge(awayRank)}">#${awayRank}</span>` : '';
+                const homeBadge = homeRank ? `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${getRankBadge(homeRank)}">#${homeRank}</span>` : '';
+                const explanation = STAT_EXPLANATIONS[label] || '';
 
-        function setHeatIntensity(v) {
-            document.documentElement.style.setProperty('--heat-opacity', v);
-        }
-
-        function applyPreset(p) {
-            const presetMap = {
-                'pg': ['PTS', 'AST', 'FG3M', 'PACE', 'TOV'],
-                'c': ['PTS', 'REB', 'BLK', 'DEF_RTG', 'eFG_PCT'],
-                'threept': ['FG3M', 'FG3M_RANK', 'FG3A', 'eFG_PCT', 'PTS']
+                return `
+                    <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                        <!-- Away Stat -->
+                        <div class="flex items-center space-x-1.5 text-left font-mono">
+                            ${awayBadge}
+                            <span class="text-slate-200 font-bold">${awayVal != null ? awayVal : '--'}</span>
+                        </div>
+                        <!-- Metric Label with Interactive Hover Info -->
+                        <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
+                            <span class="stat-info-trigger" title="${explanation ? '' : label}">
+                                ${label}
+                                ${explanation ? `
+                                    <div class="stat-info-box">
+                                        <div class="font-bold text-slate-100 mb-1 flex items-center space-x-1.5 border-b border-[#30363d] pb-1 text-left">
+                                            <i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline-block mr-1"></i>
+                                            <span>${label}</span>
+                                        </div>
+                                        <div class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case">
+                                            ${explanation}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </span>
+                        </div>
+                        <!-- Home Stat -->
+                        <div class="flex items-center justify-end space-x-1.5 text-right font-mono">
+                            <span class="text-slate-200 font-bold">${homeVal != null ? homeVal : '--'}</span>
+                            ${homeBadge}
+                        </div>
+                    </div>
+                `;
             };
-            const targets = presetMap[p] || [];
-            document.querySelectorAll('.col-toggle').forEach(cb => {
-                const col = cb.getAttribute('data-col');
-                const isCore = ['TEAM', 'POSITION', 'MATCHUP_SCORE'].includes(col);
-                const isTarget = targets.some(t => col.includes(t));
-                const check = isCore || isTarget;
-                cb.checked = check;
-                document.querySelectorAll(`[data-col="${col}"]`).forEach(c => {
-                    if (check) c.classList.remove('hidden');
-                    else c.classList.add('hidden');
-                });
-            });
+
+            return `
+                <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] space-y-4 hover:border-slate-500 transition shadow-sm">
+                    <!-- Game Info Header Bar -->
+                    <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#30363d] pb-2.5">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">
+                                ${g.game_label || 'NBA'}
+                            </span>
+                            <span class="font-medium text-slate-300">
+                                ${g.gameday}
+                            </span>
+                            <span class="text-slate-500">•</span>
+                            <span class="font-mono text-slate-400">${g.gametime}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">MATCHUP</span>
+                        </div>
+                    </div>
+
+                    <!-- Matchup Banner / Scoreboard -->
+                    <div class="grid grid-cols-12 items-center py-1.5 gap-2">
+                        <!-- Away Team (5 cols) -->
+                        <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
+                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-slate-200 text-sm font-mono shadow-inner shrink-0">
+                                ${g.away_team}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate" title="${g.away_team_name}">${g.away_team_name}</h4>
+                                <div class="text-[11px] text-slate-400 flex items-center flex-wrap gap-x-1.5 gap-y-0.5 mt-0.5">
+                                    <span class="text-slate-500 font-medium">Away</span>
+                                    <span class="text-slate-600">•</span>
+                                    <span class="font-mono text-slate-300 font-semibold whitespace-nowrap">${awayRec}</span>
+                                    ${a.def_overall_character ? `<span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-semibold whitespace-nowrap ${a.def_overall_character === 'Elite Defense' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : (a.def_overall_character === 'Vulnerable Defense' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-[#21262d] text-slate-400 border border-[#30363d]')}">${a.def_overall_character}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Center vs / Scores (2 cols) -->
+                        <div class="col-span-2 text-center flex flex-col items-center justify-center">
+                            <div class="w-7 h-7 mx-auto rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center font-bold text-slate-400 text-xs">
+                                @
+                            </div>
+                        </div>
+
+                        <!-- Home Team (5 cols) -->
+                        <div class="col-span-5 flex items-center justify-end space-x-2.5 text-right min-w-0">
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate" title="${g.home_team_name}">${g.home_team_name}</h4>
+                                <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 gap-y-0.5 mt-0.5">
+                                    ${h.def_overall_character ? `<span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-semibold whitespace-nowrap ${h.def_overall_character === 'Elite Defense' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : (h.def_overall_character === 'Vulnerable Defense' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-[#21262d] text-slate-400 border border-[#30363d]')}">${h.def_overall_character}</span><span class="text-slate-600">•</span>` : ''}
+                                    <span class="font-mono text-slate-300 font-semibold whitespace-nowrap">${homeRec}</span>
+                                    <span class="text-slate-600">•</span>
+                                    <span class="text-slate-500 font-medium">Home</span>
+                                </div>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-slate-200 text-sm font-mono shadow-inner shrink-0">
+                                ${g.home_team}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Per-Game Team Stat Comparison Table (Volume x Efficiency) -->
+                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-1">
+                        <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1.5 px-2">
+                            <div class="text-left font-mono">${g.away_team} STAT & RANK</div>
+                            <div class="text-center">
+                                <span class="stat-info-trigger">
+                                    PER-GAME STAT
+                                    <div class="stat-info-box">
+                                        <div class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left">
+                                            <i data-lucide="info" class="w-3 h-3 text-slate-400 shrink-0"></i>
+                                            <span>Per-Game Team Stats (Defense Ranks)</span>
+                                        </div>
+                                        <div class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case">
+                                            Head-to-head defensive containment & positional vulnerability. Ranks #1 (easiest / top offensive matchup) to #30 (stingiest lockdown defense). Hover over any stat for its exact definition.
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="text-right font-mono">${g.home_team} STAT & RANK</div>
+                        </div>
+
+                        <!-- 1. Defensive Efficiency & Pace -->
+                        ${formatRow('Defensive Rating', a.def_rtg, a.rank_def_rtg, h.def_rtg, h.rank_def_rtg)}
+                        ${formatRow('Pace (Poss/48m)', a.pace, a.rank_pace, h.pace, h.rank_pace)}
+
+                        <!-- 2. Scoring & Perimeter -->
+                        ${formatRow('Pts Allowed/G', a.pts_allowed, a.rank_pts, h.pts_allowed, h.rank_pts)}
+                        ${formatRow('Reb Allowed/G', a.reb_allowed, a.rank_reb, h.reb_allowed, h.rank_reb)}
+                        ${formatRow('Ast Allowed/G', a.ast_allowed, a.rank_ast, h.ast_allowed, h.rank_ast)}
+                        ${formatRow('Opp 3PM Allowed/G', a.fg3m_allowed, a.rank_fg3m, h.fg3m_allowed, h.rank_fg3m)}
+                        ${formatRow('Turnovers Forced/G', a.tov_forced, a.rank_tov, h.tov_forced, h.rank_tov)}
+
+                        <!-- 3. Positional Defense Section Divider -->
+                        <div class="pt-2 pb-1 text-center text-[10px] font-bold text-slate-500 uppercase tracking-wider border-t border-[#21262d]">
+                            Positional Defense (Pts Allowed)
+                        </div>
+
+                        ${formatRow('vs Point Guards (PG)', a.vs_pg_pts, a.rank_vs_pg, h.vs_pg_pts, h.rank_vs_pg)}
+                        ${formatRow('vs Shooting Guards (SG)', a.vs_sg_pts, a.rank_vs_sg, h.vs_sg_pts, h.rank_vs_sg)}
+                        ${formatRow('vs Small Forwards (SF)', a.vs_sf_pts, a.rank_vs_sf, h.vs_sf_pts, h.rank_vs_sf)}
+                        ${formatRow('vs Power Forwards (PF)', a.vs_pf_pts, a.rank_vs_pf, h.vs_pf_pts, h.rank_vs_pf)}
+                        ${formatRow('vs Centers (C)', a.vs_c_pts, a.rank_vs_c, h.vs_c_pts, h.rank_vs_c)}
+                    </div>
+                </div>
+            `;
         }
 
-        function clearPreset() {
-            document.querySelectorAll('.col-toggle').forEach(cb => {
-                const col = cb.getAttribute('data-col');
-                const shouldHide = defaultHiddenCols.has(col);
-                cb.checked = !shouldHide;
-                document.querySelectorAll(`[data-col="${col}"]`).forEach(c => {
-                    if (shouldHide) c.classList.add('hidden');
-                    else c.classList.remove('hidden');
-                });
-            });
-        }
+        // Render Matchup Cards Grid
+        function renderMatchups() {
+            const container = document.getElementById('schedule-games-container');
+            if (!container) return;
 
-        // -------------------------------------------------------------
-        // COLUMN VISIBILITY DROPDOWN
-        // -------------------------------------------------------------
-        function toggleColDropdown() {
-            const dd = document.getElementById('colDropdown');
-            if (dd) dd.classList.toggle('open');
-        }
+            let filtered = [...globalMatchups];
 
-        document.addEventListener('click', (e) => {
-            const wrap = document.querySelector('.col-dropdown-wrap');
-            const dd = document.getElementById('colDropdown');
-            if (wrap && dd && !wrap.contains(e.target)) {
-                dd.classList.remove('open');
+            if (currentScheduleTeam && currentScheduleTeam !== 'ALL') {
+                filtered = filtered.filter(g => g.away_team === currentScheduleTeam || g.home_team === currentScheduleTeam);
             }
-        });
 
-        document.querySelectorAll('.col-toggle').forEach(cb => {
-            cb.addEventListener('change', (e) => {
-                const col = e.target.getAttribute('data-col');
-                const show = e.target.checked;
-                document.querySelectorAll(`[data-col="${col}"]`).forEach(c => {
-                    if (show) c.classList.remove('hidden');
-                    else c.classList.add('hidden');
-                });
-            });
-        });
+            if (scheduleSearchQuery) {
+                const q = scheduleSearchQuery.toLowerCase().trim();
+                filtered = filtered.filter(g =>
+                    g.away_team.toLowerCase().includes(q) ||
+                    g.home_team.toLowerCase().includes(q) ||
+                    (g.away_team_name && g.away_team_name.toLowerCase().includes(q)) ||
+                    (g.home_team_name && g.home_team_name.toLowerCase().includes(q))
+                );
+            }
 
-        function toggleAllCols(check) {
-            document.querySelectorAll('.col-toggle').forEach(cb => {
-                cb.checked = check;
-                const col = cb.getAttribute('data-col');
-                document.querySelectorAll(`[data-col="${col}"]`).forEach(c => {
-                    if (check) c.classList.remove('hidden');
-                    else c.classList.add('hidden');
-                });
-            });
+            const countEl = document.getElementById('sched-stat-total-games');
+            if (countEl) countEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full glass-panel rounded-xl p-12 text-center text-slate-500 space-y-2">
+                        <i data-lucide="inbox" class="w-6 h-6 mx-auto text-slate-600 mb-1"></i>
+                        <p class="font-medium text-slate-400">No matchups match the selected filter.</p>
+                        <p class="text-xs text-slate-500">Try choosing "All Teams" or clearing your search term.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = filtered.map(renderGameCardHtml).join('');
+            }
+
+            if (window.lucide) lucide.createIcons({ root: container });
         }
 
-        // -------------------------------------------------------------
-        // TABLE SORTING (Defense)
-        // -------------------------------------------------------------
-        function sortTableByColumn(th) {
-            const col = th.getAttribute('data-col');
-            if (!col) return;
-            const asc = currentSort.col === col ? !currentSort.asc : true;
-            currentSort = { col, asc };
+        function filterScheduleTeam(team) {
+            currentScheduleTeam = team || 'ALL';
+            renderMatchups();
+        }
 
-            document.querySelectorAll('#statsTable thead th .sort-indicator').forEach(si => si.textContent = '');
-            const indicator = th.querySelector('.sort-indicator');
-            if (indicator) indicator.textContent = asc ? '▲' : '▼';
+        function onScheduleSearch(query) {
+            scheduleSearchQuery = query || '';
+            renderMatchups();
+        }
 
-            const tbody = document.getElementById('defense-table-body');
-            const rows = Array.from(tbody.querySelectorAll('tr.defense-row'));
-
-            rows.sort((a, b) => {
-                const aCell = a.querySelector(`td[data-col="${col}"]`);
-                const bCell = b.querySelector(`td[data-col="${col}"]`);
-                const aText = aCell ? aCell.innerText.trim() : '';
-                const bText = bCell ? bCell.innerText.trim() : '';
-                const aNum = parseFloat(aText);
-                const bNum = parseFloat(bText);
-
-                if (!isNaN(aNum) && !isNaN(bNum)) {
-                    return asc ? aNum - bNum : bNum - aNum;
+        function onScheduleSlateChange(val) {
+            if (val === 'today') {
+                const todayGames = {{ todays_games | tojson }};
+                if (todayGames && todayGames.length > 0) {
+                    const todayCodes = new Set();
+                    todayGames.forEach(p => { todayCodes.add(p[0]); todayCodes.add(p[1]); });
+                    globalMatchups = initialMatchups.filter(g => todayCodes.has(g.away_team) && todayCodes.has(g.home_team));
                 }
-                return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            } else {
+                globalMatchups = [...initialMatchups];
+            }
+            renderMatchups();
+        }
+
+        function compareCustomMatchup() {
+            const away = document.getElementById('lab-away-select')?.value;
+            const home = document.getElementById('lab-home-select')?.value;
+            if (!away || !home) return;
+
+            const aStats = allTeamStats[away] || {};
+            const hStats = allTeamStats[home] || {};
+
+            const customMatchup = {
+                game_id: `NBA_${away}_${home}_custom`,
+                game_label: 'LAB H2H',
+                gameday: 'Custom Matchup Lab',
+                gametime: 'Head-to-Head',
+                is_final: false,
+                away_team: away,
+                away_team_name: teamNamesMap[away] || away,
+                away_record: 'H2H Lab',
+                home_team: home,
+                home_team_name: teamNamesMap[home] || home,
+                home_record: 'H2H Lab',
+                away_stats: aStats,
+                home_stats: hStats
+            };
+
+            // Prepend custom matchup to the top of the cards list and re-render
+            globalMatchups = [customMatchup, ...initialMatchups.filter(g => !(g.away_team === away && g.home_team === home))];
+            currentScheduleTeam = 'ALL';
+            const teamSelect = document.getElementById('schedule-team-select');
+            if (teamSelect) teamSelect.value = 'ALL';
+            renderMatchups();
+
+            // Smooth scroll down to the card
+            document.getElementById('schedule-games-container')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =========================================================================
+        // Floor Streaks Table & Filtering (Matching NFL Hub renderFloorStreaks)
+        // =========================================================================
+        function renderFloorStreaks() {
+            const tbody = document.getElementById('floor-streak-table-body');
+            const countEl = document.getElementById('floor-visible-count');
+            if (!tbody) return;
+
+            let filtered = [...globalFloorStreaks];
+
+            // Filter by Position
+            if (floorFilterPos && floorFilterPos !== 'ALL') {
+                filtered = filtered.filter(p => (p.position || '').toUpperCase() === floorFilterPos);
+            }
+
+            // Filter by Metric
+            if (floorFilterStat && floorFilterStat !== 'ALL') {
+                filtered = filtered.filter(p => (p.stat || '').toUpperCase() === floorFilterStat);
+            }
+
+            // Filter by Min Streak
+            const minStreak = parseInt(floorFilterStreak || 0, 10);
+            if (minStreak > 0) {
+                filtered = filtered.filter(p => (p.streak || 0) >= minStreak);
+            }
+
+            // Filter by Search Query
+            if (floorSearchQuery) {
+                const q = floorSearchQuery.toLowerCase().trim();
+                filtered = filtered.filter(p =>
+                    (p.player_name || '').toLowerCase().includes(q) ||
+                    (p.team || '').toLowerCase().includes(q)
+                );
+            }
+
+            // Sort
+            filtered.sort((a, b) => {
+                let vA = a[floorSortCol];
+                let vB = b[floorSortCol];
+                if (typeof vA === 'string') vA = vA.toLowerCase();
+                if (typeof vB === 'string') vB = vB.toLowerCase();
+                if (vA < vB) return floorSortAsc ? -1 : 1;
+                if (vA > vB) return floorSortAsc ? 1 : -1;
+                return 0;
             });
 
-            rows.forEach(r => tbody.appendChild(r));
+            if (countEl) countEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="py-12 text-center text-slate-500">
+                            <i data-lucide="inbox" class="w-6 h-6 mx-auto mb-2 text-slate-600"></i>
+                            <p class="font-medium text-slate-400">No players match the current filters.</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Try selecting ALL positions or lowering the streak threshold.</p>
+                        </td>
+                    </tr>
+                `;
+                if (window.lucide) lucide.createIcons({ root: tbody });
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((p, idx) => {
+                const streak = p.streak || 0;
+                let tierBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">Developing (1-4)</span>';
+                if (streak >= 8) {
+                    tierBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/80 text-emerald-400 border border-emerald-800 font-bold">Elite (8+)</span>';
+                } else if (streak >= 5) {
+                    tierBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950/80 text-blue-400 border border-blue-800 font-semibold">Solid (5-7)</span>';
+                }
+
+                // Render Game Logs as Individual Pill Badges
+                const gameLogsHtml = (p.game_logs || []).map(val => {
+                    const num = parseFloat(val);
+                    const isHigh = !isNaN(num) && num >= (p.baseline || 0);
+                    return `<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono ${isHigh ? 'bg-emerald-900/40 text-emerald-300 border border-emerald-700/50' : 'bg-[#21262d] text-slate-300 border border-[#30363d]'}">${val}</span>`;
+                }).join(' ');
+
+                return `
+                    <tr class="hover:bg-[#21262d]/50 transition">
+                        <td class="text-center font-mono text-slate-500 py-2.5 px-3">${idx + 1}</td>
+                        <td class="py-2.5 px-3">
+                            <div class="font-semibold text-slate-100">${p.player_name || 'Unknown'}</div>
+                            <div class="text-[10px] text-slate-500 font-mono">${p.team || '--'} • Pos ${p.position || '--'}</div>
+                        </td>
+                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.position || '--'}</td>
+                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.team || '--'}</td>
+                        <td class="py-2.5 px-3 text-slate-300 font-medium">
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono ${p.stat === 'PTS' ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30' : (p.stat === 'REB' ? 'bg-sky-500/10 text-sky-300 border border-sky-500/30' : 'bg-purple-500/10 text-purple-300 border border-purple-500/30')} mr-1">${p.stat}</span>
+                            <span>${p.stat_label}</span>
+                        </td>
+                        <td class="text-right font-mono font-semibold text-slate-200 py-2.5 px-3">${p.baseline != null ? p.baseline.toFixed(1) : '--'}</td>
+                        <td class="text-center font-mono font-bold text-emerald-400 py-2.5 px-3">${p.threshold || '--'}</td>
+                        <td class="text-center font-mono font-bold text-slate-100 py-2.5 px-3">
+                            <span class="inline-block px-2 py-0.5 rounded bg-[#161b22] border border-[#30363d] font-bold text-slate-200">${streak}</span>
+                        </td>
+                        <td class="text-center py-2.5 px-3">${tierBadge}</td>
+                        <td class="py-2.5 px-3 font-mono text-slate-300">
+                            <div class="flex items-center gap-1 flex-wrap">${gameLogsHtml || '--'}</div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            if (window.lucide) lucide.createIcons({ root: tbody });
         }
 
-        // -------------------------------------------------------------
-        // EXPORT CSV
-        // -------------------------------------------------------------
-        function exportTableCsv() {
-            const table = document.getElementById('statsTable');
-            if (!table) return;
-            const rows = Array.from(table.querySelectorAll('tr'));
-            const csv = [];
-            rows.forEach(r => {
-                if (r.style.display === 'none') return;
-                const cols = Array.from(r.querySelectorAll('th, td')).filter(c => !c.classList.contains('hidden'));
-                const line = cols.map(c => `"${c.innerText.replace(/"/g, '""').trim()}"`).join(',');
-                csv.push(line);
-            });
-            const blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `nba_defense_stats_${new Date().toISOString().slice(0,10)}.csv`;
-            link.click();
-        }
-
-        // -------------------------------------------------------------
-        // RADAR PANEL (Exploitability Profile)
-        // -------------------------------------------------------------
-        function openRadarPanel(row, el) {
-            document.querySelectorAll('tr.selected-row').forEach(r => r.classList.remove('selected-row'));
-            if (el) el.classList.add('selected-row');
-
-            const overlay = document.getElementById('radarOverlay');
-            const panel = document.getElementById('radarPanel');
-            
-            document.getElementById('panelTeam').textContent = `${row.TEAM} (${row.POSITION})`;
-            document.getElementById('panelSubtitle').textContent = `Matchup Exploitability Profile vs League Average`;
-
-            overlay.style.display = 'block';
-            setTimeout(() => {
-                overlay.style.opacity = '1';
-                panel.classList.add('open');
-            }, 10);
-
-            renderRadar(row);
-        }
-
-        function closeRadarPanel() {
-            const overlay = document.getElementById('radarOverlay');
-            const panel = document.getElementById('radarPanel');
-            overlay.style.opacity = '0';
-            panel.classList.remove('open');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 280);
-            document.querySelectorAll('tr.selected-row').forEach(r => r.classList.remove('selected-row'));
-        }
-
-        function calcMatchupStrength(rank) {
-            if (rank == null || isNaN(rank)) return 50;
-            // Rank 1 = most vulnerable defense -> 100 exploitability
-            // Rank 30 = toughest defense -> 0 exploitability
-            return Math.max(0, Math.min(100, Math.round(((31 - rank) / 30) * 100)));
-        }
-
-        function renderRadar(row) {
-            const ctx = document.getElementById('radarChart');
-            if (radarInstance) radarInstance.destroy();
-
-            const labels = radarMetrics.map(m => m.label);
-            const teamData = radarMetrics.map(m => calcMatchupStrength(row[m.column]));
-            const leagueData = leagueAvgRaw ? radarMetrics.map(m => calcMatchupStrength(leagueAvgRaw[m.column])) : null;
-
-            radarInstance = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: `${row.TEAM} ${row.POSITION}`,
-                            data: teamData,
-                            borderColor: '#58a6ff',
-                            backgroundColor: 'rgba(88, 166, 255, 0.25)',
-                            pointBackgroundColor: '#58a6ff',
-                            pointBorderColor: '#fff',
-                            borderWidth: 2.5,
-                            fill: true,
-                            tension: 0.15
-                        },
-                        {
-                            label: 'League Average',
-                            data: leagueData || labels.map(() => 50),
-                            borderColor: '#8b949e',
-                            backgroundColor: 'rgba(139, 148, 158, 0.1)',
-                            pointBackgroundColor: '#8b949e',
-                            borderWidth: 1.5,
-                            borderDash: [4, 4],
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            min: 0,
-                            max: 100,
-                            ticks: {
-                                stepSize: 25,
-                                color: '#8b949e',
-                                backdropColor: 'transparent',
-                                font: { size: 10, family: 'monospace' }
-                            },
-                            grid: { color: 'rgba(48, 54, 61, 0.8)' },
-                            angleLines: { color: 'rgba(48, 54, 61, 0.8)' },
-                            pointLabels: {
-                                color: '#c9d1d9',
-                                font: { size: 11, weight: 'bold' }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#c9d1d9',
-                                font: { size: 11 }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(22, 27, 34, 0.95)',
-                            titleColor: '#f0f6fc',
-                            bodyColor: '#c9d1d9',
-                            borderColor: '#30363d',
-                            borderWidth: 1,
-                            callbacks: {
-                                label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw} / 100`
-                            }
-                        }
+        function setFloorPosFilter(pos) {
+            floorFilterPos = pos;
+            ['ALL', 'PG', 'SG', 'SF', 'PF', 'C'].forEach(p => {
+                const btn = document.getElementById(`floor-filter-pos-${p}`);
+                if (btn) {
+                    if (p === pos) {
+                        btn.className = 'px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold';
+                    } else {
+                        btn.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
                     }
                 }
             });
+            renderFloorStreaks();
         }
 
-        // -------------------------------------------------------------
-        // PLAYER STREAKS CLIENT FILTERING
-        // -------------------------------------------------------------
-        function onStreakSearch(query) {
-            currentStreakQuery = (query || '').toLowerCase().trim();
-            filterStreaksTable();
-        }
-
-        function filterStreakPos(pos) {
-            currentStreakPos = pos;
-            document.querySelectorAll('.str-pos-chip').forEach(btn => {
-                btn.className = 'str-pos-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
-            });
-            const activeBtn = document.getElementById(`streak-pos-${pos}`);
-            if (activeBtn) activeBtn.className = 'str-pos-chip px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold';
-            filterStreaksTable();
-        }
-
-        function filterStreakStat(stat) {
-            currentStreakStat = stat;
-            document.querySelectorAll('.str-stat-chip').forEach(btn => {
-                btn.className = 'str-stat-chip px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
-            });
-            const activeBtn = document.getElementById(`streak-stat-${stat}`);
-            if (activeBtn) activeBtn.className = 'str-stat-chip px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold';
-            filterStreaksTable();
-        }
-
-        function filterStreaksTable() {
-            const rows = document.querySelectorAll('.streak-row');
-            let visibleCount = 0;
-
-            rows.forEach(r => {
-                const player = r.getAttribute('data-player') || '';
-                const team = r.getAttribute('data-team') || '';
-                const pos = r.getAttribute('data-pos') || '';
-                const stat = r.getAttribute('data-stat') || '';
-
-                const matchesQuery = !currentStreakQuery || player.includes(currentStreakQuery) || team.includes(currentStreakQuery);
-                const matchesPos = currentStreakPos === 'ALL' || pos === currentStreakPos;
-                const matchesStat = currentStreakStat === 'ALL' || stat === currentStreakStat;
-
-                if (matchesQuery && matchesPos && matchesStat) {
-                    r.style.display = '';
-                    visibleCount++;
-                } else {
-                    r.style.display = 'none';
+        function setFloorStatFilter(stat) {
+            floorFilterStat = stat;
+            ['ALL', 'PTS', 'REB', 'AST'].forEach(s => {
+                const btn = document.getElementById(`floor-filter-stat-${s}`);
+                if (btn) {
+                    if (s === stat) {
+                        btn.className = 'px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold';
+                    } else {
+                        btn.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
+                    }
                 }
             });
-
-            updateStreakCount(visibleCount);
+            renderFloorStreaks();
         }
 
-        function updateStreakCount(count) {
-            const rows = document.querySelectorAll('.streak-row');
-            const total = count !== undefined ? count : Array.from(rows).filter(r => r.style.display !== 'none').length;
-            const counter = document.getElementById('streak-visible-count');
-            if (counter) counter.textContent = total;
-            const badge = document.getElementById('streaks-badge-count');
-            if (badge) badge.textContent = total;
+        function setFloorStreakFilter(val) {
+            floorFilterStreak = val || '1';
+            renderFloorStreaks();
+        }
 
-            const emptyRow = document.getElementById('streaks-empty-row');
-            if (emptyRow) {
-                emptyRow.style.display = total === 0 ? '' : 'none';
+        function onFloorSearch(query) {
+            floorSearchQuery = query || '';
+            renderFloorStreaks();
+        }
+
+        function sortFloorStreaks(col) {
+            if (floorSortCol === col) {
+                floorSortAsc = !floorSortAsc;
+            } else {
+                floorSortCol = col;
+                floorSortAsc = (col === 'player_name' || col === 'team' || col === 'position');
             }
+            renderFloorStreaks();
         }
 
-        function sortStreaksTable(field) {
-            const asc = currentStreakSort.col === field ? !currentStreakSort.asc : true;
-            currentStreakSort = { col: field, asc };
-
-            const tbody = document.getElementById('streaks-table-body');
-            const rows = Array.from(tbody.querySelectorAll('tr.streak-row'));
-
-            rows.sort((a, b) => {
-                let aVal, bVal;
-                if (field === 'Player') {
-                    aVal = a.getAttribute('data-player');
-                    bVal = b.getAttribute('data-player');
-                    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-                } else if (field === 'Pos') {
-                    aVal = a.getAttribute('data-pos');
-                    bVal = b.getAttribute('data-pos');
-                    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-                } else if (field === 'Team') {
-                    aVal = a.getAttribute('data-team');
-                    bVal = b.getAttribute('data-team');
-                    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-                } else if (field === 'Stat') {
-                    aVal = a.getAttribute('data-stat');
-                    bVal = b.getAttribute('data-stat');
-                    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-                } else {
-                    const colIndex = field === 'Season_Avg' ? 6 : field === 'Streak_Avg' ? 7 : 8;
-                    const aCell = a.children[colIndex];
-                    const bCell = b.children[colIndex];
-                    const aNum = parseFloat(aCell ? aCell.innerText : '0');
-                    const bNum = parseFloat(bCell ? bCell.innerText : '0');
-                    return asc ? aNum - bNum : bNum - aNum;
-                }
-            });
-
-            rows.forEach(r => tbody.appendChild(r));
-        }
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMatchups();
+            renderFloorStreaks();
+            if (window.lucide) lucide.createIcons();
+        });
     </script>
 </body>
 </html>

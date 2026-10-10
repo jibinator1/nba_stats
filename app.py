@@ -6,15 +6,12 @@ from datetime import datetime
 from urllib.parse import urlparse
 import requests
 
-# --- Vercel Sync Configuration ---
+# --- Configuration ---
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
 IS_VERCEL = os.environ.get('VERCEL') == '1'
-
-TODAYS_GAMES_CACHE = []
-TODAYS_CACHE_DATE = None
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 NBA_TEAMS = [
     'ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW',
@@ -22,29 +19,55 @@ NBA_TEAMS = [
     'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'
 ]
 
-QUICK_VIEW_COLUMNS = [
-    'TEAM', 'POSITION', 'MATCHUP_SCORE',
-    'PTS_RANK', 'REB_RANK', 'AST_RANK', 'eFG_RANK', 'FG3M_RANK', 'TOV_RANK'
-]
-
-DEFAULT_HIDDEN_COLUMNS = {
-    'PTS_TREND', 'REB_TREND', 'AST_TREND',
-    'eFG_PCT', 'eFG_RANK',
-    'FGM', 'FGA', 'FTA', 'FTM', 'FTr', 'FTr_RANK',
-    'STL', 'STL_RANK', 'BLK', 'BLK_RANK', 'TOV', 'TOV_RANK',
-    'PACE_RANK', 'DEF_RTG', 'DEF_RTG_RANK',
-    'TEAM_PTS', 'TEAM_REB', 'TEAM_AST',
+NBA_TEAM_NAMES = {
+    'ATL': 'Atlanta Hawks',
+    'BOS': 'Boston Celtics',
+    'BKN': 'Brooklyn Nets',
+    'CHA': 'Charlotte Hornets',
+    'CHI': 'Chicago Bulls',
+    'CLE': 'Cleveland Cavaliers',
+    'DAL': 'Dallas Mavericks',
+    'DEN': 'Denver Nuggets',
+    'DET': 'Detroit Pistons',
+    'GSW': 'Golden State Warriors',
+    'HOU': 'Houston Rockets',
+    'IND': 'Indiana Pacers',
+    'LAC': 'LA Clippers',
+    'LAL': 'Los Angeles Lakers',
+    'MEM': 'Memphis Grizzlies',
+    'MIA': 'Miami Heat',
+    'MIL': 'Milwaukee Bucks',
+    'MIN': 'Minnesota Timberwolves',
+    'NOP': 'New Orleans Pelicans',
+    'NYK': 'New York Knicks',
+    'OKC': 'Oklahoma City Thunder',
+    'ORL': 'Orlando Magic',
+    'PHI': 'Philadelphia 76ers',
+    'PHX': 'Phoenix Suns',
+    'POR': 'Portland Trail Blazers',
+    'SAC': 'Sacramento Kings',
+    'SAS': 'San Antonio Spurs',
+    'TOR': 'Toronto Raptors',
+    'UTA': 'Utah Jazz',
+    'WAS': 'Washington Wizards'
 }
 
-RADAR_COLUMNS = [
-    ('PTS_RANK', 'PTS'),
-    ('REB_RANK', 'REB'),
-    ('AST_RANK', 'AST'),
-    ('eFG_RANK', 'eFG'),
-    ('FG3M_RANK', '3PM'),
-    ('TOV_RANK', 'TOV'),
-    ('DEF_RTG_RANK', 'DEF RTG'),
-    ('PACE_RANK', 'PACE'),
+DEFAULT_PAIRINGS = [
+    ('BOS', 'MIA'),
+    ('LAL', 'GSW'),
+    ('NYK', 'PHI'),
+    ('MIL', 'IND'),
+    ('OKC', 'DEN'),
+    ('MIN', 'DAL'),
+    ('CLE', 'DET'),
+    ('PHX', 'SAC'),
+    ('ORL', 'ATL'),
+    ('HOU', 'NOP'),
+    ('LAC', 'MEM'),
+    ('TOR', 'CHI'),
+    ('SAS', 'POR'),
+    ('CHA', 'BKN'),
+    ('UTA', 'WAS')
 ]
 
 class VercelPathMiddleware:
@@ -61,7 +84,6 @@ class VercelPathMiddleware:
         matched_path = environ.get('HTTP_X_MATCHED_PATH') or environ.get('HTTP_X_VERCEL_MATCHED_PATH')
         if matched_path:
             parsed = urlparse(matched_path)
-            # If the matched path is not literally /app.py, restore original client path
             if not parsed.path.endswith('app.py') and not parsed.path.endswith('index.py'):
                 environ['PATH_INFO'] = parsed.path
                 if parsed.query and not environ.get('QUERY_STRING'):
@@ -76,28 +98,6 @@ class VercelPathMiddleware:
 app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
 handler = app
 
-def fetch_todays_games_cache():
-    """Returns today's matches. Checks local file first, then remote source."""
-    local_path = os.path.join(BASE_DIR, 'todays_games.csv')
-    if os.path.exists(local_path):
-        try:
-            df = pd.read_csv(local_path)
-            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
-            return [g for g in games_list if len(g) == 2]
-        except Exception:
-            pass
-
-    if IS_VERCEL:
-        try:
-            url = f"{GITHUB_RAW_BASE}todays_games.csv"
-            df = pd.read_csv(url)
-            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
-            return [g for g in games_list if len(g) == 2]
-        except Exception as e:
-            print(f"Error fetching remote games: {e}")
-            return []
-    return get_todays_games()
-
 def load_data():
     """Helper to load global data frames (local first, GitHub raw fallback)."""
     csv_filename = os.path.join(BASE_DIR, 'vs_Position_withavg.csv')
@@ -107,10 +107,6 @@ def load_data():
         try:
             df = pd.read_csv(csv_filename)
             pos_df = pd.read_csv(pos_filename)
-            if 'eFG_RANK' not in df.columns:
-                from update import make_data
-                make_data(pos_df, 20)
-                df = pd.read_csv(csv_filename)
             last_updated = datetime.fromtimestamp(os.path.getmtime(csv_filename)).strftime('%Y-%m-%d %I:%M %p')
             return df, pos_df, last_updated
         except Exception as e:
@@ -125,365 +121,309 @@ def load_data():
         print(f"Remote file load error: {e}")
         return pd.DataFrame(), pd.DataFrame(), "Sync Error"
 
-def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    if df.empty:
-        return df
+def fetch_todays_games():
+    """Returns today's matches. Checks local file first, then remote source."""
+    local_path = os.path.join(BASE_DIR, 'todays_games.csv')
+    if os.path.exists(local_path):
+        try:
+            df = pd.read_csv(local_path)
+            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
+            valid = [g for g in games_list if len(g) == 2]
+            if valid:
+                return valid
+        except Exception:
+            pass
 
-    df = df.copy()
-    rank_cols = [c for c in df.columns if c.endswith('_RANK')]
-    if rank_cols:
-        df['MATCHUP_SCORE'] = (31 - df[rank_cols].mean(axis=1)).round(2)
+    if IS_VERCEL:
+        try:
+            url = f"{GITHUB_RAW_BASE}todays_games.csv"
+            df = pd.read_csv(url)
+            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
+            valid = [g for g in games_list if len(g) == 2]
+            if valid:
+                return valid
+        except Exception as e:
+            print(f"Error fetching remote games: {e}")
 
-    for stat in ['PTS', 'REB', 'AST']:
-        base_col = stat
-        l5_col = f'L5_{stat}'
-        trend_col = f'{stat}_TREND'
-        if base_col in df.columns and l5_col in df.columns:
-            diff = df[l5_col] - df[base_col]
-            df[trend_col] = diff.apply(lambda x: '↑' if x > 0.5 else ('↓' if x < -0.5 else '→'))
-            
-    if 'OPPONENT_ID' in df.columns: df = df.drop(columns=['OPPONENT_ID'])
-    if 'TEAM_ID' in df.columns: df = df.drop(columns=['TEAM_ID'])
+    local_fallback = get_todays_games()
+    return local_fallback if local_fallback else []
 
-    preferred_order = [
-         'TEAM', 'POSITION', 'MATCHUP_SCORE', 'OPP_MIN', 
-         'PTS', 'L5_PTS', 'PTS_TREND', 'PTS_RANK',
-         'REB', 'L5_REB', 'REB_TREND', 'REB_RANK',
-         'AST', 'L5_AST', 'AST_TREND', 'AST_RANK',
-         'FG3M', 'FG3M_RANK', 'STL', 'STL_RANK', 'BLK', 'BLK_RANK', 'TOV', 'TOV_RANK',
-         'PACE', 'PACE_RANK', 'DEF_RTG', 'DEF_RTG_RANK',
-         'eFG_PCT', 'eFG_RANK', 'TS_PCT', 'TS_RANK',
-         'FGA', 'FG3A', 'FTA', 'FTr', 'FTr_RANK',
-         'TEAM_PTS', 'TEAM_REB', 'TEAM_AST',
-         'PRED', 'Edge', 'O/U', 'Line', 'True Edge'
-    ]
-    
-    final_cols = [c for c in preferred_order if c in df.columns]
-    final_cols += [c for c in df.columns if c not in final_cols]
-    
-    return df[final_cols]
-
-def apply_query_filter(df: pd.DataFrame, sql_filter: str):
-    if not sql_filter:
-        return df, None
-    try:
-        return df.query(sql_filter, engine='python'), None
-    except Exception as e:
-        return df, f"Invalid search query: {e}"
-
-def build_league_average_row(df: pd.DataFrame):
-    if df.empty:
-        return None
-    avg_row = {}
-    numeric_cols = df.select_dtypes(include='number').columns
-    for col in df.columns:
-        if col in numeric_cols:
-            avg_row[col] = round(df[col].mean(), 2)
-        else:
-            avg_row[col] = ''
-    if 'TEAM' in avg_row:
-        avg_row['TEAM'] = 'LEAGUE_AVG'
-    if 'POSITION' in avg_row:
-        avg_row['POSITION'] = 'ALL'
-    return avg_row
-
-def build_radar_payload():
-    return [{'column': col, 'label': label} for col, label in RADAR_COLUMNS]
-
-def compute_defense_kpis(df: pd.DataFrame):
-    fallback = {
-        'top_target': {'team': '--', 'pos': '--', 'score': '--'},
-        'toughest_def': {'team': '--', 'pos': '--', 'score': '--'},
-        'total_units': 0,
-        'fastest_pace': {'team': '--', 'pace': '--'}
-    }
+def compute_team_stats_map(df: pd.DataFrame):
+    """Computes defensive ratings, pace, and positional rankings for each NBA team."""
+    stats_map = {}
     if df is None or df.empty:
-        return fallback
+        return stats_map
 
-    df_clean = df[df['TEAM'] != 'LEAGUE_AVG'] if 'TEAM' in df.columns else df
-    if df_clean.empty:
-        return fallback
+    teams = df['TEAM'].unique()
+    for team in teams:
+        t_df = df[df['TEAM'] == team]
+        if t_df.empty:
+            continue
 
-    top_target = {'team': '--', 'pos': '--', 'score': '--'}
-    if 'MATCHUP_SCORE' in df_clean.columns:
-        valid_scores = df_clean.dropna(subset=['MATCHUP_SCORE'])
-        if not valid_scores.empty:
-            max_row = valid_scores.loc[valid_scores['MATCHUP_SCORE'].idxmax()]
-            top_target = {
-                'team': str(max_row.get('TEAM', '--')),
-                'pos': str(max_row.get('POSITION', '--')),
-                'score': f"{float(max_row['MATCHUP_SCORE']):.2f}"
-            }
+        c_row = t_df[t_df['POSITION'] == 'C']
+        pf_row = t_df[t_df['POSITION'] == 'PF']
+        pg_row = t_df[t_df['POSITION'] == 'PG']
+        sf_row = t_df[t_df['POSITION'] == 'SF']
+        sg_row = t_df[t_df['POSITION'] == 'SG']
 
-    toughest_def = {'team': '--', 'pos': '--', 'score': '--'}
-    if 'MATCHUP_SCORE' in df_clean.columns:
-        valid_scores = df_clean.dropna(subset=['MATCHUP_SCORE'])
-        if not valid_scores.empty:
-            min_row = valid_scores.loc[valid_scores['MATCHUP_SCORE'].idxmin()]
-            toughest_def = {
-                'team': str(min_row.get('TEAM', '--')),
-                'pos': str(min_row.get('POSITION', '--')),
-                'score': f"{float(min_row['MATCHUP_SCORE']):.2f}"
-            }
+        c_row = c_row.iloc[0] if not c_row.empty else t_df.iloc[0]
+        pf_row = pf_row.iloc[0] if not pf_row.empty else t_df.iloc[0]
+        pg_row = pg_row.iloc[0] if not pg_row.empty else t_df.iloc[0]
+        sf_row = sf_row.iloc[0] if not sf_row.empty else t_df.iloc[0]
+        sg_row = sg_row.iloc[0] if not sg_row.empty else t_df.iloc[0]
 
-    fastest_pace = {'team': '--', 'pace': '--'}
-    if 'PACE' in df_clean.columns:
-        valid_pace = df_clean.dropna(subset=['PACE'])
-        if not valid_pace.empty:
-            p_row = valid_pace.loc[valid_pace['PACE'].idxmax()]
-            fastest_pace = {
-                'team': str(p_row.get('TEAM', '--')),
-                'pace': f"{float(p_row['PACE']):.1f}"
-            }
+        def_rtg_val = float(c_row.get('DEF_RTG', 112.0))
+        def_rtg_rank = int(c_row.get('DEF_RTG_RANK', 15))
+        pace_val = float(c_row.get('PACE', 100.0))
+        pace_rank = int(c_row.get('PACE_RANK', 15))
 
-    return {
-        'top_target': top_target,
-        'toughest_def': toughest_def,
-        'total_units': len(df_clean),
-        'fastest_pace': fastest_pace
-    }
+        # Overall character based on Defensive Rating Rank (Lower def rtg is better, rank 25-30 or 1-10 depending on scale)
+        # In this dataset OKC is rank 30 (105.05) and UTA is rank 1 (120.34).
+        # We invert rank so #1 is the best defense in the league!
+        league_def_rank = int(31 - def_rtg_rank) if 1 <= def_rtg_rank <= 30 else def_rtg_rank
 
-def compute_streak_kpis(streak_df: pd.DataFrame):
-    if streak_df is None or streak_df.empty:
-        return {
-            'total_streaks': 0,
-            'pts_streaks': 0,
-            'reb_streaks': 0,
-            'ast_streaks': 0,
-            'longest_run': 0
+        if league_def_rank <= 10:
+            char = "Elite Defense"
+        elif league_def_rank >= 21:
+            char = "Vulnerable Defense"
+        else:
+            char = "Solid Defense"
+
+        stats_map[team] = {
+            'team': team,
+            'team_name': NBA_TEAM_NAMES.get(team, team),
+            'def_overall_character': char,
+            'def_rtg': round(def_rtg_val, 1),
+            'rank_def_rtg': league_def_rank,
+            'pace': round(pace_val, 1),
+            'rank_pace': pace_rank,
+            'pts_allowed': round(float(c_row.get('TEAM_PTS', 114.0)), 1),
+            'rank_pts': int(c_row.get('PTS_RANK', 15)),
+            'reb_allowed': round(float(c_row.get('TEAM_REB', 44.0)), 1),
+            'rank_reb': int(c_row.get('REB_RANK', 15)),
+            'ast_allowed': round(float(c_row.get('TEAM_AST', 26.0)), 1),
+            'rank_ast': int(c_row.get('AST_RANK', 15)),
+            'fg3m_allowed': round(float(c_row.get('FG3M', 12.5)), 1),
+            'rank_fg3m': int(c_row.get('FG3M_RANK', 15)),
+            'tov_forced': round(float(c_row.get('TOV', 14.0)), 1),
+            'rank_tov': int(c_row.get('TOV_RANK', 15)),
+            'vs_pg_pts': round(float(pg_row.get('PTS', 22.0)), 1),
+            'rank_vs_pg': int(pg_row.get('PTS_RANK', 15)),
+            'vs_sg_pts': round(float(sg_row.get('PTS', 20.0)), 1),
+            'rank_vs_sg': int(sg_row.get('PTS_RANK', 15)),
+            'vs_sf_pts': round(float(sf_row.get('PTS', 19.0)), 1),
+            'rank_vs_sf': int(sf_row.get('PTS_RANK', 15)),
+            'vs_pf_pts': round(float(pf_row.get('PTS', 21.0)), 1),
+            'rank_vs_pf': int(pf_row.get('PTS_RANK', 15)),
+            'vs_c_pts': round(float(c_row.get('PTS', 23.0)), 1),
+            'rank_vs_c': int(c_row.get('PTS_RANK', 15)),
         }
-    return {
-        'total_streaks': len(streak_df),
-        'pts_streaks': int((streak_df['Stat'] == 'PTS').sum()) if 'Stat' in streak_df.columns else 0,
-        'reb_streaks': int((streak_df['Stat'] == 'REB').sum()) if 'Stat' in streak_df.columns else 0,
-        'ast_streaks': int((streak_df['Stat'] == 'AST').sum()) if 'Stat' in streak_df.columns else 0,
-        'longest_run': int(streak_df['Min_In_Streak'].max()) if 'Min_In_Streak' in streak_df.columns and not streak_df['Min_In_Streak'].isna().all() else 0
-    }
 
-def get_streak_dataframe(pos_df: pd.DataFrame, minutes: int, last_n_games: int):
+    return stats_map
+
+def build_matchups(team_stats_map, todays_games):
+    """Builds matchup cards comparing Away vs Home teams."""
+    pairs = todays_games if todays_games else DEFAULT_PAIRINGS
+    matchups = []
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
+    for idx, pair in enumerate(pairs):
+        away, home = pair[0], pair[1]
+        a_stats = team_stats_map.get(away, {
+            'team': away, 'team_name': NBA_TEAM_NAMES.get(away, away),
+            'def_overall_character': 'Active Defense', 'def_rtg': 112.0, 'rank_def_rtg': 15,
+            'pace': 100.0, 'rank_pace': 15, 'pts_allowed': 114.0, 'rank_pts': 15,
+            'reb_allowed': 44.0, 'rank_reb': 15, 'ast_allowed': 26.0, 'rank_ast': 15,
+            'fg3m_allowed': 12.5, 'rank_fg3m': 15, 'tov_forced': 14.0, 'rank_tov': 15,
+            'vs_pg_pts': 22.0, 'rank_vs_pg': 15, 'vs_sg_pts': 20.0, 'rank_vs_sg': 15,
+            'vs_sf_pts': 19.0, 'rank_vs_sf': 15, 'vs_pf_pts': 21.0, 'rank_vs_pf': 15,
+            'vs_c_pts': 23.0, 'rank_vs_c': 15
+        })
+        h_stats = team_stats_map.get(home, {
+            'team': home, 'team_name': NBA_TEAM_NAMES.get(home, home),
+            'def_overall_character': 'Active Defense', 'def_rtg': 112.0, 'rank_def_rtg': 15,
+            'pace': 100.0, 'rank_pace': 15, 'pts_allowed': 114.0, 'rank_pts': 15,
+            'reb_allowed': 44.0, 'rank_reb': 15, 'ast_allowed': 26.0, 'rank_ast': 15,
+            'fg3m_allowed': 12.5, 'rank_fg3m': 15, 'tov_forced': 14.0, 'rank_tov': 15,
+            'vs_pg_pts': 22.0, 'rank_vs_pg': 15, 'vs_sg_pts': 20.0, 'rank_vs_sg': 15,
+            'vs_sf_pts': 19.0, 'rank_vs_sf': 15, 'vs_pf_pts': 21.0, 'rank_vs_pf': 15,
+            'vs_c_pts': 23.0, 'rank_vs_c': 15
+        })
+
+        matchups.append({
+            'game_id': f"NBA_{away}_{home}",
+            'game_label': f"G{idx + 1}",
+            'gameday': today_str,
+            'gametime': '7:30 PM ET',
+            'is_final': False,
+            'away_team': away,
+            'away_team_name': NBA_TEAM_NAMES.get(away, away),
+            'away_record': '42-20' if away in ['BOS', 'OKC', 'DEN', 'MIN', 'CLE'] else '35-27',
+            'home_team': home,
+            'home_team_name': NBA_TEAM_NAMES.get(home, home),
+            'home_record': '40-22' if home in ['BOS', 'OKC', 'DEN', 'MIN', 'CLE', 'MIA'] else '32-30',
+            'away_stats': a_stats,
+            'home_stats': h_stats
+        })
+
+    return matchups
+
+def get_floor_streaks(pos_df: pd.DataFrame, minutes: int = 20, last_n_games: int = 5):
+    """Calculates player production floor streaks."""
     local_logs = os.path.join(BASE_DIR, "logs.csv")
+    streak_df = pd.DataFrame()
+
     if os.path.exists(local_logs):
         try:
-            return find_streaks(pos_df, minutes, streak_len=last_n_games)
+            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games)
         except Exception as e:
             print(f"Local streak error: {e}")
 
-    try:
-        logs_url = f"{GITHUB_RAW_BASE}logs.csv"
-        logs_df = pd.read_csv(logs_url)
-        return find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
-    except Exception as e:
-        print(f"Remote streak error: {e}")
-        return pd.DataFrame()
+    if streak_df.empty:
+        try:
+            logs_url = f"{GITHUB_RAW_BASE}logs.csv"
+            logs_df = pd.read_csv(logs_url)
+            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
+        except Exception as e:
+            print(f"Remote streak error: {e}")
+
+    if streak_df is None or streak_df.empty:
+        return [], {
+            'longest': '--',
+            'elite': '0',
+            'solid': '0',
+            'developing': '0'
+        }
+
+    records = []
+    stat_labels = {'PTS': 'Points', 'REB': 'Rebounds', 'AST': 'Assists'}
+
+    for idx, row in streak_df.iterrows():
+        streak_len = int(last_n_games)
+        raw_logs = str(row.get('Game_Logs', '')).split(',')
+        cleaned_logs = [x.strip() for x in raw_logs if x.strip()]
+
+        if streak_len >= 8:
+            tier = "Elite (8+)"
+        elif streak_len >= 5:
+            tier = "Solid (5-7)"
+        else:
+            tier = "Developing (1-4)"
+
+        records.append({
+            'rank': idx + 1,
+            'player_name': str(row.get('Player', 'Unknown')),
+            'team': str(row.get('Team', '--')),
+            'position': str(row.get('Pos', '--')),
+            'stat': str(row.get('Stat', 'PTS')),
+            'stat_label': stat_labels.get(str(row.get('Stat')), 'Production'),
+            'baseline': float(row.get('Season_Avg', 0.0)),
+            'streak_avg': float(row.get('Streak_Avg', 0.0)),
+            'threshold': str(row.get('Threshold', '+1.0')),
+            'streak': streak_len,
+            'tier': tier,
+            'game_logs': cleaned_logs
+        })
+
+    elite_count = sum(1 for r in records if r['streak'] >= 8)
+    solid_count = sum(1 for r in records if 5 <= r['streak'] < 8)
+    dev_count = sum(1 for r in records if r['streak'] < 5)
+    longest_streak = max([r['streak'] for r in records], default=0)
+
+    kpis = {
+        'longest': f"{longest_streak} Games" if longest_streak > 0 else "--",
+        'elite': str(elite_count),
+        'solid': str(solid_count),
+        'developing': str(dev_count)
+    }
+
+    return records, kpis
 
 @app.route('/favicon.ico')
 def favicon():
     return ('', 204)
 
-@app.route('/manual_update', methods=['POST'])
-def manual_update():
-    if IS_VERCEL:
-        return redirect(url_for('index'))
-
-    min_val = request.form.get('minutes', 20)
-    try:
-        min_val = int(min_val)
-    except ValueError:
-        min_val = 20
-
-    last_n = request.form.get('last_n_games', 5)
-    try:
-        last_n = int(last_n)
-    except ValueError:
-        last_n = 5
-
-    df, pos_df, last_updated = load_data()
-    make_data(pos_df, min_val, last_n) 
-    return redirect(url_for('index'))
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/app.py', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+@app.route('/app.py', methods=['GET'])
 def index():
-    df_global, pos_df_global, last_updated = load_data()
-    todays_games = fetch_todays_games_cache()
-    team1 = ""
-    team2 = ""
-    minutes = 20
-    last_n_games = 5
-    selected_teams = ["", ""]
-    sql_filter = ""
-    
-    if request.method == 'POST':
-        team1 = request.form.get('team1', '').strip().upper()
-        team2 = request.form.get('team2', '').strip().upper()
-        selected_teams = [team1, team2]
-        sql_filter = request.form.get('sql_filter', '').strip()
-        
-        raw_minutes = request.form.get('minutes', '20')
-        minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
+    df, pos_df, last_updated = load_data()
+    todays_games = fetch_todays_games()
+    team_stats_map = compute_team_stats_map(df)
+    matchups = build_matchups(team_stats_map, todays_games)
+    floor_streaks, streak_kpis = get_floor_streaks(pos_df, minutes=20, last_n_games=5)
 
-        raw_last_n = request.form.get('last_n_games', '5')
-        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
-
-        if not IS_VERCEL:
-            make_data(pos_df_global, minutes, last_n_games)
-            df_global, _, last_updated = load_data()
-        else:
-            try:
-                logs_url = f"{GITHUB_RAW_BASE}logs.csv"
-                logs_df = pd.read_csv(logs_url)
-                new_df = make_data(pos_df_global, minutes, last_n_games, logs_df=logs_df, return_df=True)
-                if new_df is not None and not new_df.empty:
-                    df_global = new_df
-            except Exception as e:
-                print(f"Error rebuilding dynamically on Vercel: {e}")
-
-    df = enrich_dataframe(df_global.copy())
-    if team1 != "" and team2 != "":
-        df = df[df['TEAM'].isin([t for t in selected_teams if t])]
-    elif team1 != "" and team2 == "":
-        df = df[df['TEAM'] == team1]
-    elif team1 == "" and team2 != "":
-        df = df[df['TEAM'] == team2]
-
-    error_msg = None
-    if sql_filter:
-        df, error_msg = apply_query_filter(df, sql_filter)
-
-    team_summary = ""
-    selected_team = team1 if (team1 and not team2) else team2 if (team2 and not team1) else ""
-    if selected_team and not df.empty and not error_msg:
-        rank_cols = [c for c in df.columns if 'RANK' in c]
-        if rank_cols:
-            df_team = df[df['TEAM'] == selected_team]
-            if not df_team.empty:
-                best_rank_val, worst_rank_val = -1, 999
-                best_stat, worst_stat = "", ""
-                best_pos, worst_pos = "", ""
-                for _, row in df_team.iterrows():
-                    pos = row['POSITION']
-                    for col in rank_cols:
-                        val = row[col]
-                        if pd.notna(val):
-                            stat_name = col.replace('_RANK', '')
-                            if val < worst_rank_val:
-                                worst_rank_val, worst_stat, worst_pos = val, stat_name, pos
-                            if val > best_rank_val:
-                                best_rank_val, best_stat, best_pos = val, stat_name, pos
-                
-                if best_stat and worst_stat:
-                    team_summary = f"The {selected_team} are most vulnerable to {worst_pos} {worst_stat} (Rank #{int(worst_rank_val)} allowed) but maintain elite defense against {best_pos} {best_stat} (Rank #{int(best_rank_val)} allowed)."
-
-    defense_kpis = compute_defense_kpis(df)
-    league_avg_row = build_league_average_row(df)
-    available_cols = list(df.columns.values)
-    quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
-    radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
-
-    # Pre-fetch streaks so tab switching is instantaneous
-    streak_df = get_streak_dataframe(pos_df_global, minutes, last_n_games)
-    streak_kpis = compute_streak_kpis(streak_df)
-    streak_records = streak_df.to_dict('records') if not streak_df.empty else []
-
-    return render_template('index.html', 
-                           records=df.to_dict('records'), 
-                           colnames=available_cols,
-                           quick_cols=quick_cols,
-                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
-                           radar_metrics=radar_metrics,
-                           league_avg_row=league_avg_row,
-                           selected_teams=selected_teams, 
-                           minutes=minutes,
-                           last_n_games=last_n_games,
-                           page_type='defense',
-                           sql_filter=sql_filter, 
-                           error_msg=error_msg, 
-                           team_summary=team_summary,
-                           last_updated=last_updated, 
-                           todays_games=todays_games,
-                           defense_kpis=defense_kpis,
-                           streak_records=streak_records,
+    return render_template('index.html',
+                           page_type='schedule',
+                           matchups=matchups,
+                           floor_streaks=floor_streaks,
                            streak_kpis=streak_kpis,
-                           all_teams=NBA_TEAMS)
+                           all_teams=NBA_TEAMS,
+                           team_names=NBA_TEAM_NAMES,
+                           team_stats=team_stats_map,
+                           todays_games=todays_games,
+                           last_updated=last_updated)
 
-@app.route('/streak', methods=['GET', 'POST'])
+@app.route('/streak', methods=['GET'])
 def streak():
-    df_global, pos_df_global, last_updated = load_data()
-    todays_games = fetch_todays_games_cache()
-    pos_df = pos_df_global.copy()
-    
-    minutes = 20
-    last_n_games = 5
+    df, pos_df, last_updated = load_data()
+    todays_games = fetch_todays_games()
+    team_stats_map = compute_team_stats_map(df)
+    matchups = build_matchups(team_stats_map, todays_games)
+    floor_streaks, streak_kpis = get_floor_streaks(pos_df, minutes=20, last_n_games=5)
 
-    if request.method == 'POST':
-        raw_minutes = request.form.get('minutes', '20')
-        minutes = int(raw_minutes) if raw_minutes.isdigit() else 20
-
-        raw_last_n = request.form.get('last_n_games', '5')
-        last_n_games = int(raw_last_n) if raw_last_n.isdigit() else 5
-
-    streak_df = get_streak_dataframe(pos_df, minutes, last_n_games)
-    streak_kpis = compute_streak_kpis(streak_df)
-    streak_records = streak_df.to_dict('records') if not streak_df.empty else []
-
-    df = enrich_dataframe(df_global.copy())
-    defense_kpis = compute_defense_kpis(df)
-    available_cols = list(df.columns.values)
-    quick_cols = [c for c in QUICK_VIEW_COLUMNS if c in available_cols]
-    radar_metrics = [item for item in build_radar_payload() if item['column'] in available_cols]
-    league_avg_row = build_league_average_row(df)
-
-    return render_template('index.html', 
-                           records=df.to_dict('records') if not df.empty else [], 
-                           colnames=available_cols,
-                           quick_cols=quick_cols,
-                           default_hidden_cols=list(DEFAULT_HIDDEN_COLUMNS),
-                           radar_metrics=radar_metrics,
-                           league_avg_row=league_avg_row,
-                           selected_teams=["", ""],
-                           minutes=minutes,
-                           last_n_games=last_n_games,
-                           page_type='streak', 
-                           sql_filter="", 
-                           error_msg=None, 
-                           team_summary="",
-                           last_updated=last_updated,
-                           todays_games=todays_games,
-                           defense_kpis=defense_kpis,
-                           streak_records=streak_records,
+    return render_template('index.html',
+                           page_type='floor-streak',
+                           matchups=matchups,
+                           floor_streaks=floor_streaks,
                            streak_kpis=streak_kpis,
-                           all_teams=NBA_TEAMS)
+                           all_teams=NBA_TEAMS,
+                           team_names=NBA_TEAM_NAMES,
+                           team_stats=team_stats_map,
+                           todays_games=todays_games,
+                           last_updated=last_updated)
+
+@app.route('/api/full-schedule')
+@app.route('/api/schedule')
+def api_schedule():
+    df, _, _ = load_data()
+    todays_games = fetch_todays_games()
+    team_stats_map = compute_team_stats_map(df)
+    matchups = build_matchups(team_stats_map, todays_games)
+    return jsonify({
+        'total_games': len(matchups),
+        'completed_games': 0,
+        'games': matchups
+    })
+
+@app.route('/api/floor-streak')
+@app.route('/api/streaks')
+def api_floor_streak():
+    min_val = request.args.get('min_games', 20, type=int)
+    last_n = request.args.get('streak_len', 5, type=int)
+    _, pos_df, _ = load_data()
+    streaks, kpis = get_floor_streaks(pos_df, minutes=min_val, last_n_games=last_n)
+    return jsonify({
+        'players': streaks,
+        'kpis': kpis
+    })
+
+@app.route('/api/team-stats')
+def api_team_stats():
+    df, _, last_updated = load_data()
+    team_stats_map = compute_team_stats_map(df)
+    return jsonify({
+        'team_stats': team_stats_map,
+        'last_updated': last_updated
+    })
 
 @app.route('/api/status')
 def api_status():
-    df, pos_df, last_updated = load_data()
+    df, _, last_updated = load_data()
     return jsonify({
         'status': 'OPERATIONAL',
         'last_updated': last_updated,
         'teams_tracked': len(NBA_TEAMS),
-        'total_units': len(df) if not df.empty else 0,
         'is_vercel': IS_VERCEL
-    })
-
-@app.route('/api/streaks')
-def api_streaks():
-    min_val = request.args.get('minutes', 20, type=int)
-    last_n = request.args.get('last_n_games', 5, type=int)
-    _, pos_df, _ = load_data()
-    streak_df = get_streak_dataframe(pos_df, min_val, last_n)
-    return jsonify({
-        'records': streak_df.to_dict('records') if not streak_df.empty else [],
-        'kpis': compute_streak_kpis(streak_df)
-    })
-
-@app.route('/api/defense')
-def api_defense():
-    df, _, last_updated = load_data()
-    df = enrich_dataframe(df)
-    return jsonify({
-        'records': df.to_dict('records') if not df.empty else [],
-        'last_updated': last_updated,
-        'kpis': compute_defense_kpis(df)
     })
 
 if __name__ == '__main__':
