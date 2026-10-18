@@ -5,6 +5,9 @@
  * Strictly descriptive, zero predictive/betting vocabulary.
  */
 
+// Helper to resolve ESPN logo with correct team slugs
+const getLogoUrl = (t) => (window.getTeamLogoUrl ? window.getTeamLogoUrl(t) : `https://a.espncdn.com/i/teamlogos/nba/500/${String(t).toLowerCase()}.png`);
+
 // Upgraded Forensic Executive Insight Callouts Generator (Factual & Descriptive)
 function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers) {
     if (!a || !a.gp || !h || !h.gp) {
@@ -103,7 +106,7 @@ function generateDeepDiveModalHtml(g) {
         return `
             <div class="space-y-2">
                 <div class="flex items-center space-x-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1">
-                    <img src="https://a.espncdn.com/i/teamlogos/nba/500/${teamCode.toLowerCase()}.png" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
+                    <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
                     <span class="${badgeColor}">${teamCode} Rotation (Top 4 Minutes)</span>
                 </div>
                 <div class="space-y-2">
@@ -148,7 +151,7 @@ function generateDeepDiveModalHtml(g) {
             <div class="grid grid-cols-12 items-center gap-3">
                 <div class="col-span-5 flex items-center space-x-3 min-w-0">
                     <div class="w-12 h-12 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-2 shadow-inner shrink-0 relative overflow-hidden">
-                        <img src="https://a.espncdn.com/i/teamlogos/nba/500/${aTeam.toLowerCase()}.png" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <img src="${getLogoUrl(aTeam)}" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
                         <span class="font-extrabold text-cyan-400 font-mono text-sm hidden items-center justify-center w-full h-full">${aTeam}</span>
                     </div>
                     <div class="min-w-0 flex-1">
@@ -191,7 +194,7 @@ function generateDeepDiveModalHtml(g) {
                         </div>
                     </div>
                     <div class="w-12 h-12 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-2 shadow-inner shrink-0 relative overflow-hidden">
-                        <img src="https://a.espncdn.com/i/teamlogos/nba/500/${hTeam.toLowerCase()}.png" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <img src="${getLogoUrl(hTeam)}" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
                         <span class="font-extrabold text-rose-400 font-mono text-sm hidden items-center justify-center w-full h-full">${hTeam}</span>
                     </div>
                 </div>

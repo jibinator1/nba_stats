@@ -206,7 +206,7 @@ function renderPlayerProfiles() {
                 <td class="text-center font-mono font-bold text-cyan-400 py-2.5 px-3">${p.position}</td>
                 <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">
                     <div class="flex items-center justify-center space-x-1.5">
-                        <img src="https://a.espncdn.com/i/teamlogos/nba/500/${(p.team || '').toLowerCase()}.png" alt="${p.team}" class="w-4 h-4 object-contain shrink-0" onerror="this.style.display='none';"/>
+                        <img src="${(window.getTeamLogoUrl ? window.getTeamLogoUrl(p.team) : `https://a.espncdn.com/i/teamlogos/nba/500/${(p.team || '').toLowerCase()}.png`)}" alt="${p.team}" class="w-4 h-4 object-contain shrink-0" onerror="this.style.display='none';"/>
                         <span>${p.team}</span>
                     </div>
                 </td>

@@ -13,6 +13,18 @@ const allPlayerProfiles = APP_DATA.allPlayerProfiles || [];
 const allTeamGameLogs = APP_DATA.allTeamGameLogs || [];
 const teamNamesMap = APP_DATA.teamNamesMap || {};
 
+// Resilient ESPN Logo Map for 100% correct team assets
+const ESPN_LOGO_MAP = {
+    'GSW': 'gs', 'NOP': 'no', 'NYK': 'ny', 'SAS': 'sa', 'UTA': 'utah', 'WAS': 'wsh'
+};
+function getTeamLogoUrl(team) {
+    if (!team) return '';
+    const upper = String(team).toUpperCase();
+    const slug = ESPN_LOGO_MAP[upper] || upper.toLowerCase();
+    return `https://a.espncdn.com/i/teamlogos/nba/500/${slug}.png`;
+}
+window.getTeamLogoUrl = getTeamLogoUrl;
+
 // Dynamic Date Helper (computes local today date string YYYY-MM-DD on page open)
 function getTodayDateStr() {
     const now = new Date();
@@ -528,7 +540,7 @@ function renderGameCardHtml(g) {
             <div class="grid grid-cols-12 items-center py-1 gap-2">
                 <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
                     <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
-                        <img src="https://a.espncdn.com/i/teamlogos/nba/500/${aTeam.toLowerCase()}.png" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <img src="${getTeamLogoUrl(aTeam)}" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
                         <span class="font-extrabold text-cyan-400 font-mono text-xs hidden items-center justify-center w-full h-full">${aTeam}</span>
                     </div>
                     <div class="min-w-0 flex-1">
@@ -566,7 +578,7 @@ function renderGameCardHtml(g) {
                         </div>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
-                        <img src="https://a.espncdn.com/i/teamlogos/nba/500/${hTeam.toLowerCase()}.png" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <img src="${getTeamLogoUrl(hTeam)}" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
                         <span class="font-extrabold text-rose-400 font-mono text-xs hidden items-center justify-center w-full h-full">${hTeam}</span>
                     </div>
                 </div>
