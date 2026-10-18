@@ -1,9 +1,6 @@
 {
   "version": 2,
   "functions": {
-    "app.py": {
-      "includeFiles": "{*.json,static/**,public/**,templates/**}"
-    },
     "api/index.py": {
       "includeFiles": "{*.json,static/**,public/**,templates/**}"
     }
@@ -11,7 +8,7 @@
   "rewrites": [
     {
       "source": "/((?!static/).*)",
-      "destination": "/app.py"
+      "destination": "/api/index.py?__path__=/$1"
     }
   ]
 }

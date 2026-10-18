@@ -8,7 +8,7 @@ Zero judgment language, multi-season baseline, Euclidean similar-opponent modeli
 import os
 import json
 from datetime import datetime
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs, urlencode
 import numpy as np
 import requests
 from flask import Flask, render_template, request, jsonify
@@ -35,20 +35,30 @@ class VercelPathMiddleware:
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        current_path = environ.get('PATH_INFO', '')
-        matched_path = environ.get('HTTP_X_MATCHED_PATH') or environ.get('HTTP_X_VERCEL_MATCHED_PATH')
-        raw_path = environ.get('HTTP_X_FORWARDED_URI') or environ.get('REQUEST_URI') or environ.get('RAW_URI')
+        qs = environ.get('QUERY_STRING', '')
+        if '__path__' in qs:
+            params = parse_qs(qs, keep_blank_values=True)
+            if '__path__' in params and params['__path__']:
+                req_path = params['__path__'][0]
+                if not req_path.startswith('/'):
+                    req_path = '/' + req_path
+                environ['PATH_INFO'] = req_path
+                del params['__path__']
+                environ['QUERY_STRING'] = urlencode(params, doseq=True)
+        else:
+            current_path = environ.get('PATH_INFO', '')
+            matched_path = environ.get('HTTP_X_MATCHED_PATH') or environ.get('HTTP_X_VERCEL_MATCHED_PATH')
+            raw_path = environ.get('HTTP_X_FORWARDED_URI') or environ.get('REQUEST_URI') or environ.get('RAW_URI')
 
-        # Only intervene if PATH_INFO is literally the serverless function name (/app.py or /api/index.py)
-        if current_path in ('/app.py', 'app.py', '/api/index.py', 'api/index.py', ''):
-            candidate = matched_path if (matched_path and not matched_path.endswith('app.py') and not matched_path.endswith('index.py')) else raw_path
-            if candidate and not candidate.endswith('app.py') and not candidate.endswith('index.py'):
-                parsed = urlparse(candidate)
-                environ['PATH_INFO'] = parsed.path or '/'
-                if parsed.query and not environ.get('QUERY_STRING'):
-                    environ['QUERY_STRING'] = parsed.query
-            else:
-                environ['PATH_INFO'] = '/'
+            if current_path in ('/app.py', 'app.py', '/api/index.py', 'api/index.py', '/api/index', ''):
+                candidate = matched_path if (matched_path and not matched_path.endswith('app.py') and not matched_path.endswith('index.py') and not matched_path.endswith('index')) else raw_path
+                if candidate and not candidate.endswith('app.py') and not candidate.endswith('index.py') and not candidate.endswith('index'):
+                    parsed = urlparse(candidate)
+                    environ['PATH_INFO'] = parsed.path or '/'
+                    if parsed.query and not environ.get('QUERY_STRING'):
+                        environ['QUERY_STRING'] = parsed.query
+                else:
+                    environ['PATH_INFO'] = '/'
 
         return self.wsgi_app(environ, start_response)
 
@@ -249,8 +259,6 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
 
 def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=None):
     """Unified rendering controller for main dashboard, profiles tab, and matchup views."""
-    if request.args.get('debug') == '1':
-        return jsonify({k: str(v) for k, v in request.environ.items() if not k.startswith('wsgi.')})
     forensic_teams, _, player_profiles, team_game_logs, last_updated = load_forensic_data()
     all_games = load_all_schedule_games()
     today_str = datetime.now().strftime("%Y-%m-%d")
