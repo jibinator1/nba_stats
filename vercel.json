@@ -2,15 +2,15 @@
   "version": 2,
   "functions": {
     "app.py": {
-      "includeFiles": "{*.json,static/**,templates/**}"
+      "includeFiles": "{*.json,static/**,public/**,templates/**}"
     },
     "api/index.py": {
-      "includeFiles": "{*.json,static/**,templates/**}"
+      "includeFiles": "{*.json,static/**,public/**,templates/**}"
     }
   },
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!static/).*)",
       "destination": "/app.py"
     }
   ]

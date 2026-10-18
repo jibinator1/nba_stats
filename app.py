@@ -35,17 +35,20 @@ class VercelPathMiddleware:
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
+        current_path = environ.get('PATH_INFO', '')
         matched_path = environ.get('HTTP_X_MATCHED_PATH') or environ.get('HTTP_X_VERCEL_MATCHED_PATH')
-        if matched_path:
-            parsed = urlparse(matched_path)
-            if not parsed.path.endswith('app.py') and not parsed.path.endswith('index.py'):
-                environ['PATH_INFO'] = parsed.path
+        raw_path = environ.get('HTTP_X_FORWARDED_URI') or environ.get('REQUEST_URI') or environ.get('RAW_URI')
+
+        # Only intervene if PATH_INFO is literally the serverless function name (/app.py or /api/index.py)
+        if current_path in ('/app.py', 'app.py', '/api/index.py', 'api/index.py', ''):
+            candidate = matched_path if (matched_path and not matched_path.endswith('app.py') and not matched_path.endswith('index.py')) else raw_path
+            if candidate and not candidate.endswith('app.py') and not candidate.endswith('index.py'):
+                parsed = urlparse(candidate)
+                environ['PATH_INFO'] = parsed.path or '/'
                 if parsed.query and not environ.get('QUERY_STRING'):
                     environ['QUERY_STRING'] = parsed.query
             else:
                 environ['PATH_INFO'] = '/'
-        elif environ.get('PATH_INFO') in ('/app.py', 'app.py', '/api/index.py', 'api/index.py'):
-            environ['PATH_INFO'] = '/'
 
         return self.wsgi_app(environ, start_response)
 
