@@ -2,10 +2,10 @@
   "version": 2,
   "functions": {
     "app.py": {
-      "includeFiles": "*.json"
+      "includeFiles": "{*.json,static/**,templates/**}"
     },
     "api/index.py": {
-      "includeFiles": "*.json"
+      "includeFiles": "{*.json,static/**,templates/**}"
     }
   },
   "rewrites": [

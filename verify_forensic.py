@@ -24,7 +24,11 @@ def run_audit():
     
     # 1. Audit Forbidden Words
     bad_words = ['exploit', 'advantage', 'elite', 'vulnerable', 'lockdown', 'bad matchup']
-    files_to_check = ['templates/index.html', 'app.py', 'forensic_data.py']
+    files_to_check = [
+        'templates/index.html', 'app.py', 'forensic_data.py',
+        'static/js/app.js', 'static/js/visuals.js', 'static/js/modal.js', 'static/js/profiles.js',
+        'README.md'
+    ]
     
     print("\n[1/5] Auditing forbidden judgmental words...")
     found_any = False
@@ -51,7 +55,12 @@ def run_audit():
         ('/api/forensic-teams', 200),
         ('/api/similar-opponents?defense=BOS&offense=NYK', 200),
         ('/api/matchup/BOS/MIA', 200),
-        ('/api/status', 200)
+        ('/api/status', 200),
+        ('/static/style.css', 200),
+        ('/static/js/app.js', 200),
+        ('/static/js/visuals.js', 200),
+        ('/static/js/modal.js', 200),
+        ('/static/js/profiles.js', 200)
     ]
     for route, code in routes:
         res = client.get(route)
@@ -61,10 +70,17 @@ def run_audit():
             print(f"  [FAIL] {route} -> HTTP {res.status_code} (expected {code})")
             sys.exit(1)
             
-    # 3. Verify HTML Document Content
+    # 3. Verify HTML Document & Static Assets Content
     print("\n[3/5] Verifying Matchup Lab HTML & SVG Visual Alignment...")
     res = client.get('/')
     html = res.data.decode('utf-8')
+    js_content = ""
+    for js_route in ['/static/js/visuals.js', '/static/js/modal.js', '/static/js/profiles.js', '/static/js/app.js']:
+        js_res = client.get(js_route)
+        if js_res.status_code == 200:
+            js_content += "\n" + js_res.data.decode('utf-8')
+    combined = html + js_content
+
     checks = [
         ('Shot Zone Alignment SVG', 'renderShotZoneAlignmentSvg'),
         ('Play Type Alignment SVG', 'renderPlayTypeAlignmentSvg'),
@@ -76,10 +92,10 @@ def run_audit():
         ('Similar-Opponent Historical Lookup', 'Similar-Opponent Historical Lookup')
     ]
     for label, substr in checks:
-        if substr in html:
-            print(f"  [PASS] {label} verified in HTML template.")
+        if substr in combined:
+            print(f"  [PASS] {label} verified in frontend assets.")
         else:
-            print(f"  [FAIL] Missing {label} in HTML template.")
+            print(f"  [FAIL] Missing {label} in frontend assets.")
             sys.exit(1)
 
     # 4. Verify Similar-Opponents Model

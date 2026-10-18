@@ -1,10 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-import pandas as pd
+"""
+NBA Forensic Scouting Engine - Core Backend
+===========================================
+Strictly descriptive, play-by-play, tracking-backed matchup analytics engine.
+Zero judgment language, multi-season baseline, Euclidean similar-opponent modeling.
+"""
+
 import os
 import json
 from datetime import datetime
 from urllib.parse import urlparse
+import numpy as np
 import requests
+from flask import Flask, render_template, request, jsonify
 
 from forensic_data import run_forensic_pipeline
 
@@ -22,61 +29,27 @@ NBA_TEAMS = [
 ]
 
 NBA_TEAM_NAMES = {
-    'ATL': 'Atlanta Hawks',
-    'BOS': 'Boston Celtics',
-    'BKN': 'Brooklyn Nets',
-    'CHA': 'Charlotte Hornets',
-    'CHI': 'Chicago Bulls',
-    'CLE': 'Cleveland Cavaliers',
-    'DAL': 'Dallas Mavericks',
-    'DEN': 'Denver Nuggets',
-    'DET': 'Detroit Pistons',
-    'GSW': 'Golden State Warriors',
-    'HOU': 'Houston Rockets',
-    'IND': 'Indiana Pacers',
-    'LAC': 'LA Clippers',
-    'LAL': 'Los Angeles Lakers',
-    'MEM': 'Memphis Grizzlies',
-    'MIA': 'Miami Heat',
-    'MIL': 'Milwaukee Bucks',
-    'MIN': 'Minnesota Timberwolves',
-    'NOP': 'New Orleans Pelicans',
-    'NYK': 'New York Knicks',
-    'OKC': 'Oklahoma City Thunder',
-    'ORL': 'Orlando Magic',
-    'PHI': 'Philadelphia 76ers',
-    'PHX': 'Phoenix Suns',
-    'POR': 'Portland Trail Blazers',
-    'SAC': 'Sacramento Kings',
-    'SAS': 'San Antonio Spurs',
-    'TOR': 'Toronto Raptors',
-    'UTA': 'Utah Jazz',
-    'WAS': 'Washington Wizards'
+    'ATL': 'Atlanta Hawks', 'BOS': 'Boston Celtics', 'BKN': 'Brooklyn Nets',
+    'CHA': 'Charlotte Hornets', 'CHI': 'Chicago Bulls', 'CLE': 'Cleveland Cavaliers',
+    'DAL': 'Dallas Mavericks', 'DEN': 'Denver Nuggets', 'DET': 'Detroit Pistons',
+    'GSW': 'Golden State Warriors', 'HOU': 'Houston Rockets', 'IND': 'Indiana Pacers',
+    'LAC': 'LA Clippers', 'LAL': 'Los Angeles Lakers', 'MEM': 'Memphis Grizzlies',
+    'MIA': 'Miami Heat', 'MIL': 'Milwaukee Bucks', 'MIN': 'Minnesota Timberwolves',
+    'NOP': 'New Orleans Pelicans', 'NYK': 'New York Knicks', 'OKC': 'Oklahoma City Thunder',
+    'ORL': 'Orlando Magic', 'PHI': 'Philadelphia 76ers', 'PHX': 'Phoenix Suns',
+    'POR': 'Portland Trail Blazers', 'SAC': 'Sacramento Kings', 'SAS': 'San Antonio Spurs',
+    'TOR': 'Toronto Raptors', 'UTA': 'Utah Jazz', 'WAS': 'Washington Wizards'
 }
 
 DEFAULT_PAIRINGS = [
-    ('BOS', 'MIA'),
-    ('LAL', 'GSW'),
-    ('NYK', 'PHI'),
-    ('MIL', 'IND'),
-    ('OKC', 'DEN'),
-    ('MIN', 'DAL'),
-    ('CLE', 'DET'),
-    ('PHX', 'SAC'),
-    ('ORL', 'ATL'),
-    ('HOU', 'NOP'),
-    ('LAC', 'MEM'),
-    ('TOR', 'CHI'),
-    ('SAS', 'POR'),
-    ('CHA', 'BKN'),
-    ('UTA', 'WAS')
+    ('BOS', 'MIA'), ('LAL', 'GSW'), ('NYK', 'PHI'), ('MIL', 'IND'),
+    ('OKC', 'DEN'), ('MIN', 'DAL'), ('CLE', 'DET'), ('PHX', 'SAC'),
+    ('ORL', 'ATL'), ('HOU', 'NOP'), ('LAC', 'MEM'), ('TOR', 'CHI'),
+    ('SAS', 'POR'), ('CHA', 'BKN'), ('UTA', 'WAS')
 ]
 
 class VercelPathMiddleware:
-    """
-    Normalizes Vercel serverless request paths.
-    Restores PATH_INFO and QUERY_STRING so Flask routing matches correctly.
-    """
+    """Normalizes Vercel serverless request paths so Flask matches correctly."""
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
 
@@ -98,13 +71,17 @@ class VercelPathMiddleware:
 app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
 handler = app
 
+# =========================================================================
+# DATA LOADERS & ENGINES
+# =========================================================================
+
 def load_forensic_data():
-    """Loads 4-pillar team profiles, similarity models, player usage distributions, and team game logs."""
+    """Loads team profiles, similarity models, player distributions, and game logs."""
     teams_path = os.path.join(BASE_DIR, 'forensic_teams.json')
     sim_path = os.path.join(BASE_DIR, 'forensic_similar_opponents.json')
     players_path = os.path.join(BASE_DIR, 'forensic_players.json')
     logs_path = os.path.join(BASE_DIR, 'forensic_team_game_logs.json')
-    
+
     if os.path.exists(teams_path) and os.path.exists(sim_path) and os.path.exists(players_path):
         try:
             with open(teams_path, 'r', encoding='utf-8') as f:
@@ -151,34 +128,9 @@ def load_forensic_data():
         print(f"Pipeline generation error: {e}")
         return {}, {}, [], [], "Sync Error"
 
-def fetch_todays_games():
-    """Returns today's matches. Checks local file first, then remote source."""
-    local_path = os.path.join(BASE_DIR, 'todays_games.csv')
-    if os.path.exists(local_path):
-        try:
-            df = pd.read_csv(local_path)
-            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
-            valid = [g for g in games_list if len(g) == 2]
-            if valid:
-                return valid
-        except Exception:
-            pass
 
-    if IS_VERCEL:
-        try:
-            url = f"{GITHUB_RAW_BASE}todays_games.csv"
-            df = pd.read_csv(url)
-            games_list = df.groupby('GAME_ID')['TEAM_ABBREVIATION'].apply(list).tolist()
-            valid = [g for g in games_list if len(g) == 2]
-            if valid:
-                return valid
-        except Exception as e:
-            print(f"Error fetching remote games: {e}")
-
-    return []
-
-def load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles):
-    """Loads all schedule games and enriches with 4-pillar forensic metrics & similar opponents."""
+def load_all_schedule_games():
+    """Loads all schedule games with normalized metadata."""
     json_path = os.path.join(BASE_DIR, 'schedule_games.json')
     raw_games = []
 
@@ -200,7 +152,7 @@ def load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
 
     if not raw_games:
         today_str = datetime.now().strftime("%Y-%m-%d")
-        for idx, (a, h) in enumerate(DEFAULT_PAIRINGS):
+        for a, h in DEFAULT_PAIRINGS:
             raw_games.append({
                 'game_id': f"NBA_{a}_{h}",
                 'gameday': today_str,
@@ -211,25 +163,11 @@ def load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
                 'is_final': False
             })
 
-    # Group players by team for O(1) lookup
-    team_players = {}
-    for p in player_profiles:
-        t = p['team']
-        if t not in team_players:
-            team_players[t] = []
-        team_players[t].append(p)
-
     enriched = []
     for g in raw_games:
         away = g['away_team']
         home = g['home_team']
-        a_prof = forensic_teams.get(away, {})
-        h_prof = forensic_teams.get(home, {})
         is_fin = bool(g.get('is_final', False))
-
-        # Similar opponent lookup
-        home_def_sim = similarity_lookups.get(home, {}).get(away, {})
-        away_def_sim = similarity_lookups.get(away, {}).get(home, {})
 
         enriched.append({
             'game_id': g['game_id'],
@@ -237,10 +175,10 @@ def load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
             'gametime': 'FINAL' if is_fin else '7:30 PM ET',
             'away_team': away,
             'away_team_name': NBA_TEAM_NAMES.get(away, away),
-            'away_record': '42-20' if away in ['BOS', 'OKC', 'DEN', 'MIN', 'CLE'] else '35-27',
+            'away_record': g.get('away_record'),
             'home_team': home,
             'home_team_name': NBA_TEAM_NAMES.get(home, home),
-            'home_record': '40-22' if home in ['BOS', 'OKC', 'DEN', 'MIN', 'CLE', 'MIA'] else '32-30',
+            'home_record': g.get('home_record'),
             'away_score': g.get('away_score'),
             'home_score': g.get('home_score'),
             'is_final': is_fin
@@ -248,21 +186,18 @@ def load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
 
     return enriched
 
+
 def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
     """Calculates date-range filtered team statistics and rankings. Returns None for teams with 0 games."""
     if not team_game_logs:
         return {}
+
     filtered = [g for g in team_game_logs if start_date <= g['d'] <= end_date]
-    teams_dict = {}
-    
-    # Group by team
     by_team = {}
     for g in filtered:
-        t = g['t']
-        if t not in by_team:
-            by_team[t] = []
-        by_team[t].append(g)
-        
+        by_team.setdefault(g['t'], []).append(g)
+
+    teams_dict = {}
     for t in NBA_TEAMS:
         t_games = by_team.get(t, [])
         gp = len(t_games)
@@ -272,23 +207,14 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
                 'team_name': NBA_TEAM_NAMES.get(t, t),
                 'gp': 0,
                 'is_small_sample': True,
-                'pts_scored': None,
-                'pts_allowed': None,
-                'reb_total': None,
-                'reb_allowed': None,
-                'ast_total': None,
-                'ast_allowed': None,
-                'fg3m_total': None,
-                'fg3m_allowed': None,
-                'fg3a_total': None,
-                'fg3a_allowed': None,
-                'fg_pct': None,
-                'fg_pct_opp': None,
-                'pace': None,
-                'off_rtg': None,
-                'def_rtg': None,
-                'shot_profile_offense': None,
-                'shot_profile_allowed': None
+                'pts_scored': None, 'pts_allowed': None,
+                'reb_total': None, 'reb_allowed': None,
+                'ast_total': None, 'ast_allowed': None,
+                'fg3m_total': None, 'fg3m_allowed': None,
+                'fg3a_total': None, 'fg3a_allowed': None,
+                'fg_pct': None, 'fg_pct_opp': None,
+                'pace': None, 'off_rtg': None, 'def_rtg': None,
+                'shot_profile_offense': None, 'shot_profile_allowed': None
             }
         else:
             tot_poss = sum(g['poss'] for g in t_games)
@@ -299,7 +225,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
             tot_fgm = sum(g['fgm'] for g in t_games)
             tot_fga_opp = sum(g['opp_fga'] for g in t_games)
             tot_fgm_opp = sum(g['opp_fgm'] for g in t_games)
-            
+
             teams_dict[t] = {
                 'team': t,
                 'team_name': NBA_TEAM_NAMES.get(t, t),
@@ -338,15 +264,37 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
         ranked = set()
         for idx, (t, _) in enumerate(tuples):
             ranked.add(t)
-            if teams_dict[t].get('is_small_sample'):
-                teams_dict[t][f'rank_{metric}'] = 'Small Sample'
-            else:
-                teams_dict[t][f'rank_{metric}'] = idx + 1
+            teams_dict[t][f'rank_{metric}'] = 'Small Sample' if teams_dict[t].get('is_small_sample') else (idx + 1)
         for t in NBA_TEAMS:
             if t not in ranked:
                 teams_dict[t][f'rank_{metric}'] = None
 
     return teams_dict
+
+
+# =========================================================================
+# APPLICATION ROUTES (DESCRIPTIVE FORENSIC ENGINE)
+# =========================================================================
+
+def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=None):
+    """Unified rendering controller for main dashboard, profiles tab, and matchup views."""
+    forensic_teams, _, player_profiles, team_game_logs, last_updated = load_forensic_data()
+    all_games = load_all_schedule_games()
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
+    return render_template('index.html',
+                           page_type=page_type,
+                           all_games=all_games,
+                           start_date='2025-10-02',
+                           end_date=today_str,
+                           forensic_teams=forensic_teams,
+                           player_profiles=player_profiles,
+                           team_game_logs=team_game_logs,
+                           all_teams=NBA_TEAMS,
+                           team_names=NBA_TEAM_NAMES,
+                           last_updated=last_updated,
+                           initial_away=initial_away,
+                           initial_home=initial_home)
 
 @app.route('/favicon.ico')
 def favicon():
@@ -355,76 +303,24 @@ def favicon():
 @app.route('/', methods=['GET'])
 @app.route('/app.py', methods=['GET'])
 def index():
-    forensic_teams, similarity_lookups, player_profiles, team_game_logs, last_updated = load_forensic_data()
-    todays_games = fetch_todays_games()
-    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
-
-    all_game_dates = sorted(set(g['gameday'] for g in all_games if g.get('gameday')), reverse=True)
-    today_str = datetime.now().strftime("%Y-%m-%d")
-
-    # Revert date range: start of last season (2025-10-02) to current date
-    default_start_date = '2025-10-02'
-    default_end_date = today_str
-
-    dates_in_range = [d for d in all_game_dates if default_start_date <= d <= default_end_date]
-
-    return render_template('index.html',
-                           page_type='schedule',
-                           all_games=all_games,
-                           dates_2026=dates_in_range,
-                           start_date=default_start_date,
-                           end_date=default_end_date,
-                           forensic_teams=forensic_teams,
-                           player_profiles=player_profiles,
-                           team_game_logs=team_game_logs,
-                           all_teams=NBA_TEAMS,
-                           team_names=NBA_TEAM_NAMES,
-                           todays_games=todays_games,
-                           last_updated=last_updated)
+    return render_main_dashboard(page_type='schedule')
 
 @app.route('/profiles', methods=['GET'])
-@app.route('/streak', methods=['GET'])
 def profiles():
-    forensic_teams, similarity_lookups, player_profiles, team_game_logs, last_updated = load_forensic_data()
-    todays_games = fetch_todays_games()
-    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
+    return render_main_dashboard(page_type='profiles')
 
-    all_game_dates = sorted(set(g['gameday'] for g in all_games if g.get('gameday')), reverse=True)
-    today_str = datetime.now().strftime("%Y-%m-%d")
+@app.route('/matchup/<away>/<home>', methods=['GET'])
+def matchup_view(away, home):
+    return render_main_dashboard(page_type='schedule', initial_away=away.upper(), initial_home=home.upper())
 
-    default_start_date = '2025-10-02'
-    default_end_date = today_str
-
-    dates_in_range = [d for d in all_game_dates if default_start_date <= d <= default_end_date]
-
-    return render_template('index.html',
-                           page_type='profiles',
-                           all_games=all_games,
-                           dates_2026=dates_in_range,
-                           start_date=default_start_date,
-                           end_date=default_end_date,
-                           forensic_teams=forensic_teams,
-                           player_profiles=player_profiles,
-                           team_game_logs=team_game_logs,
-                           all_teams=NBA_TEAMS,
-                           team_names=NBA_TEAM_NAMES,
-                           todays_games=todays_games,
-                           last_updated=last_updated)
-
-@app.route('/api/full-schedule')
 @app.route('/api/schedule')
 def api_schedule():
-    forensic_teams, similarity_lookups, player_profiles, _, _ = load_forensic_data()
-    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
-
+    all_games = load_all_schedule_games()
     today_str = datetime.now().strftime("%Y-%m-%d")
     season = request.args.get('season', '2025')
-    if season == '2026':
-        default_s_date = '2026-10-19'
-        default_e_date = '2027-04-14'
-    else:
-        default_s_date = '2025-10-02'
-        default_e_date = today_str
+
+    default_s_date = '2026-10-19' if season == '2026' else '2025-10-02'
+    default_e_date = '2027-04-14' if season == '2026' else today_str
 
     s_date = request.args.get('start_date', default_s_date)
     e_date = request.args.get('end_date', default_e_date)
@@ -449,15 +345,13 @@ def api_schedule():
     })
 
 @app.route('/api/player-profiles')
-@app.route('/api/floor-streak')
-@app.route('/api/streaks')
 def api_player_profiles():
     _, _, player_profiles, _, _ = load_forensic_data()
     team_filter = request.args.get('team', '').upper()
     pos_filter = request.args.get('pos', '').upper()
     s_date = request.args.get('start_date')
     e_date = request.args.get('end_date')
-    
+
     filtered = player_profiles
     if team_filter and team_filter != 'ALL':
         filtered = [p for p in filtered if p['team'] == team_filter]
@@ -496,7 +390,6 @@ def api_player_profiles():
                     'paint_pts': round(sum(lg.get('paint_pts', 0) for lg in matching)/len(matching), 1)
                 }
                 last10 = matching[:10]
-                import numpy as np
                 p_copy['distribution_10g'] = {
                     'pts': {'floor': round(float(np.percentile([x['pts'] for x in last10], 25)), 1),
                             'median': round(float(np.percentile([x['pts'] for x in last10], 50)), 1),
@@ -518,14 +411,13 @@ def api_player_profiles():
             'end_date': e_date,
             'players': out_players
         })
-        
+
     return jsonify({
         'total_players': len(filtered),
         'players': filtered
     })
 
 @app.route('/api/forensic-teams')
-@app.route('/api/team-stats')
 def api_forensic_teams():
     forensic_teams, _, _, team_game_logs, last_updated = load_forensic_data()
     s_date = request.args.get('start_date')
@@ -548,64 +440,27 @@ def api_similar_opponents():
     _, similarity_lookups, _, _, _ = load_forensic_data()
     def_team = request.args.get('defense', 'BOS').upper()
     atk_team = request.args.get('offense', 'NYK').upper()
-    
+
     sim_data = similarity_lookups.get(def_team, {}).get(atk_team, {
         'summary_text': f"No similarity data recorded for {def_team} vs {atk_team}."
     })
     return jsonify(sim_data)
-
-@app.route('/matchup/<away>/<home>', methods=['GET'])
-def matchup_view(away, home):
-    forensic_teams, similarity_lookups, player_profiles, team_game_logs, last_updated = load_forensic_data()
-    todays_games = fetch_todays_games()
-    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
-
-    all_game_dates = sorted(set(g['gameday'] for g in all_games if g.get('gameday')), reverse=True)
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    default_start_date = '2025-10-02'
-    default_end_date = today_str
-
-    dates_in_range = [d for d in all_game_dates if default_start_date <= d <= default_end_date]
-
-    return render_template('index.html',
-                           page_type='schedule',
-                           all_games=all_games,
-                           dates_2026=dates_in_range,
-                           start_date=default_start_date,
-                           end_date=default_end_date,
-                           forensic_teams=forensic_teams,
-                           player_profiles=player_profiles,
-                           team_game_logs=team_game_logs,
-                           all_teams=NBA_TEAMS,
-                           team_names=NBA_TEAM_NAMES,
-                           todays_games=todays_games,
-                           last_updated=last_updated,
-                           initial_away=away.upper(),
-                           initial_home=home.upper())
 
 @app.route('/api/matchup/<away>/<home>')
 def api_matchup(away, home):
     away = away.upper()
     home = home.upper()
     forensic_teams, similarity_lookups, player_profiles, _, _ = load_forensic_data()
-    
-    a_prof = forensic_teams.get(away, {})
-    h_prof = forensic_teams.get(home, {})
-    home_sim = similarity_lookups.get(home, {}).get(away, {})
-    away_sim = similarity_lookups.get(away, {}).get(home, {})
-    
-    away_p = [p for p in player_profiles if p['team'] == away]
-    home_p = [p for p in player_profiles if p['team'] == home]
-    
+
     return jsonify({
         'away_team': away,
         'home_team': home,
-        'away_forensic': a_prof,
-        'home_forensic': h_prof,
-        'home_def_vs_away_sim': home_sim,
-        'away_def_vs_home_sim': away_sim,
-        'away_top_rotation': away_p,
-        'home_top_rotation': home_p
+        'away_forensic': forensic_teams.get(away, {}),
+        'home_forensic': forensic_teams.get(home, {}),
+        'home_def_vs_away_sim': similarity_lookups.get(home, {}).get(away, {}),
+        'away_def_vs_home_sim': similarity_lookups.get(away, {}).get(home, {}),
+        'away_top_rotation': [p for p in player_profiles if p['team'] == away],
+        'home_top_rotation': [p for p in player_profiles if p['team'] == home]
     })
 
 @app.route('/api/status')
