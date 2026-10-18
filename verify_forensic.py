@@ -116,13 +116,32 @@ def run_audit():
     print("  [PASS] Player Usage Profiles correctly compute 25th/50th/75th percentiles and context rates.")
     
     # 6. Verify Dynamic Date Range & 2026-10-19 Start Date
-    print("\n[6/6] Testing Dynamic Date Range & 2026-10-19 Start Date...")
+    print("\n[6/7] Testing Dynamic Date Range & 2026-10-19 Start Date...")
     res = client.get('/api/schedule?season=2026')
     s_data = res.json
     assert s_data.get('start_date') == '2026-10-19', f"Expected start_date 2026-10-19, got {s_data.get('start_date')}"
     assert s_data.get('total_games') > 0, "Expected non-zero games for 2026-27 schedule"
     print(f"  Schedule Start Date: {s_data.get('start_date')} | End Date: {s_data.get('end_date')} | Games in Window: {s_data.get('total_games')}")
     print("  [PASS] Dynamic date range correctly anchors at 2026-10-19 and adjusts daily.")
+
+    # 7. Verify Date Range Gating & Zero-Game Blank Stats
+    print("\n[7/7] Testing Date-Filtered Forensic Gating (Zero Games -> Blank / Null)...")
+    res_zero = client.get('/api/forensic-teams?start_date=2026-10-19&end_date=2026-10-25')
+    zero_teams = res_zero.json.get('forensic_teams', {})
+    assert 'BOS' in zero_teams, "Missing BOS in zero_teams"
+    bos_zero = zero_teams['BOS']
+    assert bos_zero['gp'] == 0, f"Expected gp == 0, got {bos_zero['gp']}"
+    assert bos_zero['pts_scored'] is None, f"Expected pts_scored is None, got {bos_zero['pts_scored']}"
+    assert bos_zero['rank_pts_scored'] is None, f"Expected rank_pts_scored is None, got {bos_zero['rank_pts_scored']}"
+    print(f"  Zero-Game Window BOS: GP={bos_zero['gp']} | PTS={bos_zero['pts_scored']} | Rank={bos_zero['rank_pts_scored']}")
+
+    res_players_zero = client.get('/api/player-profiles?start_date=2026-10-19&end_date=2026-10-25')
+    players_zero = res_players_zero.json.get('players', [])
+    assert len(players_zero) > 0, "Expected players list"
+    assert players_zero[0]['games_played'] == 0, f"Expected player gp 0, got {players_zero[0]['games_played']}"
+    assert players_zero[0]['season_avg']['pts'] is None, f"Expected pts None, got {players_zero[0]['season_avg']['pts']}"
+    print(f"  Zero-Game Window Player ({players_zero[0]['player_name']}): GP={players_zero[0]['games_played']} | PTS Avg={players_zero[0]['season_avg']['pts']}")
+    print("  [PASS] Date-filtered gating correctly blanks stats and suppresses ranks when games played == 0.")
 
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")

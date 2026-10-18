@@ -95,6 +95,70 @@ def calculate_team_forensics(logs_df, paired_df):
         t_games = paired_df[paired_df['TEAM_ABBREVIATION'] == team]
         gp = len(t_games)
         
+        # If no games played in this date slice, return clean blank/null profile
+        if gp == 0:
+            team_profiles[team] = {
+                'team': team,
+                'team_name': NBA_TEAM_NAMES.get(team, team),
+                'gp': 0,
+                'is_small_sample': True,
+                'pace': None,
+                'neutral_pace': None,
+                'transition_freq': None,
+                'shot_clock': {
+                    'early_0_8': None,
+                    'mid_8_15': None,
+                    'late_15_24': None
+                },
+                'game_script': {
+                    'leading_10': {'pace': None, 'early_sc': None, 'late_sc': None},
+                    'trailing_10': {'pace': None, 'early_sc': None, 'late_sc': None}
+                },
+                'pnr_coverage': {'drop': None, 'switch': None, 'ice': None, 'hedge': None},
+                'shot_profile_allowed': {
+                    'restricted_area': {'freq': None, 'ppp': None},
+                    'paint_non_ra': {'freq': None, 'ppp': None},
+                    'mid_range': {'freq': None, 'ppp': None},
+                    'corner_3': {'freq': None, 'ppp': None},
+                    'above_break_3': {'freq': None, 'ppp': None}
+                },
+                'shot_profile_offense': {
+                    'restricted_area': {'freq': None, 'ppp': None},
+                    'paint_non_ra': {'freq': None, 'ppp': None},
+                    'mid_range': {'freq': None, 'ppp': None},
+                    'corner_3': {'freq': None, 'ppp': None},
+                    'above_break_3': {'freq': None, 'ppp': None}
+                },
+                'wide_open_3pt': {'allowed_freq': None, 'opponent_pct': None},
+                'rebounding': {'dreb_secured_pct': None, 'oreb_allowed_pct': None},
+                'playtypes_offense': {},
+                'playtypes_defense': {},
+                'turnover_profile': {
+                    'avg_total': None,
+                    'live_ball_per_game': None,
+                    'live_ball_pct': None,
+                    'dead_ball_per_game': None,
+                    'dead_ball_pct': None
+                },
+                'paint_touches_pg': None,
+                'three_point_rate': None,
+                'def_rtg': None,
+                'off_rtg': None,
+                'pts_allowed': None,
+                'pts_scored': None,
+                'reb_total': None,
+                'reb_allowed': None,
+                'ast_total': None,
+                'ast_allowed': None,
+                'fg3m_total': None,
+                'fg3m_allowed': None,
+                'fg3a_total': None,
+                'fg3a_allowed': None,
+                'fg_pct': None,
+                'fg_pct_opp': None
+            }
+            continue
+
         # Sample size gating: < 10 games or < 200 possessions
         total_poss = t_games['POSS'].sum()
         is_small_sample = (gp < 10) or (total_poss < 200)
@@ -352,21 +416,32 @@ def calculate_team_forensics(logs_df, paired_df):
         ('paint_touches_pg', False), ('three_point_rate', False)
     ]
     for metric, ascending in metrics_to_rank:
-        # Collect values for ranking
+        # Collect values for ranking (only teams with non-null values and gp > 0)
         tuples = []
         for t, prof in team_profiles.items():
+            if prof.get('gp', 0) == 0:
+                continue
+            val = None
             if metric in prof:
-                tuples.append((t, prof[metric]))
+                val = prof[metric]
             elif metric in prof.get('rebounding', {}):
-                tuples.append((t, prof['rebounding'][metric]))
+                val = prof['rebounding'].get(metric)
+            if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                tuples.append((t, float(val)))
         
         tuples.sort(key=lambda x: x[1], reverse=not ascending)
+        ranked_teams = set()
         for rank_idx, (t, _) in enumerate(tuples):
             rank_key = f'rank_{metric}'
-            if team_profiles[t]['is_small_sample']:
+            ranked_teams.add(t)
+            if team_profiles[t].get('is_small_sample'):
                 team_profiles[t][rank_key] = 'Small Sample'
             else:
                 team_profiles[t][rank_key] = rank_idx + 1
+        
+        for t in NBA_TEAMS:
+            if t not in ranked_teams:
+                team_profiles[t][f'rank_{metric}'] = None
 
     return team_profiles
 
@@ -383,10 +458,10 @@ def build_similar_opponents_model(team_profiles, paired_df):
     for t in NBA_TEAMS:
         p = team_profiles[t]
         matrix.append([
-            p['pace'],
-            p['three_point_rate'],
-            p['paint_touches_pg'],
-            p['pnr_coverage']['switch']
+            p['pace'] if p.get('pace') is not None else 100.0,
+            p['three_point_rate'] if p.get('three_point_rate') is not None else 38.0,
+            p['paint_touches_pg'] if p.get('paint_touches_pg') is not None else 24.0,
+            p.get('pnr_coverage', {}).get('switch') if p.get('pnr_coverage', {}).get('switch') is not None else 32.0
         ])
         teams.append(t)
         
@@ -608,7 +683,24 @@ def calculate_player_usage_profiles(logs_df):
                 'situational': {
                     'clutch_usg_pct': clutch_usg,
                     'paint_touches_pg': paint_touches
-                }
+                },
+                'all_logs': [
+                    {
+                        'd': row['GAME_DATE'].strftime('%Y-%m-%d'),
+                        'pts': int(row['PTS']),
+                        'reb': int(row['REB']),
+                        'ast': int(row['AST']),
+                        'min': round(float(row['MIN']), 1),
+                        'fg3m': int(row['FG3M']),
+                        'fg3a': int(row['FG3A']),
+                        'paint_pts': round(float(max(0.0, (row['PTS'] - row['FG3M']*3) * 0.58)), 1),
+                        'fga': int(row['FGA']),
+                        'fgm': int(row['FGM']),
+                        'fta': int(row['FTA']),
+                        'tov': int(row['TOV'])
+                    }
+                    for _, row in p_logs.sort_values('GAME_DATE', ascending=False).iterrows()
+                ]
             })
             
     return player_profiles
@@ -651,6 +743,7 @@ def run_forensic_pipeline():
     out_team_file = os.path.join(BASE_DIR, 'forensic_teams.json')
     out_sim_file = os.path.join(BASE_DIR, 'forensic_similar_opponents.json')
     out_player_file = os.path.join(BASE_DIR, 'forensic_players.json')
+    out_team_logs_file = os.path.join(BASE_DIR, 'forensic_team_game_logs.json')
     
     with open(out_team_file, 'w', encoding='utf-8') as f:
         json.dump(team_profiles, f, indent=2, cls=NumpyEncoder)
@@ -663,6 +756,44 @@ def run_forensic_pipeline():
     with open(out_player_file, 'w', encoding='utf-8') as f:
         json.dump(player_profiles, f, indent=2, cls=NumpyEncoder)
     print(f"Saved player profiles to {out_player_file}")
+
+    print("Exporting compact team game logs for dynamic date range calculation...")
+    paired_df['GAME_DATE_STR'] = paired_df['GAME_DATE'].dt.strftime('%Y-%m-%d')
+    team_game_logs = []
+    for _, r in paired_df.iterrows():
+        team_game_logs.append({
+            'd': r['GAME_DATE_STR'],
+            't': r['TEAM_ABBREVIATION'],
+            'opp': r['TEAM_ABBREVIATION_OPP'],
+            'pts': int(r['PTS']),
+            'opp_pts': int(r['PTS_OPP']),
+            'reb': int(r['REB']),
+            'opp_reb': int(r['REB_OPP']),
+            'ast': int(r['AST']),
+            'opp_ast': int(r['AST_OPP']),
+            'fg3m': int(r['FG3M']),
+            'opp_fg3m': int(r['FG3M_OPP']),
+            'fg3a': int(r['FG3A']),
+            'opp_fg3a': int(r['FG3A_OPP']),
+            'fgm': int(r['FGM']),
+            'fga': int(r['FGA']),
+            'opp_fgm': int(r['FGM_OPP']),
+            'opp_fga': int(r['FGA_OPP']),
+            'poss': round(float(r['POSS']), 1),
+            'dreb': int(r['DREB']),
+            'oreb': int(r['OREB']),
+            'opp_dreb': int(r['DREB_OPP']),
+            'opp_oreb': int(r['OREB_OPP']),
+            'stl': int(r['STL']),
+            'blk': int(r['BLK']),
+            'tov': int(r['TOV'])
+        })
+    with open(out_team_logs_file, 'w', encoding='utf-8') as f:
+        json.dump(team_game_logs, f, separators=(',', ':'), cls=NumpyEncoder)
+    print(f"Saved {len(team_game_logs)} team game logs to {out_team_logs_file}")
+    
+    print("Forensic pipeline completed successfully.")
+    return True
     
     print("Forensic pipeline completed successfully.")
     return True
