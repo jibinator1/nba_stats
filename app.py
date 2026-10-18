@@ -369,6 +369,33 @@ def api_similar_opponents():
     })
     return jsonify(sim_data)
 
+@app.route('/matchup/<away>/<home>', methods=['GET'])
+def matchup_view(away, home):
+    forensic_teams, similarity_lookups, player_profiles, last_updated = load_forensic_data()
+    todays_games = fetch_todays_games()
+    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
+
+    all_game_dates = sorted(set(g['gameday'] for g in all_games if g.get('gameday')), reverse=True)
+    dates_2026 = [d for d in all_game_dates if d >= '2026-10-19']
+
+    default_start_date = '2026-10-19'
+    default_end_date = '2027-04-14'
+
+    return render_template('index.html',
+                           page_type='schedule',
+                           all_games=all_games,
+                           dates_2026=dates_2026,
+                           start_date=default_start_date,
+                           end_date=default_end_date,
+                           forensic_teams=forensic_teams,
+                           player_profiles=player_profiles,
+                           all_teams=NBA_TEAMS,
+                           team_names=NBA_TEAM_NAMES,
+                           todays_games=todays_games,
+                           last_updated=last_updated,
+                           initial_away=away.upper(),
+                           initial_home=home.upper())
+
 @app.route('/api/matchup/<away>/<home>')
 def api_matchup(away, home):
     away = away.upper()

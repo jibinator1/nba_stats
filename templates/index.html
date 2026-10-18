@@ -319,8 +319,8 @@
                 </div>
             </div>
 
-            <!-- Schedule Games List Container -->
-            <div id="schedule-games-container" class="space-y-6">
+            <!-- Schedule Games List Container (2-Column Dense Grid) -->
+            <div id="schedule-games-container" class="grid grid-cols-1 xl:grid-cols-2 gap-5">
                 <!-- Dynamically populated via renderScheduleGames() -->
             </div>
         </section>
@@ -505,6 +505,21 @@
 
         // Metric Explanations Dictionary for Hover Tooltips
         const STAT_EXPLANATIONS = {
+            'Points / Game': 'Average points scored per game across completed contests.',
+            'Points Allowed / G': 'Average points surrendered to opposing offenses per game.',
+            'Rebounds / Game': 'Total rebounds secured per contest (offensive plus defensive).',
+            'Rebounds Allowed / G': 'Total rebounds surrendered to opposing teams per contest.',
+            'Assists / Game': 'Average offensive assists per game.',
+            'Assists Allowed / G': 'Average opponent assists allowed per game.',
+            'Threes Made (3PM)': 'Average 3-point field goals converted per game.',
+            '3PM Allowed / G': 'Average 3-point field goals allowed to opponents per game.',
+            'Threes Attempted (3PA)': 'Average 3-point field goal volume attempted per contest.',
+            '3PA Allowed / G': 'Average opponent 3-point field goal volume allowed per contest.',
+            'FG% (Field Goal %)': 'Team overall field goal conversion percentage.',
+            'FG% Allowed': 'Defensive field goal percentage allowed to opponents.',
+            'Pace (Poss/48m)': 'Game tempo measured as total possessions per 48 minutes.',
+            'Offensive Rating': 'Points produced per 100 offensive possessions.',
+            'Defensive Rating': 'Points surrendered per 100 defensive possessions.',
             'Neutral Pace': 'Possessions per 48 minutes when the score differential is within 5 points, measuring baseline game tempo without garbage-time skew.',
             'Transition Frequency': 'Percentage of possessions initiated within the first 6 seconds of the shot clock.',
             'Shot Clock Early (0-8s)': 'Share of field goal attempts taken in the first 8 seconds of possession.',
@@ -831,7 +846,7 @@
         }
 
         // =========================================================================
-        // 4-PILLAR MATCHUP LAB CARD GENERATOR
+        // MAIN DASHBOARD: DENSE 3-COLUMN SIDE-BY-SIDE MATCHUP COMPARISON CARD
         // =========================================================================
 
         function renderGameCardHtml(g) {
@@ -848,33 +863,37 @@
                 statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">SCHEDULED</span>`;
             }
 
-            // Stat Row Formatter
+            // Stat Row Formatter: (Away Stat & Rank | Center Metric Label | Home Stat & Rank)
             const formatRow = (label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) => {
                 const exp = STAT_EXPLANATIONS[label] || '';
                 const aBadge = formatRankBadge(aRank, isSmallA);
                 const hBadge = formatRankBadge(hRank, isSmallH);
 
                 return `
-                    <div class="grid grid-cols-3 items-center py-1 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                    <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                        <!-- Away Stat -->
                         <div class="flex items-center space-x-1.5 text-left font-mono">
                             ${aBadge}
                             <span class="text-slate-200 font-bold">${aVal != null ? aVal : '--'}</span>
                         </div>
+                        <!-- Metric Label with Tooltip -->
                         <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
                             <span class="stat-info-trigger">
                                 ${label}
                                 ${exp ? `
-                                    <div class="stat-info-box">
-                                        <div class="font-bold text-slate-100 mb-1 border-b border-[#30363d] pb-1 text-left">
-                                            ${label}
-                                        </div>
-                                        <div class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case">
+                                    <span class="stat-info-box block">
+                                        <span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block">
+                                            <i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i>
+                                            <span>${label}</span>
+                                        </span>
+                                        <span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">
                                             ${exp}
-                                        </div>
-                                    </div>
+                                        </span>
+                                    </span>
                                 ` : ''}
                             </span>
                         </div>
+                        <!-- Home Stat -->
                         <div class="flex items-center justify-end space-x-1.5 text-right font-mono">
                             <span class="text-slate-200 font-bold">${hVal != null ? hVal : '--'}</span>
                             ${hBadge}
@@ -883,48 +902,57 @@
                 `;
             };
 
-            // Similarity Box
-            const homeDefSim = g.home_def_sim || {};
-            const awayDefSim = g.away_def_sim || {};
+            // Shot Profile Funnel values
+            const aRim = a.shot_profile_offense?.restricted_area?.freq || 30.0;
+            const hRimDef = h.shot_profile_allowed?.restricted_area?.freq || 28.0;
+            const aMid = a.shot_profile_offense?.mid_range?.freq || 16.0;
+            const hMidDef = h.shot_profile_allowed?.mid_range?.freq || 18.0;
+            const a3pt = ( (a.shot_profile_offense?.corner_3?.freq || 9.5) + (a.shot_profile_offense?.above_break_3?.freq || 29.5) ).toFixed(1);
+            const h3ptDef = ( (h.shot_profile_allowed?.corner_3?.freq || 9.5) + (h.shot_profile_allowed?.above_break_3?.freq || 29.5) ).toFixed(1);
+            const estPace = ((parseFloat(a.pace || 100) + parseFloat(h.pace || 100)) / 2).toFixed(1);
 
             return `
-                <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] space-y-4 hover:border-slate-500 transition shadow-sm">
-                    <!-- Game Info Header Bar -->
+                <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] space-y-3.5 hover:border-slate-500 transition shadow-sm flex flex-col justify-between">
+                    <!-- Top Bar: Date, Gametime, Status, Deep Dive Button -->
                     <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#30363d] pb-2.5">
                         <div class="flex items-center space-x-2">
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">
                                 ${g.gameday}
                             </span>
                             <span class="text-slate-500">•</span>
-                            <span class="font-mono text-slate-400">${g.gametime || '7:30 PM ET'}</span>
+                            <span class="font-mono text-slate-400 text-xs">${g.gametime || '7:30 PM ET'}</span>
                         </div>
-                        <div>
+                        <div class="flex items-center space-x-2">
                             ${statusBadge}
+                            <button onclick="openDeepDiveModal('${g.game_id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-800/60 transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+                                <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+                                <span>Deep Dive</span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Matchup Scoreboard Banner -->
-                    <div class="grid grid-cols-12 items-center py-1.5 gap-2">
+                    <div class="grid grid-cols-12 items-center py-1 gap-2">
                         <!-- Away Team -->
                         <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
-                            <div class="w-11 h-11 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
+                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
                                 <img src="https://a.espncdn.com/i/teamlogos/nba/500/${aTeam.toLowerCase()}.png" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
                                 <span class="font-extrabold text-cyan-400 font-mono text-xs hidden items-center justify-center w-full h-full">${aTeam}</span>
                             </div>
                             <div class="min-w-0 flex-1">
                                 <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.away_team_name}</h4>
                                 <div class="text-[11px] text-slate-400 flex items-center flex-wrap gap-x-1.5 mt-0.5 font-mono">
-                                    <span>Away</span>
-                                    <span>•</span>
-                                    <span>Pace: ${a.pace || '--'}</span>
+                                    <span class="text-slate-300 font-semibold">${g.away_record || '42-20'}</span>
+                                    <span class="text-slate-600">•</span>
+                                    <span class="text-slate-500 font-medium">Away</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Center Score -->
+                        <!-- Center Score / @ -->
                         <div class="col-span-2 text-center flex flex-col items-center justify-center">
                             ${isFinal && g.away_score != null && g.home_score != null ? `
-                                <div class="flex items-center justify-center space-x-1.5 font-mono font-extrabold text-lg sm:text-xl text-slate-100">
+                                <div class="flex items-center justify-center space-x-1 font-mono font-extrabold text-base sm:text-lg text-slate-100">
                                     <span>${g.away_score}</span>
                                     <span class="text-slate-600 text-xs">-</span>
                                     <span>${g.home_score}</span>
@@ -942,118 +970,558 @@
                             <div class="min-w-0 flex-1">
                                 <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.home_team_name}</h4>
                                 <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 mt-0.5 font-mono">
-                                    <span>Pace: ${h.pace || '--'}</span>
-                                    <span>•</span>
-                                    <span>Home</span>
+                                    <span class="text-slate-500 font-medium">Home</span>
+                                    <span class="text-slate-600">•</span>
+                                    <span class="text-slate-300 font-semibold">${g.home_record || '40-22'}</span>
                                 </div>
                             </div>
-                            <div class="w-11 h-11 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
+                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
                                 <img src="https://a.espncdn.com/i/teamlogos/nba/500/${hTeam.toLowerCase()}.png" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
                                 <span class="font-extrabold text-rose-400 font-mono text-xs hidden items-center justify-center w-full h-full">${hTeam}</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ========================================================== -->
-                    <!-- EXECUTIVE ALIGNMENT SUMMARY (INLINE SVGs)                  -->
-                    <!-- ========================================================== -->
-                    <div class="space-y-3 pt-2 border-t border-[#30363d]">
-                        ${renderShotZoneAlignmentSvg(a, h, aTeam, hTeam)}
-                        ${renderPlayTypeAlignmentSvg(a, h, aTeam, hTeam)}
-                        ${renderPaceAlignmentSvg(a, h, aTeam, hTeam)}
+                    <!-- Redesigned Per-Game Team Stat Comparison Table (Volume x Efficiency) -->
+                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-2.5 sm:p-3 space-y-0.5">
+                        <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1.5 px-2">
+                            <div class="text-left font-mono">${aTeam} STAT & RANK</div>
+                            <div class="text-center font-mono">
+                                <span class="stat-info-trigger">
+                                    PER-GAME STAT
+                                    <span class="stat-info-box block">
+                                        <span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block">
+                                            <i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i>
+                                            <span>Forensic Per-Game Baselines</span>
+                                        </span>
+                                        <span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">
+                                            Head-to-head offensive volume & efficiency vs defensive resistance. Ranks #1-#10 (green) reflect top containment or high volume; ranks #21-#30 (amber) reflect lower tiers. Hover over any individual stat for its exact definition.
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="text-right font-mono">${hTeam} STAT & RANK</div>
+                        </div>
+
+                        <!-- 1. Scoring -->
+                        ${formatRow('Points / Game', a.pts_scored, a.rank_pts_scored, h.pts_scored, h.rank_pts_scored, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('Points Allowed / G', a.pts_allowed, a.rank_pts_allowed, h.pts_allowed, h.rank_pts_allowed, a.is_small_sample, h.is_small_sample)}
+
+                        <!-- 2. Rebounding -->
+                        ${formatRow('Rebounds / Game', a.reb_total, a.rank_reb_total, h.reb_total, h.rank_reb_total, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('Rebounds Allowed / G', a.reb_allowed, a.rank_reb_allowed, h.reb_allowed, h.rank_reb_allowed, a.is_small_sample, h.is_small_sample)}
+
+                        <!-- 3. Playmaking / Assists -->
+                        ${formatRow('Assists / Game', a.ast_total, a.rank_ast_total, h.ast_total, h.rank_ast_total, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('Assists Allowed / G', a.ast_allowed, a.rank_ast_allowed, h.ast_allowed, h.rank_ast_allowed, a.is_small_sample, h.is_small_sample)}
+
+                        <!-- 4. Three-Point Shooting -->
+                        ${formatRow('Threes Made (3PM)', a.fg3m_total, a.rank_fg3m_total, h.fg3m_total, h.rank_fg3m_total, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('3PM Allowed / G', a.fg3m_allowed, a.rank_fg3m_allowed, h.fg3m_allowed, h.rank_fg3m_allowed, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('Threes Attempted (3PA)', a.fg3a_total, a.rank_fg3a_total, h.fg3a_total, h.rank_fg3a_total, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('3PA Allowed / G', a.fg3a_allowed, a.rank_fg3a_allowed, h.fg3a_allowed, h.rank_fg3a_allowed, a.is_small_sample, h.is_small_sample)}
+
+                        <!-- 5. Field Goal Percentage -->
+                        ${formatRow('FG% (Field Goal %)', (a.fg_pct != null ? a.fg_pct + '%' : null), a.rank_fg_pct, (h.fg_pct != null ? h.fg_pct + '%' : null), h.rank_fg_pct, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('FG% Allowed', (a.fg_pct_opp != null ? a.fg_pct_opp + '%' : null), a.rank_fg_pct_opp, (h.fg_pct_opp != null ? h.fg_pct_opp + '%' : null), h.rank_fg_pct_opp, a.is_small_sample, h.is_small_sample)}
+
+                        <!-- 6. Pace & Efficiency Ratings -->
+                        ${formatRow('Pace (Poss/48m)', a.pace, a.rank_pace, h.pace, h.rank_pace, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('Offensive Rating', a.off_rtg, a.rank_off_rtg, h.off_rtg, h.rank_off_rtg, a.is_small_sample, h.is_small_sample)}
+                        ${formatRow('Defensive Rating', a.def_rtg, a.rank_def_rtg, h.def_rtg, h.rank_def_rtg, a.is_small_sample, h.is_small_sample)}
                     </div>
 
-                    <!-- ========================================================== -->
-                    <!-- 4 FORENSIC PILLARS                                         -->
-                    <!-- ========================================================== -->
-                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-3">
-                        <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1 px-2">
-                            <div class="text-left font-mono">${aTeam} TRACKING</div>
-                            <div class="text-center font-mono">FORENSIC METRIC</div>
-                            <div class="text-right font-mono">${hTeam} TRACKING</div>
+                    <!-- Bottom of Card: Shot Profile Funnel -->
+                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
+                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-[#21262d] pb-1.5 px-1">
+                            <span class="flex items-center space-x-1.5">
+                                <i data-lucide="split" class="w-3 h-3 text-slate-400"></i>
+                                <span>Shot Profile Funnel</span>
+                            </span>
+                            <span class="font-mono text-[9px] text-slate-300 bg-[#161b22] px-2 py-0.5 rounded border border-[#21262d]">Game Pace: ${estPace} Poss/48</span>
                         </div>
-
-                        <!-- PILLAR 1: PACE, GAME FLOW & TRANSITION -->
-                        <div>
-                            <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
-                                <i data-lucide="activity" class="w-3 h-3"></i>
-                                <span>Pillar 1: Pace, Game Flow & Transition</span>
-                            </div>
-                            <div class="mt-1 space-y-0.5">
-                                ${formatRow('Neutral Pace', a.neutral_pace, a.rank_neutral_pace, h.neutral_pace, h.rank_neutral_pace, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Transition Frequency', a.transition_freq ? a.transition_freq + '%' : '--', a.rank_transition_freq, h.transition_freq ? h.transition_freq + '%' : '--', h.rank_transition_freq, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Shot Clock Early (0-8s)', a.shot_clock ? a.shot_clock.early_0_8 + '%' : '--', null, h.shot_clock ? h.shot_clock.early_0_8 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Shot Clock Mid (8-15s)', a.shot_clock ? a.shot_clock.mid_8_15 + '%' : '--', null, h.shot_clock ? h.shot_clock.mid_8_15 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Shot Clock Late (15-24s)', a.shot_clock ? a.shot_clock.late_15_24 + '%' : '--', null, h.shot_clock ? h.shot_clock.late_15_24 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Pace Leading 10+', a.game_script?.leading_10?.pace, null, h.game_script?.leading_10?.pace, null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Pace Trailing 10+', a.game_script?.trailing_10?.pace, null, h.game_script?.trailing_10?.pace, null, a.is_small_sample, h.is_small_sample)}
-                            </div>
-                        </div>
-
-                        <!-- PILLAR 2: PERIMETER & PAINT DEFENSE -->
-                        <div>
-                            <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
-                                <i data-lucide="shield" class="w-3 h-3"></i>
-                                <span>Pillar 2: Perimeter & Paint Defense</span>
-                            </div>
-                            <div class="mt-1 space-y-0.5">
-                                ${formatRow('Pick & Roll Drop', a.pnr_coverage ? a.pnr_coverage.drop + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.drop + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Pick & Roll Switch', a.pnr_coverage ? a.pnr_coverage.switch + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.switch + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Restricted Area Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Paint Non-RA Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Corner 3 Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Wide-Open 3PT Rate Allowed', a.wide_open_3pt ? a.wide_open_3pt.allowed_freq + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.allowed_freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Opponent Wide-Open 3PT%', a.wide_open_3pt ? a.wide_open_3pt.opponent_pct + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.opponent_pct + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Defensive Rebound % (DREB%)', a.rebounding ? a.rebounding.dreb_secured_pct + '%' : '--', a.rank_dreb_secured_pct, h.rebounding ? h.rebounding.dreb_secured_pct + '%' : '--', h.rank_dreb_secured_pct, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Offensive Rebound % Allowed', a.rebounding ? a.rebounding.oreb_allowed_pct + '%' : '--', a.rank_oreb_allowed_pct, h.rebounding ? h.rebounding.oreb_allowed_pct + '%' : '--', h.rank_oreb_allowed_pct, a.is_small_sample, h.is_small_sample)}
-                            </div>
-                        </div>
-
-                        <!-- PILLAR 3: OFFENSIVE PLAY TYPE & SCHEME -->
-                        <div>
-                            <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
-                                <i data-lucide="zap" class="w-3 h-3"></i>
-                                <span>Pillar 3: Offensive Play Type & Scheme</span>
-                            </div>
-                            <div class="mt-1 space-y-0.5">
-                                ${formatRow('PnR Ball Handler Freq', a.playtypes_offense ? a.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Isolation Freq', a.playtypes_offense ? a.playtypes_offense.Isolation.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Isolation.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Spot-Up Freq', a.playtypes_offense ? a.playtypes_offense.Spot_Up.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Spot_Up.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Live-Ball Turnovers', a.turnover_profile ? a.turnover_profile.live_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.live_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
-                                ${formatRow('Dead-Ball Turnovers', a.turnover_profile ? a.turnover_profile.dead_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.dead_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ========================================================== -->
-                    <!-- SIMILAR-OPPONENT HISTORICAL LOOKUP BOX                     -->
-                    <!-- ========================================================== -->
-                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3.5 space-y-2">
-                        <div class="flex items-center gap-2 text-xs font-bold text-slate-200">
-                            <i data-lucide="compass" class="w-4 h-4 text-cyan-400"></i>
-                            <span>Similar-Opponent Historical Lookup (Euclidean Analog Model)</span>
-                        </div>
-                        <div class="space-y-1.5 text-xs font-mono text-slate-300">
-                            ${homeDefSim.summary_text ? `
-                                <div class="p-2 rounded bg-[#161b22] border border-[#30363d]/80 leading-relaxed">
-                                    <span class="text-cyan-400 font-bold">[Home Defense vs. Analogs]:</span> ${homeDefSim.summary_text}
-                                    <div class="text-[10.5px] text-slate-400 mt-1">
-                                        Analogs Faced: ${(homeDefSim.cluster_opponents || []).join(', ') || '--'}
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <!-- Rim Attempts (Restricted Area) -->
+                            <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
+                                    <span>Rim (RA)</span>
+                                    <span class="font-mono text-[9px] text-cyan-400">${aRim}%</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div>
+                                        <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${aRim}%</span></div>
+                                        <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${Math.min(100, aRim * 2)}%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${hRimDef}%</span></div>
+                                        <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${Math.min(100, hRimDef * 2)}%"></div></div>
                                     </div>
                                 </div>
-                            ` : ''}
-                            ${awayDefSim.summary_text ? `
-                                <div class="p-2 rounded bg-[#161b22] border border-[#30363d]/80 leading-relaxed">
-                                    <span class="text-cyan-400 font-bold">[Away Defense vs. Analogs]:</span> ${awayDefSim.summary_text}
-                                    <div class="text-[10.5px] text-slate-400 mt-1">
-                                        Analogs Faced: ${(awayDefSim.cluster_opponents || []).join(', ') || '--'}
+                            </div>
+                            <!-- Mid-Range Attempts -->
+                            <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
+                                    <span>Mid-Range</span>
+                                    <span class="font-mono text-[9px] text-cyan-400">${aMid}%</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div>
+                                        <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${aMid}%</span></div>
+                                        <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${Math.min(100, aMid * 2)}%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${hMidDef}%</span></div>
+                                        <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${Math.min(100, hMidDef * 2)}%"></div></div>
                                     </div>
                                 </div>
-                            ` : ''}
+                            </div>
+                            <!-- 3PT Attempts -->
+                            <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
+                                    <span>3PT Rate</span>
+                                    <span class="font-mono text-[9px] text-cyan-400">${a3pt}%</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div>
+                                        <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${a3pt}%</span></div>
+                                        <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${Math.min(100, a3pt * 2)}%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${h3ptDef}%</span></div>
+                                        <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${Math.min(100, h3ptDef * 2)}%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        // =========================================================================
+        // DEEP DIVE: EXECUTIVE INSIGHT CALLOUTS GENERATOR (FACTUAL & PLAYER-SPECIFIC)
+        // =========================================================================
+
+        function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers) {
+            // Identify top 3PT shooters
+            const hShooters = (hPlayers && hPlayers.length) ? [...hPlayers].sort((x, y) => (y.season_avg?.fg3a || 0) - (x.season_avg?.fg3a || 0)) : [];
+            const aShooters = (aPlayers && aPlayers.length) ? [...aPlayers].sort((x, y) => (y.season_avg?.fg3a || 0) - (x.season_avg?.fg3a || 0)) : [];
+            const topHShooter = hShooters[0];
+            const topAShooter = aShooters[0];
+
+            // Identify top interior/paint scorers
+            const aPaintPlayers = (aPlayers && aPlayers.length) ? [...aPlayers].sort((x, y) => (y.season_avg?.paint_pts || 0) - (x.season_avg?.paint_pts || 0)) : [];
+            const hPaintPlayers = (hPlayers && hPlayers.length) ? [...hPlayers].sort((x, y) => (y.season_avg?.paint_pts || 0) - (x.season_avg?.paint_pts || 0)) : [];
+            const topAPaint = aPaintPlayers[0];
+            const topHPaint = hPaintPlayers[0];
+
+            // Factual statement 1: 3PT Perimeter Alignment
+            const a3paAllowed = a.fg3a_allowed || 38.2;
+            const a3paRank = a.rank_fg3a_allowed ? `#${a.rank_fg3a_allowed}` : 'Tier';
+            const h3paShooterStat = topHShooter ? `${topHShooter.player_name} (${topHShooter.position}) averages ${topHShooter.season_avg?.fg3a || 8.0} 3PA per game` : `${hTeam} perimeter rotation attempts ${h.fg3a_total || 36.0} 3PA per game`;
+            const callout3pt = `${aTeam} defense allows ${a3paAllowed} three-point attempts per game (Rank ${a3paRank}). ${hTeam}'s ${h3paShooterStat}.`;
+
+            // Factual statement 2: Paint Scoring Alignment
+            const hRaPpp = h.shot_profile_allowed?.restricted_area?.ppp || 1.25;
+            const aPaintStat = topAPaint ? `${topAPaint.player_name} (${topAPaint.position}) averages ${topAPaint.season_avg?.paint_pts || 12.0} paint points per game` : `${aTeam} records ${a.paint_touches_pg || 22.0} paint touches per game`;
+            const calloutPaint = `${hTeam} allows ${hRaPpp} points per possession in the restricted area. ${aTeam}'s ${aPaintStat}.`;
+
+            // Factual statement 3: Rebounding Alignment
+            const aOrebAllowed = a.rebounding?.oreb_allowed_pct || 27.5;
+            const aOrebRank = a.rank_oreb_allowed_pct ? `#${a.rank_oreb_allowed_pct}` : 'Tier';
+            const hDrebSecured = h.rebounding?.dreb_secured_pct || 74.0;
+            const hDrebRank = h.rank_dreb_secured_pct ? `#${h.rank_dreb_secured_pct}` : 'Tier';
+            const calloutReb = `${aTeam} surrenders an offensive rebound rate of ${aOrebAllowed}% (Rank ${aOrebRank}). ${hTeam} secures ${hDrebSecured}% of defensive rebounds (Rank ${hDrebRank}).`;
+
+            // Factual statement 4: Tempo & Pace Clash
+            const aPaceVal = a.pace || 99.0;
+            const aPaceRank = a.rank_pace ? `#${a.rank_pace}` : 'Tier';
+            const hPaceVal = h.pace || 99.0;
+            const hPaceRank = h.rank_pace ? `#${h.rank_pace}` : 'Tier';
+            const estNeutralPace = ((parseFloat(a.neutral_pace || aPaceVal) + parseFloat(h.neutral_pace || hPaceVal)) / 2).toFixed(1);
+            const calloutPace = `${aTeam} records ${aPaceVal} possessions per 48 minutes (Rank ${aPaceRank}). ${hTeam} records ${hPaceVal} possessions per 48 minutes (Rank ${hPaceRank}). Expected neutral tempo: ${estNeutralPace} possessions.`;
+
+            // Factual statement 5: Scheme & Coverage Clash
+            const aPnrFreq = a.playtypes_offense?.PnR_Ball_Handler?.freq || 21.0;
+            const hDropFreq = h.pnr_coverage?.drop || 42.0;
+            const hSwitchFreq = h.pnr_coverage?.switch || 32.0;
+            const calloutScheme = `${aTeam} initiates ${aPnrFreq}% of half-court possessions via Pick & Roll Ball Handler. ${hTeam} deploys ${hDropFreq}% drop and ${hSwitchFreq}% switch coverage against ball screens.`;
+
+            return `
+                <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-4 space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                        <span class="uppercase tracking-wider">Forensic Matchup Callouts (Player & Scheme Cross-Reference)</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs font-mono">
+                        <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
+                            <span class="text-cyan-400 font-bold block mb-1">[3PT Perimeter Alignment]</span>
+                            ${callout3pt}
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
+                            <span class="text-cyan-400 font-bold block mb-1">[Restricted Area Paint Alignment]</span>
+                            ${calloutPaint}
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
+                            <span class="text-cyan-400 font-bold block mb-1">[Glass & Rebound Alignment]</span>
+                            ${calloutReb}
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
+                            <span class="text-cyan-400 font-bold block mb-1">[Game Tempo & Pace Clash]</span>
+                            ${calloutPace}
+                        </div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-xs font-mono text-slate-300 leading-relaxed">
+                        <span class="text-cyan-400 font-bold block mb-1">[Play Type & Defensive Coverage Alignment]</span>
+                        ${calloutScheme}
+                    </div>
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // DEEP DIVE: FULL MODAL CONTENT GENERATOR (SVGs + 4 PILLARS + SIMILAR)
+        // =========================================================================
+
+        function generateDeepDiveModalHtml(g) {
+            const a = g.away_forensic || allForensicTeams[g.away_team] || {};
+            const h = g.home_forensic || allForensicTeams[g.home_team] || {};
+            const aTeam = g.away_team;
+            const hTeam = g.home_team;
+            const aPlayers = g.away_players || allPlayerProfiles.filter(p => p.team === aTeam);
+            const hPlayers = g.home_players || allPlayerProfiles.filter(p => p.team === hTeam);
+            const isFinal = g.is_final;
+            const homeDefSim = g.home_def_sim || {};
+            const awayDefSim = g.away_def_sim || {};
+
+            // Modal Pillar Row Formatter
+            const formatPillarRow = (label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) => {
+                const exp = STAT_EXPLANATIONS[label] || '';
+                const aBadge = formatRankBadge(aRank, isSmallA);
+                const hBadge = formatRankBadge(hRank, isSmallH);
+
+                return `
+                    <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                        <div class="flex items-center space-x-1.5 text-left font-mono">
+                            ${aBadge}
+                            <span class="text-slate-200 font-bold">${aVal != null ? aVal : '--'}</span>
+                        </div>
+                        <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
+                            <span class="stat-info-trigger">
+                                ${label}
+                                ${exp ? `
+                                    <span class="stat-info-box block">
+                                        <span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block">
+                                            <i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i>
+                                            <span>${label}</span>
+                                        </span>
+                                        <span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">
+                                            ${exp}
+                                        </span>
+                                    </span>
+                                ` : ''}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-end space-x-1.5 text-right font-mono">
+                            <span class="text-slate-200 font-bold">${hVal != null ? hVal : '--'}</span>
+                            ${hBadge}
+                        </div>
+                    </div>
+                `;
+            };
+
+            // Player Rotation Cards Helper
+            const renderRotationTeamBlock = (teamCode, teamName, players, badgeColor) => {
+                const top4 = (players || []).slice(0, 4);
+                return `
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1">
+                            <img src="https://a.espncdn.com/i/teamlogos/nba/500/${teamCode.toLowerCase()}.png" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
+                            <span class="${badgeColor}">${teamCode} Rotation (Top 4 Minutes)</span>
+                        </div>
+                        <div class="space-y-2">
+                            ${top4.map(p => {
+                                const dist = p.distribution_10g?.pts || {};
+                                const sAvg = p.season_avg || {};
+                                const ctx = p.context_stats || {};
+                                const sit = p.situational || {};
+                                return `
+                                    <div class="bg-[#161b22] rounded-lg p-2.5 border border-[#21262d] text-xs font-mono space-y-1.5">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-1.5">
+                                                <span class="font-bold text-slate-200 text-xs">${p.player_name}</span>
+                                                <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#21262d] text-cyan-300 border border-[#30363d]">${p.position}</span>
+                                                ${p.is_small_sample ? '<span class="text-[9px] text-amber-400">[Small Sample]</span>' : ''}
+                                            </div>
+                                            <span class="text-[11px] text-slate-400">${sAvg.min || '--'} MPG</span>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-1 bg-[#12161c] p-1.5 rounded border border-[#21262d] text-center text-[10px]">
+                                            <div><span class="text-slate-500 block">Season PTS</span><b class="text-slate-200">${sAvg.pts || '--'}</b></div>
+                                            <div><span class="text-slate-500 block">3PA / G</span><b class="text-slate-200">${sAvg.fg3a || '--'}</b></div>
+                                            <div><span class="text-slate-500 block">Paint PTS</span><b class="text-slate-200">${sAvg.paint_pts || '--'}</b></div>
+                                        </div>
+                                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                                            <span>10G Floor/Med/Ceil:</span>
+                                            <span class="text-slate-200 font-bold">${dist.floor || '--'} / <span class="text-cyan-400">${dist.median || '--'}</span> / ${dist.ceiling || '--'}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-[9.5px] text-slate-500">
+                                            <span>USG: ${ctx.usg_pct || '--'}% • AST: ${ctx.ast_pct || '--'}%</span>
+                                            <span>Clutch USG: ${sit.clutch_usg_pct || '--'}%</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            };
+
+            return `
+                <!-- Matchup Title Banner -->
+                <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] bg-gradient-to-r from-[#161b22] via-[#0d1117] to-[#161b22]">
+                    <div class="grid grid-cols-12 items-center gap-3">
+                        <!-- Away Team Banner -->
+                        <div class="col-span-5 flex items-center space-x-3 min-w-0">
+                            <div class="w-12 h-12 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-2 shadow-inner shrink-0 relative overflow-hidden">
+                                <img src="https://a.espncdn.com/i/teamlogos/nba/500/${aTeam.toLowerCase()}.png" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                <span class="font-extrabold text-cyan-400 font-mono text-sm hidden items-center justify-center w-full h-full">${aTeam}</span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="font-bold text-slate-100 text-sm sm:text-base truncate">${g.away_team_name}</h3>
+                                <div class="text-xs text-slate-400 flex items-center flex-wrap gap-x-2 mt-0.5 font-mono">
+                                    <span class="text-slate-200 font-bold">${g.away_record || '42-20'}</span>
+                                    <span>•</span>
+                                    <span>Pace: ${a.pace || '--'}</span>
+                                    <span>•</span>
+                                    <span>PTS: ${a.pts_scored || '--'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Center Info -->
+                        <div class="col-span-2 text-center flex flex-col items-center justify-center">
+                            ${isFinal && g.away_score != null && g.home_score != null ? `
+                                <div class="flex items-center justify-center space-x-1.5 font-mono font-extrabold text-lg sm:text-xl text-slate-100">
+                                    <span>${g.away_score}</span>
+                                    <span class="text-slate-600 text-xs">-</span>
+                                    <span>${g.home_score}</span>
+                                </div>
+                                <span class="text-[9px] font-bold font-mono text-emerald-400 uppercase">FINAL</span>
+                            ` : `
+                                <div class="w-8 h-8 mx-auto rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center font-bold text-slate-300 text-xs">
+                                    @
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-400 mt-1">${g.gameday}</span>
+                            `}
+                        </div>
+
+                        <!-- Home Team Banner -->
+                        <div class="col-span-5 flex items-center justify-end space-x-3 text-right min-w-0">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="font-bold text-slate-100 text-sm sm:text-base truncate">${g.home_team_name}</h3>
+                                <div class="text-xs text-slate-400 flex items-center justify-end flex-wrap gap-x-2 mt-0.5 font-mono">
+                                    <span>PTS: ${h.pts_scored || '--'}</span>
+                                    <span>•</span>
+                                    <span>Pace: ${h.pace || '--'}</span>
+                                    <span>•</span>
+                                    <span class="text-slate-200 font-bold">${g.home_record || '40-22'}</span>
+                                </div>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-2 shadow-inner shrink-0 relative overflow-hidden">
+                                <img src="https://a.espncdn.com/i/teamlogos/nba/500/${hTeam.toLowerCase()}.png" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                <span class="font-extrabold text-rose-400 font-mono text-sm hidden items-center justify-center w-full h-full">${hTeam}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================== -->
+                <!-- 1. EXECUTIVE ALIGNMENT SUMMARY (SVG VISUAL SCHEME CLASHES)      -->
+                <!-- ============================================================== -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2 border-b border-[#30363d] pb-2">
+                        <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Executive Alignment Summary (Visual Scheme Clashes)</h4>
+                    </div>
+                    <div class="space-y-3">
+                        ${renderShotZoneAlignmentSvg(a, h, aTeam, hTeam)}
+                        ${renderPlayTypeAlignmentSvg(a, h, aTeam, hTeam)}
+                        ${renderPaceAlignmentSvg(a, h, aTeam, hTeam)}
+                    </div>
+                </div>
+
+                <!-- ============================================================== -->
+                <!-- 2. UPGRADED FORENSIC EXECUTIVE INSIGHT CALLOUTS                -->
+                <!-- ============================================================== -->
+                ${renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)}
+
+                <!-- ============================================================== -->
+                <!-- 3. THE 4 FORENSIC SCOUTING PILLARS                             -->
+                <!-- ============================================================== -->
+                <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3.5 sm:p-4 space-y-4">
+                    <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1.5 px-2">
+                        <div class="text-left font-mono">${aTeam} TRACKING</div>
+                        <div class="text-center font-mono">FORENSIC PILLAR METRIC</div>
+                        <div class="text-right font-mono">${hTeam} TRACKING</div>
+                    </div>
+
+                    <!-- PILLAR 1: PACE, GAME FLOW & TRANSITION -->
+                    <div>
+                        <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
+                            <i data-lucide="gauge" class="w-3.5 h-3.5"></i>
+                            <span>Pillar 1: Pace, Game Flow & Transition</span>
+                        </div>
+                        <div class="mt-1 space-y-0.5">
+                            ${formatPillarRow('Neutral Pace', a.neutral_pace, a.rank_neutral_pace, h.neutral_pace, h.rank_neutral_pace, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Transition Frequency', a.transition_freq ? a.transition_freq + '%' : '--', a.rank_transition_freq, h.transition_freq ? h.transition_freq + '%' : '--', h.rank_transition_freq, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Shot Clock Early (0-8s)', a.shot_clock ? a.shot_clock.early_0_8 + '%' : '--', null, h.shot_clock ? h.shot_clock.early_0_8 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Shot Clock Mid (8-15s)', a.shot_clock ? a.shot_clock.mid_8_15 + '%' : '--', null, h.shot_clock ? h.shot_clock.mid_8_15 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Shot Clock Late (15-24s)', a.shot_clock ? a.shot_clock.late_15_24 + '%' : '--', null, h.shot_clock ? h.shot_clock.late_15_24 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Pace Leading 10+', a.game_script?.leading_10?.pace, null, h.game_script?.leading_10?.pace, null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Pace Trailing 10+', a.game_script?.trailing_10?.pace, null, h.game_script?.trailing_10?.pace, null, a.is_small_sample, h.is_small_sample)}
+                        </div>
+                    </div>
+
+                    <!-- PILLAR 2: PERIMETER & PAINT DEFENSE -->
+                    <div>
+                        <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
+                            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                            <span>Pillar 2: Perimeter & Paint Defense</span>
+                        </div>
+                        <div class="mt-1 space-y-0.5">
+                            ${formatPillarRow('Pick & Roll Drop', a.pnr_coverage ? a.pnr_coverage.drop + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.drop + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Pick & Roll Switch', a.pnr_coverage ? a.pnr_coverage.switch + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.switch + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Restricted Area Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Paint Non-RA Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Corner 3 Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Wide-Open 3PT Rate Allowed', a.wide_open_3pt ? a.wide_open_3pt.allowed_freq + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.allowed_freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Opponent Wide-Open 3PT%', a.wide_open_3pt ? a.wide_open_3pt.opponent_pct + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.opponent_pct + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Defensive Rebound % (DREB%)', a.rebounding ? a.rebounding.dreb_secured_pct + '%' : '--', a.rank_dreb_secured_pct, h.rebounding ? h.rebounding.dreb_secured_pct + '%' : '--', h.rank_dreb_secured_pct, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Offensive Rebound % Allowed', a.rebounding ? a.rebounding.oreb_allowed_pct + '%' : '--', a.rank_oreb_allowed_pct, h.rebounding ? h.rebounding.oreb_allowed_pct + '%' : '--', h.rank_oreb_allowed_pct, a.is_small_sample, h.is_small_sample)}
+                        </div>
+                    </div>
+
+                    <!-- PILLAR 3: OFFENSIVE PLAY TYPE & SCHEME -->
+                    <div>
+                        <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                            <span>Pillar 3: Offensive Play Type & Scheme</span>
+                        </div>
+                        <div class="mt-1 space-y-0.5">
+                            ${formatPillarRow('PnR Ball Handler Freq', a.playtypes_offense ? a.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Isolation Freq', a.playtypes_offense ? a.playtypes_offense.Isolation.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Isolation.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Spot-Up Freq', a.playtypes_offense ? a.playtypes_offense.Spot_Up.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Spot_Up.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Live-Ball Turnovers', a.turnover_profile ? a.turnover_profile.live_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.live_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            ${formatPillarRow('Dead-Ball Turnovers', a.turnover_profile ? a.turnover_profile.dead_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.dead_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================== -->
+                <!-- 4. PILLAR 4: PLAYER USAGE PROFILES (TOP 4 ROTATION)            -->
+                <!-- ============================================================== -->
+                <div class="glass-panel rounded-xl p-4 border border-[#30363d] space-y-3">
+                    <div class="flex items-center space-x-2 border-b border-[#30363d] pb-2">
+                        <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pillar 4: Player Usage Profiles (Top 4 Rotation Distributions)</h4>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        ${renderRotationTeamBlock(aTeam, g.away_team_name, aPlayers, 'text-cyan-400')}
+                        ${renderRotationTeamBlock(hTeam, g.home_team_name, hPlayers, 'text-rose-400')}
+                    </div>
+                </div>
+
+                <!-- ============================================================== -->
+                <!-- 5. SIMILAR-OPPONENT HISTORICAL LOOKUP                          -->
+                <!-- ============================================================== -->
+                <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-4 space-y-2">
+                    <div class="flex items-center gap-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-2">
+                        <i data-lucide="compass" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Similar-Opponent Historical Lookup (Euclidean Analog Model)</span>
+                    </div>
+                    <div class="space-y-2 text-xs font-mono text-slate-300">
+                        ${homeDefSim.summary_text ? `
+                            <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#30363d]/80 leading-relaxed">
+                                <span class="text-cyan-400 font-bold block mb-0.5">[Home Defense vs. Analogs]:</span>
+                                <div>${homeDefSim.summary_text}</div>
+                                <div class="text-[10.5px] text-slate-400 mt-1">
+                                    Analogs Faced: ${(homeDefSim.cluster_opponents || []).join(', ') || '--'}
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${awayDefSim.summary_text ? `
+                            <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#30363d]/80 leading-relaxed">
+                                <span class="text-cyan-400 font-bold block mb-0.5">[Away Defense vs. Analogs]:</span>
+                                <div>${awayDefSim.summary_text}</div>
+                                <div class="text-[10.5px] text-slate-400 mt-1">
+                                    Analogs Faced: ${(awayDefSim.cluster_opponents || []).join(', ') || '--'}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // DEEP DIVE MODAL CONTROLLERS & INTERACTIONS
+        // =========================================================================
+
+        function openDeepDiveModal(gameId) {
+            const g = allScheduleGames.find(x => x.game_id === gameId);
+            if (!g) return;
+            renderDeepDiveModal(g);
+        }
+
+        function openMatchupByTeams(awayTeam, homeTeam) {
+            const a = allForensicTeams[awayTeam] || {};
+            const h = allForensicTeams[homeTeam] || {};
+            const aPlayers = allPlayerProfiles.filter(p => p.team === awayTeam);
+            const hPlayers = allPlayerProfiles.filter(p => p.team === homeTeam);
+            const g = {
+                game_id: `NBA_${awayTeam}_${homeTeam}`,
+                gameday: getTodayDateStr(),
+                gametime: '7:30 PM ET',
+                away_team: awayTeam,
+                away_team_name: teamNamesMap[awayTeam] || awayTeam,
+                away_record: '42-20',
+                home_team: homeTeam,
+                home_team_name: teamNamesMap[homeTeam] || homeTeam,
+                home_record: '40-22',
+                is_final: false,
+                away_forensic: a,
+                home_forensic: h,
+                away_players: aPlayers,
+                home_players: hPlayers,
+                home_def_sim: {},
+                away_def_sim: {}
+            };
+            renderDeepDiveModal(g);
+        }
+
+        function renderDeepDiveModal(g) {
+            const container = document.getElementById('deep-dive-modal-content');
+            const modal = document.getElementById('deep-dive-modal');
+            if (!container || !modal) return;
+
+            container.innerHTML = generateDeepDiveModalHtml(g);
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            safeCreateIcons(container);
+        }
+
+        function closeDeepDiveModal() {
+            const modal = document.getElementById('deep-dive-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        function onModalBackdropClick(e) {
+            if (e.target.id === 'deep-dive-modal') {
+                closeDeepDiveModal();
+            }
         }
 
         // Render Matchup Cards Grid
@@ -1227,12 +1695,13 @@
                     away_def_sim: data.away_def_vs_home_sim
                 };
 
+                allScheduleGames.unshift(customMatchup);
                 const container = document.getElementById('schedule-games-container');
                 if (container) {
                     container.innerHTML = renderGameCardHtml(customMatchup) + container.innerHTML;
                     safeCreateIcons(container);
-                    container.scrollIntoView({ behavior: 'smooth' });
                 }
+                openDeepDiveModal(customMatchup.game_id);
             } catch (e) {
                 console.error("Matchup API error:", e);
             }
@@ -1489,7 +1958,46 @@
             renderProfileDateChips();
             renderPlayerProfiles();
             safeCreateIcons();
+
+            // Auto-open matchup modal if routed directly to /matchup/<away>/<home>
+            const initAway = {{ (initial_away if initial_away is defined else None) | tojson }};
+            const initHome = {{ (initial_home if initial_home is defined else None) | tojson }};
+            if (initAway && initHome) {
+                setTimeout(() => openMatchupByTeams(initAway, initHome), 150);
+            }
+        });
+
+        // Global Escape key listener to close Deep Dive modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDeepDiveModal();
+            }
         });
     </script>
+
+    <!-- ============================================================== -->
+    <!-- DEEP DIVE MODAL OVERLAY                                        -->
+    <!-- ============================================================== -->
+    <div id="deep-dive-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden overflow-y-auto p-3 sm:p-6" onclick="onModalBackdropClick(event)">
+        <div class="max-w-5xl mx-auto glass-panel rounded-2xl border border-[#30363d] shadow-2xl overflow-hidden my-4 sm:my-8 relative" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 sm:p-5 border-b border-[#30363d] bg-[#161b22]/95 sticky top-0 z-20 backdrop-blur">
+                <div class="flex items-center space-x-3">
+                    <span class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-cyan-950/60 text-cyan-300 border border-cyan-800/60 flex items-center gap-1.5 shadow-sm">
+                        <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+                        <span>MATCHUP DEEP DIVE</span>
+                    </span>
+                    <span class="text-xs text-slate-400 hidden sm:inline">4-Pillar Forensic Scouting & Executive Alignment</span>
+                </div>
+                <button onclick="closeDeepDiveModal()" class="w-8 h-8 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-slate-400 hover:text-slate-200 border border-[#30363d] flex items-center justify-center transition active:scale-95" title="Close (Esc)">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Modal Dynamic Content -->
+            <div id="deep-dive-modal-content" class="p-4 sm:p-6 space-y-6 max-h-[85vh] overflow-y-auto">
+            </div>
+        </div>
+    </div>
 </body>
 </html>

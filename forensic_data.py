@@ -323,15 +323,33 @@ def calculate_team_forensics(logs_df, paired_df):
             'paint_touches_pg': paint_touches,
             'three_point_rate': round(team_3p_rate, 1),
             'def_rtg': round(base_def_rtg, 1),
+            'off_rtg': round((t_games['PTS'].sum() / total_poss * 100) if total_poss > 0 else 112.0, 1),
             'pts_allowed': round(pts_allowed_pg, 1),
-            'pts_scored': round(off_pts_pg, 1)
+            'pts_scored': round(off_pts_pg, 1),
+            'reb_total': round(t_games['REB'].mean(), 1),
+            'reb_allowed': round(t_games['REB_OPP'].mean(), 1),
+            'ast_total': round(t_games['AST'].mean(), 1),
+            'ast_allowed': round(t_games['AST_OPP'].mean(), 1),
+            'fg3m_total': round(t_games['FG3M'].mean(), 1),
+            'fg3m_allowed': round(t_games['FG3M_OPP'].mean(), 1),
+            'fg3a_total': round(t_games['FG3A'].mean(), 1),
+            'fg3a_allowed': round(t_games['FG3A_OPP'].mean(), 1),
+            'fg_pct': round((t_games['FGM'].sum() / t_games['FGA'].sum() * 100) if t_games['FGA'].sum() > 0 else 46.0, 1),
+            'fg_pct_opp': round((t_games['FGM_OPP'].sum() / t_games['FGA_OPP'].sum() * 100) if t_games['FGA_OPP'].sum() > 0 else 46.0, 1)
         }
 
     # Add league ranks with sample size gating
     metrics_to_rank = [
         ('pace', False), ('neutral_pace', False), ('transition_freq', False),
-        ('def_rtg', True), ('pts_allowed', True), ('dreb_secured_pct', False),
-        ('oreb_allowed_pct', True), ('paint_touches_pg', False), ('three_point_rate', False)
+        ('def_rtg', True), ('off_rtg', False),
+        ('pts_scored', False), ('pts_allowed', True),
+        ('reb_total', False), ('reb_allowed', True),
+        ('ast_total', False), ('ast_allowed', True),
+        ('fg3m_total', False), ('fg3m_allowed', True),
+        ('fg3a_total', False), ('fg3a_allowed', True),
+        ('fg_pct', False), ('fg_pct_opp', True),
+        ('dreb_secured_pct', False), ('oreb_allowed_pct', True),
+        ('paint_touches_pg', False), ('three_point_rate', False)
     ]
     for metric, ascending in metrics_to_rank:
         # Collect values for ranking
@@ -533,6 +551,9 @@ def calculate_player_usage_profiles(logs_df):
             avg_reb = round(float(p_logs['REB'].mean()), 1)
             avg_ast = round(float(p_logs['AST'].mean()), 1)
             avg_min = round(float(p_logs['MIN'].mean()), 1)
+            avg_fg3a = round(float(p_logs['FG3A'].mean()), 1)
+            avg_fg3m = round(float(p_logs['FG3M'].mean()), 1)
+            avg_paint_pts = round(float(max(0.0, (p_logs['PTS'] - p_logs['FG3M']*3).mean() * 0.58)), 1)
             
             # Context stats: USG%, AST%, REB%
             tot_p_fga = p_logs['FGA'].sum()
@@ -569,7 +590,10 @@ def calculate_player_usage_profiles(logs_df):
                     'pts': avg_pts,
                     'reb': avg_reb,
                     'ast': avg_ast,
-                    'min': avg_min
+                    'min': avg_min,
+                    'fg3a': avg_fg3a,
+                    'fg3m': avg_fg3m,
+                    'paint_pts': avg_paint_pts
                 },
                 'distribution_10g': {
                     'pts': {'floor': pts_floor, 'median': pts_median, 'ceiling': pts_ceil, 'logs': p_logs['PTS'].head(10).tolist()},
