@@ -13,7 +13,7 @@ import numpy as np
 import requests
 from flask import Flask, render_template, request, jsonify
 
-from forensic_data import run_forensic_pipeline
+from forensic_data import run_forensic_pipeline, NBA_TEAMS, NBA_TEAM_NAMES, make_empty_team_profile
 
 # --- Configuration ---
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
@@ -21,25 +21,6 @@ IS_VERCEL = os.environ.get('VERCEL') == '1'
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
-
-NBA_TEAMS = [
-    'ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW',
-    'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK',
-    'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'
-]
-
-NBA_TEAM_NAMES = {
-    'ATL': 'Atlanta Hawks', 'BOS': 'Boston Celtics', 'BKN': 'Brooklyn Nets',
-    'CHA': 'Charlotte Hornets', 'CHI': 'Chicago Bulls', 'CLE': 'Cleveland Cavaliers',
-    'DAL': 'Dallas Mavericks', 'DEN': 'Denver Nuggets', 'DET': 'Detroit Pistons',
-    'GSW': 'Golden State Warriors', 'HOU': 'Houston Rockets', 'IND': 'Indiana Pacers',
-    'LAC': 'LA Clippers', 'LAL': 'Los Angeles Lakers', 'MEM': 'Memphis Grizzlies',
-    'MIA': 'Miami Heat', 'MIL': 'Milwaukee Bucks', 'MIN': 'Minnesota Timberwolves',
-    'NOP': 'New Orleans Pelicans', 'NYK': 'New York Knicks', 'OKC': 'Oklahoma City Thunder',
-    'ORL': 'Orlando Magic', 'PHI': 'Philadelphia 76ers', 'PHX': 'Phoenix Suns',
-    'POR': 'Portland Trail Blazers', 'SAC': 'Sacramento Kings', 'SAS': 'San Antonio Spurs',
-    'TOR': 'Toronto Raptors', 'UTA': 'Utah Jazz', 'WAS': 'Washington Wizards'
-}
 
 DEFAULT_PAIRINGS = [
     ('BOS', 'MIA'), ('LAL', 'GSW'), ('NYK', 'PHI'), ('MIL', 'IND'),
@@ -202,20 +183,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
         t_games = by_team.get(t, [])
         gp = len(t_games)
         if gp == 0:
-            teams_dict[t] = {
-                'team': t,
-                'team_name': NBA_TEAM_NAMES.get(t, t),
-                'gp': 0,
-                'is_small_sample': True,
-                'pts_scored': None, 'pts_allowed': None,
-                'reb_total': None, 'reb_allowed': None,
-                'ast_total': None, 'ast_allowed': None,
-                'fg3m_total': None, 'fg3m_allowed': None,
-                'fg3a_total': None, 'fg3a_allowed': None,
-                'fg_pct': None, 'fg_pct_opp': None,
-                'pace': None, 'off_rtg': None, 'def_rtg': None,
-                'shot_profile_offense': None, 'shot_profile_allowed': None
-            }
+            teams_dict[t] = make_empty_team_profile(t)
         else:
             tot_poss = sum(g['poss'] for g in t_games)
             pace = round((tot_poss / (gp * 48)) * 48, 1) if gp > 0 else 100.0

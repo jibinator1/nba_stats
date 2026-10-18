@@ -115,7 +115,7 @@ function renderPlayerProfiles() {
     const kpiHighUsg = document.getElementById('profiles-kpi-high-usg');
     if (!tbody) return;
 
-    let filtered = [...allPlayerProfiles];
+    let filtered = [...((currentPlayerProfiles && currentPlayerProfiles.length) ? currentPlayerProfiles : allPlayerProfiles)];
 
     if (profileSelectedDate) {
         const gamesOnDate = allScheduleGames.filter(g => g.gameday === profileSelectedDate);

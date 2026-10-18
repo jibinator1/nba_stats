@@ -146,6 +146,26 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
     `;
 }
 
+function createEmptyTeamProfile(t) {
+    const zones = ['restricted_area', 'paint_non_ra', 'mid_range', 'corner_3', 'above_break_3'];
+    return {
+        team: t, team_name: teamNamesMap[t] || t, gp: 0, is_small_sample: true,
+        pace: null, neutral_pace: null, transition_freq: null,
+        shot_clock: { early_0_8: null, mid_8_15: null, late_15_24: null },
+        game_script: { leading_10: { pace: null, early_sc: null, late_sc: null }, trailing_10: { pace: null, early_sc: null, late_sc: null } },
+        pnr_coverage: { drop: null, switch: null, ice: null, hedge: null },
+        shot_profile_allowed: Object.fromEntries(zones.map(z => [z, { freq: null, ppp: null }])),
+        shot_profile_offense: Object.fromEntries(zones.map(z => [z, { freq: null, ppp: null }])),
+        rebounding: { dreb_secured_pct: null, oreb_allowed_pct: null },
+        playtypes_offense: {}, playtypes_defense: {},
+        turnover_profile: { avg_total: null, live_ball_per_game: null, live_ball_pct: null, dead_ball_per_game: null, dead_ball_pct: null },
+        paint_touches_pg: null, three_point_rate: null, def_rtg: null, off_rtg: null,
+        pts_allowed: null, pts_scored: null, reb_total: null, reb_allowed: null,
+        ast_total: null, ast_allowed: null, fg3m_total: null, fg3m_allowed: null,
+        fg3a_total: null, fg3a_allowed: null, fg_pct: null, fg_pct_opp: null
+    };
+}
+
 // Dynamic In-Memory Recalculation Engine across Date Range
 function recalculateForensicsForDateRange(sDate, eDate) {
     if (!sDate) sDate = '2025-10-02';
@@ -168,55 +188,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         const gp = tGames.length;
 
         if (gp === 0) {
-            currentForensicTeams[t] = {
-                team: t,
-                team_name: teamNamesMap[t] || t,
-                gp: 0,
-                is_small_sample: true,
-                pace: null,
-                neutral_pace: null,
-                transition_freq: null,
-                shot_clock: { early_0_8: null, mid_8_15: null, late_15_24: null },
-                game_script: {
-                    leading_10: { pace: null, early_sc: null, late_sc: null },
-                    trailing_10: { pace: null, early_sc: null, late_sc: null }
-                },
-                pnr_coverage: { drop: null, switch: null, ice: null, hedge: null },
-                shot_profile_allowed: {
-                    restricted_area: { freq: null, ppp: null },
-                    paint_non_ra: { freq: null, ppp: null },
-                    mid_range: { freq: null, ppp: null },
-                    corner_3: { freq: null, ppp: null },
-                    above_break_3: { freq: null, ppp: null }
-                },
-                shot_profile_offense: {
-                    restricted_area: { freq: null, ppp: null },
-                    paint_non_ra: { freq: null, ppp: null },
-                    mid_range: { freq: null, ppp: null },
-                    corner_3: { freq: null, ppp: null },
-                    above_break_3: { freq: null, ppp: null }
-                },
-                rebounding: { dreb_secured_pct: null, oreb_allowed_pct: null },
-                playtypes_offense: {},
-                playtypes_defense: {},
-                turnover_profile: { avg_total: null, live_ball_per_game: null, live_ball_pct: null, dead_ball_per_game: null, dead_ball_pct: null },
-                paint_touches_pg: null,
-                three_point_rate: null,
-                def_rtg: null,
-                off_rtg: null,
-                pts_allowed: null,
-                pts_scored: null,
-                reb_total: null,
-                reb_allowed: null,
-                ast_total: null,
-                ast_allowed: null,
-                fg3m_total: null,
-                fg3m_allowed: null,
-                fg3a_total: null,
-                fg3a_allowed: null,
-                fg_pct: null,
-                fg_pct_opp: null
-            };
+            currentForensicTeams[t] = createEmptyTeamProfile(t);
         } else {
             const totPoss = tGames.reduce((acc, g) => acc + (g.poss || 100), 0);
             const pace = (totPoss / (gp * 48)) * 48;
@@ -469,6 +441,47 @@ function switchTab(tabId) {
     safeCreateIcons();
 }
 
+const STAT_CARD_METRICS = [
+    { label: 'Points / Game', key: 'pts_scored', rankKey: 'rank_pts_scored' },
+    { label: 'Points Allowed / G', key: 'pts_allowed', rankKey: 'rank_pts_allowed' },
+    { label: 'Rebounds / Game', key: 'reb_total', rankKey: 'rank_reb_total' },
+    { label: 'Rebounds Allowed / G', key: 'reb_allowed', rankKey: 'rank_reb_allowed' },
+    { label: 'Assists / Game', key: 'ast_total', rankKey: 'rank_ast_total' },
+    { label: 'Assists Allowed / G', key: 'ast_allowed', rankKey: 'rank_ast_allowed' },
+    { label: 'Threes Made (3PM)', key: 'fg3m_total', rankKey: 'rank_fg3m_total' },
+    { label: '3PM Allowed / G', key: 'fg3m_allowed', rankKey: 'rank_fg3m_allowed' },
+    { label: 'Threes Attempted (3PA)', key: 'fg3a_total', rankKey: 'rank_fg3a_total' },
+    { label: '3PA Allowed / G', key: 'fg3a_allowed', rankKey: 'rank_fg3a_allowed' },
+    { label: 'FG% (Field Goal %)', key: 'fg_pct', rankKey: 'rank_fg_pct', isPct: true },
+    { label: 'FG% Allowed', key: 'fg_pct_opp', rankKey: 'rank_fg_pct_opp', isPct: true },
+    { label: 'Pace (Poss/48m)', key: 'pace', rankKey: 'rank_pace' },
+    { label: 'Offensive Rating', key: 'off_rtg', rankKey: 'rank_off_rtg' },
+    { label: 'Defensive Rating', key: 'def_rtg', rankKey: 'rank_def_rtg' }
+];
+
+function renderFunnelZone(label, aGen, hAllow, aTeam, hTeam) {
+    const aW = Math.min(100, (parseFloat(aGen) || 0) * 2);
+    const hW = Math.min(100, (parseFloat(hAllow) || 0) * 2);
+    return `
+        <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
+            <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
+                <span>${label}</span>
+                <span class="font-mono text-[9px] text-cyan-400">${aGen != null ? aGen + '%' : '--'}</span>
+            </div>
+            <div class="space-y-1">
+                <div>
+                    <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${aGen != null ? aGen + '%' : '--'}</span></div>
+                    <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${aW}%"></div></div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${hAllow != null ? hAllow + '%' : '--'}</span></div>
+                    <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${hW}%"></div></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function renderGameCardHtml(g) {
     const a = currentForensicTeams[g.away_team] || g.away_forensic || allForensicTeams[g.away_team] || {};
     const h = currentForensicTeams[g.home_team] || g.home_forensic || allForensicTeams[g.home_team] || {};
@@ -579,21 +592,11 @@ function renderGameCardHtml(g) {
                     <div class="text-right font-mono">${hTeam} STAT & RANK</div>
                 </div>
 
-                ${formatStatRow('Points / Game', a.pts_scored, a.rank_pts_scored, h.pts_scored, h.rank_pts_scored, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Points Allowed / G', a.pts_allowed, a.rank_pts_allowed, h.pts_allowed, h.rank_pts_allowed, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Rebounds / Game', a.reb_total, a.rank_reb_total, h.reb_total, h.rank_reb_total, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Rebounds Allowed / G', a.reb_allowed, a.rank_reb_allowed, h.reb_allowed, h.rank_reb_allowed, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Assists / Game', a.ast_total, a.rank_ast_total, h.ast_total, h.rank_ast_total, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Assists Allowed / G', a.ast_allowed, a.rank_ast_allowed, h.ast_allowed, h.rank_ast_allowed, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Threes Made (3PM)', a.fg3m_total, a.rank_fg3m_total, h.fg3m_total, h.rank_fg3m_total, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('3PM Allowed / G', a.fg3m_allowed, a.rank_fg3m_allowed, h.fg3m_allowed, h.rank_fg3m_allowed, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Threes Attempted (3PA)', a.fg3a_total, a.rank_fg3a_total, h.fg3a_total, h.rank_fg3a_total, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('3PA Allowed / G', a.fg3a_allowed, a.rank_fg3a_allowed, h.fg3a_allowed, h.rank_fg3a_allowed, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('FG% (Field Goal %)', (a.fg_pct != null ? a.fg_pct + '%' : null), a.rank_fg_pct, (h.fg_pct != null ? h.fg_pct + '%' : null), h.rank_fg_pct, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('FG% Allowed', (a.fg_pct_opp != null ? a.fg_pct_opp + '%' : null), a.rank_fg_pct_opp, (h.fg_pct_opp != null ? h.fg_pct_opp + '%' : null), h.rank_fg_pct_opp, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Pace (Poss/48m)', a.pace, a.rank_pace, h.pace, h.rank_pace, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Offensive Rating', a.off_rtg, a.rank_off_rtg, h.off_rtg, h.rank_off_rtg, a.is_small_sample, h.is_small_sample)}
-                ${formatStatRow('Defensive Rating', a.def_rtg, a.rank_def_rtg, h.def_rtg, h.rank_def_rtg, a.is_small_sample, h.is_small_sample)}
+                ${STAT_CARD_METRICS.map(m => {
+                    const aVal = a[m.key] != null ? (m.isPct ? a[m.key] + '%' : a[m.key]) : null;
+                    const hVal = h[m.key] != null ? (m.isPct ? h[m.key] + '%' : h[m.key]) : null;
+                    return formatStatRow(m.label, aVal, a[m.rankKey], hVal, h[m.rankKey], a.is_small_sample, h.is_small_sample);
+                }).join('')}
             </div>
 
             ${(!hasDataA || !hasDataH) ? `
@@ -619,54 +622,9 @@ function renderGameCardHtml(g) {
                     <span class="font-mono text-[9px] text-slate-300 bg-[#161b22] px-2 py-0.5 rounded border border-[#21262d]">Game Pace: ${estPace} Poss/48</span>
                 </div>
                 <div class="grid grid-cols-3 gap-2 text-xs">
-                    <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
-                        <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
-                            <span>Rim (RA)</span>
-                            <span class="font-mono text-[9px] text-cyan-400">${aRim}%</span>
-                        </div>
-                        <div class="space-y-1">
-                            <div>
-                                <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${aRim}%</span></div>
-                                <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${Math.min(100, (aRim || 0) * 2)}%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${hRimDef}%</span></div>
-                                <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${Math.min(100, (hRimDef || 0) * 2)}%"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
-                        <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
-                            <span>Mid-Range</span>
-                            <span class="font-mono text-[9px] text-cyan-400">${aMid}%</span>
-                        </div>
-                        <div class="space-y-1">
-                            <div>
-                                <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${aMid}%</span></div>
-                                <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${Math.min(100, (aMid || 0) * 2)}%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${hMidDef}%</span></div>
-                                <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${Math.min(100, (hMidDef || 0) * 2)}%"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-[#161b22] p-2 rounded-lg border border-[#21262d] space-y-1">
-                        <div class="flex items-center justify-between text-[10px] font-bold text-slate-300">
-                            <span>3PT Rate</span>
-                            <span class="font-mono text-[9px] text-cyan-400">${a3pt}%</span>
-                        </div>
-                        <div class="space-y-1">
-                            <div>
-                                <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${aTeam} Gen</span><span>${a3pt}%</span></div>
-                                <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full rounded-full" style="width: ${Math.min(100, (a3pt || 0) * 2)}%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-[8.5px] font-mono text-slate-400"><span>${hTeam} Allow</span><span>${h3ptDef}%</span></div>
-                                <div class="w-full bg-[#21262d] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: ${Math.min(100, (h3ptDef || 0) * 2)}%"></div></div>
-                            </div>
-                        </div>
-                    </div>
+                    ${renderFunnelZone('Rim (RA)', aRim, hRimDef, aTeam, hTeam)}
+                    ${renderFunnelZone('Mid-Range', aMid, hMidDef, aTeam, hTeam)}
+                    ${renderFunnelZone('3PT Rate', a3pt, h3ptDef, aTeam, hTeam)}
                 </div>
             </div>
             `}

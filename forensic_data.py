@@ -86,6 +86,38 @@ def build_paired_games(logs_df):
     
     return paired
 
+def make_empty_team_profile(team):
+    """Creates a blank forensic profile for a team with 0 games in the sample."""
+    zones = ('restricted_area', 'paint_non_ra', 'mid_range', 'corner_3', 'above_break_3')
+    return {
+        'team': team,
+        'team_name': NBA_TEAM_NAMES.get(team, team),
+        'gp': 0,
+        'is_small_sample': True,
+        'pace': None, 'neutral_pace': None, 'transition_freq': None,
+        'shot_clock': {'early_0_8': None, 'mid_8_15': None, 'late_15_24': None},
+        'game_script': {
+            'leading_10': {'pace': None, 'early_sc': None, 'late_sc': None},
+            'trailing_10': {'pace': None, 'early_sc': None, 'late_sc': None}
+        },
+        'pnr_coverage': {'drop': None, 'switch': None, 'ice': None, 'hedge': None},
+        'shot_profile_allowed': {z: {'freq': None, 'ppp': None} for z in zones},
+        'shot_profile_offense': {z: {'freq': None, 'ppp': None} for z in zones},
+        'wide_open_3pt': {'allowed_freq': None, 'opponent_pct': None},
+        'rebounding': {'dreb_secured_pct': None, 'oreb_allowed_pct': None},
+        'playtypes_offense': {},
+        'playtypes_defense': {},
+        'turnover_profile': {
+            'avg_total': None, 'live_ball_per_game': None, 'live_ball_pct': None,
+            'dead_ball_per_game': None, 'dead_ball_pct': None
+        },
+        'paint_touches_pg': None, 'three_point_rate': None,
+        'def_rtg': None, 'off_rtg': None, 'pts_allowed': None, 'pts_scored': None,
+        'reb_total': None, 'reb_allowed': None, 'ast_total': None, 'ast_allowed': None,
+        'fg3m_total': None, 'fg3m_allowed': None, 'fg3a_total': None, 'fg3a_allowed': None,
+        'fg_pct': None, 'fg_pct_opp': None
+    }
+
 def calculate_team_forensics(logs_df, paired_df):
     """Calculates all 4 pillars of forensic metrics for each of the 30 teams."""
     team_profiles = {}
@@ -97,66 +129,7 @@ def calculate_team_forensics(logs_df, paired_df):
         
         # If no games played in this date slice, return clean blank/null profile
         if gp == 0:
-            team_profiles[team] = {
-                'team': team,
-                'team_name': NBA_TEAM_NAMES.get(team, team),
-                'gp': 0,
-                'is_small_sample': True,
-                'pace': None,
-                'neutral_pace': None,
-                'transition_freq': None,
-                'shot_clock': {
-                    'early_0_8': None,
-                    'mid_8_15': None,
-                    'late_15_24': None
-                },
-                'game_script': {
-                    'leading_10': {'pace': None, 'early_sc': None, 'late_sc': None},
-                    'trailing_10': {'pace': None, 'early_sc': None, 'late_sc': None}
-                },
-                'pnr_coverage': {'drop': None, 'switch': None, 'ice': None, 'hedge': None},
-                'shot_profile_allowed': {
-                    'restricted_area': {'freq': None, 'ppp': None},
-                    'paint_non_ra': {'freq': None, 'ppp': None},
-                    'mid_range': {'freq': None, 'ppp': None},
-                    'corner_3': {'freq': None, 'ppp': None},
-                    'above_break_3': {'freq': None, 'ppp': None}
-                },
-                'shot_profile_offense': {
-                    'restricted_area': {'freq': None, 'ppp': None},
-                    'paint_non_ra': {'freq': None, 'ppp': None},
-                    'mid_range': {'freq': None, 'ppp': None},
-                    'corner_3': {'freq': None, 'ppp': None},
-                    'above_break_3': {'freq': None, 'ppp': None}
-                },
-                'wide_open_3pt': {'allowed_freq': None, 'opponent_pct': None},
-                'rebounding': {'dreb_secured_pct': None, 'oreb_allowed_pct': None},
-                'playtypes_offense': {},
-                'playtypes_defense': {},
-                'turnover_profile': {
-                    'avg_total': None,
-                    'live_ball_per_game': None,
-                    'live_ball_pct': None,
-                    'dead_ball_per_game': None,
-                    'dead_ball_pct': None
-                },
-                'paint_touches_pg': None,
-                'three_point_rate': None,
-                'def_rtg': None,
-                'off_rtg': None,
-                'pts_allowed': None,
-                'pts_scored': None,
-                'reb_total': None,
-                'reb_allowed': None,
-                'ast_total': None,
-                'ast_allowed': None,
-                'fg3m_total': None,
-                'fg3m_allowed': None,
-                'fg3a_total': None,
-                'fg3a_allowed': None,
-                'fg_pct': None,
-                'fg_pct_opp': None
-            }
+            team_profiles[team] = make_empty_team_profile(team)
             continue
 
         # Sample size gating: < 10 games or < 200 possessions
@@ -794,9 +767,6 @@ def run_forensic_pipeline():
     with open(out_team_logs_file, 'w', encoding='utf-8') as f:
         json.dump(team_game_logs, f, separators=(',', ':'), cls=NumpyEncoder)
     print(f"Saved {len(team_game_logs)} team game logs to {out_team_logs_file}")
-    
-    print("Forensic pipeline completed successfully.")
-    return True
     
     print("Forensic pipeline completed successfully.")
     return True

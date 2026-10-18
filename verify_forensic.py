@@ -27,7 +27,7 @@ def run_audit():
     files_to_check = [
         'templates/index.html', 'app.py', 'forensic_data.py',
         'static/js/app.js', 'static/js/visuals.js', 'static/js/modal.js', 'static/js/profiles.js',
-        'README.md'
+        'README.md', 'run_app.py'
     ]
     
     print("\n[1/5] Auditing forbidden judgmental words...")

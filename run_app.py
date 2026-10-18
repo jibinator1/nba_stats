@@ -1,6 +1,6 @@
 """
-NBA Analytics & Matchup Hub - App Launcher
-==========================================
+NBA Forensic Scouting Engine - Local App Launcher
+==================================================
 Launches the Flask server on http://localhost:5000 and automatically
 opens the interactive dashboard in your default browser.
 """
@@ -16,8 +16,8 @@ def open_browser():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("STARTING NBA ANALYTICS & MATCHUP HUB")
-    print("Positional Defense Matrix • Player Streaks")
+    print("STARTING NBA FORENSIC SCOUTING ENGINE")
+    print("Descriptive Play-by-Play & Tracking Matchup Alignment")
     print("=" * 60)
     print("Dashboard will open automatically at: http://localhost:5000")
     print("Press Ctrl+C in this terminal to stop the server.")

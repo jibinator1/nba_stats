@@ -379,10 +379,10 @@
             initialHome: {{ (initial_home if initial_home is defined else None) | tojson }}
         };
     </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/visuals.js') }}"></script>
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profiles.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
     <!-- ============================================================== -->
     <!-- DEEP DIVE MODAL OVERLAY                                        -->
