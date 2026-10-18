@@ -29,8 +29,13 @@
         }
     </script>
 
-    <!-- Lucide Icons -->
+    <!-- Lucide Icons (Dual CDN with unpkg + Cloudflare Fallback) -->
     <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <script>
+        if (!window.lucide) {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.344.0/umd/lucide.min.js"><\/script>');
+        }
+    </script>
 
     <style>
         html, body {
@@ -136,8 +141,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <!-- Logo & Title -->
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-cyan-400">
-                    <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i>
+                <div class="w-9 h-9 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-cyan-400 shadow-inner">
+                    <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                    </svg>
                 </div>
                 <div>
                     <h1 class="text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
@@ -468,13 +477,24 @@
         const clientTodayStr = getTodayDateStr();
         const defaultSeasonStart = '2026-10-19';
 
-        // State variables: Start at oct 19th 2026 to the date website is opened (changes every day)
+        // State variables: Start at oct 19th 2026 through the 2026-27 upcoming season
         let startDate = defaultSeasonStart;
-        let endDate = (clientTodayStr >= defaultSeasonStart) ? clientTodayStr : defaultSeasonStart;
+        let endDate = '2027-04-14';
         let currentScheduleSeason = '2026';
         let selectedScheduleDate = 'all';
         let currentScheduleTeam = 'ALL';
         let scheduleSearchQuery = '';
+
+        // Resilient Lucide Icon Helper
+        function safeCreateIcons(targetRoot) {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons(targetRoot ? { root: targetRoot } : undefined);
+                }
+            } catch (err) {
+                console.warn('Lucide icon rendering warning:', err);
+            }
+        }
 
         let profileSelectedDate = '';
         let profileFilterPos = 'ALL';
@@ -537,7 +557,7 @@
             renderScheduleGames();
             renderProfileDateChips();
             renderPlayerProfiles();
-            if (window.lucide) lucide.createIcons();
+            safeCreateIcons();
         }
 
         // Tab Switching
@@ -558,7 +578,7 @@
                 btnProfiles.className = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
                 btnSched.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
             }
-            if (window.lucide) lucide.createIcons();
+            safeCreateIcons();
         }
 
         // =========================================================================
@@ -807,6 +827,7 @@
                         </span>
                     </div>
                 </div>
+            `;
         }
 
         // =========================================================================
@@ -886,8 +907,9 @@
                     <div class="grid grid-cols-12 items-center py-1.5 gap-2">
                         <!-- Away Team -->
                         <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-cyan-400 text-sm font-mono shadow-inner shrink-0">
-                                ${aTeam}
+                            <div class="w-11 h-11 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
+                                <img src="https://a.espncdn.com/i/teamlogos/nba/500/${aTeam.toLowerCase()}.png" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                <span class="font-extrabold text-cyan-400 font-mono text-xs hidden items-center justify-center w-full h-full">${aTeam}</span>
                             </div>
                             <div class="min-w-0 flex-1">
                                 <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.away_team_name}</h4>
@@ -925,8 +947,9 @@
                                     <span>Home</span>
                                 </div>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-rose-400 text-sm font-mono shadow-inner shrink-0">
-                                ${hTeam}
+                            <div class="w-11 h-11 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
+                                <img src="https://a.espncdn.com/i/teamlogos/nba/500/${hTeam.toLowerCase()}.png" alt="${hTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                <span class="font-extrabold text-rose-400 font-mono text-xs hidden items-center justify-center w-full h-full">${hTeam}</span>
                             </div>
                         </div>
                     </div>
@@ -1090,7 +1113,7 @@
                 container.innerHTML = games.slice(0, 30).map(renderGameCardHtml).join('');
             }
 
-            if (window.lucide) lucide.createIcons({ root: container });
+            safeCreateIcons(container);
         }
 
         function renderScheduleDatePills() {
@@ -1150,7 +1173,7 @@
                 if (titleEl) titleEl.textContent = '2026-27 NBA Forensic Matchup Lab';
                 if (seasonPill) seasonPill.textContent = '2026-27 Tracking';
                 startDate = '2026-10-19';
-                endDate = (todayStr >= '2026-10-19') ? todayStr : '2026-10-19';
+                endDate = '2027-04-14';
             } else if (season === '2025') {
                 if (titleEl) titleEl.textContent = '2025-26 NBA Forensic Matchup Lab';
                 if (seasonPill) seasonPill.textContent = '2025-26 Baseline';
@@ -1160,7 +1183,7 @@
                 if (titleEl) titleEl.textContent = 'Full NBA Forensic Matchup Lab';
                 if (seasonPill) seasonPill.textContent = 'All Seasons';
                 startDate = '2025-10-02';
-                endDate = (todayStr >= '2026-10-19') ? todayStr : '2026-10-19';
+                endDate = '2027-04-14';
             }
 
             document.getElementById('input-start-date').value = startDate;
@@ -1207,7 +1230,7 @@
                 const container = document.getElementById('schedule-games-container');
                 if (container) {
                     container.innerHTML = renderGameCardHtml(customMatchup) + container.innerHTML;
-                    if (window.lucide) lucide.createIcons({ root: container });
+                    safeCreateIcons(container);
                     container.scrollIntoView({ behavior: 'smooth' });
                 }
             } catch (e) {
@@ -1396,7 +1419,7 @@
                         </td>
                     </tr>
                 `;
-                if (window.lucide) lucide.createIcons({ root: tbody });
+                safeCreateIcons(tbody);
                 return;
             }
 
@@ -1423,7 +1446,12 @@
                             <div class="text-[10px] text-slate-500 font-mono">${p.team_name} • ${p.games_played} GP</div>
                         </td>
                         <td class="text-center font-mono font-bold text-cyan-400 py-2.5 px-3">${p.position}</td>
-                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.team}</td>
+                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <img src="https://a.espncdn.com/i/teamlogos/nba/500/${(p.team || '').toLowerCase()}.png" alt="${p.team}" class="w-4 h-4 object-contain shrink-0" onerror="this.style.display='none';"/>
+                                <span>${p.team}</span>
+                            </div>
+                        </td>
                         <td class="text-right font-mono text-slate-200 py-2.5 px-3">
                             <span class="font-bold">${sAvg[statKey] != null ? sAvg[statKey] : '--'}</span>
                             <span class="text-[10px] text-slate-500 block">${sAvg.min} MPG</span>
@@ -1446,7 +1474,7 @@
                 `;
             }).join('');
 
-            if (window.lucide) lucide.createIcons({ root: tbody });
+            safeCreateIcons(tbody);
         }
 
         // Initialize on DOM load
@@ -1460,7 +1488,7 @@
             renderScheduleGames();
             renderProfileDateChips();
             renderPlayerProfiles();
-            if (window.lucide) lucide.createIcons();
+            safeCreateIcons();
         });
     </script>
 </body>

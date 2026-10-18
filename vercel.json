@@ -1,5 +1,13 @@
 {
   "version": 2,
+  "functions": {
+    "app.py": {
+      "includeFiles": "*.json"
+    },
+    "api/index.py": {
+      "includeFiles": "*.json"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",

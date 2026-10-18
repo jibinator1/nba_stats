@@ -259,7 +259,7 @@ def index():
 
     today_str = datetime.now().strftime("%Y-%m-%d")
     default_start_date = '2026-10-19'
-    default_end_date = max('2026-10-19', today_str)
+    default_end_date = '2027-04-14'
 
     return render_template('index.html',
                            page_type='schedule',
@@ -286,7 +286,7 @@ def profiles():
 
     today_str = datetime.now().strftime("%Y-%m-%d")
     default_start_date = '2026-10-19'
-    default_end_date = max('2026-10-19', today_str)
+    default_end_date = '2027-04-14'
 
     return render_template('index.html',
                            page_type='profiles',
@@ -307,12 +307,9 @@ def api_schedule():
     forensic_teams, similarity_lookups, player_profiles, _ = load_forensic_data()
     all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
 
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    default_end_date = max('2026-10-19', today_str)
-
     season = request.args.get('season', '2026')
     s_date = request.args.get('start_date', '2026-10-19')
-    e_date = request.args.get('end_date', default_end_date)
+    e_date = request.args.get('end_date', '2027-04-14')
 
     filtered = [g for g in all_games if s_date <= g['gameday'] <= e_date]
     if season == '2026':
