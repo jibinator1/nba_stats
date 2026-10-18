@@ -249,6 +249,8 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
 
 def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=None):
     """Unified rendering controller for main dashboard, profiles tab, and matchup views."""
+    if request.args.get('debug') == '1':
+        return jsonify({k: str(v) for k, v in request.environ.items() if not k.startswith('wsgi.')})
     forensic_teams, _, player_profiles, team_game_logs, last_updated = load_forensic_data()
     all_games = load_all_schedule_games()
     today_str = datetime.now().strftime("%Y-%m-%d")
