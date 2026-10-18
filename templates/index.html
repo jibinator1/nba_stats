@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="theme-color" content="#0d1117">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>NBA Analytics & Matchup Hub</title>
+    <title>NBA Forensic Scouting Engine • Matchup Lab</title>
 
-    <!-- Favicon (NBA Basketball Icon) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2358a6ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20'></path><line x1='2' y1='12' x2='22' y2='12'></line></svg>">
+    <!-- Favicon (Basketball Icon) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20'></path><line x1='2' y1='12' x2='22' y2='12'></line></svg>">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,21 +21,17 @@
                         cardbg: '#161b22',
                         cardsubtle: '#21262d',
                         bordercolor: '#30363d',
-                        accent: '#58a6ff',
-                        accentsubtle: 'rgba(56, 139, 253, 0.15)',
-                        successtext: '#3fb950',
-                        warningtext: '#d29922',
-                        dangertext: '#f85149'
+                        accent: '#38bdf8',
+                        accentsubtle: 'rgba(56, 189, 248, 0.12)'
                     }
                 }
             }
         }
     </script>
 
-    <!-- Lucide Icons (Pinned CDN) -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
 
-    <!-- Base Styling matching NFL Hub -->
     <style>
         html, body {
             overflow-x: hidden;
@@ -50,7 +44,6 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             touch-action: manipulation;
         }
-        /* Mobile touch scrolling */
         .touch-scroll {
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
@@ -62,20 +55,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* Sticky table column for mobile */
-        .sticky-col {
-            position: sticky;
-            left: 0;
-            z-index: 10;
-            background-color: #161b22;
-        }
-        th.sticky-col {
-            z-index: 20;
-            background-color: #21262d;
-        }
-        .rank-top { background-color: rgba(63, 185, 80, 0.12); color: #7ee787; border: 1px solid rgba(63, 185, 80, 0.25); }
-        .rank-mid { background-color: rgba(88, 166, 255, 0.1); color: #a5d6ff; border: 1px solid rgba(88, 166, 255, 0.2); }
-        .rank-bot { background-color: rgba(248, 81, 73, 0.12); color: #ffa198; border: 1px solid rgba(248, 81, 73, 0.25); }
         .glass-panel {
             background: #161b22;
             border: 1px solid #30363d;
@@ -86,10 +65,10 @@
             transition: color 0.15s ease, background-color 0.15s ease;
         }
         .th-sortable:hover {
-            color: #58a6ff;
+            color: #38bdf8;
             background-color: #21262d;
         }
-        /* Per-Game Stat Hover Info Box (Snappy Lingering Tooltip) */
+        /* Forensic Tooltip Trigger */
         .stat-info-trigger {
             position: relative;
             display: inline-flex;
@@ -111,15 +90,14 @@
             bottom: calc(100% + 8px);
             left: 50%;
             transform: translateX(-50%) translateY(4px);
-            width: 250px;
+            width: 260px;
             max-width: calc(100vw - 32px);
             padding: 8px 11px;
             background: rgba(18, 22, 28, 0.98);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid #30363d;
             border-radius: 8px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8);
             color: #c9d1d9;
             font-size: 11px;
             line-height: 1.45;
@@ -128,7 +106,6 @@
             pointer-events: none;
             z-index: 100;
             transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
-            transition-delay: 0s;
         }
         .stat-info-box::after {
             content: '';
@@ -144,9 +121,7 @@
             visibility: visible;
             opacity: 1;
             transform: translateX(-50%) translateY(0);
-            transition-delay: 0.12s;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
@@ -155,34 +130,34 @@
 <body class="min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white">
 
     <!-- ============================================================== -->
-    <!-- TOP NAVIGATION BAR (Matching NFL Hub Header with Date Range)  -->
+    <!-- TOP NAVIGATION BAR                                            -->
     <!-- ============================================================== -->
     <header class="glass-panel sticky top-0 z-50 border-b border-[#30363d]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <!-- Logo & Title -->
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-slate-300">
-                    <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-300"></i>
+                <div class="w-9 h-9 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-cyan-400">
+                    <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i>
                 </div>
                 <div>
                     <h1 class="text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
-                        <span>NBA PREDICTION & ANALYTICS</span>
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#21262d] text-slate-400 border border-[#30363d] font-normal" id="header-season-pill">2026 Season</span>
+                        <span>NBA FORENSIC SCOUTING ENGINE</span>
+                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#21262d] text-cyan-400 border border-[#30363d] font-normal" id="header-season-pill">2026-27 Tracking</span>
                     </h1>
-                    <p class="text-xs text-slate-400 -mt-0.5">Volume x Efficiency Metrics • Matchup Lab H2H • Positional Defense</p>
+                    <p class="text-xs text-slate-400 -mt-0.5">4-Pillar Matchup Lab • Descriptive Tracking Metrics • Multi-Season Baselines • Player Usage Distributions</p>
                 </div>
             </div>
 
-            <!-- Global Matchup Date Range (Matching NFL Hub Top-Right Date Range) -->
+            <!-- Global Matchup Date Range -->
             <div class="flex items-center gap-3">
                 <div class="flex items-center bg-[#21262d] border border-[#30363d] rounded-lg p-1.5 space-x-2 text-xs">
                     <div class="flex items-center space-x-1.5 px-2">
                         <span class="text-slate-400 font-medium text-[11px]">From:</span>
-                        <input type="date" id="input-start-date" value="{{ start_date }}" onchange="onDateRangeChange()" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-1 outline-none focus:border-slate-500 font-mono text-xs cursor-pointer">
+                        <input type="date" id="input-start-date" value="{{ start_date }}" onchange="onDateRangeChange()" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-1 outline-none focus:border-cyan-500 font-mono text-xs cursor-pointer">
                     </div>
                     <div class="flex items-center space-x-1.5 px-2 border-l border-[#30363d]">
                         <span class="text-slate-400 font-medium text-[11px]">To:</span>
-                        <input type="date" id="input-end-date" value="{{ end_date }}" onchange="onDateRangeChange()" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-1 outline-none focus:border-slate-500 font-mono text-xs cursor-pointer">
+                        <input type="date" id="input-end-date" value="{{ end_date }}" onchange="onDateRangeChange()" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-1 outline-none focus:border-cyan-500 font-mono text-xs cursor-pointer">
                     </div>
                 </div>
 
@@ -195,14 +170,14 @@
 
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 border-t border-[#30363d] overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type != 'floor-streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
-                <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
-                <span id="nav-schedule-label">Schedule & Matchups (2026 / 2025)</span>
+            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type != 'profiles' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+                <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                <span id="nav-schedule-label">Matchup Lab (2026-27 Schedule)</span>
             </button>
-            <button onclick="switchTab('floor-streak')" id="tab-btn-floor-streak" class="py-2.5 px-1 border-b-2 {{ 'border-slate-300 text-slate-100 font-semibold' if page_type == 'floor-streak' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
-                <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
-                <span>Player Floor Streaks</span>
-                <span id="streaks-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#30363d] text-slate-300 font-mono">{{ floor_streaks|length }}</span>
+            <button onclick="switchTab('profiles')" id="tab-btn-profiles" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type == 'profiles' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+                <span>Player Usage Profiles</span>
+                <span id="profiles-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#30363d] text-cyan-300 font-mono">{{ player_profiles|length }}</span>
             </button>
         </div>
     </header>
@@ -211,30 +186,30 @@
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
 
         <!-- ============================================================== -->
-        <!-- TAB 1: SCHEDULE & MATCHUP STATS -->
+        <!-- TAB 1: 4-PILLAR MATCHUP LAB & SCHEDULE                         -->
         <!-- ============================================================== -->
-        <section id="tab-schedule" class="{{ 'hidden' if page_type == 'floor-streak' else '' }} space-y-5">
+        <section id="tab-schedule" class="{{ 'hidden' if page_type == 'profiles' else '' }} space-y-5">
             <!-- Header & Control Bar -->
             <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#30363d] pb-4">
                     <div>
                         <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
-                            <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
-                            <span id="schedule-title">2026 NBA Season Schedule & Matchup Stats</span>
+                            <i data-lucide="binary" class="w-4 h-4 text-cyan-400"></i>
+                            <span id="schedule-title">Forensic Matchup Lab</span>
                         </h2>
                         <p class="text-xs text-slate-400 mt-0.5" id="schedule-subtitle">
-                            Full 2026 schedule with verified scores, completed stats & defensive rankings
+                            Descriptive tracking metrics across Pace, Perimeter/Paint Defense, Play Types, and Similar-Opponent Clusters.
                         </p>
                     </div>
 
-                    <!-- Filter Controls (Mobile Responsive) -->
+                    <!-- Filter Controls -->
                     <div class="flex flex-wrap items-center gap-2">
                         <!-- Season Selector -->
                         <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5">
                             <span class="text-[11px] text-slate-400 font-medium">Season:</span>
                             <select id="schedule-season-select" onchange="onScheduleSeasonChange(this.value)" class="bg-transparent text-slate-200 text-xs font-semibold outline-none cursor-pointer">
-                                <option value="2026" selected class="bg-[#161b22]">2026 (Cur)</option>
-                                <option value="2025" class="bg-[#161b22]">2025</option>
+                                <option value="2026" selected class="bg-[#161b22]">2026-27 Tracking</option>
+                                <option value="2025" class="bg-[#161b22]">2025-26 Baseline</option>
                                 <option value="ALL" class="bg-[#161b22]">All Seasons</option>
                             </select>
                         </div>
@@ -252,23 +227,18 @@
 
                         <!-- Search Input -->
                         <div class="relative w-full sm:w-44">
-                            <input type="text" id="schedule-search-input" oninput="onScheduleSearch(this.value)" placeholder="Search team..." class="bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-7 pr-3 py-1.5 focus:border-slate-500 outline-none font-medium placeholder-slate-500 w-full">
+                            <input type="text" id="schedule-search-input" oninput="onScheduleSearch(this.value)" placeholder="Search team..." class="bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-7 pr-3 py-1.5 focus:border-cyan-500 outline-none font-medium placeholder-slate-500 w-full">
                             <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2 pointer-events-none"></i>
                         </div>
-
-                        <!-- Refresh -->
-                        <button onclick="reloadAllData()" class="p-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-300 rounded-lg transition active:scale-95" title="Refresh Schedule">
-                            <i data-lucide="rotate-cw" class="w-4 h-4"></i>
-                        </button>
                     </div>
                 </div>
 
                 <!-- Custom Matchup Lab Bar (Head-to-Head Comparison) -->
                 <div class="bg-[#12161c] rounded-lg p-3 border border-[#30363d]/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div class="flex items-center gap-2">
-                        <i data-lucide="shuffle" class="w-4 h-4 text-cyan-400"></i>
-                        <span class="text-xs font-bold text-slate-200">Matchup Lab H2H:</span>
-                        <span class="text-[11px] text-slate-400">Compare any two NBA teams head-to-head:</span>
+                        <i data-lucide="git-compare" class="w-4 h-4 text-cyan-400"></i>
+                        <span class="text-xs font-bold text-slate-200">Custom Matchup Analysis:</span>
+                        <span class="text-[11px] text-slate-400">Align any two NBA teams side-by-side with full 4-pillar data:</span>
                     </div>
 
                     <div class="flex items-center gap-2 flex-wrap">
@@ -293,44 +263,44 @@
                         </div>
 
                         <button onclick="compareCustomMatchup()" class="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-lg transition active:scale-95 shadow-sm">
-                            Compare
+                            Analyze Matchup
                         </button>
                     </div>
                 </div>
 
-                <!-- Summary Badges & Quick Stats -->
+                <!-- Forensic Standards & Sample Size Gating Ribbon -->
                 <div class="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="px-2.5 py-1 rounded bg-[#21262d] border border-[#30363d] text-slate-300 font-medium">
-                            <strong id="sched-stat-total-games" class="text-slate-100 font-bold">0</strong> Total Games
+                            <strong id="sched-stat-total-games" class="text-slate-100 font-bold">0</strong> Games
                         </span>
                         <span class="px-2.5 py-1 rounded bg-[#21262d] border border-[#30363d] text-slate-300 font-medium">
                             <strong id="sched-stat-completed-games" class="text-slate-100 font-bold">0</strong> Final
                         </span>
-                        <span id="sched-stat-baseline-badge" class="px-2.5 py-1 rounded bg-sky-500/10 border border-sky-500/25 text-sky-300 font-medium text-[11px] flex items-center space-x-1.5">
-                            <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400"></i>
-                            <span id="sched-stat-baseline-note">Timeline: {{ start_date }} to {{ end_date }}</span>
+                        <span class="px-2.5 py-1 rounded bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 font-medium text-[11px] flex items-center space-x-1.5">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Sample Size Gating: &lt;10 Games or &lt;200 Possessions marked [Small Sample]</span>
                         </span>
                     </div>
 
                     <div class="text-[11px] text-slate-400 flex items-center space-x-2">
-                        <span>Rank badges:</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded rank-top">#1-#10 (Easiest / Top Target)</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded rank-mid">#11-#20 (Mid)</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded rank-bot">#21-#30 (Lockdown Defense)</span>
+                        <span>Rank tiers:</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-mono">#1-#10 (Lowest Allowed / Top Containment)</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">#11-#20 (Median)</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-800/60 font-mono">#21-#30 (Highest Allowed)</span>
                     </div>
                 </div>
 
-                <!-- Select Date where Games are on for the 2026 Season (Pill Bar & Custom Date Picker) -->
+                <!-- Select Date Game Slate Chips -->
                 <div class="space-y-1.5 pt-2 border-t border-[#30363d]">
                     <div class="flex items-center justify-between flex-wrap gap-2">
                         <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                             <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-400"></i>
-                            <span>Select Date where games are on for the 2026 season:</span>
+                            <span>Select Game Slate Date:</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[11px] text-slate-400">Pick Specific Date:</span>
-                            <input type="date" id="schedule-date-picker" onchange="filterScheduleDate(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-mono cursor-pointer" title="Select specific game date">
+                            <input type="date" id="schedule-date-picker" onchange="filterScheduleDate(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-mono cursor-pointer" title="Select specific game date">
                         </div>
                     </div>
                     <!-- Date Pills Container -->
@@ -340,62 +310,62 @@
                 </div>
             </div>
 
-            <!-- Schedule Games List Container (2-Column Matchup Card Grid) -->
-            <div id="schedule-games-container" class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <!-- Schedule Games List Container -->
+            <div id="schedule-games-container" class="space-y-6">
                 <!-- Dynamically populated via renderScheduleGames() -->
             </div>
         </section>
 
 
         <!-- ============================================================== -->
-        <!-- TAB 2: PLAYER FLOOR BREACH STREAKS -->
+        <!-- TAB 2: PLAYER USAGE PROFILES (UPGRADED FROM FLOOR STREAKS)    -->
         <!-- ============================================================== -->
-        <section id="tab-floor-streak" class="{{ 'hidden' if page_type != 'floor-streak' else '' }} space-y-5">
-            <!-- Header & Concept Overview -->
+        <section id="tab-profiles" class="{{ 'hidden' if page_type != 'profiles' else '' }} space-y-5">
+            <!-- Header & Overview -->
             <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <div class="flex items-center gap-2">
                             <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
-                                <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
-                                <span>Player Floor Streaks</span>
+                                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Player Usage Profiles</span>
                             </h2>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-slate-200 border border-[#30363d]">Hard Line Threshold (+Margin / Baseline)</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-cyan-400 border border-[#30363d]">Top 4 Rotations • 10-Game Distribution Percentiles</span>
                         </div>
                         <p class="text-xs text-slate-400 mt-1">
-                            Tracks consecutive games where player production meets or exceeds established hard floor thresholds across Points, Rebounds, and Assists.
+                            Descriptive distributions displaying Typical Floor (25th percentile), Usual Output (Median), and Typical Ceiling (75th percentile) alongside USG%, AST%, REB%, and situational clutch volume.
                         </p>
                     </div>
 
                     <div class="flex items-center gap-3">
                         <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1.5">
-                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                            <span id="floor-active-timeline-text">2026 Season Active</span>
+                            <span class="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
+                            <span>2026 Tracking Baseline Active</span>
                         </div>
-                        <button onclick="reloadAllData()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Floor Streaks">
+                        <button onclick="reloadAllData()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Profiles">
                             <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-slate-400"></i>
-                            <span>Refresh Streaks</span>
+                            <span>Refresh Profiles</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- KPI Metric Summary Ribbon (Matching NFL Hub) -->
+                <!-- KPI Ribbon -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#30363d]">
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Longest Active Streak</span>
-                        <div id="floor-kpi-longest" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.longest }}</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Tracked Rotation Players</span>
+                        <div id="profiles-kpi-total" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ player_profiles|length }}</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">High Consistency (8+ Games)</span>
-                        <div id="floor-kpi-elite" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.elite }}</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Active on Current Slate</span>
+                        <div id="profiles-kpi-active" class="text-xs font-semibold font-mono text-cyan-400 mt-1">All Teams</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Solid Floor (5-7 Games)</span>
-                        <div id="floor-kpi-solid" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.solid }}</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Primary Usage Core (&gt;28% USG)</span>
+                        <div id="profiles-kpi-high-usg" class="text-xs font-semibold font-mono text-slate-200 mt-1">--</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Developing (1-4 Games)</span>
-                        <div id="floor-kpi-breached" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ streak_kpis.developing }}</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Sample Gating Status</span>
+                        <div class="text-xs font-semibold font-mono text-emerald-400 mt-1">Verified (&gt;10 GP)</div>
                     </div>
                 </div>
             </div>
@@ -405,83 +375,66 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <!-- Search Input -->
                     <div class="relative w-56">
-                        <input type="text" id="floor-search-input" oninput="onFloorSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-slate-500 font-medium">
+                        <input type="text" id="profile-search-input" oninput="onProfileSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-cyan-500 font-medium">
                         <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
                     </div>
 
-                    <!-- Date Filter: Select Game Date (Matching NFL Hub Game Slate Chips) -->
+                    <!-- Playing Tonight Date Filter (Slate Chips) -->
                     <div class="flex items-center gap-1.5 bg-[#161b22] px-2.5 py-1 rounded-lg border border-[#30363d] min-w-0 max-w-full overflow-hidden">
                         <span class="text-xs text-slate-400 font-semibold flex items-center gap-1 shrink-0">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
-                            <span>Game Slate:</span>
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Playing Tonight:</span>
                         </span>
-                        <div id="floor-date-chips" class="flex items-center gap-1 overflow-x-auto max-w-[240px] sm:max-w-[320px] md:max-w-[420px] py-0.5 whitespace-nowrap scrollbar-thin shrink">
-                            <button id="btn-floor-all-dates" onclick="clearFloorDateFilter()" class="chip active text-[11px] py-0.5 px-2.5 rounded shrink-0 bg-[#30363d] text-slate-100 font-bold" title="Show all dates">All</button>
+                        <div id="profile-date-chips" class="flex items-center gap-1 overflow-x-auto max-w-[240px] sm:max-w-[320px] md:max-w-[420px] py-0.5 whitespace-nowrap scrollbar-thin shrink">
+                            <button id="btn-profile-all-dates" onclick="clearProfileDateFilter()" class="chip active text-[11px] py-0.5 px-2.5 rounded shrink-0 bg-[#30363d] text-slate-100 font-bold" title="Show all dates">All Slates</button>
                         </div>
-                        <input type="date" id="floor-date-picker" onchange="onFloorDateChange(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-mono cursor-pointer shrink-0" title="Select custom slate date">
+                        <input type="date" id="profile-date-picker" onchange="onProfileDateChange(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-mono cursor-pointer shrink-0" title="Select custom slate date">
                     </div>
 
-                    <!-- Position Filter Chips (PG, SG, SF, PF, C) -->
+                    <!-- Position Filter Chips -->
                     <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                        <button onclick="setFloorPosFilter('ALL')" id="floor-filter-pos-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
-                        <button onclick="setFloorPosFilter('PG')" id="floor-filter-pos-PG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
-                        <button onclick="setFloorPosFilter('SG')" id="floor-filter-pos-SG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
-                        <button onclick="setFloorPosFilter('SF')" id="floor-filter-pos-SF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
-                        <button onclick="setFloorPosFilter('PF')" id="floor-filter-pos-PF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
-                        <button onclick="setFloorPosFilter('C')" id="floor-filter-pos-C" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
+                        <button onclick="setProfilePosFilter('ALL')" id="profile-filter-pos-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
+                        <button onclick="setProfilePosFilter('PG')" id="profile-filter-pos-PG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
+                        <button onclick="setProfilePosFilter('SG')" id="profile-filter-pos-SG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
+                        <button onclick="setProfilePosFilter('SF')" id="profile-filter-pos-SF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
+                        <button onclick="setProfilePosFilter('PF')" id="profile-filter-pos-PF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
+                        <button onclick="setProfilePosFilter('C')" id="profile-filter-pos-C" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
                     </div>
 
-                    <!-- Metric Filter Chips (PTS, REB, AST) -->
+                    <!-- Stat Metric Selector Chips -->
                     <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                        <button onclick="setFloorStatFilter('ALL')" id="floor-filter-stat-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
-                        <button onclick="setFloorStatFilter('PTS')" id="floor-filter-stat-PTS" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PTS</button>
-                        <button onclick="setFloorStatFilter('REB')" id="floor-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
-                        <button onclick="setFloorStatFilter('AST')" id="floor-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
-                    </div>
-
-                    <!-- Minimum Streak Filter -->
-                    <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
-                        <span class="text-[11px] font-medium">Streak:</span>
-                        <select id="floor-streak-filter-select" onchange="setFloorStreakFilter(this.value)" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-slate-500 font-medium cursor-pointer">
-                            <option value="1" selected>All Active (1+)</option>
-                            <option value="2">Active (2+)</option>
-                            <option value="5">Solid (5+)</option>
-                            <option value="8">Elite (8+)</option>
-                        </select>
+                        <button onclick="setProfileStatFilter('PTS')" id="profile-filter-stat-PTS" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">PTS</button>
+                        <button onclick="setProfileStatFilter('REB')" id="profile-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
+                        <button onclick="setProfileStatFilter('AST')" id="profile-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
                     </div>
                 </div>
 
                 <div class="text-xs text-slate-400 font-mono">
-                    Showing <span id="floor-visible-count" class="text-slate-100 font-bold">{{ floor_streaks|length }}</span> tracked players
+                    Displaying <span id="profile-visible-count" class="text-slate-100 font-bold">{{ player_profiles|length }}</span> rotation profiles
                 </div>
             </div>
 
-            <!-- Mobile Horizontal Swipe Tip -->
-            <p class="text-[10px] text-slate-400 sm:hidden flex items-center space-x-1">
-                <i data-lucide="chevrons-right" class="w-3.5 h-3.5 text-slate-400"></i>
-                <span>Swipe table horizontally to view floor thresholds & reliability tiers</span>
-            </p>
-
-            <!-- Floor Streaks Data Table -->
+            <!-- Player Profiles Table -->
             <div class="glass-panel rounded-xl overflow-hidden border border-[#30363d]">
-                <div class="overflow-x-auto max-h-[700px] overflow-y-auto touch-scroll">
+                <div class="overflow-x-auto max-h-[750px] overflow-y-auto touch-scroll">
                     <table class="w-full text-left text-xs border-collapse">
                         <thead class="bg-[#21262d] sticky top-0 z-10 text-slate-400 font-medium border-b border-[#30363d]">
                             <tr>
-                                <th class="th-sortable text-center w-12 py-2.5 px-3" onclick="sortFloorStreaks('rank')">#</th>
-                                <th class="th-sortable py-2.5 px-3" onclick="sortFloorStreaks('player_name')">Player</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('position')">Pos</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('team')">Team</th>
-                                <th class="text-left py-2.5 px-3">Tracked Production Metric</th>
-                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortFloorStreaks('baseline')">Baseline (Season Avg)</th>
-                                <th class="text-center py-2.5 px-3">Threshold</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('streak')">Streak</th>
-                                <th class="text-center py-2.5 px-3">Reliability Tier</th>
-                                <th class="text-left py-2.5 px-3 min-w-[200px]">Recent Game Logs</th>
+                                <th class="text-center w-12 py-2.5 px-3">#</th>
+                                <th class="th-sortable py-2.5 px-3" onclick="sortProfiles('player_name')">Player</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('position')">Pos</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('team')">Team</th>
+                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortProfiles('season_avg')">Season Averages</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('floor')">Typical Floor (25th %ile)</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('median')">Usual Output (Median)</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('ceiling')">Typical Ceiling (75th %ile)</th>
+                                <th class="text-center py-2.5 px-3">Context Rates (USG / AST / REB)</th>
+                                <th class="text-center py-2.5 px-3">Situational Usage</th>
+                                <th class="text-left py-2.5 px-3 min-w-[200px]">Last 10 Game Distribution</th>
                             </tr>
                         </thead>
-                        <tbody id="floor-streak-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
-                            <!-- Injected via JavaScript -->
+                        <tbody id="player-profile-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
+                            <!-- Populated via renderPlayerProfiles() -->
                         </tbody>
                     </table>
                 </div>
@@ -492,131 +445,623 @@
 
     <!-- Footer -->
     <footer class="border-t border-[#30363d] py-3 text-center text-xs text-slate-500">
-        NBA Analytics & Matchup Hub • Powered by NBA Official Game Logs & Positional Defense Matrix
+        NBA Forensic Scouting Engine • Strict Descriptive Standard • Powered by Official NBA Tracking & Play-by-Play
     </footer>
 
-    <!-- Frontend Application Logic (Matching NFL Website Architecture) -->
+    <!-- Frontend Application Logic -->
     <script>
         // Data injected from Flask backend
         const allScheduleGames = {{ all_games | tojson }};
-        const initialStreaks = {{ floor_streaks | tojson }};
-        const allTeamStats = {{ team_stats | tojson }};
+        const allForensicTeams = {{ forensic_teams | tojson }};
+        const allPlayerProfiles = {{ player_profiles | tojson }};
         const teamNamesMap = {{ team_names | tojson }};
 
-        // State variables
-        let startDate = '{{ start_date }}';
-        let endDate = '{{ end_date }}';
+        // Dynamic Date Helper (computes local today date string YYYY-MM-DD on page open)
+        function getTodayDateStr() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        const clientTodayStr = getTodayDateStr();
+        const defaultSeasonStart = '2026-10-19';
+
+        // State variables: Start at oct 19th 2026 to the date website is opened (changes every day)
+        let startDate = defaultSeasonStart;
+        let endDate = (clientTodayStr >= defaultSeasonStart) ? clientTodayStr : defaultSeasonStart;
         let currentScheduleSeason = '2026';
         let selectedScheduleDate = 'all';
         let currentScheduleTeam = 'ALL';
         let scheduleSearchQuery = '';
 
-        let floorSelectedDate = '';
-        let globalFloorStreaks = [...initialStreaks];
-        let floorFilterPos = 'ALL';
-        let floorFilterStat = 'ALL';
-        let floorFilterStreak = '1';
-        let floorSearchQuery = '';
-        let floorSortCol = 'streak';
-        let floorSortAsc = false;
+        let profileSelectedDate = '';
+        let profileFilterPos = 'ALL';
+        let profileFilterStat = 'PTS';
+        let profileSearchQuery = '';
+        let profileSortCol = 'median';
+        let profileSortAsc = false;
 
         // Metric Explanations Dictionary for Hover Tooltips
         const STAT_EXPLANATIONS = {
-            'Defensive Rating': 'Points allowed per 100 defensive possessions. Core efficiency metric measuring overall defensive lockdown capability.',
-            'Pace (Poss/48m)': 'Number of offensive and defensive possessions per 48 minutes. Faster pace inflates game possessions and scoring opportunities.',
-            'Pts Allowed/G': 'Total points conceded per game by team defense. Ranked #1 (stingiest) to #30 (most generous allowed).',
-            'Reb Allowed/G': 'Total rebounds surrendered per game to opponent offenses.',
-            'Ast Allowed/G': 'Total assists conceded per game, evaluating ball movement containment and defensive rotations.',
-            'Opp 3PM Allowed/G': 'Three-pointers made per game by opposing offenses against perimeter defense.',
-            'Turnovers Forced/G': 'Average turnovers forced per game through active hands, steals, and shot clock pressure.',
-            'vs Point Guards (PG)': 'Points allowed per game specifically to opponent starting and primary Point Guards.',
-            'vs Shooting Guards (SG)': 'Points allowed per game to opponent Shooting Guards, evaluating wing isolation defense.',
-            'vs Small Forwards (SF)': 'Points allowed per game to opponent Small Forwards and secondary slashers.',
-            'vs Power Forwards (PF)': 'Points allowed per game to opponent Power Forwards, assessing stretch-big and paint defense.',
-            'vs Centers (C)': 'Points allowed per game to opponent Centers, evaluating interior rim protection.'
+            'Neutral Pace': 'Possessions per 48 minutes when the score differential is within 5 points, measuring baseline game tempo without garbage-time skew.',
+            'Transition Frequency': 'Percentage of possessions initiated within the first 6 seconds of the shot clock.',
+            'Shot Clock Early (0-8s)': 'Share of field goal attempts taken in the first 8 seconds of possession.',
+            'Shot Clock Mid (8-15s)': 'Share of field goal attempts taken during secondary transition and set initiation (8-15 seconds).',
+            'Shot Clock Late (15-24s)': 'Share of field goal attempts taken against late shot clock pressure (15-24 seconds).',
+            'Pace Leading 10+': 'Observed team pace when holding a double-digit lead of 10 or more points.',
+            'Pace Trailing 10+': 'Observed team pace when facing a double-digit deficit of 10 or more points.',
+            'Pick & Roll Drop': 'Defensive scheme frequency dropping the big protector inside to protect the rim against ball screens.',
+            'Pick & Roll Switch': 'Defensive scheme frequency switching on ball screens along perimeter and wings.',
+            'Pick & Roll Ice': 'Defensive scheme frequency forcing the ball handler away from the middle toward the sideline.',
+            'Pick & Roll Hedge': 'Defensive scheme frequency showing hard or blitzing high on the screen.',
+            'Restricted Area Allowed': 'Frequency and Points Per Possession (PPP) allowed to opponents inside the restricted area (rim).',
+            'Paint Non-RA Allowed': 'Frequency and PPP allowed in the paint outside the restricted area (short mid-range & floaters).',
+            'Mid-Range Allowed': 'Frequency and PPP allowed on two-point attempts between the paint and 3-point line.',
+            'Corner 3 Allowed': 'Frequency and PPP allowed on corner 3-point attempts.',
+            'Above-the-Break 3 Allowed': 'Frequency and PPP allowed on above-the-break 3-point attempts.',
+            'Wide-Open 3PT Rate Allowed': 'Percentage of opponent 3-point attempts taken with 6+ feet of open defender separation.',
+            'Opponent Wide-Open 3PT%': 'Conversion percentage by opposing offenses on wide-open (6+ ft) 3-point attempts.',
+            'Defensive Rebound % (DREB%)': 'Percentage of available defensive rebounds secured by the team.',
+            'Offensive Rebound % Allowed': 'Percentage of available offensive rebounds surrendered to the opponent.',
+            'Live-Ball Turnovers': 'Turnovers resulting directly in opponent steals and transition runs.',
+            'Dead-Ball Turnovers': 'Turnovers resulting in whistle stoppages (out-of-bounds, travel, offensive foul).'
         };
 
-        // Rank Badge Class Resolver
-        function getRankBadge(rank) {
-            if (!rank) return '';
+        // Rank Badge Formatter with Sample Size Gating
+        function formatRankBadge(rank, isSmallSample) {
+            if (isSmallSample || rank === 'Small Sample' || !rank) {
+                return `<span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">Small Sample</span>`;
+            }
             const r = parseInt(rank, 10);
-            if (r <= 10) return 'rank-top'; // Green
-            if (r <= 20) return 'rank-mid'; // Blue
-            return 'rank-bot'; // Red
+            if (isNaN(r)) return '';
+            let style = 'bg-[#21262d] text-slate-300 border border-[#30363d]';
+            if (r <= 10) style = 'bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-semibold';
+            else if (r >= 21) style = 'bg-amber-950/40 text-amber-300 border border-amber-800/60 font-semibold';
+            return `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono ${style}">#${r}</span>`;
         }
 
-        // Global Date Range Handler (From & To inputs in header)
+        // Global Date Range Handler
         function onDateRangeChange() {
             startDate = document.getElementById('input-start-date').value;
             endDate = document.getElementById('input-end-date').value;
-
-            // Update baseline note
-            const baselineNoteEl = document.getElementById('sched-stat-baseline-note');
-            if (baselineNoteEl) {
-                baselineNoteEl.textContent = `Timeline: ${startDate} to ${endDate}`;
-            }
-
             renderScheduleDatePills();
             renderScheduleGames();
-            renderFloorDateChips();
-            renderFloorStreaks();
+            renderProfileDateChips();
+            renderPlayerProfiles();
         }
 
         function reloadAllData() {
             renderScheduleDatePills();
             renderScheduleGames();
-            renderFloorDateChips();
-            renderFloorStreaks();
+            renderProfileDateChips();
+            renderPlayerProfiles();
             if (window.lucide) lucide.createIcons();
         }
 
         // Tab Switching
         function switchTab(tabId) {
             const schedSection = document.getElementById('tab-schedule');
-            const floorSection = document.getElementById('tab-floor-streak');
+            const profileSection = document.getElementById('tab-profiles');
             const btnSched = document.getElementById('tab-btn-schedule');
-            const btnFloor = document.getElementById('tab-btn-floor-streak');
+            const btnProfiles = document.getElementById('tab-btn-profiles');
 
             if (tabId === 'schedule') {
                 schedSection.classList.remove('hidden');
-                floorSection.classList.add('hidden');
-                btnSched.className = 'py-2.5 px-1 border-b-2 border-slate-300 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
-                btnFloor.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
+                profileSection.classList.add('hidden');
+                btnSched.className = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
+                btnProfiles.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
             } else {
                 schedSection.classList.add('hidden');
-                floorSection.classList.remove('hidden');
-                btnFloor.className = 'py-2.5 px-1 border-b-2 border-slate-300 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
+                profileSection.classList.remove('hidden');
+                btnProfiles.className = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
                 btnSched.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
             }
             if (window.lucide) lucide.createIcons();
         }
 
-        // Filter games by Season and Date Range
-        function getFilteredScheduleGames() {
-            let games = [...allScheduleGames];
+        // =========================================================================
+        // SVG GENERATORS (Inline Dark Mode Visual Summary)
+        // =========================================================================
 
-            // Filter by season
-            if (currentScheduleSeason === '2026') {
-                games = games.filter(g => g.gameday && g.gameday.startsWith('2026'));
-            } else if (currentScheduleSeason === '2025') {
-                games = games.filter(g => g.gameday && g.gameday.startsWith('2025'));
+        // Row 1: Shot Zone Alignment Heat Map
+        function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) {
+            const zones = [
+                { id: 'restricted_area', label: 'Rim (RA)' },
+                { id: 'paint_non_ra', label: 'Paint (Non-RA)' },
+                { id: 'mid_range', label: 'Mid-Range' },
+                { id: 'corner_3', label: 'Corner 3' },
+                { id: 'above_break_3', label: 'Above Break 3' }
+            ];
+
+            const aOff = awayForensic.shot_profile_offense || {};
+            const hDef = homeForensic.shot_profile_allowed || {};
+
+            let cellsHtml = '';
+            const cellW = 150;
+            const cellH = 75;
+
+            zones.forEach((z, idx) => {
+                const offFreq = aOff[z.id]?.freq || 20.0;
+                const defPpp = hDef[z.id]?.ppp || 1.05;
+
+                // Color code by PPP: <=0.95 green/teal, 0.96-1.14 slate, >=1.15 amber/red
+                let fill = '#1e293b';
+                let stroke = '#334155';
+                let textPppColor = '#94a3b8';
+
+                if (defPpp <= 0.95) {
+                    fill = 'rgba(16, 185, 129, 0.12)';
+                    stroke = 'rgba(16, 185, 129, 0.35)';
+                    textPppColor = '#34d399';
+                } else if (defPpp >= 1.15) {
+                    fill = 'rgba(239, 68, 68, 0.12)';
+                    stroke = 'rgba(239, 68, 68, 0.35)';
+                    textPppColor = '#f87171';
+                }
+
+                const x = 15 + idx * (cellW + 10);
+                cellsHtml += `
+                    <g transform="translate(${x}, 35)">
+                        <rect width="${cellW}" height="${cellH}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="1"/>
+                        <text x="10" y="18" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="monospace">${z.label}</text>
+                        <text x="10" y="38" fill="#94a3b8" font-size="10" font-family="sans-serif">${awayTeam} Offense: <tspan fill="#f1f5f9" font-weight="bold">${offFreq}%</tspan></text>
+                        <text x="10" y="56" fill="#94a3b8" font-size="10" font-family="sans-serif">${homeTeam} Defense: <tspan fill="${textPppColor}" font-weight="bold">${defPpp} PPP</tspan></text>
+                    </g>
+                `;
+            });
+
+            return `
+                <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="crosshair" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Shot Zone Alignment (Offense Generation vs. Defense Allowed PPP)</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500 font-mono">Teal: &le;0.95 PPP | Red: &ge;1.15 PPP</span>
+                    </div>
+                    <div class="overflow-x-auto touch-scroll">
+                        <svg viewBox="0 0 815 125" class="w-full min-w-[750px] h-auto">
+                            <rect width="815" height="125" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+                            <text x="15" y="22" fill="#94a3b8" font-size="10" font-weight="semibold" font-family="monospace">${awayTeam} ATTEMPTS FREQUENCY (%) VS. ${homeTeam} DEFENSIVE ALLOWANCE (PPP)</text>
+                            ${cellsHtml}
+                        </svg>
+                    </div>
+                    <!-- Stat Callout Pills -->
+                    <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [${awayTeam} Shot Focus: ${(aOff.above_break_3?.freq || 30.0)}% Above-Break 3]
+                        </span>
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [${homeTeam} Defense Allowed: ${(hDef.restricted_area?.ppp || 1.25)} PPP at Rim]
+                        </span>
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [Paint Non-RA Allowed: ${(hDef.paint_non_ra?.ppp || 0.92)} PPP]
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Row 2: Play Type Alignment Horizontal Bar Chart
+        function renderPlayTypeAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) {
+            const playtypes = [
+                { id: 'PnR_Ball_Handler', label: 'PnR Ball Handler' },
+                { id: 'Spot_Up', label: 'Spot-Up' },
+                { id: 'Isolation', label: 'Isolation' }
+            ];
+
+            const aPt = awayForensic.playtypes_offense || {};
+            const hPt = homeForensic.playtypes_defense || {};
+
+            let rowsHtml = '';
+            const maxBarW = 280;
+
+            playtypes.forEach((pt, idx) => {
+                const freq = aPt[pt.id]?.freq || 20.0;
+                const allowedPpp = hPt[pt.id]?.allowed_ppp || 0.95;
+
+                // Scale bar width (freq from 0 to 50%)
+                const barW = Math.min(maxBarW, (freq / 50.0) * maxBarW);
+                const y = 35 + idx * 30;
+
+                let pppColor = '#94a3b8';
+                if (allowedPpp <= 0.92) pppColor = '#34d399';
+                else if (allowedPpp >= 1.08) pppColor = '#f87171';
+
+                rowsHtml += `
+                    <g transform="translate(15, ${y})">
+                        <text x="0" y="14" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="monospace">${pt.label}</text>
+                        <!-- Frequency Bar -->
+                        <rect x="150" y="2" width="${maxBarW}" height="16" rx="3" fill="#21262d"/>
+                        <rect x="150" y="2" width="${barW}" height="16" rx="3" fill="#0284c7"/>
+                        <text x="${160 + barW}" y="14" fill="#cbd5e1" font-size="10" font-family="monospace">${freq}%</text>
+                        <!-- Defense PPP Allowed -->
+                        <text x="490" y="14" fill="#94a3b8" font-size="10" font-family="sans-serif">${homeTeam} Allowed: <tspan fill="${pppColor}" font-weight="bold">${allowedPpp} PPP</tspan></text>
+                    </g>
+                `;
+            });
+
+            return `
+                <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="bar-chart-horizontal" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Play Type Alignment (${awayTeam} Generation vs. ${homeTeam} Defense Allowed)</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500 font-mono">Primary Schemes</span>
+                    </div>
+                    <div class="overflow-x-auto touch-scroll">
+                        <svg viewBox="0 0 815 130" class="w-full min-w-[750px] h-auto">
+                            <rect width="815" height="130" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+                            <text x="15" y="20" fill="#94a3b8" font-size="10" font-weight="semibold" font-family="monospace">TOP 3 OFFENSIVE PLAY TYPES VS. DEFENSIVE ALLOWANCE</text>
+                            ${rowsHtml}
+                        </svg>
+                    </div>
+                    <!-- Stat Callout Pills -->
+                    <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [${awayTeam} Primary Play: PnR Ball Handler (${(aPt.PnR_Ball_Handler?.freq || 20)}%)]
+                        </span>
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [${homeTeam} Allowed: ${(hPt.PnR_Ball_Handler?.allowed_ppp || 0.91)} PPP on PnR]
+                        </span>
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [Isolation Frequency: ${(aPt.Isolation?.freq || 8.5)}%]
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Row 3: Pace Alignment Meter (Precision Telemetry Gauge)
+        function renderPaceAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) {
+            const aPace = awayForensic.pace || 100.0;
+            const hPace = homeForensic.pace || 100.0;
+            const expPace = ((aPace + hPace) / 2).toFixed(1);
+
+            // Scale from 94 to 108
+            const minPace = 94.0;
+            const maxPace = 108.0;
+            const startX = 80;
+            const meterW = 650;
+            const getX = (val) => startX + Math.max(0, Math.min(meterW, ((val - minPace) / (maxPace - minPace)) * meterW));
+
+            const aX = getX(aPace);
+            const hX = getX(hPace);
+            const midX = getX(100.0);
+            const expX = getX(parseFloat(expPace));
+
+            // Generate Ticks (94, 96, 98, 100, 102, 104, 106, 108)
+            let ticksHtml = '';
+            for (let p = 94; p <= 108; p += 2) {
+                const tx = getX(p);
+                ticksHtml += `
+                    <line x1="${tx}" y1="52" x2="${tx}" y2="60" stroke="#475569" stroke-width="1.5"/>
+                    <text x="${tx}" y="72" fill="#64748b" font-size="9" text-anchor="middle" font-family="monospace">${p}</text>
+                `;
             }
 
-            // Filter by global date range
+            return `
+                <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="gauge" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Pace Alignment Gauge (Possessions / 48m Game Tempo)</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500 font-mono">League Baseline: 100.0 Poss/48m</span>
+                    </div>
+                    <div class="overflow-x-auto touch-scroll">
+                        <svg viewBox="0 0 815 110" class="w-full min-w-[750px] h-auto">
+                            <rect width="815" height="110" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+                            
+                            <!-- Gauge Tempo Zones (Slow, Neutral, Fast) -->
+                            <rect x="${getX(94)}" y="40" width="${getX(98) - getX(94)}" height="12" rx="3" fill="#1e293b" stroke="#334155" stroke-width="0.5"/>
+                            <rect x="${getX(98)}" y="40" width="${getX(102) - getX(98)}" height="12" fill="#0f172a" stroke="#0ea5e9" stroke-opacity="0.3" stroke-width="0.5"/>
+                            <rect x="${getX(102)}" y="40" width="${getX(108) - getX(102)}" height="12" rx="3" fill="#1e293b" stroke="#334155" stroke-width="0.5"/>
+                            
+                            <!-- Zone Labels -->
+                            <text x="${(getX(94) + getX(98)) / 2}" y="34" fill="#64748b" font-size="8.5" text-anchor="middle" font-family="monospace">HALF-COURT</text>
+                            <text x="${midX}" y="34" fill="#38bdf8" font-size="8.5" text-anchor="middle" font-family="monospace">LEAGUE BASELINE</text>
+                            <text x="${(getX(102) + getX(108)) / 2}" y="34" fill="#64748b" font-size="8.5" text-anchor="middle" font-family="monospace">TRANSITION</text>
+
+                            <!-- Baseline Reference Marker (100.0) -->
+                            <line x1="${midX}" y1="38" x2="${midX}" y2="62" stroke="#38bdf8" stroke-dasharray="2 2" stroke-width="2"/>
+
+                            <!-- Ticks & Numbers -->
+                            ${ticksHtml}
+
+                            <!-- Away Team Needle & Teardrop Flag -->
+                            <g transform="translate(${aX}, 40)">
+                                <polygon points="0,0 -5,-14 5,-14" fill="#38bdf8"/>
+                                <rect x="-24" y="-28" width="48" height="15" rx="3" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
+                                <text x="0" y="-17" fill="#f8fafc" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="monospace">${awayTeam} ${aPace}</text>
+                            </g>
+
+                            <!-- Home Team Needle & Teardrop Flag -->
+                            <g transform="translate(${hX}, 40)">
+                                <polygon points="0,0 -5,-14 5,-14" fill="#f43f5e"/>
+                                <rect x="-24" y="-28" width="48" height="15" rx="3" fill="#be123c" stroke="#f43f5e" stroke-width="1"/>
+                                <text x="0" y="-17" fill="#f8fafc" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="monospace">${homeTeam} ${hPace}</text>
+                            </g>
+
+                            <!-- Expected Clashing Pace Target Pill -->
+                            <g transform="translate(${expX}, 55)">
+                                <circle cx="0" cy="0" r="4.5" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.5"/>
+                                <rect x="-35" y="24" width="70" height="18" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+                                <text x="0" y="36.5" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">EXP: ${expPace}</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <!-- Clean Stat Callout Pills -->
+                    <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [${awayTeam} Pace: ${aPace}]
+                        </span>
+                        <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
+                            [${homeTeam} Pace: ${hPace}]
+                        </span>
+                        <span class="px-2 py-0.5 rounded bg-cyan-950/40 border border-cyan-800/60 text-cyan-300">
+                            [Expected Game Tempo: ${expPace} Poss/48m]
+                        </span>
+                    </div>
+                </div>
+        }
+
+        // =========================================================================
+        // 4-PILLAR MATCHUP LAB CARD GENERATOR
+        // =========================================================================
+
+        function renderGameCardHtml(g) {
+            const a = g.away_forensic || allForensicTeams[g.away_team] || {};
+            const h = g.home_forensic || allForensicTeams[g.home_team] || {};
+            const isFinal = g.is_final;
+            const aTeam = g.away_team;
+            const hTeam = g.home_team;
+
+            let statusBadge = '';
+            if (isFinal) {
+                statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>FINAL</span></span>`;
+            } else {
+                statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">SCHEDULED</span>`;
+            }
+
+            // Stat Row Formatter
+            const formatRow = (label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) => {
+                const exp = STAT_EXPLANATIONS[label] || '';
+                const aBadge = formatRankBadge(aRank, isSmallA);
+                const hBadge = formatRankBadge(hRank, isSmallH);
+
+                return `
+                    <div class="grid grid-cols-3 items-center py-1 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                        <div class="flex items-center space-x-1.5 text-left font-mono">
+                            ${aBadge}
+                            <span class="text-slate-200 font-bold">${aVal != null ? aVal : '--'}</span>
+                        </div>
+                        <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
+                            <span class="stat-info-trigger">
+                                ${label}
+                                ${exp ? `
+                                    <div class="stat-info-box">
+                                        <div class="font-bold text-slate-100 mb-1 border-b border-[#30363d] pb-1 text-left">
+                                            ${label}
+                                        </div>
+                                        <div class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case">
+                                            ${exp}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-end space-x-1.5 text-right font-mono">
+                            <span class="text-slate-200 font-bold">${hVal != null ? hVal : '--'}</span>
+                            ${hBadge}
+                        </div>
+                    </div>
+                `;
+            };
+
+            // Similarity Box
+            const homeDefSim = g.home_def_sim || {};
+            const awayDefSim = g.away_def_sim || {};
+
+            return `
+                <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] space-y-4 hover:border-slate-500 transition shadow-sm">
+                    <!-- Game Info Header Bar -->
+                    <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#30363d] pb-2.5">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">
+                                ${g.gameday}
+                            </span>
+                            <span class="text-slate-500">•</span>
+                            <span class="font-mono text-slate-400">${g.gametime || '7:30 PM ET'}</span>
+                        </div>
+                        <div>
+                            ${statusBadge}
+                        </div>
+                    </div>
+
+                    <!-- Matchup Scoreboard Banner -->
+                    <div class="grid grid-cols-12 items-center py-1.5 gap-2">
+                        <!-- Away Team -->
+                        <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
+                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-cyan-400 text-sm font-mono shadow-inner shrink-0">
+                                ${aTeam}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.away_team_name}</h4>
+                                <div class="text-[11px] text-slate-400 flex items-center flex-wrap gap-x-1.5 mt-0.5 font-mono">
+                                    <span>Away</span>
+                                    <span>•</span>
+                                    <span>Pace: ${a.pace || '--'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Center Score -->
+                        <div class="col-span-2 text-center flex flex-col items-center justify-center">
+                            ${isFinal && g.away_score != null && g.home_score != null ? `
+                                <div class="flex items-center justify-center space-x-1.5 font-mono font-extrabold text-lg sm:text-xl text-slate-100">
+                                    <span>${g.away_score}</span>
+                                    <span class="text-slate-600 text-xs">-</span>
+                                    <span>${g.home_score}</span>
+                                </div>
+                                <span class="text-[9px] font-bold font-mono text-emerald-400 uppercase">FINAL</span>
+                            ` : `
+                                <div class="w-7 h-7 mx-auto rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center font-bold text-slate-400 text-xs">
+                                    @
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- Home Team -->
+                        <div class="col-span-5 flex items-center justify-end space-x-2.5 text-right min-w-0">
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.home_team_name}</h4>
+                                <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 mt-0.5 font-mono">
+                                    <span>Pace: ${h.pace || '--'}</span>
+                                    <span>•</span>
+                                    <span>Home</span>
+                                </div>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-rose-400 text-sm font-mono shadow-inner shrink-0">
+                                ${hTeam}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================================== -->
+                    <!-- EXECUTIVE ALIGNMENT SUMMARY (INLINE SVGs)                  -->
+                    <!-- ========================================================== -->
+                    <div class="space-y-3 pt-2 border-t border-[#30363d]">
+                        ${renderShotZoneAlignmentSvg(a, h, aTeam, hTeam)}
+                        ${renderPlayTypeAlignmentSvg(a, h, aTeam, hTeam)}
+                        ${renderPaceAlignmentSvg(a, h, aTeam, hTeam)}
+                    </div>
+
+                    <!-- ========================================================== -->
+                    <!-- 4 FORENSIC PILLARS                                         -->
+                    <!-- ========================================================== -->
+                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-3">
+                        <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1 px-2">
+                            <div class="text-left font-mono">${aTeam} TRACKING</div>
+                            <div class="text-center font-mono">FORENSIC METRIC</div>
+                            <div class="text-right font-mono">${hTeam} TRACKING</div>
+                        </div>
+
+                        <!-- PILLAR 1: PACE, GAME FLOW & TRANSITION -->
+                        <div>
+                            <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
+                                <i data-lucide="activity" class="w-3 h-3"></i>
+                                <span>Pillar 1: Pace, Game Flow & Transition</span>
+                            </div>
+                            <div class="mt-1 space-y-0.5">
+                                ${formatRow('Neutral Pace', a.neutral_pace, a.rank_neutral_pace, h.neutral_pace, h.rank_neutral_pace, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Transition Frequency', a.transition_freq ? a.transition_freq + '%' : '--', a.rank_transition_freq, h.transition_freq ? h.transition_freq + '%' : '--', h.rank_transition_freq, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Shot Clock Early (0-8s)', a.shot_clock ? a.shot_clock.early_0_8 + '%' : '--', null, h.shot_clock ? h.shot_clock.early_0_8 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Shot Clock Mid (8-15s)', a.shot_clock ? a.shot_clock.mid_8_15 + '%' : '--', null, h.shot_clock ? h.shot_clock.mid_8_15 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Shot Clock Late (15-24s)', a.shot_clock ? a.shot_clock.late_15_24 + '%' : '--', null, h.shot_clock ? h.shot_clock.late_15_24 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Pace Leading 10+', a.game_script?.leading_10?.pace, null, h.game_script?.leading_10?.pace, null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Pace Trailing 10+', a.game_script?.trailing_10?.pace, null, h.game_script?.trailing_10?.pace, null, a.is_small_sample, h.is_small_sample)}
+                            </div>
+                        </div>
+
+                        <!-- PILLAR 2: PERIMETER & PAINT DEFENSE -->
+                        <div>
+                            <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
+                                <i data-lucide="shield" class="w-3 h-3"></i>
+                                <span>Pillar 2: Perimeter & Paint Defense</span>
+                            </div>
+                            <div class="mt-1 space-y-0.5">
+                                ${formatRow('Pick & Roll Drop', a.pnr_coverage ? a.pnr_coverage.drop + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.drop + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Pick & Roll Switch', a.pnr_coverage ? a.pnr_coverage.switch + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.switch + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Restricted Area Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Paint Non-RA Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Corner 3 Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Wide-Open 3PT Rate Allowed', a.wide_open_3pt ? a.wide_open_3pt.allowed_freq + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.allowed_freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Opponent Wide-Open 3PT%', a.wide_open_3pt ? a.wide_open_3pt.opponent_pct + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.opponent_pct + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Defensive Rebound % (DREB%)', a.rebounding ? a.rebounding.dreb_secured_pct + '%' : '--', a.rank_dreb_secured_pct, h.rebounding ? h.rebounding.dreb_secured_pct + '%' : '--', h.rank_dreb_secured_pct, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Offensive Rebound % Allowed', a.rebounding ? a.rebounding.oreb_allowed_pct + '%' : '--', a.rank_oreb_allowed_pct, h.rebounding ? h.rebounding.oreb_allowed_pct + '%' : '--', h.rank_oreb_allowed_pct, a.is_small_sample, h.is_small_sample)}
+                            </div>
+                        </div>
+
+                        <!-- PILLAR 3: OFFENSIVE PLAY TYPE & SCHEME -->
+                        <div>
+                            <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
+                                <i data-lucide="zap" class="w-3 h-3"></i>
+                                <span>Pillar 3: Offensive Play Type & Scheme</span>
+                            </div>
+                            <div class="mt-1 space-y-0.5">
+                                ${formatRow('PnR Ball Handler Freq', a.playtypes_offense ? a.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Isolation Freq', a.playtypes_offense ? a.playtypes_offense.Isolation.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Isolation.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Spot-Up Freq', a.playtypes_offense ? a.playtypes_offense.Spot_Up.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Spot_Up.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Live-Ball Turnovers', a.turnover_profile ? a.turnover_profile.live_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.live_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
+                                ${formatRow('Dead-Ball Turnovers', a.turnover_profile ? a.turnover_profile.dead_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.dead_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================================== -->
+                    <!-- SIMILAR-OPPONENT HISTORICAL LOOKUP BOX                     -->
+                    <!-- ========================================================== -->
+                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3.5 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-slate-200">
+                            <i data-lucide="compass" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Similar-Opponent Historical Lookup (Euclidean Analog Model)</span>
+                        </div>
+                        <div class="space-y-1.5 text-xs font-mono text-slate-300">
+                            ${homeDefSim.summary_text ? `
+                                <div class="p-2 rounded bg-[#161b22] border border-[#30363d]/80 leading-relaxed">
+                                    <span class="text-cyan-400 font-bold">[Home Defense vs. Analogs]:</span> ${homeDefSim.summary_text}
+                                    <div class="text-[10.5px] text-slate-400 mt-1">
+                                        Analogs Faced: ${(homeDefSim.cluster_opponents || []).join(', ') || '--'}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            ${awayDefSim.summary_text ? `
+                                <div class="p-2 rounded bg-[#161b22] border border-[#30363d]/80 leading-relaxed">
+                                    <span class="text-cyan-400 font-bold">[Away Defense vs. Analogs]:</span> ${awayDefSim.summary_text}
+                                    <div class="text-[10.5px] text-slate-400 mt-1">
+                                        Analogs Faced: ${(awayDefSim.cluster_opponents || []).join(', ') || '--'}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Matchup Cards Grid
+        function renderScheduleGames() {
+            const container = document.getElementById('schedule-games-container');
+            if (!container) return;
+
+            let games = [...allScheduleGames];
+
+            // Season filter
+            if (currentScheduleSeason === '2026') {
+                games = games.filter(g => g.gameday && g.gameday >= '2026-10-19');
+            } else if (currentScheduleSeason === '2025') {
+                games = games.filter(g => g.gameday && g.gameday < '2026-10-19');
+            }
+
+            // Global date range filter
             if (startDate) games = games.filter(g => g.gameday >= startDate);
             if (endDate) games = games.filter(g => g.gameday <= endDate);
 
-            // Filter by selected specific date
+            // Specific date filter
             if (selectedScheduleDate && selectedScheduleDate !== 'all') {
                 games = games.filter(g => g.gameday === selectedScheduleDate);
             }
 
-            // Filter by team
+            // Team filter
             if (currentScheduleTeam && currentScheduleTeam !== 'ALL') {
                 games = games.filter(g => g.away_team === currentScheduleTeam || g.home_team === currentScheduleTeam);
             }
 
-            // Filter by search query
+            // Search filter
             if (scheduleSearchQuery) {
                 const q = scheduleSearchQuery.toLowerCase().trim();
                 games = games.filter(g =>
@@ -627,36 +1072,50 @@
                 );
             }
 
-            return games;
+            const countEl = document.getElementById('sched-stat-total-games');
+            if (countEl) countEl.textContent = games.length;
+
+            const compEl = document.getElementById('sched-stat-completed-games');
+            if (compEl) compEl.textContent = games.filter(g => g.is_final).length;
+
+            if (games.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-panel rounded-xl p-12 text-center text-slate-400 space-y-2 border border-[#30363d]">
+                        <i data-lucide="calendar-x" class="w-8 h-8 mx-auto text-slate-500 mb-1"></i>
+                        <p class="font-medium text-slate-300">No scheduled matchups match the selected criteria.</p>
+                        <p class="text-xs text-slate-500">Pick another slate date or broaden your date range.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = games.slice(0, 30).map(renderGameCardHtml).join('');
+            }
+
+            if (window.lucide) lucide.createIcons({ root: container });
         }
 
-        // Render Date Pills for Dates where games actually occurred
         function renderScheduleDatePills() {
             const container = document.getElementById('schedule-date-pills');
             if (!container) return;
 
-            // Get games in the date range for the active season
             let seasonGames = allScheduleGames.filter(g => {
-                if (currentScheduleSeason === '2026' && !g.gameday.startsWith('2026')) return false;
-                if (currentScheduleSeason === '2025' && !g.gameday.startsWith('2025')) return false;
+                if (currentScheduleSeason === '2026' && g.gameday < '2026-10-19') return false;
+                if (currentScheduleSeason === '2025' && g.gameday >= '2026-10-19') return false;
                 if (startDate && g.gameday < startDate) return false;
                 if (endDate && g.gameday > endDate) return false;
                 return true;
             });
 
-            // Count games per date
             const dateCounts = {};
             seasonGames.forEach(g => {
                 const d = g.gameday;
                 dateCounts[d] = (dateCounts[d] || 0) + 1;
             });
 
-            // Sort dates descending (most recent first)
             const sortedDates = Object.keys(dateCounts).sort().reverse();
-
             const isAll = selectedScheduleDate === 'all';
+
             let html = `
-                <button onclick="filterScheduleDate('all')" id="sched-date-pill-all" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
+                <button onclick="filterScheduleDate('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
                     All Dates (${sortedDates.length})
                 </button>
             `;
@@ -664,7 +1123,7 @@
             sortedDates.forEach(d => {
                 const isActive = selectedScheduleDate === d;
                 html += `
-                    <button onclick="filterScheduleDate('${d}')" id="sched-date-pill-${d}" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isActive ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
+                    <button onclick="filterScheduleDate('${d}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isActive ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
                         ${d} <span class="text-[10px] text-slate-500 font-mono ml-0.5">(${dateCounts[d]})</span>
                     </button>
                 `;
@@ -676,9 +1135,7 @@
         function filterScheduleDate(date) {
             selectedScheduleDate = date || 'all';
             const picker = document.getElementById('schedule-date-picker');
-            if (picker) {
-                picker.value = (date !== 'all') ? date : '';
-            }
+            if (picker) picker.value = (date !== 'all') ? date : '';
             renderScheduleDatePills();
             renderScheduleGames();
         }
@@ -686,27 +1143,24 @@
         function onScheduleSeasonChange(season) {
             currentScheduleSeason = season;
             const titleEl = document.getElementById('schedule-title');
-            const subTitle = document.getElementById('schedule-subtitle');
             const seasonPill = document.getElementById('header-season-pill');
+            const todayStr = getTodayDateStr();
 
             if (season === '2026') {
-                if (titleEl) titleEl.textContent = '2026 NBA Season Schedule & Matchup Stats';
-                if (subTitle) subTitle.textContent = 'Full 2026 schedule with verified scores, completed stats & defensive rankings';
-                if (seasonPill) seasonPill.textContent = '2026 Season';
-                startDate = '2026-01-01';
-                endDate = '2026-06-13';
+                if (titleEl) titleEl.textContent = '2026-27 NBA Forensic Matchup Lab';
+                if (seasonPill) seasonPill.textContent = '2026-27 Tracking';
+                startDate = '2026-10-19';
+                endDate = (todayStr >= '2026-10-19') ? todayStr : '2026-10-19';
             } else if (season === '2025') {
-                if (titleEl) titleEl.textContent = '2025 NBA Season Schedule & Matchup Stats';
-                if (subTitle) subTitle.textContent = '2025 season games with verified box scores & defensive rankings';
-                if (seasonPill) seasonPill.textContent = '2025 Season';
+                if (titleEl) titleEl.textContent = '2025-26 NBA Forensic Matchup Lab';
+                if (seasonPill) seasonPill.textContent = '2025-26 Baseline';
                 startDate = '2025-10-02';
-                endDate = '2025-12-31';
+                endDate = '2026-06-13';
             } else {
-                if (titleEl) titleEl.textContent = 'Full NBA Schedule & Matchup Stats';
-                if (subTitle) subTitle.textContent = 'All regular season & playoff games across 2025-26';
+                if (titleEl) titleEl.textContent = 'Full NBA Forensic Matchup Lab';
                 if (seasonPill) seasonPill.textContent = 'All Seasons';
                 startDate = '2025-10-02';
-                endDate = '2026-06-13';
+                endDate = (todayStr >= '2026-10-19') ? todayStr : '2026-10-19';
             }
 
             document.getElementById('input-start-date').value = startDate;
@@ -726,242 +1180,49 @@
             renderScheduleGames();
         }
 
-        // Render Game Card HTML (Matching NFL Hub format)
-        function renderGameCardHtml(g) {
-            const a = g.away_stats || allTeamStats[g.away_team] || {};
-            const h = g.home_stats || allTeamStats[g.home_team] || {};
-            const awayRec = g.away_record || '0-0';
-            const homeRec = g.home_record || '0-0';
-            const isFinal = g.is_final;
-
-            let oddsBadgeHtml = '';
-            if (isFinal) {
-                oddsBadgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>FINAL</span></span>`;
-            } else {
-                oddsBadgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">UPCOMING</span>`;
-            }
-
-            const formatRow = (label, awayVal, awayRank, homeVal, homeRank) => {
-                const awayBadge = awayRank ? `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${getRankBadge(awayRank)}">#${awayRank}</span>` : '';
-                const homeBadge = homeRank ? `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${getRankBadge(homeRank)}">#${homeRank}</span>` : '';
-                const explanation = STAT_EXPLANATIONS[label] || '';
-
-                return `
-                    <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
-                        <!-- Away Stat -->
-                        <div class="flex items-center space-x-1.5 text-left font-mono">
-                            ${awayBadge}
-                            <span class="text-slate-200 font-bold">${awayVal != null ? awayVal : '--'}</span>
-                        </div>
-                        <!-- Metric Label with Interactive Hover Info -->
-                        <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
-                            <span class="stat-info-trigger" title="${explanation ? '' : label}">
-                                ${label}
-                                ${explanation ? `
-                                    <div class="stat-info-box">
-                                        <div class="font-bold text-slate-100 mb-1 flex items-center space-x-1.5 border-b border-[#30363d] pb-1 text-left">
-                                            <i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline-block mr-1"></i>
-                                            <span>${label}</span>
-                                        </div>
-                                        <div class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case">
-                                            ${explanation}
-                                        </div>
-                                    </div>
-                                ` : ''}
-                            </span>
-                        </div>
-                        <!-- Home Stat -->
-                        <div class="flex items-center justify-end space-x-1.5 text-right font-mono">
-                            <span class="text-slate-200 font-bold">${homeVal != null ? homeVal : '--'}</span>
-                            ${homeBadge}
-                        </div>
-                    </div>
-                `;
-            };
-
-            return `
-                <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] space-y-4 hover:border-slate-500 transition shadow-sm">
-                    <!-- Game Info Header Bar -->
-                    <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#30363d] pb-2.5">
-                        <div class="flex items-center space-x-2">
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-[#21262d] text-slate-300 border border-[#30363d] font-mono">
-                                ${g.gameday}
-                            </span>
-                            <span class="text-slate-500">•</span>
-                            <span class="font-mono text-slate-400">${g.gametime || '7:30 PM ET'}</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            ${oddsBadgeHtml}
-                        </div>
-                    </div>
-
-                    <!-- Matchup Banner / Scoreboard -->
-                    <div class="grid grid-cols-12 items-center py-1.5 gap-2">
-                        <!-- Away Team (5 cols) -->
-                        <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-slate-200 text-sm font-mono shadow-inner shrink-0">
-                                ${g.away_team}
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate" title="${g.away_team_name}">${g.away_team_name}</h4>
-                                <div class="text-[11px] text-slate-400 flex items-center flex-wrap gap-x-1.5 gap-y-0.5 mt-0.5">
-                                    <span class="text-slate-500 font-medium">Away</span>
-                                    <span class="text-slate-600">•</span>
-                                    <span class="font-mono text-slate-300 font-semibold whitespace-nowrap">${awayRec}</span>
-                                    ${a.def_overall_character ? `<span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-semibold whitespace-nowrap ${a.def_overall_character === 'Elite Defense' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : (a.def_overall_character === 'Vulnerable Defense' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-[#21262d] text-slate-400 border border-[#30363d]')}">${a.def_overall_character}</span>` : ''}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Center vs / Scores (2 cols) -->
-                        <div class="col-span-2 text-center flex flex-col items-center justify-center">
-                            ${isFinal && g.away_score != null && g.home_score != null ? `
-                                <div class="flex items-center justify-center space-x-1.5 font-mono font-extrabold text-lg sm:text-xl text-slate-100">
-                                    <span class="${g.away_score > g.home_score ? 'text-emerald-400 font-black' : 'text-slate-300'}">${g.away_score}</span>
-                                    <span class="text-slate-600 text-xs">-</span>
-                                    <span class="${g.home_score > g.away_score ? 'text-emerald-400 font-black' : 'text-slate-300'}">${g.home_score}</span>
-                                </div>
-                                <span class="text-[9px] font-bold font-mono text-emerald-400 tracking-wider uppercase">FINAL</span>
-                            ` : `
-                                <div class="w-7 h-7 mx-auto rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center font-bold text-slate-400 text-xs">
-                                    @
-                                </div>
-                            `}
-                        </div>
-
-                        <!-- Home Team (5 cols) -->
-                        <div class="col-span-5 flex items-center justify-end space-x-2.5 text-right min-w-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate" title="${g.home_team_name}">${g.home_team_name}</h4>
-                                <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 gap-y-0.5 mt-0.5">
-                                    ${h.def_overall_character ? `<span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-semibold whitespace-nowrap ${h.def_overall_character === 'Elite Defense' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : (h.def_overall_character === 'Vulnerable Defense' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-[#21262d] text-slate-400 border border-[#30363d]')}">${h.def_overall_character}</span><span class="text-slate-600">•</span>` : ''}
-                                    <span class="font-mono text-slate-300 font-semibold whitespace-nowrap">${homeRec}</span>
-                                    <span class="text-slate-600">•</span>
-                                    <span class="text-slate-500 font-medium">Home</span>
-                                </div>
-                            </div>
-                            <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center font-extrabold text-slate-200 text-sm font-mono shadow-inner shrink-0">
-                                ${g.home_team}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Per-Game Team Stat Comparison Table (Volume x Efficiency) -->
-                    <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-1">
-                        <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1.5 px-2">
-                            <div class="text-left font-mono">${g.away_team} STAT & RANK</div>
-                            <div class="text-center">
-                                <span class="stat-info-trigger">
-                                    PER-GAME STAT
-                                    <div class="stat-info-box">
-                                        <div class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left">
-                                            <i data-lucide="info" class="w-3 h-3 text-slate-400 shrink-0"></i>
-                                            <span>Per-Game Team Stats (Defense Ranks)</span>
-                                        </div>
-                                        <div class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case">
-                                            Head-to-head defensive containment & positional vulnerability. Ranks #1 (easiest / top offensive matchup) to #30 (stingiest lockdown defense). Hover over any stat for its exact definition.
-                                        </div>
-                                    </div>
-                                </span>
-                            </div>
-                            <div class="text-right font-mono">${g.home_team} STAT & RANK</div>
-                        </div>
-
-                        <!-- 1. Defensive Efficiency & Pace -->
-                        ${formatRow('Defensive Rating', a.def_rtg, a.rank_def_rtg, h.def_rtg, h.rank_def_rtg)}
-                        ${formatRow('Pace (Poss/48m)', a.pace, a.rank_pace, h.pace, h.rank_pace)}
-
-                        <!-- 2. Scoring & Perimeter -->
-                        ${formatRow('Pts Allowed/G', a.pts_allowed, a.rank_pts, h.pts_allowed, h.rank_pts)}
-                        ${formatRow('Reb Allowed/G', a.reb_allowed, a.rank_reb, h.reb_allowed, h.rank_reb)}
-                        ${formatRow('Ast Allowed/G', a.ast_allowed, a.rank_ast, h.ast_allowed, h.rank_ast)}
-                        ${formatRow('Opp 3PM Allowed/G', a.fg3m_allowed, a.rank_fg3m, h.fg3m_allowed, h.rank_fg3m)}
-                        ${formatRow('Turnovers Forced/G', a.tov_forced, a.rank_tov, h.tov_forced, h.rank_tov)}
-
-                        <!-- 3. Positional Defense Section Divider -->
-                        <div class="pt-2 pb-1 text-center text-[10px] font-bold text-slate-500 uppercase tracking-wider border-t border-[#21262d]">
-                            Positional Defense (Pts Allowed)
-                        </div>
-
-                        ${formatRow('vs Point Guards (PG)', a.vs_pg_pts, a.rank_vs_pg, h.vs_pg_pts, h.rank_vs_pg)}
-                        ${formatRow('vs Shooting Guards (SG)', a.vs_sg_pts, a.rank_vs_sg, h.vs_sg_pts, h.rank_vs_sg)}
-                        ${formatRow('vs Small Forwards (SF)', a.vs_sf_pts, a.rank_vs_sf, h.vs_sf_pts, h.rank_vs_sf)}
-                        ${formatRow('vs Power Forwards (PF)', a.vs_pf_pts, a.rank_vs_pf, h.vs_pf_pts, h.rank_vs_pf)}
-                        ${formatRow('vs Centers (C)', a.vs_c_pts, a.rank_vs_c, h.vs_c_pts, h.rank_vs_c)}
-                    </div>
-                </div>
-            `;
-        }
-
-        // Render Matchup Cards Grid
-        function renderScheduleGames() {
-            const container = document.getElementById('schedule-games-container');
-            if (!container) return;
-
-            const games = getFilteredScheduleGames();
-
-            const countEl = document.getElementById('sched-stat-total-games');
-            if (countEl) countEl.textContent = games.length;
-
-            const compEl = document.getElementById('sched-stat-completed-games');
-            if (compEl) compEl.textContent = games.filter(g => g.is_final).length;
-
-            if (games.length === 0) {
-                const targetDisplay = (selectedScheduleDate !== 'all' ? selectedScheduleDate : `${startDate} to ${endDate}`);
-                container.innerHTML = `
-                    <div class="col-span-full glass-panel rounded-xl p-12 text-center text-slate-400 space-y-2 border border-[#30363d]">
-                        <i data-lucide="calendar-x" class="w-8 h-8 mx-auto text-slate-500 mb-1"></i>
-                        <p class="font-medium text-slate-300">No scheduled NBA matchups found for ${targetDisplay}.</p>
-                        <p class="text-xs text-slate-500">Pick another date from the date pills above or expand your date range.</p>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = games.slice(0, 40).map(renderGameCardHtml).join('');
-            }
-
-            if (window.lucide) lucide.createIcons({ root: container });
-        }
-
-        function compareCustomMatchup() {
+        async function compareCustomMatchup() {
             const away = document.getElementById('lab-away-select')?.value;
             const home = document.getElementById('lab-home-select')?.value;
             if (!away || !home) return;
 
-            const aStats = allTeamStats[away] || {};
-            const hStats = allTeamStats[home] || {};
+            try {
+                const res = await fetch(`/api/matchup/${away}/${home}`);
+                const data = await res.json();
 
-            const customMatchup = {
-                game_id: `NBA_${away}_${home}_custom`,
-                gameday: 'Custom Matchup Lab',
-                gametime: 'Head-to-Head',
-                is_final: false,
-                away_team: away,
-                away_team_name: teamNamesMap[away] || away,
-                away_record: 'H2H Lab',
-                home_team: home,
-                home_team_name: teamNamesMap[home] || home,
-                home_record: 'H2H Lab',
-                away_stats: aStats,
-                home_stats: hStats
-            };
+                const customMatchup = {
+                    game_id: `NBA_${away}_${home}_custom`,
+                    gameday: 'Custom Matchup Analysis',
+                    gametime: 'Head-to-Head Alignment',
+                    is_final: false,
+                    away_team: away,
+                    away_team_name: teamNamesMap[away] || away,
+                    home_team: home,
+                    home_team_name: teamNamesMap[home] || home,
+                    away_forensic: data.away_forensic,
+                    home_forensic: data.home_forensic,
+                    home_def_sim: data.home_def_vs_away_sim,
+                    away_def_sim: data.away_def_vs_home_sim
+                };
 
-            // Prepend custom matchup to the top of the cards list and re-render
-            const container = document.getElementById('schedule-games-container');
-            if (container) {
-                container.innerHTML = renderGameCardHtml(customMatchup) + container.innerHTML;
-                if (window.lucide) lucide.createIcons({ root: container });
-                container.scrollIntoView({ behavior: 'smooth' });
+                const container = document.getElementById('schedule-games-container');
+                if (container) {
+                    container.innerHTML = renderGameCardHtml(customMatchup) + container.innerHTML;
+                    if (window.lucide) lucide.createIcons({ root: container });
+                    container.scrollIntoView({ behavior: 'smooth' });
+                }
+            } catch (e) {
+                console.error("Matchup API error:", e);
             }
         }
 
         // =========================================================================
-        // Floor Streaks Table & Game Slate Date Chips (Matching NFL Hub)
+        // TAB 2: PLAYER USAGE PROFILES LOGIC
         // =========================================================================
-        function renderFloorDateChips() {
-            const container = document.getElementById('floor-date-chips');
+
+        function renderProfileDateChips() {
+            const container = document.getElementById('profile-date-chips');
             if (!container) return;
 
-            // Map each gameday in the active date range to teams playing on that date
             const dateTeamsMap = {};
             allScheduleGames.forEach(g => {
                 const d = g.gameday;
@@ -971,14 +1232,12 @@
                 if (g.away_team) dateTeamsMap[d].add(g.away_team.toUpperCase());
             });
 
-            // Count how many active streak players play on each date
             const dateCounts = {};
             Object.keys(dateTeamsMap).forEach(d => {
                 const teams = dateTeamsMap[d];
                 let count = 0;
-                (globalFloorStreaks || []).forEach(p => {
-                    const t = (p.team || '').toUpperCase();
-                    if (teams.has(t)) count++;
+                allPlayerProfiles.forEach(p => {
+                    if (teams.has((p.team || '').toUpperCase())) count++;
                 });
                 if (count > 0) dateCounts[d] = count;
             });
@@ -986,15 +1245,15 @@
             const sortedDates = Object.keys(dateCounts).sort().reverse().slice(0, 15);
 
             let html = `
-                <button id="btn-floor-all-dates" onclick="clearFloorDateFilter()" class="chip ${!floorSelectedDate ? 'active bg-[#30363d] text-slate-100 font-bold' : 'text-slate-400 hover:text-slate-200 bg-[#21262d]'} text-[11px] py-0.5 px-2.5 rounded shrink-0 transition" title="Show all dates">
-                    All
+                <button id="btn-profile-all-dates" onclick="clearProfileDateFilter()" class="chip ${!profileSelectedDate ? 'bg-[#30363d] text-slate-100 font-bold' : 'text-slate-400 hover:text-slate-200 bg-[#21262d]'} text-[11px] py-0.5 px-2.5 rounded shrink-0 transition" title="Show all slates">
+                    All Slates
                 </button>
             `;
 
             sortedDates.forEach(d => {
-                const isActive = floorSelectedDate === d;
+                const isActive = profileSelectedDate === d;
                 html += `
-                    <button onclick="setFloorDate('${d}')" class="chip ${isActive ? 'active bg-[#30363d] text-slate-100 font-bold' : 'text-slate-400 hover:text-slate-200 bg-[#21262d]'} text-[11px] py-0.5 px-2 rounded shrink-0 transition">
+                    <button onclick="setProfileDate('${d}')" class="chip ${isActive ? 'bg-[#30363d] text-slate-100 font-bold' : 'text-slate-400 hover:text-slate-200 bg-[#21262d]'} text-[11px] py-0.5 px-2 rounded shrink-0 transition">
                         ${d} <span class="text-[10px] text-slate-500 font-mono">(${dateCounts[d]})</span>
                     </button>
                 `;
@@ -1003,94 +1262,125 @@
             container.innerHTML = html;
         }
 
-        function setFloorDate(d) {
-            floorSelectedDate = d;
-            const datePicker = document.getElementById('floor-date-picker');
-            if (datePicker) datePicker.value = d;
-            renderFloorDateChips();
-            renderFloorStreaks();
+        function setProfileDate(d) {
+            profileSelectedDate = d;
+            const picker = document.getElementById('profile-date-picker');
+            if (picker) picker.value = d;
+            renderProfileDateChips();
+            renderPlayerProfiles();
         }
 
-        function clearFloorDateFilter() {
-            floorSelectedDate = '';
-            const datePicker = document.getElementById('floor-date-picker');
-            if (datePicker) datePicker.value = '';
-            renderFloorDateChips();
-            renderFloorStreaks();
+        function clearProfileDateFilter() {
+            profileSelectedDate = '';
+            const picker = document.getElementById('profile-date-picker');
+            if (picker) picker.value = '';
+            renderProfileDateChips();
+            renderPlayerProfiles();
         }
 
-        function onFloorDateChange(val) {
-            floorSelectedDate = val || '';
-            renderFloorDateChips();
-            renderFloorStreaks();
+        function onProfileDateChange(val) {
+            profileSelectedDate = val || '';
+            renderProfileDateChips();
+            renderPlayerProfiles();
         }
 
-        function renderFloorStreaks() {
-            const tbody = document.getElementById('floor-streak-table-body');
-            const countEl = document.getElementById('floor-visible-count');
+        function setProfilePosFilter(pos) {
+            profileFilterPos = pos;
+            ['ALL', 'PG', 'SG', 'SF', 'PF', 'C'].forEach(p => {
+                const btn = document.getElementById(`profile-filter-pos-${p}`);
+                if (btn) {
+                    btn.className = (p === pos) ? 'px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold' : 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
+                }
+            });
+            renderPlayerProfiles();
+        }
+
+        function setProfileStatFilter(stat) {
+            profileFilterStat = stat;
+            ['PTS', 'REB', 'AST'].forEach(s => {
+                const btn = document.getElementById(`profile-filter-stat-${s}`);
+                if (btn) {
+                    btn.className = (s === stat) ? 'px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold' : 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
+                }
+            });
+            renderPlayerProfiles();
+        }
+
+        function onProfileSearch(query) {
+            profileSearchQuery = query || '';
+            renderPlayerProfiles();
+        }
+
+        function sortProfiles(col) {
+            if (profileSortCol === col) {
+                profileSortAsc = !profileSortAsc;
+            } else {
+                profileSortCol = col;
+                profileSortAsc = (col === 'player_name' || col === 'team' || col === 'position');
+            }
+            renderPlayerProfiles();
+        }
+
+        function renderPlayerProfiles() {
+            const tbody = document.getElementById('player-profile-table-body');
+            const countEl = document.getElementById('profile-visible-count');
+            const kpiActive = document.getElementById('profiles-kpi-active');
+            const kpiHighUsg = document.getElementById('profiles-kpi-high-usg');
             if (!tbody) return;
 
-            let filtered = [...globalFloorStreaks];
+            let filtered = [...allPlayerProfiles];
 
-            // Filter by Selected Game Date
-            if (floorSelectedDate) {
-                const gamesOnDate = allScheduleGames.filter(g => g.gameday === floorSelectedDate);
-                const teamsOnDate = {};
+            // Filter by playing tonight slate
+            if (profileSelectedDate) {
+                const gamesOnDate = allScheduleGames.filter(g => g.gameday === profileSelectedDate);
+                const teamsOnDate = new Set();
                 gamesOnDate.forEach(g => {
-                    const h = (g.home_team || '').toUpperCase();
-                    const a = (g.away_team || '').toUpperCase();
-                    if (h) teamsOnDate[h] = { opponent: a, matchup: `${h} vs ${a}` };
-                    if (a) teamsOnDate[a] = { opponent: h, matchup: `${a} @ ${h}` };
+                    if (g.home_team) teamsOnDate.add(g.home_team.toUpperCase());
+                    if (g.away_team) teamsOnDate.add(g.away_team.toUpperCase());
                 });
 
-                filtered = filtered.filter(p => {
-                    const t = (p.team || '').toUpperCase();
-                    return Boolean(teamsOnDate[t]);
-                });
-
-                filtered = filtered.map(p => {
-                    const t = (p.team || '').toUpperCase();
-                    const mInfo = teamsOnDate[t];
-                    return {
-                        ...p,
-                        matchup: mInfo ? mInfo.matchup : p.matchup
-                    };
-                });
+                filtered = filtered.filter(p => teamsOnDate.has((p.team || '').toUpperCase()));
+                if (kpiActive) kpiActive.textContent = `${filtered.length} Players (${profileSelectedDate})`;
+            } else {
+                if (kpiActive) kpiActive.textContent = 'All Teams (No Slate Filter)';
             }
 
-            // Filter by Position
-            if (floorFilterPos && floorFilterPos !== 'ALL') {
-                filtered = filtered.filter(p => (p.position || '').toUpperCase() === floorFilterPos);
+            // Position filter
+            if (profileFilterPos && profileFilterPos !== 'ALL') {
+                filtered = filtered.filter(p => (p.position || '').toUpperCase() === profileFilterPos);
             }
 
-            // Filter by Metric
-            if (floorFilterStat && floorFilterStat !== 'ALL') {
-                filtered = filtered.filter(p => (p.stat || '').toUpperCase() === floorFilterStat);
-            }
-
-            // Filter by Min Streak
-            const minStreak = parseInt(floorFilterStreak || 0, 10);
-            if (minStreak > 0) {
-                filtered = filtered.filter(p => (p.streak || 0) >= minStreak);
-            }
-
-            // Filter by Search Query
-            if (floorSearchQuery) {
-                const q = floorSearchQuery.toLowerCase().trim();
+            // Search filter
+            if (profileSearchQuery) {
+                const q = profileSearchQuery.toLowerCase().trim();
                 filtered = filtered.filter(p =>
                     (p.player_name || '').toLowerCase().includes(q) ||
                     (p.team || '').toLowerCase().includes(q)
                 );
             }
 
+            // KPI: High USG Count
+            const highUsgCount = filtered.filter(p => (p.context_stats?.usg_pct || 0) >= 28.0).length;
+            if (kpiHighUsg) kpiHighUsg.textContent = `${highUsgCount} Players`;
+
             // Sort
             filtered.sort((a, b) => {
-                let vA = a[floorSortCol];
-                let vB = b[floorSortCol];
+                let vA, vB;
+                const statKey = profileFilterStat.toLowerCase();
+
+                if (profileSortCol === 'player_name') { vA = a.player_name; vB = b.player_name; }
+                else if (profileSortCol === 'position') { vA = a.position; vB = b.position; }
+                else if (profileSortCol === 'team') { vA = a.team; vB = b.team; }
+                else if (profileSortCol === 'season_avg') { vA = a.season_avg?.[statKey] || 0; vB = b.season_avg?.[statKey] || 0; }
+                else if (profileSortCol === 'floor') { vA = a.distribution_10g?.[statKey]?.floor || 0; vB = b.distribution_10g?.[statKey]?.floor || 0; }
+                else if (profileSortCol === 'median') { vA = a.distribution_10g?.[statKey]?.median || 0; vB = b.distribution_10g?.[statKey]?.median || 0; }
+                else if (profileSortCol === 'ceiling') { vA = a.distribution_10g?.[statKey]?.ceiling || 0; vB = b.distribution_10g?.[statKey]?.ceiling || 0; }
+                else { vA = a.distribution_10g?.[statKey]?.median || 0; vB = b.distribution_10g?.[statKey]?.median || 0; }
+
                 if (typeof vA === 'string') vA = vA.toLowerCase();
                 if (typeof vB === 'string') vB = vB.toLowerCase();
-                if (vA < vB) return floorSortAsc ? -1 : 1;
-                if (vA > vB) return floorSortAsc ? 1 : -1;
+                if (vA < vB) return profileSortAsc ? -1 : 1;
+                if (vA > vB) return profileSortAsc ? 1 : -1;
                 return 0;
             });
 
@@ -1099,10 +1389,10 @@
             if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="10" class="py-12 text-center text-slate-500">
+                        <td colspan="11" class="py-12 text-center text-slate-500">
                             <i data-lucide="inbox" class="w-6 h-6 mx-auto mb-2 text-slate-600"></i>
-                            <p class="font-medium text-slate-400">No players match the current filters.</p>
-                            <p class="text-[11px] text-slate-500 mt-1">Try selecting ALL positions or lowering the streak threshold.</p>
+                            <p class="font-medium text-slate-400">No rotation players match current filters.</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Select ALL positions or clear the playing tonight slate filter.</p>
                         </td>
                     </tr>
                 `;
@@ -1110,42 +1400,46 @@
                 return;
             }
 
-            tbody.innerHTML = filtered.map((p, idx) => {
-                const streak = p.streak || 0;
-                let tierBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">Developing (1-4)</span>';
-                if (streak >= 8) {
-                    tierBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/80 text-emerald-400 border border-emerald-800 font-bold">Elite (8+)</span>';
-                } else if (streak >= 5) {
-                    tierBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950/80 text-blue-400 border border-blue-800 font-semibold">Solid (5-7)</span>';
-                }
+            const statKey = profileFilterStat.toLowerCase();
 
-                // Render Game Logs as Individual Pill Badges
-                const gameLogsHtml = (p.game_logs || []).map(val => {
+            tbody.innerHTML = filtered.map((p, idx) => {
+                const dist = p.distribution_10g?.[statKey] || {};
+                const sAvg = p.season_avg || {};
+                const ctx = p.context_stats || {};
+                const sit = p.situational || {};
+
+                // Game Logs as Badges
+                const gameLogsHtml = (dist.logs || []).map(val => {
                     const num = parseFloat(val);
-                    const isHigh = !isNaN(num) && num >= (p.baseline || 0);
-                    return `<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono ${isHigh ? 'bg-emerald-900/40 text-emerald-300 border border-emerald-700/50' : 'bg-[#21262d] text-slate-300 border border-[#30363d]'}">${val}</span>`;
+                    const isAboveMedian = !isNaN(num) && num >= (dist.median || 0);
+                    return `<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono ${isAboveMedian ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-800/60 font-semibold' : 'bg-[#21262d] text-slate-300 border border-[#30363d]'}">${val}</span>`;
                 }).join(' ');
 
                 return `
                     <tr class="hover:bg-[#21262d]/50 transition">
                         <td class="text-center font-mono text-slate-500 py-2.5 px-3">${idx + 1}</td>
                         <td class="py-2.5 px-3">
-                            <div class="font-semibold text-slate-100">${p.player_name || 'Unknown'}</div>
-                            <div class="text-[10px] text-slate-500 font-mono">${p.matchup || (p.team + ' • Pos ' + p.position)}</div>
+                            <div class="font-semibold text-slate-100">${p.player_name}</div>
+                            <div class="text-[10px] text-slate-500 font-mono">${p.team_name} • ${p.games_played} GP</div>
                         </td>
-                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.position || '--'}</td>
-                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.team || '--'}</td>
-                        <td class="py-2.5 px-3 text-slate-300 font-medium">
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono ${p.stat === 'PTS' ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30' : (p.stat === 'REB' ? 'bg-sky-500/10 text-sky-300 border border-sky-500/30' : 'bg-purple-500/10 text-purple-300 border border-purple-500/30')} mr-1">${p.stat}</span>
-                            <span>${p.stat_label}</span>
+                        <td class="text-center font-mono font-bold text-cyan-400 py-2.5 px-3">${p.position}</td>
+                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3">${p.team}</td>
+                        <td class="text-right font-mono text-slate-200 py-2.5 px-3">
+                            <span class="font-bold">${sAvg[statKey] != null ? sAvg[statKey] : '--'}</span>
+                            <span class="text-[10px] text-slate-500 block">${sAvg.min} MPG</span>
                         </td>
-                        <td class="text-right font-mono font-semibold text-slate-200 py-2.5 px-3">${p.baseline != null ? p.baseline.toFixed(1) : '--'}</td>
-                        <td class="text-center font-mono font-bold text-emerald-400 py-2.5 px-3">${p.threshold || '--'}</td>
-                        <td class="text-center font-mono font-bold text-slate-100 py-2.5 px-3">
-                            <span class="inline-block px-2 py-0.5 rounded bg-[#161b22] border border-[#30363d] font-bold text-slate-200">${streak}</span>
+                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3 bg-[#161b22]/40">${dist.floor != null ? dist.floor : '--'}</td>
+                        <td class="text-center font-mono font-extrabold text-cyan-300 py-2.5 px-3 bg-cyan-950/20">${dist.median != null ? dist.median : '--'}</td>
+                        <td class="text-center font-mono font-bold text-slate-300 py-2.5 px-3 bg-[#161b22]/40">${dist.ceiling != null ? dist.ceiling : '--'}</td>
+                        <td class="text-center font-mono text-slate-300 py-2.5 px-3">
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#21262d] border border-[#30363d]">USG: ${ctx.usg_pct}%</span>
+                            <span class="text-[10px] text-slate-500 ml-1">AST: ${ctx.ast_pct}%</span>
                         </td>
-                        <td class="text-center py-2.5 px-3">${tierBadge}</td>
-                        <td class="py-2.5 px-3 font-mono text-slate-300">
+                        <td class="text-center font-mono text-slate-300 py-2.5 px-3">
+                            <div class="text-[10px]">Clutch: ${sit.clutch_usg_pct}%</div>
+                            <div class="text-[10px] text-slate-500">Paint: ${sit.paint_touches_pg}/G</div>
+                        </td>
+                        <td class="py-2.5 px-3 font-mono">
                             <div class="flex items-center gap-1 flex-wrap">${gameLogsHtml || '--'}</div>
                         </td>
                     </tr>
@@ -1155,62 +1449,17 @@
             if (window.lucide) lucide.createIcons({ root: tbody });
         }
 
-        function setFloorPosFilter(pos) {
-            floorFilterPos = pos;
-            ['ALL', 'PG', 'SG', 'SF', 'PF', 'C'].forEach(p => {
-                const btn = document.getElementById(`floor-filter-pos-${p}`);
-                if (btn) {
-                    if (p === pos) {
-                        btn.className = 'px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold';
-                    } else {
-                        btn.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
-                    }
-                }
-            });
-            renderFloorStreaks();
-        }
-
-        function setFloorStatFilter(stat) {
-            floorFilterStat = stat;
-            ['ALL', 'PTS', 'REB', 'AST'].forEach(s => {
-                const btn = document.getElementById(`floor-filter-stat-${s}`);
-                if (btn) {
-                    if (s === stat) {
-                        btn.className = 'px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold';
-                    } else {
-                        btn.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
-                    }
-                }
-            });
-            renderFloorStreaks();
-        }
-
-        function setFloorStreakFilter(val) {
-            floorFilterStreak = val || '1';
-            renderFloorStreaks();
-        }
-
-        function onFloorSearch(query) {
-            floorSearchQuery = query || '';
-            renderFloorStreaks();
-        }
-
-        function sortFloorStreaks(col) {
-            if (floorSortCol === col) {
-                floorSortAsc = !floorSortAsc;
-            } else {
-                floorSortCol = col;
-                floorSortAsc = (col === 'player_name' || col === 'team' || col === 'position');
-            }
-            renderFloorStreaks();
-        }
-
         // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
+            const startInput = document.getElementById('input-start-date');
+            const endInput = document.getElementById('input-end-date');
+            if (startInput) startInput.value = startDate;
+            if (endInput) endInput.value = endDate;
+
             renderScheduleDatePills();
             renderScheduleGames();
-            renderFloorDateChips();
-            renderFloorStreaks();
+            renderProfileDateChips();
+            renderPlayerProfiles();
             if (window.lucide) lucide.createIcons();
         });
     </script>

@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from update import make_data, find_streaks, fetch_logs, get_todays_games
 import pandas as pd
 import os
 import json
 from datetime import datetime
 from urllib.parse import urlparse
 import requests
+
+from forensic_data import run_forensic_pipeline
 
 # --- Configuration ---
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
@@ -74,9 +75,7 @@ DEFAULT_PAIRINGS = [
 class VercelPathMiddleware:
     """
     Normalizes Vercel serverless request paths.
-    Vercel rewrites requests to /app.py and supplies the original client path
-    in HTTP_X_MATCHED_PATH or HTTP_X_VERCEL_MATCHED_PATH headers.
-    This middleware restores PATH_INFO and QUERY_STRING so Flask routing matches correctly.
+    Restores PATH_INFO and QUERY_STRING so Flask routing matches correctly.
     """
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
@@ -99,28 +98,47 @@ class VercelPathMiddleware:
 app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
 handler = app
 
-def load_data():
-    """Helper to load global data frames (local first, GitHub raw fallback)."""
-    csv_filename = os.path.join(BASE_DIR, 'vs_Position_withavg.csv')
-    pos_filename = os.path.join(BASE_DIR, 'positions.csv')
+def load_forensic_data():
+    """Loads 4-pillar team profiles, similarity models, and player usage distributions."""
+    teams_path = os.path.join(BASE_DIR, 'forensic_teams.json')
+    sim_path = os.path.join(BASE_DIR, 'forensic_similar_opponents.json')
+    players_path = os.path.join(BASE_DIR, 'forensic_players.json')
     
-    if os.path.exists(csv_filename) and os.path.exists(pos_filename):
+    if os.path.exists(teams_path) and os.path.exists(sim_path) and os.path.exists(players_path):
         try:
-            df = pd.read_csv(csv_filename)
-            pos_df = pd.read_csv(pos_filename)
-            last_updated = datetime.fromtimestamp(os.path.getmtime(csv_filename)).strftime('%Y-%m-%d %I:%M %p')
-            return df, pos_df, last_updated
+            with open(teams_path, 'r', encoding='utf-8') as f:
+                forensic_teams = json.load(f)
+            with open(sim_path, 'r', encoding='utf-8') as f:
+                similarity_lookups = json.load(f)
+            with open(players_path, 'r', encoding='utf-8') as f:
+                player_profiles = json.load(f)
+            last_updated = datetime.fromtimestamp(os.path.getmtime(teams_path)).strftime('%Y-%m-%d %I:%M %p')
+            return forensic_teams, similarity_lookups, player_profiles, last_updated
         except Exception as e:
-            print(f"Local file load error: {e}")
+            print(f"Error reading local forensic data: {e}")
+
+    if IS_VERCEL:
+        try:
+            r1 = requests.get(f"{GITHUB_RAW_BASE}forensic_teams.json", timeout=6)
+            r2 = requests.get(f"{GITHUB_RAW_BASE}forensic_similar_opponents.json", timeout=6)
+            r3 = requests.get(f"{GITHUB_RAW_BASE}forensic_players.json", timeout=6)
+            if r1.status_code == 200 and r2.status_code == 200 and r3.status_code == 200:
+                return r1.json(), r2.json(), r3.json(), "Remote Sync"
+        except Exception as e:
+            print(f"Error fetching remote forensic data: {e}")
 
     try:
-        df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(csv_filename)}")
-        pos_df = pd.read_csv(f"{GITHUB_RAW_BASE}{os.path.basename(pos_filename)}")
-        last_updated = "Remote Sync"
-        return df, pos_df, last_updated
+        run_forensic_pipeline()
+        with open(teams_path, 'r', encoding='utf-8') as f:
+            forensic_teams = json.load(f)
+        with open(sim_path, 'r', encoding='utf-8') as f:
+            similarity_lookups = json.load(f)
+        with open(players_path, 'r', encoding='utf-8') as f:
+            player_profiles = json.load(f)
+        return forensic_teams, similarity_lookups, player_profiles, "Local Engine"
     except Exception as e:
-        print(f"Remote file load error: {e}")
-        return pd.DataFrame(), pd.DataFrame(), "Sync Error"
+        print(f"Pipeline generation error: {e}")
+        return {}, {}, [], "Sync Error"
 
 def fetch_todays_games():
     """Returns today's matches. Checks local file first, then remote source."""
@@ -146,88 +164,16 @@ def fetch_todays_games():
         except Exception as e:
             print(f"Error fetching remote games: {e}")
 
-    local_fallback = get_todays_games()
-    return local_fallback if local_fallback else []
+    return []
 
-def compute_team_stats_map(df: pd.DataFrame):
-    """Computes defensive ratings, pace, and positional rankings for each NBA team."""
-    stats_map = {}
-    if df is None or df.empty:
-        return stats_map
-
-    teams = df['TEAM'].unique()
-    for team in teams:
-        t_df = df[df['TEAM'] == team]
-        if t_df.empty:
-            continue
-
-        c_row = t_df[t_df['POSITION'] == 'C']
-        pf_row = t_df[t_df['POSITION'] == 'PF']
-        pg_row = t_df[t_df['POSITION'] == 'PG']
-        sf_row = t_df[t_df['POSITION'] == 'SF']
-        sg_row = t_df[t_df['POSITION'] == 'SG']
-
-        c_row = c_row.iloc[0] if not c_row.empty else t_df.iloc[0]
-        pf_row = pf_row.iloc[0] if not pf_row.empty else t_df.iloc[0]
-        pg_row = pg_row.iloc[0] if not pg_row.empty else t_df.iloc[0]
-        sf_row = sf_row.iloc[0] if not sf_row.empty else t_df.iloc[0]
-        sg_row = sg_row.iloc[0] if not sg_row.empty else t_df.iloc[0]
-
-        def_rtg_val = float(c_row.get('DEF_RTG', 112.0))
-        def_rtg_rank = int(c_row.get('DEF_RTG_RANK', 15))
-        pace_val = float(c_row.get('PACE', 100.0))
-        pace_rank = int(c_row.get('PACE_RANK', 15))
-
-        # Invert DEF_RTG_RANK so #1 is the best defense in the league
-        league_def_rank = int(31 - def_rtg_rank) if 1 <= def_rtg_rank <= 30 else def_rtg_rank
-
-        if league_def_rank <= 10:
-            char = "Elite Defense"
-        elif league_def_rank >= 21:
-            char = "Vulnerable Defense"
-        else:
-            char = "Solid Defense"
-
-        stats_map[team] = {
-            'team': team,
-            'team_name': NBA_TEAM_NAMES.get(team, team),
-            'def_overall_character': char,
-            'def_rtg': round(def_rtg_val, 1),
-            'rank_def_rtg': league_def_rank,
-            'pace': round(pace_val, 1),
-            'rank_pace': pace_rank,
-            'pts_allowed': round(float(c_row.get('TEAM_PTS', 114.0)), 1),
-            'rank_pts': int(c_row.get('PTS_RANK', 15)),
-            'reb_allowed': round(float(c_row.get('TEAM_REB', 44.0)), 1),
-            'rank_reb': int(c_row.get('REB_RANK', 15)),
-            'ast_allowed': round(float(c_row.get('TEAM_AST', 26.0)), 1),
-            'rank_ast': int(c_row.get('AST_RANK', 15)),
-            'fg3m_allowed': round(float(c_row.get('FG3M', 12.5)), 1),
-            'rank_fg3m': int(c_row.get('FG3M_RANK', 15)),
-            'tov_forced': round(float(c_row.get('TOV', 14.0)), 1),
-            'rank_tov': int(c_row.get('TOV_RANK', 15)),
-            'vs_pg_pts': round(float(pg_row.get('PTS', 22.0)), 1),
-            'rank_vs_pg': int(pg_row.get('PTS_RANK', 15)),
-            'vs_sg_pts': round(float(sg_row.get('PTS', 20.0)), 1),
-            'rank_vs_sg': int(sg_row.get('PTS_RANK', 15)),
-            'vs_sf_pts': round(float(sf_row.get('PTS', 19.0)), 1),
-            'rank_vs_sf': int(sf_row.get('PTS_RANK', 15)),
-            'vs_pf_pts': round(float(pf_row.get('PTS', 21.0)), 1),
-            'rank_vs_pf': int(pf_row.get('PTS_RANK', 15)),
-            'vs_c_pts': round(float(c_row.get('PTS', 23.0)), 1),
-            'rank_vs_c': int(c_row.get('PTS_RANK', 15)),
-        }
-
-    return stats_map
-
-def load_all_schedule_games(team_stats_map):
-    """Loads all schedule games for the season and attaches team defense stats."""
+def load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles):
+    """Loads all schedule games and enriches with 4-pillar forensic metrics & similar opponents."""
     json_path = os.path.join(BASE_DIR, 'schedule_games.json')
     raw_games = []
 
     if os.path.exists(json_path):
         try:
-            with open(json_path, 'r') as f:
+            with open(json_path, 'r', encoding='utf-8') as f:
                 raw_games = json.load(f)
         except Exception as e:
             print(f"Error loading schedule_games.json: {e}")
@@ -241,33 +187,6 @@ def load_all_schedule_games(team_stats_map):
         except Exception as e:
             print(f"Error fetching remote schedule_games.json: {e}")
 
-    # Fallback to generating from logs.csv if json not available
-    if not raw_games:
-        logs_path = os.path.join(BASE_DIR, 'logs.csv')
-        if os.path.exists(logs_path):
-            try:
-                df = pd.read_csv(logs_path, usecols=['GAME_ID', 'GAME_DATE', 'MATCHUP', 'TEAM_ABBREVIATION', 'WL', 'PTS'])
-                df['DATE'] = pd.to_datetime(df['GAME_DATE']).dt.strftime('%Y-%m-%d')
-                team_pts = df.groupby(['GAME_ID', 'TEAM_ABBREVIATION', 'DATE', 'MATCHUP', 'WL'])['PTS'].sum().reset_index()
-                away_df = team_pts[team_pts['MATCHUP'].str.contains('@')].rename(columns={'TEAM_ABBREVIATION': 'AWAY_TEAM', 'PTS': 'AWAY_PTS', 'WL': 'AWAY_WL'})
-                home_df = team_pts[team_pts['MATCHUP'].str.contains('vs.')].rename(columns={'TEAM_ABBREVIATION': 'HOME_TEAM', 'PTS': 'HOME_PTS', 'WL': 'HOME_WL'})
-                paired = pd.merge(away_df[['GAME_ID', 'DATE', 'AWAY_TEAM', 'AWAY_PTS', 'AWAY_WL']], 
-                                 home_df[['GAME_ID', 'HOME_TEAM', 'HOME_PTS', 'HOME_WL']], 
-                                 on='GAME_ID').sort_values('DATE', ascending=False)
-                for _, row in paired.iterrows():
-                    raw_games.append({
-                        'game_id': str(row['GAME_ID']),
-                        'gameday': row['DATE'],
-                        'away_team': row['AWAY_TEAM'],
-                        'home_team': row['HOME_TEAM'],
-                        'away_score': int(row['AWAY_PTS']),
-                        'home_score': int(row['HOME_PTS']),
-                        'is_final': True
-                    })
-            except Exception as e:
-                print(f"Error building from logs.csv: {e}")
-
-    # Fallback to default pairings if still empty
     if not raw_games:
         today_str = datetime.now().strftime("%Y-%m-%d")
         for idx, (a, h) in enumerate(DEFAULT_PAIRINGS):
@@ -281,14 +200,25 @@ def load_all_schedule_games(team_stats_map):
                 'is_final': False
             })
 
-    # Enrich each game with full team names and stats
+    # Group players by team for O(1) lookup
+    team_players = {}
+    for p in player_profiles:
+        t = p['team']
+        if t not in team_players:
+            team_players[t] = []
+        team_players[t].append(p)
+
     enriched = []
     for g in raw_games:
         away = g['away_team']
         home = g['home_team']
-        a_stats = team_stats_map.get(away, {})
-        h_stats = team_stats_map.get(home, {})
+        a_prof = forensic_teams.get(away, {})
+        h_prof = forensic_teams.get(home, {})
         is_fin = bool(g.get('is_final', False))
+
+        # Similar opponent lookup
+        home_def_sim = similarity_lookups.get(home, {}).get(away, {})
+        away_def_sim = similarity_lookups.get(away, {}).get(home, {})
 
         enriched.append({
             'game_id': g['game_id'],
@@ -303,82 +233,15 @@ def load_all_schedule_games(team_stats_map):
             'away_score': g.get('away_score'),
             'home_score': g.get('home_score'),
             'is_final': is_fin,
-            'away_stats': a_stats,
-            'home_stats': h_stats
+            'away_forensic': a_prof,
+            'home_forensic': h_prof,
+            'home_def_sim': home_def_sim,
+            'away_def_sim': away_def_sim,
+            'away_players': team_players.get(away, []),
+            'home_players': team_players.get(home, [])
         })
 
     return enriched
-
-def get_floor_streaks(pos_df: pd.DataFrame, minutes: int = 20, last_n_games: int = 5):
-    """Calculates player production floor streaks."""
-    local_logs = os.path.join(BASE_DIR, "logs.csv")
-    streak_df = pd.DataFrame()
-
-    if os.path.exists(local_logs):
-        try:
-            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games)
-        except Exception as e:
-            print(f"Local streak error: {e}")
-
-    if streak_df.empty:
-        try:
-            logs_url = f"{GITHUB_RAW_BASE}logs.csv"
-            logs_df = pd.read_csv(logs_url)
-            streak_df = find_streaks(pos_df, minutes, streak_len=last_n_games, logs_df=logs_df)
-        except Exception as e:
-            print(f"Remote streak error: {e}")
-
-    if streak_df is None or streak_df.empty:
-        return [], {
-            'longest': '--',
-            'elite': '0',
-            'solid': '0',
-            'developing': '0'
-        }
-
-    records = []
-    stat_labels = {'PTS': 'Points', 'REB': 'Rebounds', 'AST': 'Assists'}
-
-    for idx, row in streak_df.iterrows():
-        streak_len = int(last_n_games)
-        raw_logs = str(row.get('Game_Logs', '')).split(',')
-        cleaned_logs = [x.strip() for x in raw_logs if x.strip()]
-
-        if streak_len >= 8:
-            tier = "Elite (8+)"
-        elif streak_len >= 5:
-            tier = "Solid (5-7)"
-        else:
-            tier = "Developing (1-4)"
-
-        records.append({
-            'rank': idx + 1,
-            'player_name': str(row.get('Player', 'Unknown')),
-            'team': str(row.get('Team', '--')),
-            'position': str(row.get('Pos', '--')),
-            'stat': str(row.get('Stat', 'PTS')),
-            'stat_label': stat_labels.get(str(row.get('Stat')), 'Production'),
-            'baseline': float(row.get('Season_Avg', 0.0)),
-            'streak_avg': float(row.get('Streak_Avg', 0.0)),
-            'threshold': str(row.get('Threshold', '+1.0')),
-            'streak': streak_len,
-            'tier': tier,
-            'game_logs': cleaned_logs
-        })
-
-    elite_count = sum(1 for r in records if r['streak'] >= 8)
-    solid_count = sum(1 for r in records if 5 <= r['streak'] < 8)
-    dev_count = sum(1 for r in records if r['streak'] < 5)
-    longest_streak = max([r['streak'] for r in records], default=0)
-
-    kpis = {
-        'longest': f"{longest_streak} Games" if longest_streak > 0 else "--",
-        'elite': str(elite_count),
-        'solid': str(solid_count),
-        'developing': str(dev_count)
-    }
-
-    return records, kpis
 
 @app.route('/favicon.ico')
 def favicon():
@@ -387,19 +250,16 @@ def favicon():
 @app.route('/', methods=['GET'])
 @app.route('/app.py', methods=['GET'])
 def index():
-    df, pos_df, last_updated = load_data()
+    forensic_teams, similarity_lookups, player_profiles, last_updated = load_forensic_data()
     todays_games = fetch_todays_games()
-    team_stats_map = compute_team_stats_map(df)
-    all_games = load_all_schedule_games(team_stats_map)
-    floor_streaks, streak_kpis = get_floor_streaks(pos_df, minutes=20, last_n_games=5)
+    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
 
-    # All unique dates where games occurred
-    all_game_dates = sorted(set(g['gameday'] for g in all_games), reverse=True)
-    dates_2026 = [d for d in all_game_dates if d.startswith('2026')]
+    all_game_dates = sorted(set(g['gameday'] for g in all_games if g.get('gameday')), reverse=True)
+    dates_2026 = [d for d in all_game_dates if d >= '2026-10-19']
 
-    # Default Date Range for 2026 Season
-    default_start_date = '2026-01-01'
-    default_end_date = '2026-06-13'
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    default_start_date = '2026-10-19'
+    default_end_date = max('2026-10-19', today_str)
 
     return render_template('index.html',
                            page_type='schedule',
@@ -407,55 +267,58 @@ def index():
                            dates_2026=dates_2026,
                            start_date=default_start_date,
                            end_date=default_end_date,
-                           floor_streaks=floor_streaks,
-                           streak_kpis=streak_kpis,
+                           forensic_teams=forensic_teams,
+                           player_profiles=player_profiles,
                            all_teams=NBA_TEAMS,
                            team_names=NBA_TEAM_NAMES,
-                           team_stats=team_stats_map,
                            todays_games=todays_games,
                            last_updated=last_updated)
 
+@app.route('/profiles', methods=['GET'])
 @app.route('/streak', methods=['GET'])
-def streak():
-    df, pos_df, last_updated = load_data()
+def profiles():
+    forensic_teams, similarity_lookups, player_profiles, last_updated = load_forensic_data()
     todays_games = fetch_todays_games()
-    team_stats_map = compute_team_stats_map(df)
-    all_games = load_all_schedule_games(team_stats_map)
-    floor_streaks, streak_kpis = get_floor_streaks(pos_df, minutes=20, last_n_games=5)
+    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
 
-    all_game_dates = sorted(set(g['gameday'] for g in all_games), reverse=True)
-    dates_2026 = [d for d in all_game_dates if d.startswith('2026')]
+    all_game_dates = sorted(set(g['gameday'] for g in all_games if g.get('gameday')), reverse=True)
+    dates_2026 = [d for d in all_game_dates if d >= '2026-10-19']
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    default_start_date = '2026-10-19'
+    default_end_date = max('2026-10-19', today_str)
 
     return render_template('index.html',
-                           page_type='floor-streak',
+                           page_type='profiles',
                            all_games=all_games,
                            dates_2026=dates_2026,
-                           start_date='2026-01-01',
-                           end_date='2026-06-13',
-                           floor_streaks=floor_streaks,
-                           streak_kpis=streak_kpis,
+                           start_date=default_start_date,
+                           end_date=default_end_date,
+                           forensic_teams=forensic_teams,
+                           player_profiles=player_profiles,
                            all_teams=NBA_TEAMS,
                            team_names=NBA_TEAM_NAMES,
-                           team_stats=team_stats_map,
                            todays_games=todays_games,
                            last_updated=last_updated)
 
 @app.route('/api/full-schedule')
 @app.route('/api/schedule')
 def api_schedule():
-    df, _, _ = load_data()
-    team_stats_map = compute_team_stats_map(df)
-    all_games = load_all_schedule_games(team_stats_map)
+    forensic_teams, similarity_lookups, player_profiles, _ = load_forensic_data()
+    all_games = load_all_schedule_games(forensic_teams, similarity_lookups, player_profiles)
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    default_end_date = max('2026-10-19', today_str)
 
     season = request.args.get('season', '2026')
-    s_date = request.args.get('start_date', '2026-01-01')
-    e_date = request.args.get('end_date', '2026-06-13')
+    s_date = request.args.get('start_date', '2026-10-19')
+    e_date = request.args.get('end_date', default_end_date)
 
     filtered = [g for g in all_games if s_date <= g['gameday'] <= e_date]
     if season == '2026':
-        filtered = [g for g in filtered if g['gameday'].startswith('2026')]
+        filtered = [g for g in filtered if g['gameday'] >= '2026-10-19']
     elif season == '2025':
-        filtered = [g for g in filtered if g['gameday'].startswith('2025')]
+        filtered = [g for g in filtered if g['gameday'] < '2026-10-19']
 
     unique_dates = sorted(set(g['gameday'] for g in filtered), reverse=True)
     completed = [g for g in filtered if g.get('is_final')]
@@ -470,32 +333,76 @@ def api_schedule():
         'games': filtered
     })
 
+@app.route('/api/player-profiles')
 @app.route('/api/floor-streak')
 @app.route('/api/streaks')
-def api_floor_streak():
-    min_val = request.args.get('min_games', 20, type=int)
-    last_n = request.args.get('streak_len', 5, type=int)
-    _, pos_df, _ = load_data()
-    streaks, kpis = get_floor_streaks(pos_df, minutes=min_val, last_n_games=last_n)
+def api_player_profiles():
+    _, _, player_profiles, _ = load_forensic_data()
+    team_filter = request.args.get('team', '').upper()
+    pos_filter = request.args.get('pos', '').upper()
+    
+    filtered = player_profiles
+    if team_filter and team_filter != 'ALL':
+        filtered = [p for p in filtered if p['team'] == team_filter]
+    if pos_filter and pos_filter != 'ALL':
+        filtered = [p for p in filtered if p['position'] == pos_filter]
+        
     return jsonify({
-        'players': streaks,
-        'kpis': kpis
+        'total_players': len(filtered),
+        'players': filtered
     })
 
+@app.route('/api/forensic-teams')
 @app.route('/api/team-stats')
-def api_team_stats():
-    df, _, last_updated = load_data()
-    team_stats_map = compute_team_stats_map(df)
+def api_forensic_teams():
+    forensic_teams, _, _, last_updated = load_forensic_data()
     return jsonify({
-        'team_stats': team_stats_map,
+        'forensic_teams': forensic_teams,
         'last_updated': last_updated
+    })
+
+@app.route('/api/similar-opponents')
+def api_similar_opponents():
+    _, similarity_lookups, _, _ = load_forensic_data()
+    def_team = request.args.get('defense', 'BOS').upper()
+    atk_team = request.args.get('offense', 'NYK').upper()
+    
+    sim_data = similarity_lookups.get(def_team, {}).get(atk_team, {
+        'summary_text': f"No similarity data recorded for {def_team} vs {atk_team}."
+    })
+    return jsonify(sim_data)
+
+@app.route('/api/matchup/<away>/<home>')
+def api_matchup(away, home):
+    away = away.upper()
+    home = home.upper()
+    forensic_teams, similarity_lookups, player_profiles, _ = load_forensic_data()
+    
+    a_prof = forensic_teams.get(away, {})
+    h_prof = forensic_teams.get(home, {})
+    home_sim = similarity_lookups.get(home, {}).get(away, {})
+    away_sim = similarity_lookups.get(away, {}).get(home, {})
+    
+    away_p = [p for p in player_profiles if p['team'] == away]
+    home_p = [p for p in player_profiles if p['team'] == home]
+    
+    return jsonify({
+        'away_team': away,
+        'home_team': home,
+        'away_forensic': a_prof,
+        'home_forensic': h_prof,
+        'home_def_vs_away_sim': home_sim,
+        'away_def_vs_home_sim': away_sim,
+        'away_top_rotation': away_p,
+        'home_top_rotation': home_p
     })
 
 @app.route('/api/status')
 def api_status():
-    df, _, last_updated = load_data()
+    _, _, _, last_updated = load_forensic_data()
     return jsonify({
         'status': 'OPERATIONAL',
+        'engine': 'FORENSIC_SCOUTING_PIPELINE',
         'last_updated': last_updated,
         'teams_tracked': len(NBA_TEAMS),
         'is_vercel': IS_VERCEL

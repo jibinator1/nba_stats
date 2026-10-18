@@ -124,8 +124,11 @@ def main():
         print("Use '--force' if you wish to override and run again.")
         return
     
-    # Local Data Fetching
+    # Local Data Fetching & Forensic Processing
+    from forensic_data import run_forensic_pipeline
     if fetch_logs() and update_todays_games() and fetch_injuries():
+        print("Executing forensic scouting analytics pipeline...")
+        run_forensic_pipeline()
         if AUTO_PUSH:
             push_to_github()
         record_run_success()

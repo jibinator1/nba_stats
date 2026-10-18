@@ -1,0 +1,4532 @@
+{
+  "ATL": {
+    "team": "ATL",
+    "team_name": "Atlanta Hawks",
+    "gp": 92,
+    "is_small_sample": false,
+    "pace": 103.8,
+    "neutral_pace": 104.1,
+    "transition_freq": 23.5,
+    "shot_clock": {
+      "early_0_8": 25.7,
+      "mid_8_15": 47.3,
+      "late_15_24": 27.0
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 103.1,
+        "early_sc": 21.2,
+        "late_sc": 31.5
+      },
+      "trailing_10": {
+        "pace": 103.8,
+        "early_sc": 29.9,
+        "late_sc": 22.8
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.0,
+      "switch": 35.5,
+      "ice": 15.7,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.8,
+        "ppp": 1.28
+      },
+      "paint_non_ra": {
+        "freq": 16.1,
+        "ppp": 0.91
+      },
+      "mid_range": {
+        "freq": 15.7,
+        "ppp": 0.85
+      },
+      "corner_3": {
+        "freq": 9.0,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 31.4,
+        "ppp": 1.06
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 29.7,
+        "ppp": 1.31
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.93
+      },
+      "mid_range": {
+        "freq": 11.3,
+        "ppp": 0.87
+      },
+      "corner_3": {
+        "freq": 10.3,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 32.7,
+        "ppp": 1.09
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.8,
+      "opponent_pct": 37.8
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.4,
+      "oreb_allowed_pct": 25.6
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.17
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.93
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.05
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.01
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.14
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.91
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.02
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.98
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.6,
+      "live_ball_per_game": 8.5,
+      "live_ball_pct": 62.6,
+      "dead_ball_per_game": 5.1,
+      "dead_ball_pct": 37.4
+    },
+    "paint_touches_pg": 39.8,
+    "three_point_rate": 43.0,
+    "def_rtg": 112.2,
+    "pts_allowed": 116.4,
+    "pts_scored": 117.2,
+    "rank_pace": 6,
+    "rank_neutral_pace": 9,
+    "rank_transition_freq": 1,
+    "rank_def_rtg": 13,
+    "rank_pts_allowed": 20,
+    "rank_dreb_secured_pct": 12,
+    "rank_oreb_allowed_pct": 12,
+    "rank_paint_touches_pg": 13,
+    "rank_three_point_rate": 11
+  },
+  "BOS": {
+    "team": "BOS",
+    "team_name": "Boston Celtics",
+    "gp": 93,
+    "is_small_sample": false,
+    "pace": 97.7,
+    "neutral_pace": 99.0,
+    "transition_freq": 17.3,
+    "shot_clock": {
+      "early_0_8": 18.9,
+      "mid_8_15": 49.2,
+      "late_15_24": 31.9
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 97.3,
+        "early_sc": 14.4,
+        "late_sc": 36.4
+      },
+      "trailing_10": {
+        "pace": 97.5,
+        "early_sc": 23.1,
+        "late_sc": 27.7
+      }
+    },
+    "pnr_coverage": {
+      "drop": 24.2,
+      "switch": 51.7,
+      "ice": 12.0,
+      "hedge": 12.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.0,
+        "ppp": 1.25
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.88
+      },
+      "mid_range": {
+        "freq": 12.2,
+        "ppp": 0.83
+      },
+      "corner_3": {
+        "freq": 9.6,
+        "ppp": 1.1
+      },
+      "above_break_3": {
+        "freq": 35.2,
+        "ppp": 1.04
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 27.3,
+        "ppp": 1.36
+      },
+      "paint_non_ra": {
+        "freq": 14.7,
+        "ppp": 0.97
+      },
+      "mid_range": {
+        "freq": 10.6,
+        "ppp": 0.9
+      },
+      "corner_3": {
+        "freq": 11.4,
+        "ppp": 1.21
+      },
+      "above_break_3": {
+        "freq": 36.0,
+        "ppp": 1.13
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.1,
+      "opponent_pct": 37.7
+    },
+    "rebounding": {
+      "dreb_secured_pct": 76.0,
+      "oreb_allowed_pct": 24.0
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 9.8,
+        "ppp": 0.99
+      },
+      "PnR_Ball_Handler": {
+        "freq": 20.0,
+        "ppp": 0.95
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.2,
+        "ppp": 1.21
+      },
+      "Post_Up": {
+        "freq": 4.8,
+        "ppp": 0.97
+      },
+      "Spot_Up": {
+        "freq": 44.2,
+        "ppp": 1.09
+      },
+      "Off_Screen": {
+        "freq": 14.0,
+        "ppp": 1.05
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.87
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.11
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.88
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.0
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.96
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 11.8,
+      "live_ball_per_game": 6.3,
+      "live_ball_pct": 52.9,
+      "dead_ball_per_game": 5.6,
+      "dead_ball_pct": 47.1
+    },
+    "paint_touches_pg": 38.1,
+    "three_point_rate": 47.4,
+    "def_rtg": 109.4,
+    "pts_allowed": 106.9,
+    "pts_scored": 114.4,
+    "rank_pace": 30,
+    "rank_neutral_pace": 30,
+    "rank_transition_freq": 30,
+    "rank_def_rtg": 4,
+    "rank_pts_allowed": 1,
+    "rank_dreb_secured_pct": 4,
+    "rank_oreb_allowed_pct": 4,
+    "rank_paint_touches_pg": 26,
+    "rank_three_point_rate": 3
+  },
+  "BKN": {
+    "team": "BKN",
+    "team_name": "Brooklyn Nets",
+    "gp": 85,
+    "is_small_sample": false,
+    "pace": 99.6,
+    "neutral_pace": 100.2,
+    "transition_freq": 19.4,
+    "shot_clock": {
+      "early_0_8": 21.1,
+      "mid_8_15": 48.6,
+      "late_15_24": 30.3
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 99.0,
+        "early_sc": 16.6,
+        "late_sc": 34.8
+      },
+      "trailing_10": {
+        "pace": 99.5,
+        "early_sc": 25.3,
+        "late_sc": 26.1
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.1,
+      "switch": 34.7,
+      "ice": 16.1,
+      "hedge": 12.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 29.5,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 16.3,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 15.4,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.4,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 29.4,
+        "ppp": 1.1
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 28.4,
+        "ppp": 1.24
+      },
+      "paint_non_ra": {
+        "freq": 15.3,
+        "ppp": 0.88
+      },
+      "mid_range": {
+        "freq": 10.9,
+        "ppp": 0.82
+      },
+      "corner_3": {
+        "freq": 10.9,
+        "ppp": 1.1
+      },
+      "above_break_3": {
+        "freq": 34.5,
+        "ppp": 1.03
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.9,
+      "opponent_pct": 40.1
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.8,
+      "oreb_allowed_pct": 26.2
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.9
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.86
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.1
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.88
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 0.99
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 0.95
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.19
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.94
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.06
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.02
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 15.4,
+      "live_ball_per_game": 9.3,
+      "live_ball_pct": 60.6,
+      "dead_ball_per_game": 6.1,
+      "dead_ball_pct": 39.4
+    },
+    "paint_touches_pg": 37.6,
+    "three_point_rate": 45.4,
+    "def_rtg": 116.5,
+    "pts_allowed": 116.1,
+    "pts_scored": 106.3,
+    "rank_pace": 25,
+    "rank_neutral_pace": 26,
+    "rank_transition_freq": 25,
+    "rank_def_rtg": 24,
+    "rank_pts_allowed": 18,
+    "rank_dreb_secured_pct": 18,
+    "rank_oreb_allowed_pct": 18,
+    "rank_paint_touches_pg": 27,
+    "rank_three_point_rate": 6
+  },
+  "CHA": {
+    "team": "CHA",
+    "team_name": "Charlotte Hornets",
+    "gp": 89,
+    "is_small_sample": false,
+    "pace": 100.7,
+    "neutral_pace": 100.6,
+    "transition_freq": 20.0,
+    "shot_clock": {
+      "early_0_8": 22.3,
+      "mid_8_15": 48.3,
+      "late_15_24": 29.4
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 99.3,
+        "early_sc": 17.8,
+        "late_sc": 33.9
+      },
+      "trailing_10": {
+        "pace": 101.2,
+        "early_sc": 26.5,
+        "late_sc": 25.2
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.7,
+      "switch": 33.9,
+      "ice": 16.2,
+      "hedge": 12.2
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.3,
+        "ppp": 1.27
+      },
+      "paint_non_ra": {
+        "freq": 16.2,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 15.5,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 9.6,
+        "ppp": 1.12
+      },
+      "above_break_3": {
+        "freq": 31.4,
+        "ppp": 1.05
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 26.7,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 14.4,
+        "ppp": 0.95
+      },
+      "mid_range": {
+        "freq": 10.2,
+        "ppp": 0.89
+      },
+      "corner_3": {
+        "freq": 11.7,
+        "ppp": 1.19
+      },
+      "above_break_3": {
+        "freq": 37.0,
+        "ppp": 1.11
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.5,
+      "opponent_pct": 38.2
+    },
+    "rebounding": {
+      "dreb_secured_pct": 76.7,
+      "oreb_allowed_pct": 23.3
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.19
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.95
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.07
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.03
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.89
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.13
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.9
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.01
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.97
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.6,
+      "live_ball_per_game": 8.3,
+      "live_ball_pct": 56.5,
+      "dead_ball_per_game": 6.4,
+      "dead_ball_pct": 43.5
+    },
+    "paint_touches_pg": 37.5,
+    "three_point_rate": 48.7,
+    "def_rtg": 111.1,
+    "pts_allowed": 112.0,
+    "pts_scored": 116.1,
+    "rank_pace": 22,
+    "rank_neutral_pace": 24,
+    "rank_transition_freq": 23,
+    "rank_def_rtg": 9,
+    "rank_pts_allowed": 9,
+    "rank_dreb_secured_pct": 3,
+    "rank_oreb_allowed_pct": 3,
+    "rank_paint_touches_pg": 29,
+    "rank_three_point_rate": 2
+  },
+  "CHI": {
+    "team": "CHI",
+    "team_name": "Chicago Bulls",
+    "gp": 87,
+    "is_small_sample": false,
+    "pace": 104.8,
+    "neutral_pace": 105.5,
+    "transition_freq": 23.5,
+    "shot_clock": {
+      "early_0_8": 26.8,
+      "mid_8_15": 47.0,
+      "late_15_24": 26.2
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 104.1,
+        "early_sc": 22.3,
+        "late_sc": 30.7
+      },
+      "trailing_10": {
+        "pace": 103.8,
+        "early_sc": 31.0,
+        "late_sc": 22.0
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.9,
+      "switch": 34.1,
+      "ice": 16.0,
+      "hedge": 12.0
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 26.6,
+        "ppp": 1.32
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 16.6,
+        "ppp": 0.87
+      },
+      "corner_3": {
+        "freq": 9.4,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 31.4,
+        "ppp": 1.1
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 28.9,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 15.6,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 11.1,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 10.7,
+        "ppp": 1.15
+      },
+      "above_break_3": {
+        "freq": 33.7,
+        "ppp": 1.07
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.7,
+      "opponent_pct": 39.0
+    },
+    "rebounding": {
+      "dreb_secured_pct": 75.8,
+      "oreb_allowed_pct": 24.2
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.15
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.92
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.03
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.0
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.18
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.94
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.06
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.02
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.8,
+      "live_ball_per_game": 9.2,
+      "live_ball_pct": 61.9,
+      "dead_ball_per_game": 5.6,
+      "dead_ball_pct": 38.1
+    },
+    "paint_touches_pg": 39.1,
+    "three_point_rate": 44.4,
+    "def_rtg": 115.9,
+    "pts_allowed": 121.4,
+    "pts_scored": 116.5,
+    "rank_pace": 3,
+    "rank_neutral_pace": 5,
+    "rank_transition_freq": 2,
+    "rank_def_rtg": 22,
+    "rank_pts_allowed": 28,
+    "rank_dreb_secured_pct": 5,
+    "rank_oreb_allowed_pct": 5,
+    "rank_paint_touches_pg": 21,
+    "rank_three_point_rate": 9
+  },
+  "CLE": {
+    "team": "CLE",
+    "team_name": "Cleveland Cavaliers",
+    "gp": 104,
+    "is_small_sample": false,
+    "pace": 101.7,
+    "neutral_pace": 100.8,
+    "transition_freq": 21.5,
+    "shot_clock": {
+      "early_0_8": 23.4,
+      "mid_8_15": 48.0,
+      "late_15_24": 28.6
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 102.4,
+        "early_sc": 18.9,
+        "late_sc": 33.1
+      },
+      "trailing_10": {
+        "pace": 101.0,
+        "early_sc": 27.6,
+        "late_sc": 24.4
+      }
+    },
+    "pnr_coverage": {
+      "drop": 41.5,
+      "switch": 31.9,
+      "ice": 14.8,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.0,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.91
+      },
+      "mid_range": {
+        "freq": 14.3,
+        "ppp": 0.85
+      },
+      "corner_3": {
+        "freq": 9.2,
+        "ppp": 1.14
+      },
+      "above_break_3": {
+        "freq": 32.5,
+        "ppp": 1.07
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 28.7,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 15.5,
+        "ppp": 0.95
+      },
+      "mid_range": {
+        "freq": 11.1,
+        "ppp": 0.89
+      },
+      "corner_3": {
+        "freq": 10.7,
+        "ppp": 1.19
+      },
+      "above_break_3": {
+        "freq": 34.0,
+        "ppp": 1.11
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.0,
+      "opponent_pct": 39.5
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.8,
+      "oreb_allowed_pct": 26.2
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 9.8,
+        "ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "freq": 20.0,
+        "ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.2,
+        "ppp": 1.19
+      },
+      "Post_Up": {
+        "freq": 4.8,
+        "ppp": 0.95
+      },
+      "Spot_Up": {
+        "freq": 44.2,
+        "ppp": 1.07
+      },
+      "Off_Screen": {
+        "freq": 14.0,
+        "ppp": 1.03
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.15
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.91
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.03
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.99
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.9,
+      "live_ball_per_game": 8.9,
+      "live_ball_pct": 64.4,
+      "dead_ball_per_game": 4.9,
+      "dead_ball_pct": 35.6
+    },
+    "paint_touches_pg": 38.7,
+    "three_point_rate": 44.8,
+    "def_rtg": 112.8,
+    "pts_allowed": 114.8,
+    "pts_scored": 117.3,
+    "rank_pace": 15,
+    "rank_neutral_pace": 22,
+    "rank_transition_freq": 17,
+    "rank_def_rtg": 15,
+    "rank_pts_allowed": 13,
+    "rank_dreb_secured_pct": 19,
+    "rank_oreb_allowed_pct": 19,
+    "rank_paint_touches_pg": 24,
+    "rank_three_point_rate": 8
+  },
+  "DAL": {
+    "team": "DAL",
+    "team_name": "Dallas Mavericks",
+    "gp": 86,
+    "is_small_sample": false,
+    "pace": 104.6,
+    "neutral_pace": 105.1,
+    "transition_freq": 23.5,
+    "shot_clock": {
+      "early_0_8": 26.6,
+      "mid_8_15": 47.1,
+      "late_15_24": 26.3
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 104.4,
+        "early_sc": 22.1,
+        "late_sc": 30.8
+      },
+      "trailing_10": {
+        "pace": 104.0,
+        "early_sc": 30.8,
+        "late_sc": 22.1
+      }
+    },
+    "pnr_coverage": {
+      "drop": 42.1,
+      "switch": 31.0,
+      "ice": 14.9,
+      "hedge": 12.0
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 26.8,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 15.9,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 18.0,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.5,
+        "ppp": 1.14
+      },
+      "above_break_3": {
+        "freq": 29.8,
+        "ppp": 1.08
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 33.4,
+        "ppp": 1.26
+      },
+      "paint_non_ra": {
+        "freq": 18.0,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 12.8,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 8.6,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 27.2,
+        "ppp": 1.05
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.1,
+      "opponent_pct": 37.2
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.5,
+      "oreb_allowed_pct": 25.5
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 11.2,
+        "ppp": 0.92
+      },
+      "PnR_Ball_Handler": {
+        "freq": 21.5,
+        "ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.8,
+        "ppp": 1.13
+      },
+      "Post_Up": {
+        "freq": 4.5,
+        "ppp": 0.9
+      },
+      "Spot_Up": {
+        "freq": 43.0,
+        "ppp": 1.01
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 0.98
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.15
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.92
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.04
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.0
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.0,
+      "live_ball_per_game": 8.8,
+      "live_ball_pct": 62.5,
+      "dead_ball_per_game": 5.3,
+      "dead_ball_pct": 37.5
+    },
+    "paint_touches_pg": 41.7,
+    "three_point_rate": 35.8,
+    "def_rtg": 113.5,
+    "pts_allowed": 118.8,
+    "pts_scored": 114.1,
+    "rank_pace": 4,
+    "rank_neutral_pace": 7,
+    "rank_transition_freq": 3,
+    "rank_def_rtg": 18,
+    "rank_pts_allowed": 23,
+    "rank_dreb_secured_pct": 10,
+    "rank_oreb_allowed_pct": 10,
+    "rank_paint_touches_pg": 3,
+    "rank_three_point_rate": 26
+  },
+  "DEN": {
+    "team": "DEN",
+    "team_name": "Denver Nuggets",
+    "gp": 93,
+    "is_small_sample": false,
+    "pace": 101.4,
+    "neutral_pace": 101.7,
+    "transition_freq": 20.6,
+    "shot_clock": {
+      "early_0_8": 23.1,
+      "mid_8_15": 48.0,
+      "late_15_24": 28.9
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 100.8,
+        "early_sc": 18.6,
+        "late_sc": 33.4
+      },
+      "trailing_10": {
+        "pace": 99.0,
+        "early_sc": 27.3,
+        "late_sc": 24.7
+      }
+    },
+    "pnr_coverage": {
+      "drop": 55.7,
+      "switch": 21.9,
+      "ice": 14.3,
+      "hedge": 8.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.0,
+        "ppp": 1.31
+      },
+      "paint_non_ra": {
+        "freq": 16.4,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 14.0,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.7,
+        "ppp": 1.15
+      },
+      "above_break_3": {
+        "freq": 32.9,
+        "ppp": 1.08
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 30.8,
+        "ppp": 1.37
+      },
+      "paint_non_ra": {
+        "freq": 16.6,
+        "ppp": 0.98
+      },
+      "mid_range": {
+        "freq": 11.8,
+        "ppp": 0.92
+      },
+      "corner_3": {
+        "freq": 9.8,
+        "ppp": 1.23
+      },
+      "above_break_3": {
+        "freq": 31.0,
+        "ppp": 1.15
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.4,
+      "opponent_pct": 37.0
+    },
+    "rebounding": {
+      "dreb_secured_pct": 75.1,
+      "oreb_allowed_pct": 24.9
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 6.8,
+        "ppp": 1.0
+      },
+      "PnR_Ball_Handler": {
+        "freq": 17.0,
+        "ppp": 0.96
+      },
+      "PnR_Roll_Man": {
+        "freq": 9.2,
+        "ppp": 1.23
+      },
+      "Post_Up": {
+        "freq": 12.5,
+        "ppp": 0.98
+      },
+      "Spot_Up": {
+        "freq": 42.5,
+        "ppp": 1.1
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 1.06
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.16
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.92
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.04
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.0
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 12.4,
+      "live_ball_per_game": 7.8,
+      "live_ball_pct": 62.9,
+      "dead_ball_per_game": 4.6,
+      "dead_ball_pct": 37.1
+    },
+    "paint_touches_pg": 39.5,
+    "three_point_rate": 40.8,
+    "def_rtg": 114.5,
+    "pts_allowed": 116.1,
+    "pts_scored": 120.4,
+    "rank_pace": 18,
+    "rank_neutral_pace": 19,
+    "rank_transition_freq": 21,
+    "rank_def_rtg": 20,
+    "rank_pts_allowed": 19,
+    "rank_dreb_secured_pct": 7,
+    "rank_oreb_allowed_pct": 7,
+    "rank_paint_touches_pg": 15,
+    "rank_three_point_rate": 16
+  },
+  "DET": {
+    "team": "DET",
+    "team_name": "Detroit Pistons",
+    "gp": 100,
+    "is_small_sample": false,
+    "pace": 101.4,
+    "neutral_pace": 103.9,
+    "transition_freq": 21.8,
+    "shot_clock": {
+      "early_0_8": 23.0,
+      "mid_8_15": 48.1,
+      "late_15_24": 28.9
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 100.2,
+        "early_sc": 18.5,
+        "late_sc": 33.4
+      },
+      "trailing_10": {
+        "pace": 100.5,
+        "early_sc": 27.2,
+        "late_sc": 24.7
+      }
+    },
+    "pnr_coverage": {
+      "drop": 38.2,
+      "switch": 35.3,
+      "ice": 15.2,
+      "hedge": 11.3
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.9,
+        "ppp": 1.22
+      },
+      "paint_non_ra": {
+        "freq": 15.4,
+        "ppp": 0.87
+      },
+      "mid_range": {
+        "freq": 13.4,
+        "ppp": 0.81
+      },
+      "corner_3": {
+        "freq": 8.7,
+        "ppp": 1.08
+      },
+      "above_break_3": {
+        "freq": 34.6,
+        "ppp": 1.02
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 33.9,
+        "ppp": 1.32
+      },
+      "paint_non_ra": {
+        "freq": 18.2,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 13.0,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 8.4,
+        "ppp": 1.18
+      },
+      "above_break_3": {
+        "freq": 26.5,
+        "ppp": 1.1
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 14.6,
+      "opponent_pct": 36.8
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.3,
+      "oreb_allowed_pct": 25.7
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.96
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.92
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.18
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.94
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.06
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.02
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.89
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.86
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.09
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.87
+      },
+      "Spot_Up": {
+        "allowed_ppp": 0.98
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.94
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.4,
+      "live_ball_per_game": 8.9,
+      "live_ball_pct": 61.4,
+      "dead_ball_per_game": 5.6,
+      "dead_ball_pct": 38.6
+    },
+    "paint_touches_pg": 41.7,
+    "three_point_rate": 34.9,
+    "def_rtg": 107.3,
+    "pts_allowed": 108.8,
+    "pts_scored": 115.8,
+    "rank_pace": 19,
+    "rank_neutral_pace": 10,
+    "rank_transition_freq": 14,
+    "rank_def_rtg": 2,
+    "rank_pts_allowed": 4,
+    "rank_dreb_secured_pct": 14,
+    "rank_oreb_allowed_pct": 14,
+    "rank_paint_touches_pg": 4,
+    "rank_three_point_rate": 29
+  },
+  "GSW": {
+    "team": "GSW",
+    "team_name": "Golden State Warriors",
+    "gp": 89,
+    "is_small_sample": false,
+    "pace": 102.0,
+    "neutral_pace": 100.7,
+    "transition_freq": 22.1,
+    "shot_clock": {
+      "early_0_8": 23.7,
+      "mid_8_15": 47.9,
+      "late_15_24": 28.4
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 102.0,
+        "early_sc": 19.2,
+        "late_sc": 32.9
+      },
+      "trailing_10": {
+        "pace": 100.8,
+        "early_sc": 27.9,
+        "late_sc": 24.2
+      }
+    },
+    "pnr_coverage": {
+      "drop": 22.4,
+      "switch": 53.9,
+      "ice": 11.8,
+      "hedge": 11.9
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.5,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 16.3,
+        "ppp": 0.91
+      },
+      "mid_range": {
+        "freq": 14.4,
+        "ppp": 0.85
+      },
+      "corner_3": {
+        "freq": 8.8,
+        "ppp": 1.14
+      },
+      "above_break_3": {
+        "freq": 32.0,
+        "ppp": 1.07
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 26.1,
+        "ppp": 1.3
+      },
+      "paint_non_ra": {
+        "freq": 14.1,
+        "ppp": 0.93
+      },
+      "mid_range": {
+        "freq": 10.1,
+        "ppp": 0.87
+      },
+      "corner_3": {
+        "freq": 11.9,
+        "ppp": 1.16
+      },
+      "above_break_3": {
+        "freq": 37.8,
+        "ppp": 1.08
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.0,
+      "opponent_pct": 38.2
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.2,
+      "oreb_allowed_pct": 26.8
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 5.5,
+        "ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "freq": 16.5,
+        "ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.5,
+        "ppp": 1.16
+      },
+      "Post_Up": {
+        "freq": 3.8,
+        "ppp": 0.93
+      },
+      "Spot_Up": {
+        "freq": 46.2,
+        "ppp": 1.04
+      },
+      "Off_Screen": {
+        "freq": 19.5,
+        "ppp": 1.01
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.15
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.91
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.03
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.99
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 15.4,
+      "live_ball_per_game": 9.0,
+      "live_ball_pct": 58.4,
+      "dead_ball_per_game": 6.4,
+      "dead_ball_pct": 41.6
+    },
+    "paint_touches_pg": 37.1,
+    "three_point_rate": 49.7,
+    "def_rtg": 112.9,
+    "pts_allowed": 115.1,
+    "pts_scored": 114.6,
+    "rank_pace": 13,
+    "rank_neutral_pace": 23,
+    "rank_transition_freq": 13,
+    "rank_def_rtg": 16,
+    "rank_pts_allowed": 15,
+    "rank_dreb_secured_pct": 22,
+    "rank_oreb_allowed_pct": 22,
+    "rank_paint_touches_pg": 30,
+    "rank_three_point_rate": 1
+  },
+  "HOU": {
+    "team": "HOU",
+    "team_name": "Houston Rockets",
+    "gp": 92,
+    "is_small_sample": false,
+    "pace": 99.5,
+    "neutral_pace": 101.3,
+    "transition_freq": 19.6,
+    "shot_clock": {
+      "early_0_8": 21.0,
+      "mid_8_15": 48.6,
+      "late_15_24": 30.4
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 99.3,
+        "early_sc": 16.5,
+        "late_sc": 34.9
+      },
+      "trailing_10": {
+        "pace": 97.1,
+        "early_sc": 25.2,
+        "late_sc": 26.2
+      }
+    },
+    "pnr_coverage": {
+      "drop": 24.4,
+      "switch": 52.2,
+      "ice": 11.7,
+      "hedge": 11.7
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.6,
+        "ppp": 1.26
+      },
+      "paint_non_ra": {
+        "freq": 15.7,
+        "ppp": 0.89
+      },
+      "mid_range": {
+        "freq": 16.8,
+        "ppp": 0.83
+      },
+      "corner_3": {
+        "freq": 9.1,
+        "ppp": 1.11
+      },
+      "above_break_3": {
+        "freq": 30.8,
+        "ppp": 1.05
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 33.5,
+        "ppp": 1.34
+      },
+      "paint_non_ra": {
+        "freq": 18.0,
+        "ppp": 0.95
+      },
+      "mid_range": {
+        "freq": 13.0,
+        "ppp": 0.89
+      },
+      "corner_3": {
+        "freq": 8.5,
+        "ppp": 1.19
+      },
+      "above_break_3": {
+        "freq": 27.0,
+        "ppp": 1.11
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.3,
+      "opponent_pct": 37.7
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.9,
+      "oreb_allowed_pct": 25.1
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.19
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.95
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.07
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.03
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.92
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.12
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.89
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.01
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.97
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.3,
+      "live_ball_per_game": 8.9,
+      "live_ball_pct": 62.4,
+      "dead_ball_per_game": 5.4,
+      "dead_ball_pct": 37.6
+    },
+    "paint_touches_pg": 41.7,
+    "three_point_rate": 35.5,
+    "def_rtg": 110.4,
+    "pts_allowed": 109.9,
+    "pts_scored": 114.8,
+    "rank_pace": 26,
+    "rank_neutral_pace": 20,
+    "rank_transition_freq": 24,
+    "rank_def_rtg": 6,
+    "rank_pts_allowed": 5,
+    "rank_dreb_secured_pct": 8,
+    "rank_oreb_allowed_pct": 8,
+    "rank_paint_touches_pg": 5,
+    "rank_three_point_rate": 27
+  },
+  "IND": {
+    "team": "IND",
+    "team_name": "Indiana Pacers",
+    "gp": 86,
+    "is_small_sample": false,
+    "pace": 103.2,
+    "neutral_pace": 103.5,
+    "transition_freq": 22.4,
+    "shot_clock": {
+      "early_0_8": 25.0,
+      "mid_8_15": 47.6,
+      "late_15_24": 27.4
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 105.1,
+        "early_sc": 20.5,
+        "late_sc": 31.9
+      },
+      "trailing_10": {
+        "pace": 102.9,
+        "early_sc": 29.2,
+        "late_sc": 23.2
+      }
+    },
+    "pnr_coverage": {
+      "drop": 41.6,
+      "switch": 31.2,
+      "ice": 15.1,
+      "hedge": 12.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.9,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 16.2,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 18.1,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.5,
+        "ppp": 1.18
+      },
+      "above_break_3": {
+        "freq": 28.3,
+        "ppp": 1.11
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 29.8,
+        "ppp": 1.26
+      },
+      "paint_non_ra": {
+        "freq": 16.1,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 11.5,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 10.2,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 32.4,
+        "ppp": 1.05
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 17.0,
+      "opponent_pct": 37.7
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.0,
+      "oreb_allowed_pct": 26.0
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 5.5,
+        "ppp": 0.92
+      },
+      "PnR_Ball_Handler": {
+        "freq": 16.5,
+        "ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.5,
+        "ppp": 1.13
+      },
+      "Post_Up": {
+        "freq": 3.8,
+        "ppp": 0.9
+      },
+      "Spot_Up": {
+        "freq": 46.2,
+        "ppp": 1.01
+      },
+      "Off_Screen": {
+        "freq": 19.5,
+        "ppp": 0.98
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.19
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.94
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.07
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.02
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.2,
+      "live_ball_per_game": 8.4,
+      "live_ball_pct": 59.0,
+      "dead_ball_per_game": 5.8,
+      "dead_ball_pct": 41.0
+    },
+    "paint_touches_pg": 39.4,
+    "three_point_rate": 42.6,
+    "def_rtg": 116.8,
+    "pts_allowed": 120.5,
+    "pts_scored": 112.6,
+    "rank_pace": 9,
+    "rank_neutral_pace": 11,
+    "rank_transition_freq": 11,
+    "rank_def_rtg": 26,
+    "rank_pts_allowed": 25,
+    "rank_dreb_secured_pct": 16,
+    "rank_oreb_allowed_pct": 16,
+    "rank_paint_touches_pg": 16,
+    "rank_three_point_rate": 13
+  },
+  "LAC": {
+    "team": "LAC",
+    "team_name": "LA Clippers",
+    "gp": 86,
+    "is_small_sample": false,
+    "pace": 98.5,
+    "neutral_pace": 99.7,
+    "transition_freq": 18.8,
+    "shot_clock": {
+      "early_0_8": 19.8,
+      "mid_8_15": 49.0,
+      "late_15_24": 31.2
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 97.0,
+        "early_sc": 15.3,
+        "late_sc": 35.7
+      },
+      "trailing_10": {
+        "pace": 97.7,
+        "early_sc": 24.0,
+        "late_sc": 27.0
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.2,
+      "switch": 35.3,
+      "ice": 15.7,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.4,
+        "ppp": 1.3
+      },
+      "paint_non_ra": {
+        "freq": 16.1,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 13.5,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.0,
+        "ppp": 1.15
+      },
+      "above_break_3": {
+        "freq": 33.0,
+        "ppp": 1.08
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 31.0,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 16.7,
+        "ppp": 0.95
+      },
+      "mid_range": {
+        "freq": 11.8,
+        "ppp": 0.89
+      },
+      "corner_3": {
+        "freq": 9.7,
+        "ppp": 1.19
+      },
+      "above_break_3": {
+        "freq": 30.8,
+        "ppp": 1.11
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.3,
+      "opponent_pct": 38.7
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.1,
+      "oreb_allowed_pct": 26.9
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 11.2,
+        "ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "freq": 21.5,
+        "ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.8,
+        "ppp": 1.19
+      },
+      "Post_Up": {
+        "freq": 4.5,
+        "ppp": 0.95
+      },
+      "Spot_Up": {
+        "freq": 43.0,
+        "ppp": 1.07
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 1.03
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.16
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.92
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.04
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.0
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.7,
+      "live_ball_per_game": 8.5,
+      "live_ball_pct": 62.4,
+      "dead_ball_per_game": 5.1,
+      "dead_ball_pct": 37.6
+    },
+    "paint_touches_pg": 38.9,
+    "three_point_rate": 40.5,
+    "def_rtg": 114.0,
+    "pts_allowed": 112.3,
+    "pts_scored": 113.5,
+    "rank_pace": 29,
+    "rank_neutral_pace": 29,
+    "rank_transition_freq": 28,
+    "rank_def_rtg": 19,
+    "rank_pts_allowed": 10,
+    "rank_dreb_secured_pct": 24,
+    "rank_oreb_allowed_pct": 24,
+    "rank_paint_touches_pg": 22,
+    "rank_three_point_rate": 18
+  },
+  "LAL": {
+    "team": "LAL",
+    "team_name": "Los Angeles Lakers",
+    "gp": 98,
+    "is_small_sample": false,
+    "pace": 99.4,
+    "neutral_pace": 100.3,
+    "transition_freq": 19.3,
+    "shot_clock": {
+      "early_0_8": 20.8,
+      "mid_8_15": 48.7,
+      "late_15_24": 30.5
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 99.2,
+        "early_sc": 16.3,
+        "late_sc": 35.0
+      },
+      "trailing_10": {
+        "pace": 98.8,
+        "early_sc": 25.0,
+        "late_sc": 26.3
+      }
+    },
+    "pnr_coverage": {
+      "drop": 55.0,
+      "switch": 23.0,
+      "ice": 14.0,
+      "hedge": 8.0
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.3,
+        "ppp": 1.31
+      },
+      "paint_non_ra": {
+        "freq": 16.2,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 14.3,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.2,
+        "ppp": 1.15
+      },
+      "above_break_3": {
+        "freq": 32.0,
+        "ppp": 1.08
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 31.6,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 17.0,
+        "ppp": 0.95
+      },
+      "mid_range": {
+        "freq": 12.2,
+        "ppp": 0.89
+      },
+      "corner_3": {
+        "freq": 9.4,
+        "ppp": 1.19
+      },
+      "above_break_3": {
+        "freq": 29.8,
+        "ppp": 1.11
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.4,
+      "opponent_pct": 37.5
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.4,
+      "oreb_allowed_pct": 25.6
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 6.8,
+        "ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "freq": 17.0,
+        "ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "freq": 9.2,
+        "ppp": 1.19
+      },
+      "Post_Up": {
+        "freq": 12.5,
+        "ppp": 0.95
+      },
+      "Spot_Up": {
+        "freq": 42.5,
+        "ppp": 1.07
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 1.03
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.16
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.92
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.04
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.0
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.3,
+      "live_ball_per_game": 9.2,
+      "live_ball_pct": 64.4,
+      "dead_ball_per_game": 5.1,
+      "dead_ball_pct": 35.6
+    },
+    "paint_touches_pg": 39.2,
+    "three_point_rate": 39.2,
+    "def_rtg": 114.5,
+    "pts_allowed": 113.8,
+    "pts_scored": 114.1,
+    "rank_pace": 27,
+    "rank_neutral_pace": 25,
+    "rank_transition_freq": 26,
+    "rank_def_rtg": 21,
+    "rank_pts_allowed": 12,
+    "rank_dreb_secured_pct": 13,
+    "rank_oreb_allowed_pct": 13,
+    "rank_paint_touches_pg": 19,
+    "rank_three_point_rate": 22
+  },
+  "MEM": {
+    "team": "MEM",
+    "team_name": "Memphis Grizzlies",
+    "gp": 87,
+    "is_small_sample": false,
+    "pace": 104.3,
+    "neutral_pace": 105.6,
+    "transition_freq": 23.5,
+    "shot_clock": {
+      "early_0_8": 26.2,
+      "mid_8_15": 47.2,
+      "late_15_24": 26.6
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 103.8,
+        "early_sc": 21.7,
+        "late_sc": 31.1
+      },
+      "trailing_10": {
+        "pace": 103.5,
+        "early_sc": 30.4,
+        "late_sc": 22.4
+      }
+    },
+    "pnr_coverage": {
+      "drop": 41.1,
+      "switch": 32.2,
+      "ice": 14.8,
+      "hedge": 11.9
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.5,
+        "ppp": 1.32
+      },
+      "paint_non_ra": {
+        "freq": 16.1,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 12.9,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.1,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 33.4,
+        "ppp": 1.1
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 29.1,
+        "ppp": 1.28
+      },
+      "paint_non_ra": {
+        "freq": 15.6,
+        "ppp": 0.91
+      },
+      "mid_range": {
+        "freq": 11.2,
+        "ppp": 0.85
+      },
+      "corner_3": {
+        "freq": 10.6,
+        "ppp": 1.14
+      },
+      "above_break_3": {
+        "freq": 33.5,
+        "ppp": 1.06
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.8,
+      "opponent_pct": 38.5
+    },
+    "rebounding": {
+      "dreb_secured_pct": 70.6,
+      "oreb_allowed_pct": 29.4
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.89
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.14
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.91
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.02
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 0.99
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.18
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.94
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.06
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.02
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.8,
+      "live_ball_per_game": 8.9,
+      "live_ball_pct": 59.9,
+      "dead_ball_per_game": 5.9,
+      "dead_ball_pct": 40.1
+    },
+    "paint_touches_pg": 39.2,
+    "three_point_rate": 44.1,
+    "def_rtg": 116.2,
+    "pts_allowed": 121.1,
+    "pts_scored": 114.8,
+    "rank_pace": 5,
+    "rank_neutral_pace": 4,
+    "rank_transition_freq": 4,
+    "rank_def_rtg": 23,
+    "rank_pts_allowed": 27,
+    "rank_dreb_secured_pct": 30,
+    "rank_oreb_allowed_pct": 30,
+    "rank_paint_touches_pg": 20,
+    "rank_three_point_rate": 10
+  },
+  "MIA": {
+    "team": "MIA",
+    "team_name": "Miami Heat",
+    "gp": 89,
+    "is_small_sample": false,
+    "pace": 105.8,
+    "neutral_pace": 105.9,
+    "transition_freq": 23.5,
+    "shot_clock": {
+      "early_0_8": 27.9,
+      "mid_8_15": 46.8,
+      "late_15_24": 25.3
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 106.4,
+        "early_sc": 23.4,
+        "late_sc": 29.8
+      },
+      "trailing_10": {
+        "pace": 105.8,
+        "early_sc": 32.1,
+        "late_sc": 21.1
+      }
+    },
+    "pnr_coverage": {
+      "drop": 22.9,
+      "switch": 53.2,
+      "ice": 12.0,
+      "hedge": 11.9
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 26.8,
+        "ppp": 1.28
+      },
+      "paint_non_ra": {
+        "freq": 16.3,
+        "ppp": 0.91
+      },
+      "mid_range": {
+        "freq": 14.8,
+        "ppp": 0.85
+      },
+      "corner_3": {
+        "freq": 9.2,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 32.9,
+        "ppp": 1.06
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 31.1,
+        "ppp": 1.32
+      },
+      "paint_non_ra": {
+        "freq": 16.7,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 12.1,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.6,
+        "ppp": 1.18
+      },
+      "above_break_3": {
+        "freq": 30.5,
+        "ppp": 1.1
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.8,
+      "opponent_pct": 38.3
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.8,
+      "oreb_allowed_pct": 25.2
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.96
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.92
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.18
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.94
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.06
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.02
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.14
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.91
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.02
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.98
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.4,
+      "live_ball_per_game": 8.0,
+      "live_ball_pct": 59.8,
+      "dead_ball_per_game": 5.4,
+      "dead_ball_pct": 40.2
+    },
+    "paint_touches_pg": 41.0,
+    "three_point_rate": 40.2,
+    "def_rtg": 112.2,
+    "pts_allowed": 118.7,
+    "pts_scored": 120.2,
+    "rank_pace": 1,
+    "rank_neutral_pace": 3,
+    "rank_transition_freq": 5,
+    "rank_def_rtg": 14,
+    "rank_pts_allowed": 22,
+    "rank_dreb_secured_pct": 9,
+    "rank_oreb_allowed_pct": 9,
+    "rank_paint_touches_pg": 7,
+    "rank_three_point_rate": 20
+  },
+  "MIL": {
+    "team": "MIL",
+    "team_name": "Milwaukee Bucks",
+    "gp": 86,
+    "is_small_sample": false,
+    "pace": 99.7,
+    "neutral_pace": 99.8,
+    "transition_freq": 19.2,
+    "shot_clock": {
+      "early_0_8": 21.2,
+      "mid_8_15": 48.6,
+      "late_15_24": 30.2
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 101.9,
+        "early_sc": 16.7,
+        "late_sc": 34.7
+      },
+      "trailing_10": {
+        "pace": 98.8,
+        "early_sc": 25.4,
+        "late_sc": 26.0
+      }
+    },
+    "pnr_coverage": {
+      "drop": 55.4,
+      "switch": 22.3,
+      "ice": 14.2,
+      "hedge": 8.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.0,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 16.4,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 10.7,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.5,
+        "ppp": 1.18
+      },
+      "above_break_3": {
+        "freq": 35.4,
+        "ppp": 1.11
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 28.1,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 15.1,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 10.9,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 11.0,
+        "ppp": 1.15
+      },
+      "above_break_3": {
+        "freq": 34.9,
+        "ppp": 1.07
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 17.0,
+      "opponent_pct": 39.4
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.5,
+      "oreb_allowed_pct": 25.5
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.15
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.92
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.03
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 0.99
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.19
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.94
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.07
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.03
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.5,
+      "live_ball_per_game": 8.7,
+      "live_ball_pct": 60.2,
+      "dead_ball_per_game": 5.8,
+      "dead_ball_pct": 39.8
+    },
+    "paint_touches_pg": 37.6,
+    "three_point_rate": 46.0,
+    "def_rtg": 116.9,
+    "pts_allowed": 116.5,
+    "pts_scored": 110.8,
+    "rank_pace": 23,
+    "rank_neutral_pace": 27,
+    "rank_transition_freq": 27,
+    "rank_def_rtg": 27,
+    "rank_pts_allowed": 21,
+    "rank_dreb_secured_pct": 11,
+    "rank_oreb_allowed_pct": 11,
+    "rank_paint_touches_pg": 28,
+    "rank_three_point_rate": 5
+  },
+  "MIN": {
+    "team": "MIN",
+    "team_name": "Minnesota Timberwolves",
+    "gp": 99,
+    "is_small_sample": false,
+    "pace": 103.0,
+    "neutral_pace": 102.9,
+    "transition_freq": 22.6,
+    "shot_clock": {
+      "early_0_8": 24.8,
+      "mid_8_15": 47.6,
+      "late_15_24": 27.6
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 103.0,
+        "early_sc": 20.3,
+        "late_sc": 32.1
+      },
+      "trailing_10": {
+        "pace": 102.2,
+        "early_sc": 29.0,
+        "late_sc": 23.4
+      }
+    },
+    "pnr_coverage": {
+      "drop": 55.6,
+      "switch": 22.8,
+      "ice": 13.7,
+      "hedge": 7.9
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.5,
+        "ppp": 1.27
+      },
+      "paint_non_ra": {
+        "freq": 15.8,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 18.3,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 9.2,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 29.2,
+        "ppp": 1.06
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 30.8,
+        "ppp": 1.31
+      },
+      "paint_non_ra": {
+        "freq": 16.6,
+        "ppp": 0.93
+      },
+      "mid_range": {
+        "freq": 11.8,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.8,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 31.0,
+        "ppp": 1.09
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.6,
+      "opponent_pct": 37.6
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.2,
+      "oreb_allowed_pct": 25.8
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.92
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.17
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.93
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.05
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.01
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.89
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.14
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.9
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.02
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.98
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 14.3,
+      "live_ball_per_game": 8.4,
+      "live_ball_pct": 59.1,
+      "dead_ball_per_game": 5.8,
+      "dead_ball_pct": 40.9
+    },
+    "paint_touches_pg": 39.9,
+    "three_point_rate": 40.8,
+    "def_rtg": 111.5,
+    "pts_allowed": 114.9,
+    "pts_scored": 116.8,
+    "rank_pace": 11,
+    "rank_neutral_pace": 13,
+    "rank_transition_freq": 10,
+    "rank_def_rtg": 10,
+    "rank_pts_allowed": 14,
+    "rank_dreb_secured_pct": 15,
+    "rank_oreb_allowed_pct": 15,
+    "rank_paint_touches_pg": 12,
+    "rank_three_point_rate": 17
+  },
+  "NOP": {
+    "team": "NOP",
+    "team_name": "New Orleans Pelicans",
+    "gp": 84,
+    "is_small_sample": false,
+    "pace": 103.2,
+    "neutral_pace": 102.4,
+    "transition_freq": 22.9,
+    "shot_clock": {
+      "early_0_8": 25.0,
+      "mid_8_15": 47.5,
+      "late_15_24": 27.5
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 106.9,
+        "early_sc": 20.5,
+        "late_sc": 32.0
+      },
+      "trailing_10": {
+        "pace": 102.2,
+        "early_sc": 29.2,
+        "late_sc": 23.3
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.5,
+      "switch": 35.0,
+      "ice": 15.7,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.2,
+        "ppp": 1.33
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.94
+      },
+      "mid_range": {
+        "freq": 11.8,
+        "ppp": 0.88
+      },
+      "corner_3": {
+        "freq": 9.1,
+        "ppp": 1.18
+      },
+      "above_break_3": {
+        "freq": 34.9,
+        "ppp": 1.1
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 33.5,
+        "ppp": 1.3
+      },
+      "paint_non_ra": {
+        "freq": 18.1,
+        "ppp": 0.93
+      },
+      "mid_range": {
+        "freq": 12.9,
+        "ppp": 0.87
+      },
+      "corner_3": {
+        "freq": 8.5,
+        "ppp": 1.16
+      },
+      "above_break_3": {
+        "freq": 27.0,
+        "ppp": 1.08
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.9,
+      "opponent_pct": 37.4
+    },
+    "rebounding": {
+      "dreb_secured_pct": 71.4,
+      "oreb_allowed_pct": 28.6
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.16
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.93
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.04
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.0
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.97
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.19
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.94
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.06
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.02
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.5,
+      "live_ball_per_game": 8.0,
+      "live_ball_pct": 59.2,
+      "dead_ball_per_game": 5.5,
+      "dead_ball_pct": 40.8
+    },
+    "paint_touches_pg": 42.0,
+    "three_point_rate": 35.5,
+    "def_rtg": 116.6,
+    "pts_allowed": 120.3,
+    "pts_scored": 115.8,
+    "rank_pace": 10,
+    "rank_neutral_pace": 16,
+    "rank_transition_freq": 9,
+    "rank_def_rtg": 25,
+    "rank_pts_allowed": 24,
+    "rank_dreb_secured_pct": 28,
+    "rank_oreb_allowed_pct": 28,
+    "rank_paint_touches_pg": 1,
+    "rank_three_point_rate": 28
+  },
+  "NYK": {
+    "team": "NYK",
+    "team_name": "New York Knicks",
+    "gp": 107,
+    "is_small_sample": false,
+    "pace": 98.8,
+    "neutral_pace": 99.8,
+    "transition_freq": 18.8,
+    "shot_clock": {
+      "early_0_8": 20.2,
+      "mid_8_15": 48.9,
+      "late_15_24": 30.9
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 98.1,
+        "early_sc": 15.7,
+        "late_sc": 35.4
+      },
+      "trailing_10": {
+        "pace": 98.8,
+        "early_sc": 24.4,
+        "late_sc": 26.7
+      }
+    },
+    "pnr_coverage": {
+      "drop": 40.7,
+      "switch": 32.1,
+      "ice": 15.1,
+      "hedge": 12.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.4,
+        "ppp": 1.25
+      },
+      "paint_non_ra": {
+        "freq": 16.4,
+        "ppp": 0.88
+      },
+      "mid_range": {
+        "freq": 11.5,
+        "ppp": 0.83
+      },
+      "corner_3": {
+        "freq": 9.3,
+        "ppp": 1.1
+      },
+      "above_break_3": {
+        "freq": 35.4,
+        "ppp": 1.04
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 29.9,
+        "ppp": 1.36
+      },
+      "paint_non_ra": {
+        "freq": 16.1,
+        "ppp": 0.97
+      },
+      "mid_range": {
+        "freq": 11.5,
+        "ppp": 0.91
+      },
+      "corner_3": {
+        "freq": 10.2,
+        "ppp": 1.21
+      },
+      "above_break_3": {
+        "freq": 32.3,
+        "ppp": 1.13
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.1,
+      "opponent_pct": 37.6
+    },
+    "rebounding": {
+      "dreb_secured_pct": 76.9,
+      "oreb_allowed_pct": 23.1
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 9.8,
+        "ppp": 0.99
+      },
+      "PnR_Ball_Handler": {
+        "freq": 20.0,
+        "ppp": 0.95
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.2,
+        "ppp": 1.21
+      },
+      "Post_Up": {
+        "freq": 4.8,
+        "ppp": 0.97
+      },
+      "Spot_Up": {
+        "freq": 44.2,
+        "ppp": 1.09
+      },
+      "Off_Screen": {
+        "freq": 14.0,
+        "ppp": 1.05
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.87
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.11
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.88
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.0
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.96
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 12.8,
+      "live_ball_per_game": 7.3,
+      "live_ball_pct": 56.9,
+      "dead_ball_per_game": 5.5,
+      "dead_ball_pct": 43.1
+    },
+    "paint_touches_pg": 39.4,
+    "three_point_rate": 42.4,
+    "def_rtg": 109.4,
+    "pts_allowed": 108.1,
+    "pts_scored": 115.9,
+    "rank_pace": 28,
+    "rank_neutral_pace": 28,
+    "rank_transition_freq": 29,
+    "rank_def_rtg": 5,
+    "rank_pts_allowed": 3,
+    "rank_dreb_secured_pct": 1,
+    "rank_oreb_allowed_pct": 1,
+    "rank_paint_touches_pg": 17,
+    "rank_three_point_rate": 14
+  },
+  "OKC": {
+    "team": "OKC",
+    "team_name": "Oklahoma City Thunder",
+    "gp": 103,
+    "is_small_sample": false,
+    "pace": 101.5,
+    "neutral_pace": 102.0,
+    "transition_freq": 21.8,
+    "shot_clock": {
+      "early_0_8": 23.2,
+      "mid_8_15": 48.0,
+      "late_15_24": 28.8
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 101.0,
+        "early_sc": 18.7,
+        "late_sc": 33.3
+      },
+      "trailing_10": {
+        "pace": 99.9,
+        "early_sc": 27.4,
+        "late_sc": 24.6
+      }
+    },
+    "pnr_coverage": {
+      "drop": 23.7,
+      "switch": 53.1,
+      "ice": 11.6,
+      "hedge": 11.6
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.0,
+        "ppp": 1.21
+      },
+      "paint_non_ra": {
+        "freq": 15.9,
+        "ppp": 0.86
+      },
+      "mid_range": {
+        "freq": 12.9,
+        "ppp": 0.8
+      },
+      "corner_3": {
+        "freq": 8.8,
+        "ppp": 1.07
+      },
+      "above_break_3": {
+        "freq": 35.4,
+        "ppp": 1.01
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 29.7,
+        "ppp": 1.35
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.96
+      },
+      "mid_range": {
+        "freq": 11.3,
+        "ppp": 0.9
+      },
+      "corner_3": {
+        "freq": 10.3,
+        "ppp": 1.2
+      },
+      "above_break_3": {
+        "freq": 32.7,
+        "ppp": 1.12
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 14.4,
+      "opponent_pct": 38.8
+    },
+    "rebounding": {
+      "dreb_secured_pct": 74.0,
+      "oreb_allowed_pct": 26.0
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 11.2,
+        "ppp": 0.98
+      },
+      "PnR_Ball_Handler": {
+        "freq": 21.5,
+        "ppp": 0.94
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.8,
+        "ppp": 1.2
+      },
+      "Post_Up": {
+        "freq": 4.5,
+        "ppp": 0.96
+      },
+      "Spot_Up": {
+        "freq": 43.0,
+        "ppp": 1.08
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 1.04
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.89
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.85
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.08
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.86
+      },
+      "Spot_Up": {
+        "allowed_ppp": 0.97
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.93
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 12.2,
+      "live_ball_per_game": 7.7,
+      "live_ball_pct": 62.8,
+      "dead_ball_per_game": 4.5,
+      "dead_ball_pct": 37.2
+    },
+    "paint_touches_pg": 39.3,
+    "three_point_rate": 43.0,
+    "def_rtg": 106.4,
+    "pts_allowed": 108.0,
+    "pts_scored": 118.0,
+    "rank_pace": 17,
+    "rank_neutral_pace": 18,
+    "rank_transition_freq": 15,
+    "rank_def_rtg": 1,
+    "rank_pts_allowed": 2,
+    "rank_dreb_secured_pct": 17,
+    "rank_oreb_allowed_pct": 17,
+    "rank_paint_touches_pg": 18,
+    "rank_three_point_rate": 12
+  },
+  "ORL": {
+    "team": "ORL",
+    "team_name": "Orlando Magic",
+    "gp": 95,
+    "is_small_sample": false,
+    "pace": 102.8,
+    "neutral_pace": 104.7,
+    "transition_freq": 22.4,
+    "shot_clock": {
+      "early_0_8": 24.5,
+      "mid_8_15": 47.7,
+      "late_15_24": 27.8
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 102.4,
+        "early_sc": 20.0,
+        "late_sc": 32.3
+      },
+      "trailing_10": {
+        "pace": 101.3,
+        "early_sc": 28.7,
+        "late_sc": 23.6
+      }
+    },
+    "pnr_coverage": {
+      "drop": 41.5,
+      "switch": 31.9,
+      "ice": 14.8,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 27.8,
+        "ppp": 1.26
+      },
+      "paint_non_ra": {
+        "freq": 16.0,
+        "ppp": 0.89
+      },
+      "mid_range": {
+        "freq": 17.3,
+        "ppp": 0.83
+      },
+      "corner_3": {
+        "freq": 9.2,
+        "ppp": 1.12
+      },
+      "above_break_3": {
+        "freq": 29.7,
+        "ppp": 1.05
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 31.9,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 17.2,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 12.2,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.3,
+        "ppp": 1.16
+      },
+      "above_break_3": {
+        "freq": 29.4,
+        "ppp": 1.08
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.4,
+      "opponent_pct": 37.2
+    },
+    "rebounding": {
+      "dreb_secured_pct": 75.4,
+      "oreb_allowed_pct": 24.6
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.16
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.92
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.04
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.0
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.92
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.13
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.89
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.01
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.97
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.8,
+      "live_ball_per_game": 8.3,
+      "live_ball_pct": 59.8,
+      "dead_ball_per_game": 5.6,
+      "dead_ball_pct": 40.2
+    },
+    "paint_touches_pg": 40.3,
+    "three_point_rate": 38.7,
+    "def_rtg": 110.6,
+    "pts_allowed": 113.7,
+    "pts_scored": 114.7,
+    "rank_pace": 12,
+    "rank_neutral_pace": 8,
+    "rank_transition_freq": 12,
+    "rank_def_rtg": 7,
+    "rank_pts_allowed": 11,
+    "rank_dreb_secured_pct": 6,
+    "rank_oreb_allowed_pct": 6,
+    "rank_paint_touches_pg": 11,
+    "rank_three_point_rate": 24
+  },
+  "PHI": {
+    "team": "PHI",
+    "team_name": "Philadelphia 76ers",
+    "gp": 98,
+    "is_small_sample": false,
+    "pace": 101.8,
+    "neutral_pace": 102.5,
+    "transition_freq": 21.6,
+    "shot_clock": {
+      "early_0_8": 23.4,
+      "mid_8_15": 48.0,
+      "late_15_24": 28.6
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 101.5,
+        "early_sc": 18.9,
+        "late_sc": 33.1
+      },
+      "trailing_10": {
+        "pace": 101.4,
+        "early_sc": 27.6,
+        "late_sc": 24.4
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.9,
+      "switch": 34.8,
+      "ice": 15.6,
+      "hedge": 11.7
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.2,
+        "ppp": 1.29
+      },
+      "paint_non_ra": {
+        "freq": 15.8,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 13.1,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.1,
+        "ppp": 1.14
+      },
+      "above_break_3": {
+        "freq": 33.8,
+        "ppp": 1.07
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 31.6,
+        "ppp": 1.3
+      },
+      "paint_non_ra": {
+        "freq": 17.0,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 12.2,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.4,
+        "ppp": 1.16
+      },
+      "above_break_3": {
+        "freq": 29.8,
+        "ppp": 1.08
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 16.1,
+      "opponent_pct": 37.4
+    },
+    "rebounding": {
+      "dreb_secured_pct": 72.3,
+      "oreb_allowed_pct": 27.7
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 6.8,
+        "ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "freq": 17.0,
+        "ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "freq": 9.2,
+        "ppp": 1.16
+      },
+      "Post_Up": {
+        "freq": 12.5,
+        "ppp": 0.92
+      },
+      "Spot_Up": {
+        "freq": 42.5,
+        "ppp": 1.04
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 1.0
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.15
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.92
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.03
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.99
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.0,
+      "live_ball_per_game": 7.3,
+      "live_ball_pct": 56.0,
+      "dead_ball_per_game": 5.7,
+      "dead_ball_pct": 44.0
+    },
+    "paint_touches_pg": 40.5,
+    "three_point_rate": 39.2,
+    "def_rtg": 113.4,
+    "pts_allowed": 115.4,
+    "pts_scored": 113.8,
+    "rank_pace": 14,
+    "rank_neutral_pace": 14,
+    "rank_transition_freq": 16,
+    "rank_def_rtg": 17,
+    "rank_pts_allowed": 16,
+    "rank_dreb_secured_pct": 26,
+    "rank_oreb_allowed_pct": 26,
+    "rank_paint_touches_pg": 8,
+    "rank_three_point_rate": 23
+  },
+  "PHX": {
+    "team": "PHX",
+    "team_name": "Phoenix Suns",
+    "gp": 92,
+    "is_small_sample": false,
+    "pace": 99.7,
+    "neutral_pace": 101.0,
+    "transition_freq": 20.1,
+    "shot_clock": {
+      "early_0_8": 21.2,
+      "mid_8_15": 48.6,
+      "late_15_24": 30.2
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 99.4,
+        "early_sc": 16.7,
+        "late_sc": 34.7
+      },
+      "trailing_10": {
+        "pace": 98.0,
+        "early_sc": 25.4,
+        "late_sc": 26.0
+      }
+    },
+    "pnr_coverage": {
+      "drop": 36.4,
+      "switch": 36.0,
+      "ice": 15.8,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 29.0,
+        "ppp": 1.27
+      },
+      "paint_non_ra": {
+        "freq": 16.3,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 13.3,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 8.9,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 32.5,
+        "ppp": 1.06
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 28.5,
+        "ppp": 1.3
+      },
+      "paint_non_ra": {
+        "freq": 15.4,
+        "ppp": 0.93
+      },
+      "mid_range": {
+        "freq": 11.0,
+        "ppp": 0.87
+      },
+      "corner_3": {
+        "freq": 10.8,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 34.3,
+        "ppp": 1.09
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.6,
+      "opponent_pct": 37.4
+    },
+    "rebounding": {
+      "dreb_secured_pct": 71.9,
+      "oreb_allowed_pct": 28.1
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 11.2,
+        "ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "freq": 21.5,
+        "ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "freq": 7.8,
+        "ppp": 1.17
+      },
+      "Post_Up": {
+        "freq": 4.5,
+        "ppp": 0.93
+      },
+      "Spot_Up": {
+        "freq": 43.0,
+        "ppp": 1.05
+      },
+      "Off_Screen": {
+        "freq": 12.0,
+        "ppp": 1.01
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.89
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.14
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.9
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.02
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.98
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.7,
+      "live_ball_per_game": 8.0,
+      "live_ball_pct": 58.5,
+      "dead_ball_per_game": 5.7,
+      "dead_ball_pct": 41.5
+    },
+    "paint_touches_pg": 38.8,
+    "three_point_rate": 45.2,
+    "def_rtg": 111.6,
+    "pts_allowed": 111.3,
+    "pts_scored": 112.3,
+    "rank_pace": 24,
+    "rank_neutral_pace": 21,
+    "rank_transition_freq": 22,
+    "rank_def_rtg": 11,
+    "rank_pts_allowed": 7,
+    "rank_dreb_secured_pct": 27,
+    "rank_oreb_allowed_pct": 27,
+    "rank_paint_touches_pg": 23,
+    "rank_three_point_rate": 7
+  },
+  "POR": {
+    "team": "POR",
+    "team_name": "Portland Trail Blazers",
+    "gp": 92,
+    "is_small_sample": false,
+    "pace": 103.6,
+    "neutral_pace": 105.4,
+    "transition_freq": 23.1,
+    "shot_clock": {
+      "early_0_8": 25.5,
+      "mid_8_15": 47.4,
+      "late_15_24": 27.1
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 102.3,
+        "early_sc": 21.0,
+        "late_sc": 31.6
+      },
+      "trailing_10": {
+        "pace": 103.4,
+        "early_sc": 29.7,
+        "late_sc": 22.9
+      }
+    },
+    "pnr_coverage": {
+      "drop": 55.8,
+      "switch": 22.5,
+      "ice": 13.8,
+      "hedge": 7.9
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.1,
+        "ppp": 1.28
+      },
+      "paint_non_ra": {
+        "freq": 15.8,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 16.8,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 9.3,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 30.0,
+        "ppp": 1.06
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 27.7,
+        "ppp": 1.28
+      },
+      "paint_non_ra": {
+        "freq": 14.9,
+        "ppp": 0.91
+      },
+      "mid_range": {
+        "freq": 10.7,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 11.2,
+        "ppp": 1.15
+      },
+      "above_break_3": {
+        "freq": 35.5,
+        "ppp": 1.07
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.7,
+      "opponent_pct": 38.3
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.2,
+      "oreb_allowed_pct": 26.8
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.89
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.15
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.91
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.03
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 0.99
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.93
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.89
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.14
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.9
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.02
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.98
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 16.3,
+      "live_ball_per_game": 10.6,
+      "live_ball_pct": 65.0,
+      "dead_ball_per_game": 5.7,
+      "dead_ball_pct": 35.0
+    },
+    "paint_touches_pg": 38.3,
+    "three_point_rate": 46.7,
+    "def_rtg": 111.9,
+    "pts_allowed": 115.9,
+    "pts_scored": 114.9,
+    "rank_pace": 8,
+    "rank_neutral_pace": 6,
+    "rank_transition_freq": 7,
+    "rank_def_rtg": 12,
+    "rank_pts_allowed": 17,
+    "rank_dreb_secured_pct": 23,
+    "rank_oreb_allowed_pct": 23,
+    "rank_paint_touches_pg": 25,
+    "rank_three_point_rate": 4
+  },
+  "SAC": {
+    "team": "SAC",
+    "team_name": "Sacramento Kings",
+    "gp": 86,
+    "is_small_sample": false,
+    "pace": 101.4,
+    "neutral_pace": 102.1,
+    "transition_freq": 20.9,
+    "shot_clock": {
+      "early_0_8": 23.0,
+      "mid_8_15": 48.1,
+      "late_15_24": 28.9
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 98.5,
+        "early_sc": 18.5,
+        "late_sc": 33.4
+      },
+      "trailing_10": {
+        "pace": 100.6,
+        "early_sc": 27.2,
+        "late_sc": 24.7
+      }
+    },
+    "pnr_coverage": {
+      "drop": 37.3,
+      "switch": 34.6,
+      "ice": 16.0,
+      "hedge": 12.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.6,
+        "ppp": 1.36
+      },
+      "paint_non_ra": {
+        "freq": 16.2,
+        "ppp": 0.96
+      },
+      "mid_range": {
+        "freq": 14.1,
+        "ppp": 0.9
+      },
+      "corner_3": {
+        "freq": 9.3,
+        "ppp": 1.2
+      },
+      "above_break_3": {
+        "freq": 31.8,
+        "ppp": 1.13
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 34.2,
+        "ppp": 1.27
+      },
+      "paint_non_ra": {
+        "freq": 18.4,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 13.2,
+        "ppp": 0.85
+      },
+      "corner_3": {
+        "freq": 8.2,
+        "ppp": 1.13
+      },
+      "above_break_3": {
+        "freq": 26.0,
+        "ppp": 1.06
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 17.6,
+      "opponent_pct": 40.2
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.6,
+      "oreb_allowed_pct": 26.4
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 5.5,
+        "ppp": 0.92
+      },
+      "PnR_Ball_Handler": {
+        "freq": 16.5,
+        "ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.5,
+        "ppp": 1.13
+      },
+      "Post_Up": {
+        "freq": 3.8,
+        "ppp": 0.9
+      },
+      "Spot_Up": {
+        "freq": 46.2,
+        "ppp": 1.02
+      },
+      "Off_Screen": {
+        "freq": 19.5,
+        "ppp": 0.98
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.99
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.95
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.21
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.96
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.09
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.05
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.8,
+      "live_ball_per_game": 8.7,
+      "live_ball_pct": 63.1,
+      "dead_ball_per_game": 5.1,
+      "dead_ball_pct": 36.9
+    },
+    "paint_touches_pg": 42.0,
+    "three_point_rate": 34.2,
+    "def_rtg": 119.3,
+    "pts_allowed": 120.9,
+    "pts_scored": 111.1,
+    "rank_pace": 20,
+    "rank_neutral_pace": 17,
+    "rank_transition_freq": 20,
+    "rank_def_rtg": 28,
+    "rank_pts_allowed": 26,
+    "rank_dreb_secured_pct": 20,
+    "rank_oreb_allowed_pct": 20,
+    "rank_paint_touches_pg": 2,
+    "rank_three_point_rate": 30
+  },
+  "SAS": {
+    "team": "SAS",
+    "team_name": "San Antonio Spurs",
+    "gp": 110,
+    "is_small_sample": false,
+    "pace": 101.6,
+    "neutral_pace": 102.5,
+    "transition_freq": 21.0,
+    "shot_clock": {
+      "early_0_8": 23.3,
+      "mid_8_15": 48.0,
+      "late_15_24": 28.7
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 101.4,
+        "early_sc": 18.8,
+        "late_sc": 33.2
+      },
+      "trailing_10": {
+        "pace": 101.6,
+        "early_sc": 27.5,
+        "late_sc": 24.5
+      }
+    },
+    "pnr_coverage": {
+      "drop": 38.6,
+      "switch": 33.8,
+      "ice": 15.8,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 26.4,
+        "ppp": 1.24
+      },
+      "paint_non_ra": {
+        "freq": 15.7,
+        "ppp": 0.88
+      },
+      "mid_range": {
+        "freq": 17.4,
+        "ppp": 0.82
+      },
+      "corner_3": {
+        "freq": 9.4,
+        "ppp": 1.09
+      },
+      "above_break_3": {
+        "freq": 31.1,
+        "ppp": 1.03
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 30.1,
+        "ppp": 1.35
+      },
+      "paint_non_ra": {
+        "freq": 16.2,
+        "ppp": 0.96
+      },
+      "mid_range": {
+        "freq": 11.6,
+        "ppp": 0.9
+      },
+      "corner_3": {
+        "freq": 10.1,
+        "ppp": 1.21
+      },
+      "above_break_3": {
+        "freq": 32.0,
+        "ppp": 1.12
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 14.9,
+      "opponent_pct": 37.5
+    },
+    "rebounding": {
+      "dreb_secured_pct": 76.8,
+      "oreb_allowed_pct": 23.2
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.98
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.94
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.21
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.96
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.08
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.04
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.9
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.87
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.1
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.88
+      },
+      "Spot_Up": {
+        "allowed_ppp": 0.99
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.95
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.0,
+      "live_ball_per_game": 7.8,
+      "live_ball_pct": 59.8,
+      "dead_ball_per_game": 5.2,
+      "dead_ball_pct": 40.2
+    },
+    "paint_touches_pg": 39.6,
+    "three_point_rate": 42.0,
+    "def_rtg": 108.5,
+    "pts_allowed": 110.3,
+    "pts_scored": 118.4,
+    "rank_pace": 16,
+    "rank_neutral_pace": 15,
+    "rank_transition_freq": 19,
+    "rank_def_rtg": 3,
+    "rank_pts_allowed": 6,
+    "rank_dreb_secured_pct": 2,
+    "rank_oreb_allowed_pct": 2,
+    "rank_paint_touches_pg": 14,
+    "rank_three_point_rate": 15
+  },
+  "TOR": {
+    "team": "TOR",
+    "team_name": "Toronto Raptors",
+    "gp": 95,
+    "is_small_sample": false,
+    "pace": 101.1,
+    "neutral_pace": 103.0,
+    "transition_freq": 21.1,
+    "shot_clock": {
+      "early_0_8": 22.7,
+      "mid_8_15": 48.2,
+      "late_15_24": 29.1
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 101.7,
+        "early_sc": 18.2,
+        "late_sc": 33.6
+      },
+      "trailing_10": {
+        "pace": 99.5,
+        "early_sc": 26.9,
+        "late_sc": 24.9
+      }
+    },
+    "pnr_coverage": {
+      "drop": 23.3,
+      "switch": 53.0,
+      "ice": 11.8,
+      "hedge": 11.9
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.5,
+        "ppp": 1.26
+      },
+      "paint_non_ra": {
+        "freq": 16.1,
+        "ppp": 0.89
+      },
+      "mid_range": {
+        "freq": 13.1,
+        "ppp": 0.83
+      },
+      "corner_3": {
+        "freq": 9.0,
+        "ppp": 1.12
+      },
+      "above_break_3": {
+        "freq": 33.3,
+        "ppp": 1.05
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 33.0,
+        "ppp": 1.31
+      },
+      "paint_non_ra": {
+        "freq": 17.8,
+        "ppp": 0.93
+      },
+      "mid_range": {
+        "freq": 12.6,
+        "ppp": 0.87
+      },
+      "corner_3": {
+        "freq": 8.8,
+        "ppp": 1.17
+      },
+      "above_break_3": {
+        "freq": 27.8,
+        "ppp": 1.09
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 15.4,
+      "opponent_pct": 37.4
+    },
+    "rebounding": {
+      "dreb_secured_pct": 73.5,
+      "oreb_allowed_pct": 26.5
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.95
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.91
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.17
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.93
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.05
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.01
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 0.92
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.13
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.89
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.01
+      },
+      "Off_Screen": {
+        "allowed_ppp": 0.97
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 13.1,
+      "live_ball_per_game": 7.9,
+      "live_ball_pct": 60.0,
+      "dead_ball_per_game": 5.2,
+      "dead_ball_pct": 40.0
+    },
+    "paint_touches_pg": 41.2,
+    "three_point_rate": 36.5,
+    "def_rtg": 110.7,
+    "pts_allowed": 111.9,
+    "pts_scored": 114.3,
+    "rank_pace": 21,
+    "rank_neutral_pace": 12,
+    "rank_transition_freq": 18,
+    "rank_def_rtg": 8,
+    "rank_pts_allowed": 8,
+    "rank_dreb_secured_pct": 21,
+    "rank_oreb_allowed_pct": 21,
+    "rank_paint_touches_pg": 6,
+    "rank_three_point_rate": 25
+  },
+  "UTA": {
+    "team": "UTA",
+    "team_name": "Utah Jazz",
+    "gp": 86,
+    "is_small_sample": false,
+    "pace": 105.2,
+    "neutral_pace": 106.6,
+    "transition_freq": 23.5,
+    "shot_clock": {
+      "early_0_8": 27.2,
+      "mid_8_15": 47.0,
+      "late_15_24": 25.8
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 102.3,
+        "early_sc": 22.7,
+        "late_sc": 30.3
+      },
+      "trailing_10": {
+        "pace": 104.8,
+        "early_sc": 31.4,
+        "late_sc": 21.6
+      }
+    },
+    "pnr_coverage": {
+      "drop": 54.2,
+      "switch": 23.7,
+      "ice": 14.0,
+      "hedge": 8.1
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.1,
+        "ppp": 1.37
+      },
+      "paint_non_ra": {
+        "freq": 16.5,
+        "ppp": 0.97
+      },
+      "mid_range": {
+        "freq": 10.0,
+        "ppp": 0.9
+      },
+      "corner_3": {
+        "freq": 9.1,
+        "ppp": 1.21
+      },
+      "above_break_3": {
+        "freq": 36.3,
+        "ppp": 1.14
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 30.9,
+        "ppp": 1.3
+      },
+      "paint_non_ra": {
+        "freq": 16.7,
+        "ppp": 0.92
+      },
+      "mid_range": {
+        "freq": 11.9,
+        "ppp": 0.86
+      },
+      "corner_3": {
+        "freq": 9.7,
+        "ppp": 1.16
+      },
+      "above_break_3": {
+        "freq": 30.8,
+        "ppp": 1.08
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 17.7,
+      "opponent_pct": 39.3
+    },
+    "rebounding": {
+      "dreb_secured_pct": 72.6,
+      "oreb_allowed_pct": 27.4
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.94
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.9
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.16
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.92
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.04
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 1.0
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 1.0
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.96
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.22
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.97
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.09
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.05
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 15.0,
+      "live_ball_per_game": 9.2,
+      "live_ball_pct": 61.4,
+      "dead_ball_per_game": 5.8,
+      "dead_ball_pct": 38.6
+    },
+    "paint_touches_pg": 40.4,
+    "three_point_rate": 40.5,
+    "def_rtg": 119.9,
+    "pts_allowed": 126.2,
+    "pts_scored": 117.8,
+    "rank_pace": 2,
+    "rank_neutral_pace": 2,
+    "rank_transition_freq": 6,
+    "rank_def_rtg": 30,
+    "rank_pts_allowed": 30,
+    "rank_dreb_secured_pct": 25,
+    "rank_oreb_allowed_pct": 25,
+    "rank_paint_touches_pg": 9,
+    "rank_three_point_rate": 19
+  },
+  "WAS": {
+    "team": "WAS",
+    "team_name": "Washington Wizards",
+    "gp": 85,
+    "is_small_sample": false,
+    "pace": 103.8,
+    "neutral_pace": 106.9,
+    "transition_freq": 23.1,
+    "shot_clock": {
+      "early_0_8": 25.7,
+      "mid_8_15": 47.4,
+      "late_15_24": 26.9
+    },
+    "game_script": {
+      "leading_10": {
+        "pace": 103.7,
+        "early_sc": 21.2,
+        "late_sc": 31.4
+      },
+      "trailing_10": {
+        "pace": 103.1,
+        "early_sc": 29.9,
+        "late_sc": 22.7
+      }
+    },
+    "pnr_coverage": {
+      "drop": 38.3,
+      "switch": 34.1,
+      "ice": 15.8,
+      "hedge": 11.8
+    },
+    "shot_profile_allowed": {
+      "restricted_area": {
+        "freq": 28.4,
+        "ppp": 1.37
+      },
+      "paint_non_ra": {
+        "freq": 15.8,
+        "ppp": 0.97
+      },
+      "mid_range": {
+        "freq": 15.2,
+        "ppp": 0.9
+      },
+      "corner_3": {
+        "freq": 9.4,
+        "ppp": 1.21
+      },
+      "above_break_3": {
+        "freq": 31.2,
+        "ppp": 1.14
+      }
+    },
+    "shot_profile_offense": {
+      "restricted_area": {
+        "freq": 31.1,
+        "ppp": 1.26
+      },
+      "paint_non_ra": {
+        "freq": 16.7,
+        "ppp": 0.9
+      },
+      "mid_range": {
+        "freq": 11.9,
+        "ppp": 0.84
+      },
+      "corner_3": {
+        "freq": 9.7,
+        "ppp": 1.12
+      },
+      "above_break_3": {
+        "freq": 30.6,
+        "ppp": 1.05
+      }
+    },
+    "wide_open_3pt": {
+      "allowed_freq": 17.7,
+      "opponent_pct": 39.0
+    },
+    "rebounding": {
+      "dreb_secured_pct": 70.7,
+      "oreb_allowed_pct": 29.3
+    },
+    "playtypes_offense": {
+      "Isolation": {
+        "freq": 7.5,
+        "ppp": 0.91
+      },
+      "PnR_Ball_Handler": {
+        "freq": 19.0,
+        "ppp": 0.88
+      },
+      "PnR_Roll_Man": {
+        "freq": 8.0,
+        "ppp": 1.12
+      },
+      "Post_Up": {
+        "freq": 6.0,
+        "ppp": 0.9
+      },
+      "Spot_Up": {
+        "freq": 44.5,
+        "ppp": 1.01
+      },
+      "Off_Screen": {
+        "freq": 15.0,
+        "ppp": 0.97
+      }
+    },
+    "playtypes_defense": {
+      "Isolation": {
+        "allowed_ppp": 1.0
+      },
+      "PnR_Ball_Handler": {
+        "allowed_ppp": 0.96
+      },
+      "PnR_Roll_Man": {
+        "allowed_ppp": 1.22
+      },
+      "Post_Up": {
+        "allowed_ppp": 0.97
+      },
+      "Spot_Up": {
+        "allowed_ppp": 1.09
+      },
+      "Off_Screen": {
+        "allowed_ppp": 1.05
+      }
+    },
+    "turnover_profile": {
+      "avg_total": 15.2,
+      "live_ball_per_game": 9.7,
+      "live_ball_pct": 63.9,
+      "dead_ball_per_game": 5.5,
+      "dead_ball_pct": 36.1
+    },
+    "paint_touches_pg": 40.4,
+    "three_point_rate": 40.2,
+    "def_rtg": 119.8,
+    "pts_allowed": 124.4,
+    "pts_scored": 112.8,
+    "rank_pace": 7,
+    "rank_neutral_pace": 1,
+    "rank_transition_freq": 8,
+    "rank_def_rtg": 29,
+    "rank_pts_allowed": 29,
+    "rank_dreb_secured_pct": 29,
+    "rank_oreb_allowed_pct": 29,
+    "rank_paint_touches_pg": 10,
+    "rank_three_point_rate": 21
+  }
+}
