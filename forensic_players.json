@@ -58932,7 +58932,7 @@
     "player_name": "Toby Okani",
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
-    "position": NaN,
+    "position": "F",
     "games_played": 6,
     "is_small_sample": true,
     "season_avg": {
@@ -59085,7 +59085,7 @@
     "player_name": "Lucas Williamson",
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
-    "position": NaN,
+    "position": "F",
     "games_played": 7,
     "is_small_sample": true,
     "season_avg": {

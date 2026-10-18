@@ -654,11 +654,14 @@ def calculate_player_usage_profiles(logs_df):
             clutch_usg = round(usg_pct + (1.5 if usg_pct > 24 else -1.0), 1)
             paint_touches = round(2.5 + (tot_p_reb / gp) * 0.45 + (p_logs['FGM'].mean() - p_logs['FG3M'].mean()) * 0.5, 1)
             
+            raw_pos = pos_map.get(p_name, 'F')
+            clean_pos = raw_pos if (isinstance(raw_pos, str) and raw_pos.strip() and raw_pos != 'nan') else 'F'
+            
             player_profiles.append({
                 'player_name': p_name,
                 'team': team,
                 'team_name': NBA_TEAM_NAMES.get(team, team),
-                'position': pos_map.get(p_name, 'F'),
+                'position': clean_pos,
                 'games_played': gp,
                 'is_small_sample': is_small_sample,
                 'season_avg': {
