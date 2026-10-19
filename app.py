@@ -13,7 +13,7 @@ import numpy as np
 import requests
 from flask import Flask, render_template, request, jsonify
 
-from forensic_data import run_forensic_pipeline, NBA_TEAMS, NBA_TEAM_NAMES, make_empty_team_profile
+from forensic_data import run_forensic_pipeline, NBA_TEAMS, NBA_TEAM_NAMES, make_empty_team_profile, load_injuries_by_team
 
 # --- Configuration ---
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
@@ -196,6 +196,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
         by_team.setdefault(g['t'], []).append(g)
 
     teams_dict = {}
+    injuries_by_team = load_injuries_by_team()
     for t in NBA_TEAMS:
         t_games = by_team.get(t, [])
         gp = len(t_games)
@@ -225,6 +226,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
                 'team_name': NBA_TEAM_NAMES.get(t, t),
                 'gp': gp,
                 'is_small_sample': (gp < 10) or (tot_poss < 200),
+                'injuries': injuries_by_team.get(t, []),
                 'pts_scored': round(tot_pts / gp, 1),
                 'pts_allowed': round(tot_pts_opp / gp, 1),
                 'reb_total': round(tot_reb / gp, 1),

@@ -175,8 +175,9 @@ def run_audit():
     assert 'rank_tov_allowed' in sample_t and sample_t['rank_tov_allowed'] is not None, "Missing rank_tov_allowed"
     assert 'rank_oreb_pct' in sample_t and sample_t['rank_oreb_pct'] is not None, "Missing rank_oreb_pct"
     assert 'rank_dreb_pct' in sample_t and sample_t['rank_dreb_pct'] is not None, "Missing rank_dreb_pct"
+    assert 'injuries' in sample_t, "Missing injuries list in team profile"
     
-    # Verify rank badge tooltips and metric rows in app.js
+    # Verify rank badge tooltips, injury badges, and metric rows in app.js
     res_app_js = client.get('/static/js/app.js')
     app_js_text = res_app_js.data.decode('utf-8')
     assert 'Turnovers / G' in app_js_text, "Missing Turnovers / G in app.js"
@@ -186,9 +187,10 @@ def run_audit():
     assert 'rank-tooltip' in app_js_text, "Missing rank-tooltip in app.js"
     assert 'rank-badge' in app_js_text, "Missing rank-badge in app.js"
     assert 'Small Sample: n=' in app_js_text, "Missing Small Sample label formatting in app.js"
+    assert 'renderInjuryBadge' in app_js_text, "Missing renderInjuryBadge in app.js"
     
     print(f"  BOS Metrics: TOV/G={sample_t['tov_total']} (#{sample_t['rank_tov_total']}) | Opp TOV/G={sample_t['tov_allowed']} (#{sample_t['rank_tov_allowed']}) | OREB%={sample_t['oreb_pct']}% (#{sample_t['rank_oreb_pct']}) | DREB%={sample_t['dreb_pct']}% (#{sample_t['rank_dreb_pct']})")
-    print("  [PASS] All new contextual metrics, ranks, sample size labels, and tooltips verified.")
+    print("  [PASS] All new contextual metrics, ranks, sample size labels, injury tags, and tooltips verified.")
 
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")

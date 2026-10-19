@@ -86,6 +86,42 @@ def build_paired_games(logs_df):
     
     return paired
 
+def load_injuries_by_team():
+    """Loads injuries.csv and maps players to NBA teams."""
+    inj_file = os.path.join(BASE_DIR, 'injuries.csv')
+    if not os.path.exists(inj_file):
+        return {}
+    try:
+        inj_df = pd.read_csv(inj_file)
+        inj_players = set(inj_df['Player'].dropna().str.strip())
+        player_to_team = {}
+        pos_file = os.path.join(BASE_DIR, 'positions.csv')
+        if os.path.exists(pos_file):
+            pos_df = pd.read_csv(pos_file)
+            team_clean = {'CHO': 'CHA', 'BRK': 'BKN', 'PHO': 'PHX'}
+            for _, r in pos_df.iterrows():
+                p = str(r['Player']).strip()
+                tm = str(r['Team']).strip()
+                player_to_team[p] = team_clean.get(tm, tm)
+
+        logs_file = os.path.join(BASE_DIR, 'logs.csv')
+        if os.path.exists(logs_file):
+            logs_df = pd.read_csv(logs_file, nrows=100000)
+            for _, r in logs_df.iterrows():
+                p = str(r['PLAYER_NAME']).strip()
+                if p in inj_players:
+                    player_to_team[p] = str(r['TEAM_ABBREVIATION']).strip()
+
+        inj_by_team = {}
+        for p in inj_players:
+            tm = player_to_team.get(p)
+            if tm in NBA_TEAMS:
+                inj_by_team.setdefault(tm, []).append(p)
+        return inj_by_team
+    except Exception as e:
+        print(f"Warning: Could not load injuries: {e}")
+        return {}
+
 def make_empty_team_profile(team):
     """Creates a blank forensic profile for a team with 0 games in the sample."""
     zones = ('restricted_area', 'paint_non_ra', 'mid_range', 'corner_3', 'above_break_3')
@@ -94,6 +130,7 @@ def make_empty_team_profile(team):
         'team_name': NBA_TEAM_NAMES.get(team, team),
         'gp': 0,
         'is_small_sample': True,
+        'injuries': [],
         'pace': None, 'neutral_pace': None, 'transition_freq': None,
         'shot_clock': {'early_0_8': None, 'mid_8_15': None, 'late_15_24': None},
         'game_script': {
@@ -122,6 +159,7 @@ def make_empty_team_profile(team):
 def calculate_team_forensics(logs_df, paired_df):
     """Calculates all 4 pillars of forensic metrics for each of the 30 teams."""
     team_profiles = {}
+    injuries_by_team = load_injuries_by_team()
     
     # Pre-calculated team totals
     for team in NBA_TEAMS:
@@ -377,7 +415,8 @@ def calculate_team_forensics(logs_df, paired_df):
             'fg3a_total': round(t_games['FG3A'].mean(), 1),
             'fg3a_allowed': round(t_games['FG3A_OPP'].mean(), 1),
             'fg_pct': round((t_games['FGM'].sum() / t_games['FGA'].sum() * 100) if t_games['FGA'].sum() > 0 else 46.0, 1),
-            'fg_pct_opp': round((t_games['FGM_OPP'].sum() / t_games['FGA_OPP'].sum() * 100) if t_games['FGA_OPP'].sum() > 0 else 46.0, 1)
+            'fg_pct_opp': round((t_games['FGM_OPP'].sum() / t_games['FGA_OPP'].sum() * 100) if t_games['FGA_OPP'].sum() > 0 else 46.0, 1),
+            'injuries': injuries_by_team.get(team, [])
         }
 
     # Add league ranks with sample size gating

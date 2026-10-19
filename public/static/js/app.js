@@ -170,10 +170,36 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
     `;
 }
 
+// Injury / Inactive Tag Formatter
+function formatShortPlayerName(fullName) {
+    if (!fullName) return '';
+    const parts = fullName.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0];
+    const initial = parts[0][0] + '.';
+    const last = parts.slice(1).join(' ');
+    return `${initial} ${last}`;
+}
+
+function renderInjuryBadge(injuries) {
+    if (!injuries || !Array.isArray(injuries) || injuries.length === 0) return '';
+    const count = injuries.length;
+    let displayStr = '';
+    if (count === 1) {
+        displayStr = `OUT: ${formatShortPlayerName(injuries[0])}`;
+    } else if (count === 2) {
+        displayStr = `OUT: ${formatShortPlayerName(injuries[0])}, ${formatShortPlayerName(injuries[1])}`;
+    } else {
+        displayStr = `OUT: ${formatShortPlayerName(injuries[0])}, ${formatShortPlayerName(injuries[1])}, +${count - 2}`;
+    }
+    const fullList = injuries.join(', ');
+    return `<span class="inline-flex items-center space-x-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono bg-rose-950/40 text-rose-300 border border-rose-800/50" title="Out/Inactive: ${fullList}"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span><span>${displayStr}</span></span>`;
+}
+
 function createEmptyTeamProfile(t) {
     const zones = ['restricted_area', 'paint_non_ra', 'mid_range', 'corner_3', 'above_break_3'];
     return {
         team: t, team_name: teamNamesMap[t] || t, gp: 0, is_small_sample: true,
+        injuries: (allForensicTeams[t]?.injuries) || [],
         pace: null, neutral_pace: null, transition_freq: null,
         shot_clock: { early_0_8: null, mid_8_15: null, late_15_24: null },
         game_script: { leading_10: { pace: null, early_sc: null, late_sc: null }, trailing_10: { pace: null, early_sc: null, late_sc: null } },
@@ -265,6 +291,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 team_name: teamNamesMap[t] || t,
                 gp: gp,
                 is_small_sample: (gp < 10) || (totPoss < 200),
+                injuries: (allForensicTeams[t]?.injuries) || [],
                 pace: pace.toFixed(1),
                 neutral_pace: (pace - 1.2).toFixed(1),
                 transition_freq: Math.max(11.0, Math.min(23.5, 12.0 + (pace - 95.0) * 0.9)).toFixed(1),
@@ -551,6 +578,11 @@ function renderGameCardHtml(g) {
     const hSampleClass = hIsSmall ? 'text-amber-400 font-semibold' : 'text-slate-400';
     const hSampleLabel = hIsSmall ? `[Small Sample: n=${hSampleCount}]` : `[n=${hSampleCount} games]`;
 
+    const aInj = a.injuries || allForensicTeams[aTeam]?.injuries || [];
+    const hInj = h.injuries || allForensicTeams[hTeam]?.injuries || [];
+    const aInjuryBadge = renderInjuryBadge(aInj);
+    const hInjuryBadge = renderInjuryBadge(hInj);
+
     let statusBadge = '';
     if (isFinal) {
         statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>FINAL</span></span>`;
@@ -600,6 +632,7 @@ function renderGameCardHtml(g) {
                             <span class="text-slate-600">•</span>
                             <span class="text-slate-500 font-medium">Away</span>
                             <span class="${aSampleClass} text-[10px]">${aSampleLabel}</span>
+                            ${aInjuryBadge}
                         </div>
                     </div>
                 </div>
@@ -623,6 +656,7 @@ function renderGameCardHtml(g) {
                     <div class="min-w-0 flex-1">
                         <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.home_team_name}</h4>
                         <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 mt-0.5 font-mono">
+                            ${hInjuryBadge}
                             <span class="${hSampleClass} text-[10px]">${hSampleLabel}</span>
                             <span class="text-slate-500 font-medium">Home</span>
                             <span class="text-slate-600">•</span>

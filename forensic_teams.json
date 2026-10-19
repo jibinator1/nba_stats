@@ -155,6 +155,10 @@
     "fg3a_allowed": 36.1,
     "fg_pct": 47.0,
     "fg_pct_opp": 47.3,
+    "injuries": [
+      "Trae Young",
+      "Mouhamed Gueye"
+    ],
     "rank_pace": 6,
     "rank_neutral_pace": 9,
     "rank_transition_freq": 1,
@@ -337,6 +341,7 @@
     "fg3a_allowed": 38.9,
     "fg_pct": 46.4,
     "fg_pct_opp": 44.0,
+    "injuries": [],
     "rank_pace": 30,
     "rank_neutral_pace": 30,
     "rank_transition_freq": 30,
@@ -519,6 +524,7 @@
     "fg3a_allowed": 33.0,
     "fg_pct": 44.4,
     "fg_pct_opp": 49.6,
+    "injuries": [],
     "rank_pace": 25,
     "rank_neutral_pace": 26,
     "rank_transition_freq": 25,
@@ -701,6 +707,10 @@
     "fg3a_allowed": 36.2,
     "fg_pct": 45.8,
     "fg_pct_opp": 46.8,
+    "injuries": [
+      "Grant Williams",
+      "Kon Knueppel"
+    ],
     "rank_pace": 22,
     "rank_neutral_pace": 24,
     "rank_transition_freq": 23,
@@ -883,6 +893,10 @@
     "fg3a_allowed": 38.2,
     "fg_pct": 46.9,
     "fg_pct_opp": 47.7,
+    "injuries": [
+      "Zach Collins",
+      "Josh Giddey"
+    ],
     "rank_pace": 3,
     "rank_neutral_pace": 5,
     "rank_transition_freq": 2,
@@ -1065,6 +1079,9 @@
     "fg3a_allowed": 36.9,
     "fg_pct": 47.5,
     "fg_pct_opp": 46.6,
+    "injuries": [
+      "De'Andre Hunter"
+    ],
     "rank_pace": 15,
     "rank_neutral_pace": 22,
     "rank_transition_freq": 17,
@@ -1247,6 +1264,10 @@
     "fg3a_allowed": 36.8,
     "fg_pct": 46.6,
     "fg_pct_opp": 47.4,
+    "injuries": [
+      "Anthony Davis",
+      "Dereck Lively II"
+    ],
     "rank_pace": 4,
     "rank_neutral_pace": 7,
     "rank_transition_freq": 3,
@@ -1429,6 +1450,9 @@
     "fg3a_allowed": 38.6,
     "fg_pct": 49.1,
     "fg_pct_opp": 46.7,
+    "injuries": [
+      "Peyton Watson"
+    ],
     "rank_pace": 18,
     "rank_neutral_pace": 19,
     "rank_transition_freq": 21,
@@ -1611,6 +1635,7 @@
     "fg3a_allowed": 36.6,
     "fg_pct": 48.1,
     "fg_pct_opp": 44.1,
+    "injuries": [],
     "rank_pace": 19,
     "rank_neutral_pace": 10,
     "rank_transition_freq": 14,
@@ -1793,6 +1818,10 @@
     "fg3a_allowed": 36.1,
     "fg_pct": 46.3,
     "fg_pct_opp": 47.8,
+    "injuries": [
+      "Jimmy Butler",
+      "Moses Moody"
+    ],
     "rank_pace": 13,
     "rank_neutral_pace": 23,
     "rank_transition_freq": 13,
@@ -1975,6 +2004,9 @@
     "fg3a_allowed": 34.9,
     "fg_pct": 47.5,
     "fg_pct_opp": 46.2,
+    "injuries": [
+      "Steven Adams"
+    ],
     "rank_pace": 26,
     "rank_neutral_pace": 20,
     "rank_transition_freq": 24,
@@ -2157,6 +2189,10 @@
     "fg3a_allowed": 34.2,
     "fg_pct": 45.8,
     "fg_pct_opp": 48.8,
+    "injuries": [
+      "Johnny Furphy",
+      "RayJ Dennis"
+    ],
     "rank_pace": 9,
     "rank_neutral_pace": 11,
     "rank_transition_freq": 11,
@@ -2339,6 +2375,10 @@
     "fg3a_allowed": 36.7,
     "fg_pct": 48.4,
     "fg_pct_opp": 46.9,
+    "injuries": [
+      "Bradley Beal",
+      "Jordan Miller"
+    ],
     "rank_pace": 29,
     "rank_neutral_pace": 29,
     "rank_transition_freq": 28,
@@ -2521,6 +2561,7 @@
     "fg3a_allowed": 36.2,
     "fg_pct": 49.5,
     "fg_pct_opp": 48.0,
+    "injuries": [],
     "rank_pace": 27,
     "rank_neutral_pace": 25,
     "rank_transition_freq": 26,
@@ -2703,6 +2744,15 @@
     "fg3a_allowed": 38.7,
     "fg_pct": 45.5,
     "fg_pct_opp": 48.6,
+    "injuries": [
+      "Ja Morant",
+      "Jaren Jackson Jr.",
+      "Scotty Pippen Jr.",
+      "PJ Hall",
+      "Adama-Alpha Bal",
+      "Zach Edey",
+      "Jaylen Wells"
+    ],
     "rank_pace": 5,
     "rank_neutral_pace": 4,
     "rank_transition_freq": 4,
@@ -2885,6 +2935,11 @@
     "fg3a_allowed": 39.3,
     "fg_pct": 46.6,
     "fg_pct_opp": 46.3,
+    "injuries": [
+      "Myron Gardner",
+      "Trevor Keels",
+      "Bam Adebayo"
+    ],
     "rank_pace": 1,
     "rank_neutral_pace": 3,
     "rank_transition_freq": 5,
@@ -3067,6 +3122,9 @@
     "fg3a_allowed": 39.4,
     "fg_pct": 47.7,
     "fg_pct_opp": 47.2,
+    "injuries": [
+      "Giannis Antetokounmpo"
+    ],
     "rank_pace": 23,
     "rank_neutral_pace": 27,
     "rank_transition_freq": 27,
@@ -3249,6 +3307,10 @@
     "fg3a_allowed": 34.3,
     "fg_pct": 47.5,
     "fg_pct_opp": 46.2,
+    "injuries": [
+      "Rob Dillingham",
+      "Donte DiVincenzo"
+    ],
     "rank_pace": 11,
     "rank_neutral_pace": 13,
     "rank_transition_freq": 10,
@@ -3431,6 +3493,9 @@
     "fg3a_allowed": 40.4,
     "fg_pct": 46.6,
     "fg_pct_opp": 47.8,
+    "injuries": [
+      "Bryce McGowens"
+    ],
     "rank_pace": 10,
     "rank_neutral_pace": 16,
     "rank_transition_freq": 9,
@@ -3613,6 +3678,9 @@
     "fg3a_allowed": 38.0,
     "fg_pct": 47.6,
     "fg_pct_opp": 45.3,
+    "injuries": [
+      "Mohamed Diawara"
+    ],
     "rank_pace": 28,
     "rank_neutral_pace": 28,
     "rank_transition_freq": 29,
@@ -3795,6 +3863,10 @@
     "fg3a_allowed": 38.9,
     "fg_pct": 47.9,
     "fg_pct_opp": 43.8,
+    "injuries": [
+      "Ajay Mitchell",
+      "Isaiah Hartenstein"
+    ],
     "rank_pace": 17,
     "rank_neutral_pace": 18,
     "rank_transition_freq": 15,
@@ -3977,6 +4049,10 @@
     "fg3a_allowed": 34.0,
     "fg_pct": 46.0,
     "fg_pct_opp": 47.0,
+    "injuries": [
+      "Franz Wagner",
+      "Jonathan Isaac"
+    ],
     "rank_pace": 12,
     "rank_neutral_pace": 8,
     "rank_transition_freq": 12,
@@ -4159,6 +4235,9 @@
     "fg3a_allowed": 38.1,
     "fg_pct": 45.9,
     "fg_pct_opp": 46.6,
+    "injuries": [
+      "Adem Bona"
+    ],
     "rank_pace": 14,
     "rank_neutral_pace": 14,
     "rank_transition_freq": 16,
@@ -4341,6 +4420,10 @@
     "fg3a_allowed": 35.3,
     "fg_pct": 45.5,
     "fg_pct_opp": 46.9,
+    "injuries": [
+      "CJ Huntley",
+      "Mark Williams"
+    ],
     "rank_pace": 24,
     "rank_neutral_pace": 21,
     "rank_transition_freq": 22,
@@ -4523,6 +4606,9 @@
     "fg3a_allowed": 34.9,
     "fg_pct": 45.0,
     "fg_pct_opp": 47.1,
+    "injuries": [
+      "Shaedon Sharpe"
+    ],
     "rank_pace": 8,
     "rank_neutral_pace": 6,
     "rank_transition_freq": 7,
@@ -4705,6 +4791,10 @@
     "fg3a_allowed": 36.5,
     "fg_pct": 46.8,
     "fg_pct_opp": 49.4,
+    "injuries": [
+      "Keegan Murray",
+      "Zach LaVine"
+    ],
     "rank_pace": 20,
     "rank_neutral_pace": 17,
     "rank_transition_freq": 20,
@@ -4887,6 +4977,7 @@
     "fg3a_allowed": 36.8,
     "fg_pct": 47.8,
     "fg_pct_opp": 44.3,
+    "injuries": [],
     "rank_pace": 16,
     "rank_neutral_pace": 15,
     "rank_transition_freq": 19,
@@ -5069,6 +5160,11 @@
     "fg3a_allowed": 36.2,
     "fg_pct": 47.7,
     "fg_pct_opp": 46.6,
+    "injuries": [
+      "Brandon Ingram",
+      "Alijah Martin",
+      "Chucky Hepburn"
+    ],
     "rank_pace": 21,
     "rank_neutral_pace": 12,
     "rank_transition_freq": 18,
@@ -5251,6 +5347,9 @@
     "fg3a_allowed": 41.4,
     "fg_pct": 46.8,
     "fg_pct_opp": 49.2,
+    "injuries": [
+      "Walter Clayton Jr."
+    ],
     "rank_pace": 2,
     "rank_neutral_pace": 2,
     "rank_transition_freq": 6,
@@ -5433,6 +5532,11 @@
     "fg3a_allowed": 37.4,
     "fg_pct": 46.2,
     "fg_pct_opp": 48.6,
+    "injuries": [
+      "Keshon Gilbert",
+      "Alex Sarr",
+      "Jamir Watkins"
+    ],
     "rank_pace": 7,
     "rank_neutral_pace": 1,
     "rank_transition_freq": 8,
