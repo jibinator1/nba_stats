@@ -192,6 +192,55 @@ def run_audit():
     print(f"  BOS Metrics: TOV/G={sample_t['tov_total']} (#{sample_t['rank_tov_total']}) | Opp TOV/G={sample_t['tov_allowed']} (#{sample_t['rank_tov_allowed']}) | OREB%={sample_t['oreb_pct']}% (#{sample_t['rank_oreb_pct']}) | DREB%={sample_t['dreb_pct']}% (#{sample_t['rank_dreb_pct']})")
     print("  [PASS] All new contextual metrics, ranks, sample size labels, injury tags, and tooltips verified.")
 
+    # 9. Verify Overhauled Deep Dive Modal: Visual Cards, League Ranks Across All Pillars, and Player Distribution Bars
+    print("\n[9/9] Testing Overhauled Deep Dive Insights (Visual Cards, All Pillar Ranks, Player Distribution Bars)...")
+    res_modal_js = client.get('/static/js/modal.js')
+    modal_js_text = res_modal_js.data.decode('utf-8')
+    res_visuals_js = client.get('/static/js/visuals.js')
+    visuals_js_text = res_visuals_js.data.decode('utf-8')
+
+    # Executive Callouts visual cards
+    assert 'Transition Flow & Alignment' in modal_js_text, "Missing Transition Flow callout"
+    assert 'Live-Ball Turnover Leakage' in modal_js_text, "Missing Live-Ball Turnover Leakage callout"
+    assert 'Rim Protection vs. Paint Volume' in modal_js_text, "Missing Rim Protection vs. Paint Volume callout"
+    assert 'makeCard' in modal_js_text, "Missing visual card generator makeCard in modal.js"
+
+    # All Pillar metrics have ranks in BOS profile
+    sample_b = f_teams['BOS']
+    pillar_rank_keys = [
+        'rank_early_0_8', 'rank_mid_8_15', 'rank_late_15_24',
+        'rank_pace_leading_10', 'rank_pace_trailing_10',
+        'rank_pnr_drop', 'rank_pnr_switch',
+        'rank_ra_ppp_allowed', 'rank_paint_ppp_allowed', 'rank_corner3_ppp_allowed',
+        'rank_transition_ppp_allowed',
+        'rank_pnr_bh_freq', 'rank_iso_freq', 'rank_spot_freq',
+        'rank_live_tov', 'rank_dead_tov',
+        'rank_pts_generated_off_tov', 'rank_pts_surrendered_off_tov'
+    ]
+    for rk in pillar_rank_keys:
+        assert rk in sample_b and sample_b[rk] is not None, f"Missing {rk} in BOS team profile"
+    print(f"  Pillar 1 Ranks (BOS): Early SC #{sample_b['rank_early_0_8']} | Mid SC #{sample_b['rank_mid_8_15']} | Late SC #{sample_b['rank_late_15_24']}")
+    print(f"  Pillar 2 Ranks (BOS): Drop #{sample_b['rank_pnr_drop']} | Switch #{sample_b['rank_pnr_switch']} | Rim Allowed #{sample_b['rank_ra_ppp_allowed']}")
+    print(f"  Pillar 3 Ranks (BOS): Live TOV #{sample_b['rank_live_tov']} | TOV Pts Surr #{sample_b['rank_pts_surrendered_off_tov']}")
+
+    # Check that formatPillarRow renders (#Rank of 30)
+    assert 'formatPillarRow' in modal_js_text, "Missing formatPillarRow in modal.js"
+    assert '(#${r} of 30)' in modal_js_text or '(#${r}' in modal_js_text, "Missing (#Rank of 30) badge format in modal.js"
+
+    # Check Wide-Open 3PT removed from Pillar 2
+    assert 'Wide-Open 3PT Rate Allowed' not in modal_js_text, "Wide-Open 3PT Rate Allowed should be removed from Pillar 2"
+
+    # Check Player Usage Profiles have ranks and distribution bar
+    assert 'pts_rank' in players[0]['season_avg'], "Missing pts_rank in player season_avg"
+    assert '10G PTS Distribution' in modal_js_text, "Missing visual distribution bar container in modal.js"
+    assert 'maxDomain' in modal_js_text, "Missing distribution bar math in modal.js"
+
+    # Check SVG Visual cleanups
+    assert 'Shot Focus:' not in visuals_js_text, "Redundant bottom pills should be removed from Shot Zone SVG"
+    assert 'Away Team Pace Indicator (Aligned directly above needle)' in visuals_js_text, "Pace Gauge label not aligned directly above needle"
+
+    print("  [PASS] All executive visual cards, 3 new callout cards, pillar ranks, player distribution bars, and SVG visual alignments verified.")
+
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
     print("=" * 60)

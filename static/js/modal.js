@@ -8,7 +8,44 @@
 // Helper to resolve ESPN logo with correct team slugs
 const getLogoUrl = (t) => (window.getTeamLogoUrl ? window.getTeamLogoUrl(t) : `https://a.espncdn.com/i/teamlogos/nba/500/${String(t).toLowerCase()}.png`);
 
-// Upgraded Forensic Executive Insight Callouts Generator (Factual & Descriptive)
+// Canonical Pillar Row Formatter: outputs "Value (#Rank of 30)" or "Value [Small Sample]"
+function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
+    const formatTeamMetric = (val, rank, isSmall) => {
+        if (val == null || val === '' || val === '--') return '<span class="text-slate-500 font-normal">--</span>';
+        if (isSmall || rank === 'Small Sample') {
+            return `<span class="text-slate-200 font-bold">${val}</span> <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">[Small Sample]</span>`;
+        }
+        if (rank != null && rank !== '') {
+            const r = parseInt(rank, 10);
+            if (!isNaN(r)) {
+                let style = 'bg-[#21262d] text-slate-300 border border-[#30363d]';
+                if (r <= 10) style = 'bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-semibold';
+                else if (r >= 21) style = 'bg-amber-950/40 text-amber-300 border border-amber-800/60 font-semibold';
+                return `<span class="text-slate-200 font-bold">${val}</span> <span class="text-[9.5px] px-1.5 py-0.5 rounded font-mono ${style}" title="Rank #${r} of 30">(#${r} of 30)</span>`;
+            }
+        }
+        return `<span class="text-slate-200 font-bold">${val}</span>`;
+    };
+
+    const aFormatted = formatTeamMetric(aVal, aRank, isSmallA);
+    const hFormatted = formatTeamMetric(hVal, hRank, isSmallH);
+
+    return `
+        <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition font-mono">
+            <div class="flex items-center space-x-1.5 text-left">
+                ${aFormatted}
+            </div>
+            <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
+                ${label}
+            </div>
+            <div class="flex items-center justify-end space-x-1.5 text-right">
+                ${hFormatted}
+            </div>
+        </div>
+    `;
+}
+
+// Upgraded Forensic Executive Insight Callouts Generator (2-Column Visual Cards)
 function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers) {
     if (!a || !a.gp || !h || !h.gp) {
         return `
@@ -24,38 +61,83 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
         `;
     }
 
+    const formatCalloutRank = (r, isSmall) => {
+        if (isSmall || r === 'Small Sample') return '[Small Sample]';
+        if (r != null && r !== '') return `#${r}`;
+        return '--';
+    };
+
+    // Sort players for cross-referencing
+    const aShooters = (aPlayers && aPlayers.length) ? [...aPlayers].sort((x, y) => (y.season_avg?.fg3a || 0) - (x.season_avg?.fg3a || 0)) : [];
+    const topAShooter = aShooters[0];
     const hShooters = (hPlayers && hPlayers.length) ? [...hPlayers].sort((x, y) => (y.season_avg?.fg3a || 0) - (x.season_avg?.fg3a || 0)) : [];
     const topHShooter = hShooters[0];
 
-    const aPaintPlayers = (aPlayers && aPlayers.length) ? [...aPlayers].sort((x, y) => (y.season_avg?.paint_pts || 0) - (x.season_avg?.paint_pts || 0)) : [];
+    const aPaintPlayers = (aPlayers && aPlayers.length) ? [...aPlayers].sort((x, y) => (y.situational?.paint_touches_pg || y.season_avg?.paint_pts || 0) - (x.situational?.paint_touches_pg || x.season_avg?.paint_pts || 0)) : [];
     const topAPaint = aPaintPlayers[0];
+    const topAPaintVal = topAPaint ? (topAPaint.situational?.paint_touches_pg || topAPaint.season_avg?.paint_pts || 10.5) : (a.paint_touches_pg || 24.0);
 
-    const a3paAllowed = a.fg3a_allowed || 38.2;
-    const a3paRank = a.rank_fg3a_allowed ? `#${a.rank_fg3a_allowed}` : 'Tier';
-    const h3paShooterStat = topHShooter ? `${topHShooter.player_name} (${topHShooter.position}) averages ${topHShooter.season_avg?.fg3a || 8.0} 3PA per game` : `${hTeam} perimeter rotation attempts ${h.fg3a_total || 36.0} 3PA per game`;
-    const callout3pt = `${aTeam} defense allows ${a3paAllowed} three-point attempts per game (Rank ${a3paRank}). ${hTeam}'s ${h3paShooterStat}.`;
+    // 1. 3PT Perimeter Alignment
+    const h3paDef = h.fg3a_allowed || 36.5;
+    const h3paDefRank = formatCalloutRank(h.rank_fg3a_allowed, h.is_small_sample);
+    const a3paOff = a.fg3a_total || 35.0;
+    const a3paOffRank = formatCalloutRank(a.rank_fg3a_total, a.is_small_sample);
+    const aShooterDesc = topAShooter ? `${topAShooter.player_name} (${topAShooter.position}) attempts ${topAShooter.season_avg?.fg3a || 8.0} 3PA per game` : `${aTeam} perimeter rotation attempts ${a3paOff} 3PA per game`;
+    const callout3pt = `${hTeam} defense allows ${h3paDef} three-point attempts per game (Rank ${h3paDefRank}). ${aTeam}'s ${aShooterDesc}.`;
 
+    // 2. Rim Protection vs. Paint Volume
     const hRaPpp = h.shot_profile_allowed?.restricted_area?.ppp || 1.25;
-    const aPaintStat = topAPaint ? `${topAPaint.player_name} (${topAPaint.position}) averages ${topAPaint.season_avg?.paint_pts || 12.0} paint points per game` : `${aTeam} records ${a.paint_touches_pg || 22.0} paint touches per game`;
-    const calloutPaint = `${hTeam} allows ${hRaPpp} points per possession in the restricted area. ${aTeam}'s ${aPaintStat}.`;
+    const hRaRank = formatCalloutRank(h.rank_ra_ppp_allowed, h.is_small_sample);
+    const aPaintDesc = topAPaint ? `${topAPaint.player_name} (${topAPaint.position}) logs ${topAPaintVal} paint touches per game` : `${aTeam} interior rotation logs ${topAPaintVal} touches per game`;
+    const calloutPaint = `${hTeam} allows ${hRaPpp} points per possession in the restricted area (Rank ${hRaRank}). ${aTeam}'s ${aPaintDesc}.`;
 
-    const aOrebAllowed = a.rebounding?.oreb_allowed_pct || 27.5;
-    const aOrebRank = a.rank_oreb_allowed_pct ? `#${a.rank_oreb_allowed_pct}` : 'Tier';
-    const hDrebSecured = h.rebounding?.dreb_secured_pct || 74.0;
-    const hDrebRank = h.rank_dreb_secured_pct ? `#${h.rank_dreb_secured_pct}` : 'Tier';
-    const calloutReb = `${aTeam} surrenders an offensive rebound rate of ${aOrebAllowed}% (Rank ${aOrebRank}). ${hTeam} secures ${hDrebSecured}% of defensive rebounds (Rank ${hDrebRank}).`;
+    // 3. Transition Flow & Alignment
+    const aTransFreq = a.transition_freq || 16.5;
+    const aTransRank = formatCalloutRank(a.rank_transition_freq, a.is_small_sample);
+    const hTransPpp = h.transition_ppp_allowed || 1.18;
+    const hTransPppRank = formatCalloutRank(h.rank_transition_ppp_allowed, h.is_small_sample);
+    const calloutTrans = `${aTeam} initiates ${aTransFreq}% of possessions in transition (Rank ${aTransRank}). ${hTeam} allows ${hTransPpp} points per possession on transition opportunities (Rank ${hTransPppRank}).`;
 
+    // 4. Live-Ball Turnover Leakage
+    const hPtsGen = h.turnover_profile?.points_generated_off_tov || h.points_generated_off_tov || 10.2;
+    const hPtsGenRank = formatCalloutRank(h.rank_pts_generated_off_tov, h.is_small_sample);
+    const aPtsSurr = a.turnover_profile?.points_surrendered_off_tov || a.points_surrendered_off_tov || 9.8;
+    const aPtsSurrRank = formatCalloutRank(a.rank_pts_surrendered_off_tov, a.is_small_sample);
+    const calloutTov = `${hTeam} generates ${hPtsGen} points per game off opponent giveaways (Rank ${hPtsGenRank}). ${aTeam} surrenders ${aPtsSurr} points per game off live-ball giveaways (Rank ${aPtsSurrRank}).`;
+
+    // 5. Glass & Rebound Alignment
+    const aOrebPct = a.oreb_pct || a.rebounding?.oreb_allowed_pct || 28.5;
+    const aOrebRank = formatCalloutRank(a.rank_oreb_pct || a.rank_oreb_allowed_pct, a.is_small_sample);
+    const hDrebPct = h.dreb_pct || h.rebounding?.dreb_secured_pct || 74.0;
+    const hDrebRank = formatCalloutRank(h.rank_dreb_pct || h.rank_dreb_secured_pct, h.is_small_sample);
+    const calloutReb = `${aTeam} captures an offensive rebounding rate of ${aOrebPct}% (Rank ${aOrebRank}). ${hTeam} secures ${hDrebPct}% of defensive glass opportunities (Rank ${hDrebRank}).`;
+
+    // 6. Game Tempo & Neutral Pace
     const aPaceVal = a.pace || 99.0;
-    const aPaceRank = a.rank_pace ? `#${a.rank_pace}` : 'Tier';
+    const aPaceRank = formatCalloutRank(a.rank_pace, a.is_small_sample);
     const hPaceVal = h.pace || 99.0;
-    const hPaceRank = h.rank_pace ? `#${h.rank_pace}` : 'Tier';
+    const hPaceRank = formatCalloutRank(h.rank_pace, h.is_small_sample);
     const estNeutralPace = ((parseFloat(a.neutral_pace || aPaceVal) + parseFloat(h.neutral_pace || hPaceVal)) / 2).toFixed(1);
-    const calloutPace = `${aTeam} records ${aPaceVal} possessions per 48 minutes (Rank ${aPaceRank}). ${hTeam} records ${hPaceVal} possessions per 48 minutes (Rank ${hPaceRank}). Expected neutral tempo: ${estNeutralPace} possessions.`;
+    const calloutPace = `${aTeam} neutral pace: ${a.neutral_pace || aPaceVal} (Rank ${aPaceRank}). ${hTeam} neutral pace: ${h.neutral_pace || hPaceVal} (Rank ${hPaceRank}). Projected neutral tempo: ${estNeutralPace} possessions.`;
 
-    const aPnrFreq = a.playtypes_offense?.PnR_Ball_Handler?.freq || 21.0;
-    const hDropFreq = h.pnr_coverage?.drop || 42.0;
-    const hSwitchFreq = h.pnr_coverage?.switch || 32.0;
-    const calloutScheme = `${aTeam} initiates ${aPnrFreq}% of half-court possessions via Pick & Roll Ball Handler. ${hTeam} deploys ${hDropFreq}% drop and ${hSwitchFreq}% switch coverage against ball screens.`;
+    const makeCard = (title, icon, leftStat, rightStat, footer) => `
+        <div class="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] flex flex-col justify-between space-y-2.5 hover:border-[#30363d] transition">
+            <div class="flex items-center justify-between text-slate-300 font-bold text-xs uppercase tracking-wider border-b border-[#21262d] pb-1.5">
+                <span class="flex items-center gap-1.5 text-cyan-400">
+                    <i data-lucide="${icon}" class="w-3.5 h-3.5"></i>
+                    <span>${title}</span>
+                </span>
+            </div>
+            <div class="bg-[#12161c] px-3 py-2 rounded-lg border border-[#30363d]/70 text-[11px] font-mono flex items-center justify-between text-slate-200">
+                <span class="text-cyan-400 font-semibold truncate">${leftStat}</span>
+                <span class="text-slate-600 px-2 font-sans font-light">|</span>
+                <span class="text-rose-400 font-semibold truncate text-right">${rightStat}</span>
+            </div>
+            <div class="text-[11px] text-slate-300 leading-relaxed font-sans pt-0.5">
+                ${footer}
+            </div>
+        </div>
+    `;
 
     return `
         <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-4 space-y-3">
@@ -63,27 +145,13 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
                 <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
                 <span class="uppercase tracking-wider">Forensic Matchup Callouts (Player & Scheme Cross-Reference)</span>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs font-mono">
-                <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
-                    <span class="text-cyan-400 font-bold block mb-1">[3PT Perimeter Alignment]</span>
-                    ${callout3pt}
-                </div>
-                <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
-                    <span class="text-cyan-400 font-bold block mb-1">[Restricted Area Paint Alignment]</span>
-                    ${calloutPaint}
-                </div>
-                <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
-                    <span class="text-cyan-400 font-bold block mb-1">[Glass & Rebound Alignment]</span>
-                    ${calloutReb}
-                </div>
-                <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-slate-300 leading-relaxed">
-                    <span class="text-cyan-400 font-bold block mb-1">[Game Tempo & Pace Clash]</span>
-                    ${calloutPace}
-                </div>
-            </div>
-            <div class="p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-xs font-mono text-slate-300 leading-relaxed">
-                <span class="text-cyan-400 font-bold block mb-1">[Play Type & Defensive Coverage Alignment]</span>
-                ${calloutScheme}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                ${makeCard('3PT Perimeter Alignment', 'crosshair', `${hTeam} Def: ${h3paDef} 3PA (${h3paDefRank})`, `${aTeam} Off: ${a3paOff} 3PA (${a3paOffRank})`, callout3pt)}
+                ${makeCard('Rim Protection vs. Paint Volume', 'shield', `${hTeam} Def: ${hRaPpp} PPP (${hRaRank})`, `${aTeam} Paint: ${topAPaint ? topAPaint.player_name + ' ' + topAPaintVal + '/G' : aTeam + ' ' + topAPaintVal + '/G'}`, calloutPaint)}
+                ${makeCard('Transition Flow & Alignment', 'wind', `${aTeam} Off: ${aTransFreq}% (${aTransRank})`, `${hTeam} Def: ${hTransPpp} PPP (${hTransPppRank})`, calloutTrans)}
+                ${makeCard('Live-Ball Turnover Leakage', 'arrow-left-right', `${hTeam} Def Gen: ${hPtsGen} PTS (${hPtsGenRank})`, `${aTeam} Surr: ${aPtsSurr} PTS (${aPtsSurrRank})`, calloutTov)}
+                ${makeCard('Glass & Rebound Alignment', 'maximize-2', `${aTeam} Off OREB%: ${aOrebPct}% (${aOrebRank})`, `${hTeam} Def DREB%: ${hDrebPct}% (${hDrebRank})`, calloutReb)}
+                ${makeCard('Game Tempo & Neutral Pace', 'gauge', `${aTeam} Pace: ${aPaceVal} (${aPaceRank})`, `${hTeam} Pace: ${hPaceVal} (${hPaceRank})`, calloutPace)}
             </div>
         </div>
     `;
@@ -104,38 +172,64 @@ function generateDeepDiveModalHtml(g) {
     const renderRotationTeamBlock = (teamCode, teamName, players, badgeColor) => {
         const top4 = (players || []).slice(0, 4);
         return `
-            <div class="space-y-2">
-                <div class="flex items-center space-x-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1">
+            <div class="space-y-2.5">
+                <div class="flex items-center space-x-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5">
                     <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
                     <span class="${badgeColor}">${teamCode} Rotation (Top 4 Minutes)</span>
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-2.5">
                     ${top4.map(p => {
                         const dist = p.distribution_10g?.pts || {};
                         const sAvg = p.season_avg || {};
                         const ctx = p.context_stats || {};
                         const sit = p.situational || {};
+
+                        const ptsRankStr = (sAvg.pts != null && sAvg.pts_rank != null) ? (sAvg.pts_rank === 'Small Sample' ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.pts_rank})</span>`) : '';
+                        const rebRankStr = (sAvg.reb != null && sAvg.reb_rank != null) ? (sAvg.reb_rank === 'Small Sample' ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.reb_rank})</span>`) : '';
+                        const astRankStr = (sAvg.ast != null && sAvg.ast_rank != null) ? (sAvg.ast_rank === 'Small Sample' ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.ast_rank})</span>`) : '';
+
+                        const flr = parseFloat(dist.floor) || 0;
+                        const med = parseFloat(dist.median) || 0;
+                        const ceil = parseFloat(dist.ceiling) || 0;
+                        const maxDomain = Math.max(35, Math.ceil(ceil * 1.2));
+                        const leftPct = Math.min(100, Math.max(0, (flr / maxDomain) * 100)).toFixed(1);
+                        const rightPct = Math.min(100, Math.max(0, (ceil / maxDomain) * 100)).toFixed(1);
+                        const widthPct = Math.max(3, rightPct - leftPct).toFixed(1);
+                        const medPct = Math.min(100, Math.max(0, (med / maxDomain) * 100)).toFixed(1);
+
                         return `
-                            <div class="bg-[#161b22] rounded-lg p-2.5 border border-[#21262d] text-xs font-mono space-y-1.5">
+                            <div class="bg-[#161b22] rounded-xl p-3 border border-[#21262d] text-xs font-mono space-y-2">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-1.5">
-                                        <span class="font-bold text-slate-200 text-xs">${p.player_name}</span>
+                                    <div class="flex items-center space-x-1.5 truncate">
+                                        <span class="font-bold text-slate-100 text-xs truncate">${p.player_name}</span>
                                         <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#21262d] text-cyan-300 border border-[#30363d]">${p.position}</span>
                                         ${p.is_small_sample ? '<span class="text-[9px] text-amber-400">[Small Sample]</span>' : ''}
                                     </div>
-                                    <span class="text-[11px] text-slate-400">${sAvg.min != null ? sAvg.min + ' MPG' : '--'}</span>
+                                    <span class="text-[11px] text-slate-400 shrink-0">${sAvg.min != null ? sAvg.min + ' MPG' : '--'}</span>
                                 </div>
-                                <div class="grid grid-cols-3 gap-1 bg-[#12161c] p-1.5 rounded border border-[#21262d] text-center text-[10px]">
-                                    <div><span class="text-slate-500 block">Season PTS</span><b class="text-slate-200">${sAvg.pts != null ? sAvg.pts : '--'}</b></div>
-                                    <div><span class="text-slate-500 block">3PA / G</span><b class="text-slate-200">${sAvg.fg3a != null ? sAvg.fg3a : '--'}</b></div>
-                                    <div><span class="text-slate-500 block">Paint PTS</span><b class="text-slate-200">${sAvg.paint_pts != null ? sAvg.paint_pts : '--'}</b></div>
+                                <div class="grid grid-cols-3 gap-1 bg-[#12161c] p-2 rounded-lg border border-[#21262d] text-center text-[10.5px]">
+                                    <div><span class="text-slate-500 block text-[9.5px]">Season PTS</span><b class="text-slate-100">${sAvg.pts != null ? sAvg.pts : '--'}</b> ${ptsRankStr}</div>
+                                    <div><span class="text-slate-500 block text-[9.5px]">REB</span><b class="text-slate-100">${sAvg.reb != null ? sAvg.reb : '--'}</b> ${rebRankStr}</div>
+                                    <div><span class="text-slate-500 block text-[9.5px]">AST</span><b class="text-slate-100">${sAvg.ast != null ? sAvg.ast : '--'}</b> ${astRankStr}</div>
                                 </div>
-                                <div class="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
-                                    <span>10G Floor/Med/Ceil:</span>
-                                    <span class="text-slate-200 font-bold">${dist.floor != null ? dist.floor : '--'} / <span class="text-cyan-400">${dist.median != null ? dist.median : '--'}</span> / ${dist.ceiling != null ? dist.ceiling : '--'}</span>
+                                <div class="space-y-1 bg-[#12161c]/60 p-2 rounded-lg border border-[#21262d]/60">
+                                    <div class="flex items-center justify-between text-[10px] text-slate-400">
+                                        <span class="font-sans font-medium text-slate-400">10G PTS Distribution</span>
+                                        <span>
+                                            <span class="text-slate-500">Flr</span> <b class="text-slate-200">${dist.floor != null ? dist.floor : '--'}</b>
+                                            <span class="text-slate-600 mx-1">|</span>
+                                            <span class="text-cyan-400 font-semibold">Med</span> <b class="text-cyan-300 font-bold">${dist.median != null ? dist.median : '--'}</b>
+                                            <span class="text-slate-600 mx-1">|</span>
+                                            <span class="text-slate-500">Ceil</span> <b class="text-slate-200">${dist.ceiling != null ? dist.ceiling : '--'}</b>
+                                        </span>
+                                    </div>
+                                    <div class="w-full bg-[#0d1117] h-2.5 rounded-full relative overflow-hidden border border-[#21262d]">
+                                        <div class="absolute top-0 bottom-0 bg-cyan-500/25 border-x border-cyan-400/60" style="left: ${leftPct}%; width: ${widthPct}%;"></div>
+                                        <div class="absolute top-0 bottom-0 w-1 bg-cyan-400 -ml-0.5 shadow-[0_0_5px_rgba(34,211,238,0.9)]" style="left: ${medPct}%;"></div>
+                                    </div>
                                 </div>
-                                <div class="flex items-center justify-between text-[9.5px] text-slate-500">
-                                    <span>USG: ${ctx.usg_pct != null ? ctx.usg_pct + '%' : '--'} • AST: ${ctx.ast_pct != null ? ctx.ast_pct + '%' : '--'}</span>
+                                <div class="flex items-center justify-between text-[9.5px] text-slate-500 pt-0.5">
+                                    <span>USG: ${ctx.usg_pct != null ? ctx.usg_pct + '%' : '--'} • 3PA: ${sAvg.fg3a != null ? sAvg.fg3a : '--'} • Paint: ${sAvg.paint_pts != null ? sAvg.paint_pts : '--'}</span>
                                     <span>Clutch USG: ${sit.clutch_usg_pct != null ? sit.clutch_usg_pct + '%' : '--'}</span>
                                 </div>
                             </div>
@@ -232,13 +326,13 @@ function generateDeepDiveModalHtml(g) {
                     <span>Pillar 1: Pace, Game Flow & Transition</span>
                 </div>
                 <div class="mt-1 space-y-0.5">
-                    ${formatStatRow('Neutral Pace', a.neutral_pace, a.rank_neutral_pace, h.neutral_pace, h.rank_neutral_pace, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Transition Frequency', a.transition_freq ? a.transition_freq + '%' : '--', a.rank_transition_freq, h.transition_freq ? h.transition_freq + '%' : '--', h.rank_transition_freq, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Shot Clock Early (0-8s)', a.shot_clock ? a.shot_clock.early_0_8 + '%' : '--', null, h.shot_clock ? h.shot_clock.early_0_8 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Shot Clock Mid (8-15s)', a.shot_clock ? a.shot_clock.mid_8_15 + '%' : '--', null, h.shot_clock ? h.shot_clock.mid_8_15 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Shot Clock Late (15-24s)', a.shot_clock ? a.shot_clock.late_15_24 + '%' : '--', null, h.shot_clock ? h.shot_clock.late_15_24 + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Pace Leading 10+', a.game_script?.leading_10?.pace, null, h.game_script?.leading_10?.pace, null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Pace Trailing 10+', a.game_script?.trailing_10?.pace, null, h.game_script?.trailing_10?.pace, null, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Neutral Pace', a.neutral_pace, a.rank_neutral_pace, h.neutral_pace, h.rank_neutral_pace, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Transition Frequency', a.transition_freq ? a.transition_freq + '%' : '--', a.rank_transition_freq, h.transition_freq ? h.transition_freq + '%' : '--', h.rank_transition_freq, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Shot Clock Early (0-8s)', a.shot_clock?.early_0_8 != null ? a.shot_clock.early_0_8 + '%' : '--', a.rank_early_0_8, h.shot_clock?.early_0_8 != null ? h.shot_clock.early_0_8 + '%' : '--', h.rank_early_0_8, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Shot Clock Mid (8-15s)', a.shot_clock?.mid_8_15 != null ? a.shot_clock.mid_8_15 + '%' : '--', a.rank_mid_8_15, h.shot_clock?.mid_8_15 != null ? h.shot_clock.mid_8_15 + '%' : '--', h.rank_mid_8_15, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Shot Clock Late (15-24s)', a.shot_clock?.late_15_24 != null ? a.shot_clock.late_15_24 + '%' : '--', a.rank_late_15_24, h.shot_clock?.late_15_24 != null ? h.shot_clock.late_15_24 + '%' : '--', h.rank_late_15_24, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Pace Leading 10+', a.game_script?.leading_10?.pace, a.rank_pace_leading_10, h.game_script?.leading_10?.pace, h.rank_pace_leading_10, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Pace Trailing 10+', a.game_script?.trailing_10?.pace, a.rank_pace_trailing_10, h.game_script?.trailing_10?.pace, h.rank_pace_trailing_10, a.is_small_sample, h.is_small_sample)}
                 </div>
             </div>
 
@@ -249,15 +343,14 @@ function generateDeepDiveModalHtml(g) {
                     <span>Pillar 2: Perimeter & Paint Defense</span>
                 </div>
                 <div class="mt-1 space-y-0.5">
-                    ${formatStatRow('Pick & Roll Drop', a.pnr_coverage ? a.pnr_coverage.drop + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.drop + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Pick & Roll Switch', a.pnr_coverage ? a.pnr_coverage.switch + '%' : '--', null, h.pnr_coverage ? h.pnr_coverage.switch + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Restricted Area Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Paint Non-RA Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Corner 3 Allowed', a.shot_profile_allowed ? a.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, h.shot_profile_allowed ? h.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Wide-Open 3PT Rate Allowed', a.wide_open_3pt ? a.wide_open_3pt.allowed_freq + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.allowed_freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Opponent Wide-Open 3PT%', a.wide_open_3pt ? a.wide_open_3pt.opponent_pct + '%' : '--', null, h.wide_open_3pt ? h.wide_open_3pt.opponent_pct + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Defensive Rebound % (DREB%)', a.rebounding ? a.rebounding.dreb_secured_pct + '%' : '--', a.rank_dreb_secured_pct, h.rebounding ? h.rebounding.dreb_secured_pct + '%' : '--', h.rank_dreb_secured_pct, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Offensive Rebound % Allowed', a.rebounding ? a.rebounding.oreb_allowed_pct + '%' : '--', a.rank_oreb_allowed_pct, h.rebounding ? h.rebounding.oreb_allowed_pct + '%' : '--', h.rank_oreb_allowed_pct, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Pick & Roll Drop', a.pnr_coverage?.drop != null ? a.pnr_coverage.drop + '%' : '--', a.rank_pnr_drop, h.pnr_coverage?.drop != null ? h.pnr_coverage.drop + '%' : '--', h.rank_pnr_drop, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Pick & Roll Switch', a.pnr_coverage?.switch != null ? a.pnr_coverage.switch + '%' : '--', a.rank_pnr_switch, h.pnr_coverage?.switch != null ? h.pnr_coverage.switch + '%' : '--', h.rank_pnr_switch, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Restricted Area Allowed', a.shot_profile_allowed?.restricted_area?.ppp != null ? a.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', a.rank_ra_ppp_allowed, h.shot_profile_allowed?.restricted_area?.ppp != null ? h.shot_profile_allowed.restricted_area.ppp + ' PPP' : '--', h.rank_ra_ppp_allowed, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Paint Non-RA Allowed', a.shot_profile_allowed?.paint_non_ra?.ppp != null ? a.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', a.rank_paint_ppp_allowed, h.shot_profile_allowed?.paint_non_ra?.ppp != null ? h.shot_profile_allowed.paint_non_ra.ppp + ' PPP' : '--', h.rank_paint_ppp_allowed, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Corner 3 Allowed', a.shot_profile_allowed?.corner_3?.ppp != null ? a.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', a.rank_corner3_ppp_allowed, h.shot_profile_allowed?.corner_3?.ppp != null ? h.shot_profile_allowed.corner_3.ppp + ' PPP' : '--', h.rank_corner3_ppp_allowed, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Transition Allowed PPP', a.transition_ppp_allowed != null ? a.transition_ppp_allowed + ' PPP' : '--', a.rank_transition_ppp_allowed, h.transition_ppp_allowed != null ? h.transition_ppp_allowed + ' PPP' : '--', h.rank_transition_ppp_allowed, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Defensive Rebound % (DREB%)', a.rebounding?.dreb_secured_pct != null ? a.rebounding.dreb_secured_pct + '%' : '--', a.rank_dreb_secured_pct, h.rebounding?.dreb_secured_pct != null ? h.rebounding.dreb_secured_pct + '%' : '--', h.rank_dreb_secured_pct, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Offensive Rebound % Allowed', a.rebounding?.oreb_allowed_pct != null ? a.rebounding.oreb_allowed_pct + '%' : '--', a.rank_oreb_allowed_pct, h.rebounding?.oreb_allowed_pct != null ? h.rebounding.oreb_allowed_pct + '%' : '--', h.rank_oreb_allowed_pct, a.is_small_sample, h.is_small_sample)}
                 </div>
             </div>
 
@@ -268,11 +361,12 @@ function generateDeepDiveModalHtml(g) {
                     <span>Pillar 3: Offensive Play Type & Scheme</span>
                 </div>
                 <div class="mt-1 space-y-0.5">
-                    ${formatStatRow('PnR Ball Handler Freq', a.playtypes_offense ? a.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Isolation Freq', a.playtypes_offense ? a.playtypes_offense.Isolation.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Isolation.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Spot-Up Freq', a.playtypes_offense ? a.playtypes_offense.Spot_Up.freq + '%' : '--', null, h.playtypes_offense ? h.playtypes_offense.Spot_Up.freq + '%' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Live-Ball Turnovers', a.turnover_profile ? a.turnover_profile.live_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.live_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
-                    ${formatStatRow('Dead-Ball Turnovers', a.turnover_profile ? a.turnover_profile.dead_ball_per_game + '/G' : '--', null, h.turnover_profile ? h.turnover_profile.dead_ball_per_game + '/G' : '--', null, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('PnR Ball Handler Freq', a.playtypes_offense?.PnR_Ball_Handler?.freq != null ? a.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', a.rank_pnr_bh_freq, h.playtypes_offense?.PnR_Ball_Handler?.freq != null ? h.playtypes_offense.PnR_Ball_Handler.freq + '%' : '--', h.rank_pnr_bh_freq, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Isolation Freq', a.playtypes_offense?.Isolation?.freq != null ? a.playtypes_offense.Isolation.freq + '%' : '--', a.rank_iso_freq, h.playtypes_offense?.Isolation?.freq != null ? h.playtypes_offense.Isolation.freq + '%' : '--', h.rank_iso_freq, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Spot-Up Freq', a.playtypes_offense?.Spot_Up?.freq != null ? a.playtypes_offense.Spot_Up.freq + '%' : '--', a.rank_spot_freq, h.playtypes_offense?.Spot_Up?.freq != null ? h.playtypes_offense.Spot_Up.freq + '%' : '--', h.rank_spot_freq, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Live-Ball Turnovers', a.turnover_profile?.live_ball_per_game != null ? a.turnover_profile.live_ball_per_game + '/G' : '--', a.rank_live_tov, h.turnover_profile?.live_ball_per_game != null ? h.turnover_profile.live_ball_per_game + '/G' : '--', h.rank_live_tov, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Dead-Ball Turnovers', a.turnover_profile?.dead_ball_per_game != null ? a.turnover_profile.dead_ball_per_game + '/G' : '--', a.rank_dead_tov, h.turnover_profile?.dead_ball_per_game != null ? h.turnover_profile.dead_ball_per_game + '/G' : '--', h.rank_dead_tov, a.is_small_sample, h.is_small_sample)}
+                    ${formatPillarRow('Live-Ball TOV Pts Surrendered', a.turnover_profile?.points_surrendered_off_tov != null ? a.turnover_profile.points_surrendered_off_tov + ' PTS' : '--', a.rank_pts_surrendered_off_tov, h.turnover_profile?.points_surrendered_off_tov != null ? h.turnover_profile.points_surrendered_off_tov + ' PTS' : '--', h.rank_pts_surrendered_off_tov, a.is_small_sample, h.is_small_sample)}
                 </div>
             </div>
         </div>

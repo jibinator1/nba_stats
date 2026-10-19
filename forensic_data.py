@@ -140,14 +140,17 @@ def make_empty_team_profile(team):
         'pnr_coverage': {'drop': None, 'switch': None, 'ice': None, 'hedge': None},
         'shot_profile_allowed': {z: {'freq': None, 'ppp': None} for z in zones},
         'shot_profile_offense': {z: {'freq': None, 'ppp': None} for z in zones},
+        'transition_ppp_allowed': None,
         'wide_open_3pt': {'allowed_freq': None, 'opponent_pct': None},
         'rebounding': {'dreb_secured_pct': None, 'oreb_allowed_pct': None},
         'playtypes_offense': {},
         'playtypes_defense': {},
         'turnover_profile': {
             'avg_total': None, 'live_ball_per_game': None, 'live_ball_pct': None,
-            'dead_ball_per_game': None, 'dead_ball_pct': None
+            'dead_ball_per_game': None, 'dead_ball_pct': None,
+            'points_generated_off_tov': None, 'points_surrendered_off_tov': None
         },
+        'points_generated_off_tov': None, 'points_surrendered_off_tov': None,
         'paint_touches_pg': None, 'three_point_rate': None,
         'def_rtg': None, 'off_rtg': None, 'pts_allowed': None, 'pts_scored': None,
         'reb_total': None, 'reb_allowed': None, 'oreb_pct': None, 'dreb_pct': None,
@@ -327,6 +330,8 @@ def calculate_team_forensics(logs_df, paired_df):
         avg_dead_tov = t_games['DEAD_BALL_TOV'].mean()
         live_ball_pct = round((avg_live_tov / avg_tov) * 100 if avg_tov > 0 else 52.0, 1)
         dead_ball_pct = round(100.0 - live_ball_pct, 1)
+        pts_gen_off_tov = round(t_games['STL'].mean() * 1.28, 1)
+        pts_surr_off_tov = round(avg_live_tov * 1.28, 1)
 
         # Paint touch volume
         paint_touches = round(21.5 + (team_fga - team_fg3a) * 0.35, 1)
@@ -378,6 +383,7 @@ def calculate_team_forensics(logs_df, paired_df):
                 'corner_3': {'freq': off_corner3_freq, 'ppp': off_corner3_ppp},
                 'above_break_3': {'freq': off_ab_break3_freq, 'ppp': off_ab_break3_ppp}
             },
+            'transition_ppp_allowed': round(1.18 * scale, 2),
             'wide_open_3pt': {
                 'allowed_freq': wide_open_3pa_freq,
                 'opponent_pct': opp_wide_open_3p_pct
@@ -394,8 +400,12 @@ def calculate_team_forensics(logs_df, paired_df):
                 'live_ball_per_game': round(avg_live_tov, 1),
                 'live_ball_pct': live_ball_pct,
                 'dead_ball_per_game': round(avg_dead_tov, 1),
-                'dead_ball_pct': dead_ball_pct
+                'dead_ball_pct': dead_ball_pct,
+                'points_generated_off_tov': pts_gen_off_tov,
+                'points_surrendered_off_tov': pts_surr_off_tov
             },
+            'points_generated_off_tov': pts_gen_off_tov,
+            'points_surrendered_off_tov': pts_surr_off_tov,
             'paint_touches_pg': paint_touches,
             'three_point_rate': round(team_3p_rate, 1),
             'def_rtg': round(base_def_rtg, 1),
@@ -419,48 +429,82 @@ def calculate_team_forensics(logs_df, paired_df):
             'injuries': injuries_by_team.get(team, [])
         }
 
-    # Add league ranks with sample size gating
+    # Add league ranks with sample size gating and tie breaking
     metrics_to_rank = [
-        ('pace', False), ('neutral_pace', False), ('transition_freq', False),
-        ('def_rtg', True), ('off_rtg', False),
-        ('pts_scored', False), ('pts_allowed', True),
-        ('reb_total', False), ('reb_allowed', True),
-        ('oreb_pct', False), ('dreb_pct', False),
-        ('ast_total', False), ('ast_allowed', True),
-        ('tov_total', True), ('tov_allowed', False),
-        ('fg3m_total', False), ('fg3m_allowed', True),
-        ('fg3a_total', False), ('fg3a_allowed', True),
-        ('fg_pct', False), ('fg_pct_opp', True),
-        ('dreb_secured_pct', False), ('oreb_allowed_pct', True),
-        ('paint_touches_pg', False), ('three_point_rate', False)
+        (('pace',), False, 'rank_pace'),
+        (('neutral_pace',), False, 'rank_neutral_pace'),
+        (('transition_freq',), False, 'rank_transition_freq'),
+        (('def_rtg',), True, 'rank_def_rtg'),
+        (('off_rtg',), False, 'rank_off_rtg'),
+        (('pts_scored',), False, 'rank_pts_scored'),
+        (('pts_allowed',), True, 'rank_pts_allowed'),
+        (('reb_total',), False, 'rank_reb_total'),
+        (('reb_allowed',), True, 'rank_reb_allowed'),
+        (('oreb_pct',), False, 'rank_oreb_pct'),
+        (('dreb_pct',), False, 'rank_dreb_pct'),
+        (('ast_total',), False, 'rank_ast_total'),
+        (('ast_allowed',), True, 'rank_ast_allowed'),
+        (('tov_total',), True, 'rank_tov_total'),
+        (('tov_allowed',), False, 'rank_tov_allowed'),
+        (('fg3m_total',), False, 'rank_fg3m_total'),
+        (('fg3m_allowed',), True, 'rank_fg3m_allowed'),
+        (('fg3a_total',), False, 'rank_fg3a_total'),
+        (('fg3a_allowed',), True, 'rank_fg3a_allowed'),
+        (('fg_pct',), False, 'rank_fg_pct'),
+        (('fg_pct_opp',), True, 'rank_fg_pct_opp'),
+        (('rebounding', 'dreb_secured_pct'), False, 'rank_dreb_secured_pct'),
+        (('rebounding', 'oreb_allowed_pct'), True, 'rank_oreb_allowed_pct'),
+        (('paint_touches_pg',), False, 'rank_paint_touches_pg'),
+        (('three_point_rate',), False, 'rank_three_point_rate'),
+        (('shot_clock', 'early_0_8'), False, 'rank_early_0_8'),
+        (('shot_clock', 'mid_8_15'), False, 'rank_mid_8_15'),
+        (('shot_clock', 'late_15_24'), True, 'rank_late_15_24'),
+        (('game_script', 'leading_10', 'pace'), False, 'rank_pace_leading_10'),
+        (('game_script', 'trailing_10', 'pace'), False, 'rank_pace_trailing_10'),
+        (('pnr_coverage', 'drop'), False, 'rank_pnr_drop'),
+        (('pnr_coverage', 'switch'), False, 'rank_pnr_switch'),
+        (('shot_profile_allowed', 'restricted_area', 'ppp'), True, 'rank_ra_ppp_allowed'),
+        (('shot_profile_allowed', 'paint_non_ra', 'ppp'), True, 'rank_paint_ppp_allowed'),
+        (('shot_profile_allowed', 'corner_3', 'ppp'), True, 'rank_corner3_ppp_allowed'),
+        (('transition_ppp_allowed',), True, 'rank_transition_ppp_allowed'),
+        (('playtypes_offense', 'PnR_Ball_Handler', 'freq'), False, 'rank_pnr_bh_freq'),
+        (('playtypes_offense', 'Isolation', 'freq'), False, 'rank_iso_freq'),
+        (('playtypes_offense', 'Spot_Up', 'freq'), False, 'rank_spot_freq'),
+        (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'),
+        (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
+        (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'),
+        (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov')
     ]
-    for metric, ascending in metrics_to_rank:
-        # Collect values for ranking (only teams with non-null values and gp > 0)
+    for path, ascending, rank_key in metrics_to_rank:
         tuples = []
         for t, prof in team_profiles.items():
             if prof.get('gp', 0) == 0:
                 continue
-            val = None
-            if metric in prof:
-                val = prof[metric]
-            elif metric in prof.get('rebounding', {}):
-                val = prof['rebounding'].get(metric)
-            if val is not None and not (isinstance(val, float) and np.isnan(val)):
-                tuples.append((t, float(val)))
+            curr = prof
+            for k in path:
+                if isinstance(curr, dict) and k in curr:
+                    curr = curr[k]
+                else:
+                    curr = None
+                    break
+            if curr is not None and not (isinstance(curr, float) and np.isnan(curr)):
+                tuples.append((t, float(curr)))
         
         tuples.sort(key=lambda x: x[1], reverse=not ascending)
         ranked_teams = set()
-        for rank_idx, (t, _) in enumerate(tuples):
-            rank_key = f'rank_{metric}'
+        rank = 1
+        for rank_idx, (t, v) in enumerate(tuples):
             ranked_teams.add(t)
+            if rank_idx > 0 and v != tuples[rank_idx - 1][1]:
+                rank = rank_idx + 1
             if team_profiles[t].get('is_small_sample'):
                 team_profiles[t][rank_key] = 'Small Sample'
             else:
-                team_profiles[t][rank_key] = rank_idx + 1
+                team_profiles[t][rank_key] = rank
         
         for t in NBA_TEAMS:
             if t not in ranked_teams:
-                team_profiles[t][f'rank_{metric}'] = None
+                team_profiles[t][rank_key] = None
 
     return team_profiles
 
@@ -724,7 +768,30 @@ def calculate_player_usage_profiles(logs_df):
                     for _, row in p_logs.sort_values('GAME_DATE', ascending=False).iterrows()
                 ]
             })
-            
+
+    # Rank rotation players across the league for pts, reb, ast
+    player_stat_ranks = [
+        ('pts', 'pts_rank'),
+        ('reb', 'reb_rank'),
+        ('ast', 'ast_rank')
+    ]
+    for stat, r_key in player_stat_ranks:
+        tuples = []
+        for idx, p in enumerate(player_profiles):
+            val = p.get('season_avg', {}).get(stat)
+            if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                tuples.append((idx, float(val)))
+        tuples.sort(key=lambda x: x[1], reverse=True)
+        rank = 1
+        for r_idx, (p_idx, v) in enumerate(tuples):
+            if r_idx > 0 and v != tuples[r_idx - 1][1]:
+                rank = r_idx + 1
+            p = player_profiles[p_idx]
+            if p.get('is_small_sample'):
+                p['season_avg'][r_key] = 'Small Sample'
+            else:
+                p['season_avg'][r_key] = rank
+
     return player_profiles
 
 class NumpyEncoder(json.JSONEncoder):

@@ -197,6 +197,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
 
     teams_dict = {}
     injuries_by_team = load_injuries_by_team()
+    base_forensic_teams, _, _, _, _ = load_forensic_data()
     for t in NBA_TEAMS:
         t_games = by_team.get(t, [])
         gp = len(t_games)
@@ -221,7 +222,9 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
             tot_tov = sum(g.get('tov', 0) for g in t_games)
             tot_opp_tov = sum(g.get('opp_tov', 0) for g in t_games)
 
-            teams_dict[t] = {
+            base_p = base_forensic_teams.get(t, make_empty_team_profile(t))
+            entry = dict(base_p)
+            entry.update({
                 'team': t,
                 'team_name': NBA_TEAM_NAMES.get(t, t),
                 'gp': gp,
@@ -246,7 +249,8 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
                 'pace': pace,
                 'off_rtg': round((tot_pts / tot_poss * 100), 1) if tot_poss > 0 else None,
                 'def_rtg': round((tot_pts_opp / tot_poss * 100), 1) if tot_poss > 0 else None
-            }
+            })
+            teams_dict[t] = entry
 
     # Rank metrics across teams with games
     metrics_to_rank = [
@@ -400,6 +404,25 @@ def api_player_profiles():
                             'logs': [x['ast'] for x in last10]}
                 }
             out_players.append(p_copy)
+
+        # Compute dynamic player stat ranks across out_players
+        for stat, r_key in [('pts', 'pts_rank'), ('reb', 'reb_rank'), ('ast', 'ast_rank')]:
+            tuples = []
+            for idx, p in enumerate(out_players):
+                v = p.get('season_avg', {}).get(stat)
+                if v is not None:
+                    tuples.append((idx, float(v)))
+            tuples.sort(key=lambda x: x[1], reverse=True)
+            rank = 1
+            for r_idx, (p_idx, v) in enumerate(tuples):
+                if r_idx > 0 and v != tuples[r_idx - 1][1]:
+                    rank = r_idx + 1
+                p = out_players[p_idx]
+                if p.get('is_small_sample'):
+                    p['season_avg'][r_key] = 'Small Sample'
+                else:
+                    p['season_avg'][r_key] = rank
+
         return jsonify({
             'total_players': len(out_players),
             'start_date': s_date,

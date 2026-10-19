@@ -46,7 +46,7 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
 
     let cellsHtml = '';
     const cellW = 150;
-    const cellH = 75;
+    const cellH = 84;
 
     zones.forEach((z, idx) => {
         const offFreq = aOff[z.id]?.freq || 20.0;
@@ -69,10 +69,10 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
         const x = 15 + idx * (cellW + 10);
         cellsHtml += `
             <g transform="translate(${x}, 35)">
-                <rect width="${cellW}" height="${cellH}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="1"/>
-                <text x="10" y="18" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="monospace">${z.label}</text>
-                <text x="10" y="38" fill="#94a3b8" font-size="10" font-family="sans-serif">${awayTeam} Offense: <tspan fill="#f1f5f9" font-weight="bold">${offFreq}%</tspan></text>
-                <text x="10" y="56" fill="#94a3b8" font-size="10" font-family="sans-serif">${homeTeam} Defense: <tspan fill="${textPppColor}" font-weight="bold">${defPpp} PPP</tspan></text>
+                <rect width="${cellW}" height="${cellH}" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
+                <text x="14" y="24" fill="#e2e8f0" font-size="12" font-weight="bold" font-family="monospace">${z.label}</text>
+                <text x="14" y="47" fill="#94a3b8" font-size="11" font-family="sans-serif">${awayTeam} Offense: <tspan fill="#f1f5f9" font-weight="bold">${offFreq}%</tspan></text>
+                <text x="14" y="68" fill="#94a3b8" font-size="11" font-family="sans-serif">${homeTeam} Defense: <tspan fill="${textPppColor}" font-weight="bold">${defPpp} PPP</tspan></text>
             </g>
         `;
     });
@@ -87,22 +87,11 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
                 <span class="text-[10px] text-slate-500 font-mono">Teal: &le;0.95 PPP | Red: &ge;1.15 PPP</span>
             </div>
             <div class="overflow-x-auto touch-scroll">
-                <svg viewBox="0 0 815 125" class="w-full min-w-[750px] h-auto">
-                    <rect width="815" height="125" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-                    <text x="15" y="22" fill="#94a3b8" font-size="10" font-weight="semibold" font-family="monospace">${awayTeam} ATTEMPTS FREQUENCY (%) VS. ${homeTeam} DEFENSIVE ALLOWANCE (PPP)</text>
+                <svg viewBox="0 0 815 135" class="w-full min-w-[750px] h-auto">
+                    <rect width="815" height="135" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+                    <text x="15" y="22" fill="#94a3b8" font-size="10.5" font-weight="semibold" font-family="monospace">${awayTeam} ATTEMPTS FREQUENCY (%) VS. ${homeTeam} DEFENSIVE ALLOWANCE (PPP)</text>
                     ${cellsHtml}
                 </svg>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
-                <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${awayTeam} Shot Focus: ${(aOff.above_break_3?.freq || 30.0)}% Above-Break 3]
-                </span>
-                <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${homeTeam} Defense Allowed: ${(hDef.restricted_area?.ppp || 1.25)} PPP at Rim]
-                </span>
-                <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [Paint Non-RA Allowed: ${(hDef.paint_non_ra?.ppp || 0.92)} PPP]
-                </span>
             </div>
         </div>
     `;
@@ -212,10 +201,17 @@ function renderPaceAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) 
     for (let p = 94; p <= 108; p += 2) {
         const tx = getX(p);
         ticksHtml += `
-            <line x1="${tx}" y1="52" x2="${tx}" y2="60" stroke="#475569" stroke-width="1.5"/>
-            <text x="${tx}" y="72" fill="#64748b" font-size="9" text-anchor="middle" font-family="monospace">${p}</text>
+            <line x1="${tx}" y1="70" x2="${tx}" y2="78" stroke="#475569" stroke-width="1.5"/>
+            <text x="${tx}" y="89" fill="#94a3b8" font-size="9.5" text-anchor="middle" font-family="monospace">${p}</text>
         `;
     }
+
+    const isClose = Math.abs(aX - hX) < 55;
+    const aHigher = aPace >= hPace;
+    const aBadgeY = (isClose && aHigher) ? -46 : -28;
+    const hBadgeY = (isClose && !aHigher) ? -46 : -28;
+    const aStemH = (isClose && aHigher) ? 30 : 12;
+    const hStemH = (isClose && !aHigher) ? 30 : 12;
 
     return `
         <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
@@ -227,36 +223,37 @@ function renderPaceAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) 
                 <span class="text-[10px] text-slate-500 font-mono">League Baseline: 100.0 Poss/48m</span>
             </div>
             <div class="overflow-x-auto touch-scroll">
-                <svg viewBox="0 0 815 110" class="w-full min-w-[750px] h-auto">
-                    <rect width="815" height="110" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+                <svg viewBox="0 0 815 125" class="w-full min-w-[750px] h-auto">
+                    <rect width="815" height="125" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
                     
-                    <rect x="${getX(94)}" y="40" width="${getX(98) - getX(94)}" height="12" rx="3" fill="#1e293b" stroke="#334155" stroke-width="0.5"/>
-                    <rect x="${getX(98)}" y="40" width="${getX(102) - getX(98)}" height="12" fill="#0f172a" stroke="#0ea5e9" stroke-opacity="0.3" stroke-width="0.5"/>
-                    <rect x="${getX(102)}" y="40" width="${getX(108) - getX(102)}" height="12" rx="3" fill="#1e293b" stroke="#334155" stroke-width="0.5"/>
+                    <rect x="${getX(94)}" y="58" width="${getX(98) - getX(94)}" height="12" rx="3" fill="#1e293b" stroke="#334155" stroke-width="0.5"/>
+                    <rect x="${getX(98)}" y="58" width="${getX(102) - getX(98)}" height="12" fill="#0f172a" stroke="#0ea5e9" stroke-opacity="0.3" stroke-width="0.5"/>
+                    <rect x="${getX(102)}" y="58" width="${getX(108) - getX(102)}" height="12" rx="3" fill="#1e293b" stroke="#334155" stroke-width="0.5"/>
                     
-                    <text x="${(getX(94) + getX(98)) / 2}" y="34" fill="#64748b" font-size="8.5" text-anchor="middle" font-family="monospace">HALF-COURT</text>
-                    <text x="${midX}" y="34" fill="#38bdf8" font-size="8.5" text-anchor="middle" font-family="monospace">LEAGUE BASELINE</text>
-                    <text x="${(getX(102) + getX(108)) / 2}" y="34" fill="#64748b" font-size="8.5" text-anchor="middle" font-family="monospace">TRANSITION</text>
-
-                    <line x1="${midX}" y1="38" x2="${midX}" y2="62" stroke="#38bdf8" stroke-dasharray="2 2" stroke-width="2"/>
+                    <line x1="${midX}" y1="54" x2="${midX}" y2="78" stroke="#38bdf8" stroke-dasharray="2 2" stroke-width="2"/>
                     ${ticksHtml}
 
-                    <g transform="translate(${aX}, 40)">
-                        <polygon points="0,0 -5,-14 5,-14" fill="#38bdf8"/>
-                        <rect x="-24" y="-28" width="48" height="15" rx="3" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
-                        <text x="0" y="-17" fill="#f8fafc" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="monospace">${awayTeam} ${aPace}</text>
+                    <text x="${(getX(94) + getX(98)) / 2}" y="106" fill="#64748b" font-size="8.5" text-anchor="middle" font-family="monospace">HALF-COURT</text>
+                    <text x="${midX}" y="106" fill="#38bdf8" font-size="8.5" text-anchor="middle" font-family="monospace">LEAGUE BASELINE</text>
+                    <text x="${(getX(102) + getX(108)) / 2}" y="106" fill="#64748b" font-size="8.5" text-anchor="middle" font-family="monospace">TRANSITION</text>
+
+                    <!-- Away Team Pace Indicator (Aligned directly above needle) -->
+                    <g transform="translate(${aX}, 58)">
+                        <polygon points="0,0 -4,-${aStemH} 4,-${aStemH}" fill="#38bdf8"/>
+                        <rect x="-27" y="${aBadgeY}" width="54" height="17" rx="3" fill="#0369a1" stroke="#38bdf8" stroke-width="1.2"/>
+                        <text x="0" y="${aBadgeY + 12}" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">${awayTeam} ${aPace}</text>
                     </g>
 
-                    <g transform="translate(${hX}, 40)">
-                        <polygon points="0,0 -5,-14 5,-14" fill="#f43f5e"/>
-                        <rect x="-24" y="-28" width="48" height="15" rx="3" fill="#be123c" stroke="#f43f5e" stroke-width="1"/>
-                        <text x="0" y="-17" fill="#f8fafc" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="monospace">${homeTeam} ${hPace}</text>
+                    <!-- Home Team Pace Indicator (Aligned directly above needle) -->
+                    <g transform="translate(${hX}, 58)">
+                        <polygon points="0,0 -4,-${hStemH} 4,-${hStemH}" fill="#f43f5e"/>
+                        <rect x="-27" y="${hBadgeY}" width="54" height="17" rx="3" fill="#be123c" stroke="#f43f5e" stroke-width="1.2"/>
+                        <text x="0" y="${hBadgeY + 12}" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">${homeTeam} ${hPace}</text>
                     </g>
 
-                    <g transform="translate(${expX}, 55)">
+                    <!-- Expected Tempo Marker -->
+                    <g transform="translate(${expX}, 64)">
                         <circle cx="0" cy="0" r="4.5" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.5"/>
-                        <rect x="-35" y="24" width="70" height="18" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
-                        <text x="0" y="36.5" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">EXP: ${expPace}</text>
                     </g>
                 </svg>
             </div>
