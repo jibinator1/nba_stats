@@ -104,22 +104,34 @@ const STAT_EXPLANATIONS = {
     'Opponent Wide-Open 3PT%': 'Conversion percentage by opposing offenses on wide-open (6+ ft) 3-point attempts.',
     'Defensive Rebound % (DREB%)': 'Percentage of available defensive rebounds secured by the team.',
     'Offensive Rebound % Allowed': 'Percentage of available offensive rebounds surrendered to the opponent.',
+    'OREB%': 'Offensive Rebound Rate: percentage of available offensive rebounds secured (Team OREB / [Team OREB + Opp DREB]).',
+    'DREB%': 'Defensive Rebound Rate: percentage of available defensive rebounds secured (Team DREB / [Team DREB + Opp OREB]).',
+    'Turnovers / G': 'Average turnovers committed per game.',
+    'Opp Turnovers / G': 'Average turnovers forced against opposing offenses per game.',
     'Live-Ball Turnovers': 'Turnovers resulting directly in opponent steals and transition runs.',
     'Dead-Ball Turnovers': 'Turnovers resulting in whistle stoppages (out-of-bounds, travel, offensive foul).'
 };
 
-// Rank Badge Formatter with Sample Size Gating
+// Rank Badge Formatter with Sample Size Gating & Hover Tooltip
 function formatRankBadge(rank, isSmallSample) {
     if (rank == null || rank === '') return '';
     if (isSmallSample || rank === 'Small Sample') {
-        return `<span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">Small Sample</span>`;
+        return `<span class="rank-badge inline-flex items-center" title="Small Sample (&lt;10 Games)"><span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">Small Sample</span><span class="rank-tooltip">Small Sample (&lt;10 Games)</span></span>`;
     }
     const r = parseInt(rank, 10);
     if (isNaN(r)) return '';
     let style = 'bg-[#21262d] text-slate-300 border border-[#30363d]';
     if (r <= 10) style = 'bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-semibold';
     else if (r >= 21) style = 'bg-amber-950/40 text-amber-300 border border-amber-800/60 font-semibold';
-    return `<span class="text-[10px] px-1.5 py-0.5 rounded font-mono ${style}">#${r}</span>`;
+
+    let tip = `Rank #${r} of 30`;
+    if (r <= 3) tip = `Rank #${r} of 30 (Top 10%)`;
+    else if (r <= 10) tip = `Rank #${r} of 30 (Top Tier • Green)`;
+    else if (r <= 20) tip = `Rank #${r} of 30 (Middle Tier • Neutral)`;
+    else if (r <= 27) tip = `Rank #${r} of 30 (Lower Tier • Amber)`;
+    else tip = `Rank #${r} of 30 (Bottom 10%)`;
+
+    return `<span class="rank-badge inline-flex items-center" title="${tip}"><span class="text-[10px] px-1.5 py-0.5 rounded font-mono ${style}">#${r}</span><span class="rank-tooltip">${tip}</span></span>`;
 }
 
 // Canonical Unified Stat Row Formatter (replaces duplicate formatRow and formatPillarRow)
@@ -173,8 +185,10 @@ function createEmptyTeamProfile(t) {
         turnover_profile: { avg_total: null, live_ball_per_game: null, live_ball_pct: null, dead_ball_per_game: null, dead_ball_pct: null },
         paint_touches_pg: null, three_point_rate: null, def_rtg: null, off_rtg: null,
         pts_allowed: null, pts_scored: null, reb_total: null, reb_allowed: null,
-        ast_total: null, ast_allowed: null, fg3m_total: null, fg3m_allowed: null,
-        fg3a_total: null, fg3a_allowed: null, fg_pct: null, fg_pct_opp: null
+        oreb_pct: null, dreb_pct: null,
+        ast_total: null, ast_allowed: null, tov_total: null, tov_allowed: null,
+        fg3m_total: null, fg3m_allowed: null, fg3a_total: null, fg3a_allowed: null,
+        fg_pct: null, fg_pct_opp: null
     };
 }
 
@@ -218,8 +232,17 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             const totFga = tGames.reduce((acc, g) => acc + g.fga, 0);
             const totFgmOpp = tGames.reduce((acc, g) => acc + g.opp_fgm, 0);
             const totFgaOpp = tGames.reduce((acc, g) => acc + g.opp_fga, 0);
-            const totDreb = tGames.reduce((acc, g) => acc + g.dreb, 0);
-            const totOrebOpp = tGames.reduce((acc, g) => acc + g.opp_oreb, 0);
+            const totDreb = tGames.reduce((acc, g) => acc + (g.dreb || 0), 0);
+            const totOreb = tGames.reduce((acc, g) => acc + (g.oreb || 0), 0);
+            const totDrebOpp = tGames.reduce((acc, g) => acc + (g.opp_dreb || 0), 0);
+            const totOrebOpp = tGames.reduce((acc, g) => acc + (g.opp_oreb || 0), 0);
+            const totTov = tGames.reduce((acc, g) => acc + (g.tov || 0), 0);
+            const totOppTov = tGames.reduce((acc, g) => acc + (g.opp_tov || 0), 0);
+
+            const orebPct = (totOreb + totDrebOpp > 0) ? (totOreb / (totOreb + totDrebOpp) * 100).toFixed(1) : null;
+            const drebPct = (totDreb + totOrebOpp > 0) ? (totDreb / (totDreb + totOrebOpp) * 100).toFixed(1) : null;
+            const tovTotal = gp > 0 ? (totTov / gp).toFixed(1) : null;
+            const tovAllowed = gp > 0 ? (totOppTov / gp).toFixed(1) : null;
 
             const fgPct = totFga > 0 ? (totFgm / totFga * 100).toFixed(1) : null;
             const fgPctOpp = totFgaOpp > 0 ? (totFgmOpp / totFgaOpp * 100).toFixed(1) : null;
@@ -295,8 +318,12 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 pts_scored: (totPts / gp).toFixed(1),
                 reb_total: (totReb / gp).toFixed(1),
                 reb_allowed: (totRebOpp / gp).toFixed(1),
+                oreb_pct: orebPct,
+                dreb_pct: drebPct,
                 ast_total: (totAst / gp).toFixed(1),
                 ast_allowed: (totAstOpp / gp).toFixed(1),
+                tov_total: tovTotal,
+                tov_allowed: tovAllowed,
                 fg3m_total: (totFg3m / gp).toFixed(1),
                 fg3m_allowed: (totFg3mOpp / gp).toFixed(1),
                 fg3a_total: (totFg3a / gp).toFixed(1),
@@ -311,7 +338,9 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         { key: 'pace', asc: false }, { key: 'def_rtg', asc: true }, { key: 'off_rtg', asc: false },
         { key: 'pts_scored', asc: false }, { key: 'pts_allowed', asc: true },
         { key: 'reb_total', asc: false }, { key: 'reb_allowed', asc: true },
+        { key: 'oreb_pct', asc: false }, { key: 'dreb_pct', asc: false },
         { key: 'ast_total', asc: false }, { key: 'ast_allowed', asc: true },
+        { key: 'tov_total', asc: true }, { key: 'tov_allowed', asc: false },
         { key: 'fg3m_total', asc: false }, { key: 'fg3m_allowed', asc: true },
         { key: 'fg3a_total', asc: false }, { key: 'fg3a_allowed', asc: true },
         { key: 'fg_pct', asc: false }, { key: 'fg_pct_opp', asc: true }
@@ -465,8 +494,12 @@ const STAT_CARD_METRICS = [
     { label: 'Points Allowed / G', key: 'pts_allowed', rankKey: 'rank_pts_allowed' },
     { label: 'Rebounds / Game', key: 'reb_total', rankKey: 'rank_reb_total' },
     { label: 'Rebounds Allowed / G', key: 'reb_allowed', rankKey: 'rank_reb_allowed' },
+    { label: 'OREB%', key: 'oreb_pct', rankKey: 'rank_oreb_pct', isPct: true },
+    { label: 'DREB%', key: 'dreb_pct', rankKey: 'rank_dreb_pct', isPct: true },
     { label: 'Assists / Game', key: 'ast_total', rankKey: 'rank_ast_total' },
     { label: 'Assists Allowed / G', key: 'ast_allowed', rankKey: 'rank_ast_allowed' },
+    { label: 'Turnovers / G', key: 'tov_total', rankKey: 'rank_tov_total' },
+    { label: 'Opp Turnovers / G', key: 'tov_allowed', rankKey: 'rank_tov_allowed' },
     { label: 'Threes Made (3PM)', key: 'fg3m_total', rankKey: 'rank_fg3m_total' },
     { label: '3PM Allowed / G', key: 'fg3m_allowed', rankKey: 'rank_fg3m_allowed' },
     { label: 'Threes Attempted (3PA)', key: 'fg3a_total', rankKey: 'rank_fg3a_total' },
@@ -507,6 +540,16 @@ function renderGameCardHtml(g) {
     const isFinal = g.is_final;
     const aTeam = g.away_team;
     const hTeam = g.home_team;
+
+    const aSampleCount = a.gp || 0;
+    const aIsSmall = aSampleCount < 10;
+    const aSampleClass = aIsSmall ? 'text-amber-400 font-semibold' : 'text-slate-400';
+    const aSampleLabel = aIsSmall ? `[Small Sample: n=${aSampleCount}]` : `[n=${aSampleCount} games]`;
+
+    const hSampleCount = h.gp || 0;
+    const hIsSmall = hSampleCount < 10;
+    const hSampleClass = hIsSmall ? 'text-amber-400 font-semibold' : 'text-slate-400';
+    const hSampleLabel = hIsSmall ? `[Small Sample: n=${hSampleCount}]` : `[n=${hSampleCount} games]`;
 
     let statusBadge = '';
     if (isFinal) {
@@ -556,6 +599,7 @@ function renderGameCardHtml(g) {
                             <span class="text-slate-300 font-semibold">${g.away_record || (a.gp > 0 ? `${a.gp} GP` : '--')}</span>
                             <span class="text-slate-600">•</span>
                             <span class="text-slate-500 font-medium">Away</span>
+                            <span class="${aSampleClass} text-[10px]">${aSampleLabel}</span>
                         </div>
                     </div>
                 </div>
@@ -579,6 +623,7 @@ function renderGameCardHtml(g) {
                     <div class="min-w-0 flex-1">
                         <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.home_team_name}</h4>
                         <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 mt-0.5 font-mono">
+                            <span class="${hSampleClass} text-[10px]">${hSampleLabel}</span>
                             <span class="text-slate-500 font-medium">Home</span>
                             <span class="text-slate-600">•</span>
                             <span class="text-slate-300 font-semibold">${g.home_record || (h.gp > 0 ? `${h.gp} GP` : '--')}</span>

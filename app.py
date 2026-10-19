@@ -211,6 +211,15 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
             tot_fga_opp = sum(g['opp_fga'] for g in t_games)
             tot_fgm_opp = sum(g['opp_fgm'] for g in t_games)
 
+            tot_reb = sum(g['reb'] for g in t_games)
+            tot_reb_opp = sum(g['opp_reb'] for g in t_games)
+            tot_oreb = sum(g.get('oreb', 0) for g in t_games)
+            tot_dreb = sum(g.get('dreb', 0) for g in t_games)
+            tot_opp_oreb = sum(g.get('opp_oreb', 0) for g in t_games)
+            tot_opp_dreb = sum(g.get('opp_dreb', 0) for g in t_games)
+            tot_tov = sum(g.get('tov', 0) for g in t_games)
+            tot_opp_tov = sum(g.get('opp_tov', 0) for g in t_games)
+
             teams_dict[t] = {
                 'team': t,
                 'team_name': NBA_TEAM_NAMES.get(t, t),
@@ -218,10 +227,14 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
                 'is_small_sample': (gp < 10) or (tot_poss < 200),
                 'pts_scored': round(tot_pts / gp, 1),
                 'pts_allowed': round(tot_pts_opp / gp, 1),
-                'reb_total': round(sum(g['reb'] for g in t_games) / gp, 1),
-                'reb_allowed': round(sum(g['opp_reb'] for g in t_games) / gp, 1),
+                'reb_total': round(tot_reb / gp, 1),
+                'reb_allowed': round(tot_reb_opp / gp, 1),
+                'oreb_pct': round((tot_oreb / (tot_oreb + tot_opp_dreb) * 100), 1) if (tot_oreb + tot_opp_dreb) > 0 else None,
+                'dreb_pct': round((tot_dreb / (tot_dreb + tot_opp_oreb) * 100), 1) if (tot_dreb + tot_opp_oreb) > 0 else None,
                 'ast_total': round(sum(g['ast'] for g in t_games) / gp, 1),
                 'ast_allowed': round(sum(g['opp_ast'] for g in t_games) / gp, 1),
+                'tov_total': round(tot_tov / gp, 1),
+                'tov_allowed': round(tot_opp_tov / gp, 1),
                 'fg3m_total': round(sum(g['fg3m'] for g in t_games) / gp, 1),
                 'fg3m_allowed': round(sum(g['opp_fg3m'] for g in t_games) / gp, 1),
                 'fg3a_total': round(sum(g['fg3a'] for g in t_games) / gp, 1),
@@ -238,7 +251,9 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
         ('pace', False), ('def_rtg', True), ('off_rtg', False),
         ('pts_scored', False), ('pts_allowed', True),
         ('reb_total', False), ('reb_allowed', True),
+        ('oreb_pct', False), ('dreb_pct', False),
         ('ast_total', False), ('ast_allowed', True),
+        ('tov_total', True), ('tov_allowed', False),
         ('fg3m_total', False), ('fg3m_allowed', True),
         ('fg3a_total', False), ('fg3a_allowed', True),
         ('fg_pct', False), ('fg_pct_opp', True)

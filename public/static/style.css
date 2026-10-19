@@ -133,6 +133,57 @@ tbody tr.selected-row {
 }
 
 /* ==========================================================================
+   Rank Badge Hover Tooltips
+   ========================================================================== */
+.rank-badge {
+    position: relative;
+    cursor: help;
+    display: inline-flex;
+    align-items: center;
+}
+
+.rank-badge .rank-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%) translateY(3px);
+    white-space: nowrap;
+    padding: 3px 7px;
+    background: rgba(18, 22, 28, 0.98);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    color: #f0f6fc;
+    font-size: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 120;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+
+.rank-badge .rank-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: #30363d transparent transparent transparent;
+}
+
+.rank-badge:hover .rank-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
    Tooltip & Hover Stat Info Box
    ========================================================================== */
 .stat-info-trigger {

@@ -142,7 +142,7 @@ def run_audit():
     print("  [PASS] Dynamic date range correctly anchors at 2026-10-20 and adjusts daily.")
 
     # 7. Verify Date Range Gating & Zero-Game Blank Stats
-    print("\n[7/7] Testing Date-Filtered Forensic Gating (Zero Games -> Blank / Null)...")
+    print("\n[7/8] Testing Date-Filtered Forensic Gating (Zero Games -> Blank / Null)...")
     res_zero = client.get('/api/forensic-teams?start_date=2026-10-20&end_date=2026-10-25')
     zero_teams = res_zero.json.get('forensic_teams', {})
     assert 'BOS' in zero_teams, "Missing BOS in zero_teams"
@@ -150,6 +150,8 @@ def run_audit():
     assert bos_zero['gp'] == 0, f"Expected gp == 0, got {bos_zero['gp']}"
     assert bos_zero['pts_scored'] is None, f"Expected pts_scored is None, got {bos_zero['pts_scored']}"
     assert bos_zero['rank_pts_scored'] is None, f"Expected rank_pts_scored is None, got {bos_zero['rank_pts_scored']}"
+    assert bos_zero['tov_total'] is None, f"Expected tov_total is None, got {bos_zero['tov_total']}"
+    assert bos_zero['oreb_pct'] is None, f"Expected oreb_pct is None, got {bos_zero['oreb_pct']}"
     print(f"  Zero-Game Window BOS: GP={bos_zero['gp']} | PTS={bos_zero['pts_scored']} | Rank={bos_zero['rank_pts_scored']}")
 
     res_players_zero = client.get('/api/player-profiles?start_date=2026-10-20&end_date=2026-10-25')
@@ -159,6 +161,34 @@ def run_audit():
     assert players_zero[0]['season_avg']['pts'] is None, f"Expected pts None, got {players_zero[0]['season_avg']['pts']}"
     print(f"  Zero-Game Window Player ({players_zero[0]['player_name']}): GP={players_zero[0]['games_played']} | PTS Avg={players_zero[0]['season_avg']['pts']}")
     print("  [PASS] Date-filtered gating correctly blanks stats and suppresses ranks when games played == 0.")
+
+    # 8. Verify Turnovers, Rebound Percentages, and Rank Tooltips
+    print("\n[8/8] Testing Turnovers, Rebounding Percentages, Sample Size Labels & Rank Badges...")
+    res_teams = client.get('/api/forensic-teams?start_date=2025-10-02&end_date=2026-04-15')
+    f_teams = res_teams.json.get('forensic_teams', {})
+    sample_t = f_teams['BOS']
+    assert 'tov_total' in sample_t and sample_t['tov_total'] is not None, "Missing tov_total"
+    assert 'tov_allowed' in sample_t and sample_t['tov_allowed'] is not None, "Missing tov_allowed"
+    assert 'oreb_pct' in sample_t and sample_t['oreb_pct'] is not None, "Missing oreb_pct"
+    assert 'dreb_pct' in sample_t and sample_t['dreb_pct'] is not None, "Missing dreb_pct"
+    assert 'rank_tov_total' in sample_t and sample_t['rank_tov_total'] is not None, "Missing rank_tov_total"
+    assert 'rank_tov_allowed' in sample_t and sample_t['rank_tov_allowed'] is not None, "Missing rank_tov_allowed"
+    assert 'rank_oreb_pct' in sample_t and sample_t['rank_oreb_pct'] is not None, "Missing rank_oreb_pct"
+    assert 'rank_dreb_pct' in sample_t and sample_t['rank_dreb_pct'] is not None, "Missing rank_dreb_pct"
+    
+    # Verify rank badge tooltips and metric rows in app.js
+    res_app_js = client.get('/static/js/app.js')
+    app_js_text = res_app_js.data.decode('utf-8')
+    assert 'Turnovers / G' in app_js_text, "Missing Turnovers / G in app.js"
+    assert 'Opp Turnovers / G' in app_js_text, "Missing Opp Turnovers / G in app.js"
+    assert 'OREB%' in app_js_text, "Missing OREB% in app.js"
+    assert 'DREB%' in app_js_text, "Missing DREB% in app.js"
+    assert 'rank-tooltip' in app_js_text, "Missing rank-tooltip in app.js"
+    assert 'rank-badge' in app_js_text, "Missing rank-badge in app.js"
+    assert 'Small Sample: n=' in app_js_text, "Missing Small Sample label formatting in app.js"
+    
+    print(f"  BOS Metrics: TOV/G={sample_t['tov_total']} (#{sample_t['rank_tov_total']}) | Opp TOV/G={sample_t['tov_allowed']} (#{sample_t['rank_tov_allowed']}) | OREB%={sample_t['oreb_pct']}% (#{sample_t['rank_oreb_pct']}) | DREB%={sample_t['dreb_pct']}% (#{sample_t['rank_dreb_pct']})")
+    print("  [PASS] All new contextual metrics, ranks, sample size labels, and tooltips verified.")
 
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")

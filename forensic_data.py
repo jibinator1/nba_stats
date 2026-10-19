@@ -113,7 +113,8 @@ def make_empty_team_profile(team):
         },
         'paint_touches_pg': None, 'three_point_rate': None,
         'def_rtg': None, 'off_rtg': None, 'pts_allowed': None, 'pts_scored': None,
-        'reb_total': None, 'reb_allowed': None, 'ast_total': None, 'ast_allowed': None,
+        'reb_total': None, 'reb_allowed': None, 'oreb_pct': None, 'dreb_pct': None,
+        'ast_total': None, 'ast_allowed': None, 'tov_total': None, 'tov_allowed': None,
         'fg3m_total': None, 'fg3m_allowed': None, 'fg3a_total': None, 'fg3a_allowed': None,
         'fg_pct': None, 'fg_pct_opp': None
     }
@@ -365,8 +366,12 @@ def calculate_team_forensics(logs_df, paired_df):
             'pts_scored': round(off_pts_pg, 1),
             'reb_total': round(t_games['REB'].mean(), 1),
             'reb_allowed': round(t_games['REB_OPP'].mean(), 1),
+            'oreb_pct': round((t_games['OREB'].sum() / (t_games['OREB'].sum() + t_games['DREB_OPP'].sum()) * 100) if (t_games['OREB'].sum() + t_games['DREB_OPP'].sum()) > 0 else 28.0, 1),
+            'dreb_pct': round((t_games['DREB'].sum() / (t_games['DREB'].sum() + t_games['OREB_OPP'].sum()) * 100) if (t_games['DREB'].sum() + t_games['OREB_OPP'].sum()) > 0 else 74.0, 1),
             'ast_total': round(t_games['AST'].mean(), 1),
             'ast_allowed': round(t_games['AST_OPP'].mean(), 1),
+            'tov_total': round(avg_tov, 1),
+            'tov_allowed': round(t_games['TOV_OPP'].mean(), 1),
             'fg3m_total': round(t_games['FG3M'].mean(), 1),
             'fg3m_allowed': round(t_games['FG3M_OPP'].mean(), 1),
             'fg3a_total': round(t_games['FG3A'].mean(), 1),
@@ -381,7 +386,9 @@ def calculate_team_forensics(logs_df, paired_df):
         ('def_rtg', True), ('off_rtg', False),
         ('pts_scored', False), ('pts_allowed', True),
         ('reb_total', False), ('reb_allowed', True),
+        ('oreb_pct', False), ('dreb_pct', False),
         ('ast_total', False), ('ast_allowed', True),
+        ('tov_total', True), ('tov_allowed', False),
         ('fg3m_total', False), ('fg3m_allowed', True),
         ('fg3a_total', False), ('fg3a_allowed', True),
         ('fg_pct', False), ('fg_pct_opp', True),
@@ -762,7 +769,8 @@ def run_forensic_pipeline():
             'opp_oreb': int(r['OREB_OPP']),
             'stl': int(r['STL']),
             'blk': int(r['BLK']),
-            'tov': int(r['TOV'])
+            'tov': int(r['TOV']),
+            'opp_tov': int(r['TOV_OPP'])
         })
     with open(out_team_logs_file, 'w', encoding='utf-8') as f:
         json.dump(team_game_logs, f, separators=(',', ':'), cls=NumpyEncoder)
