@@ -148,7 +148,7 @@ def load_all_schedule_games():
         for a, h in DEFAULT_PAIRINGS:
             raw_games.append({
                 'game_id': f"NBA_{a}_{h}",
-                'gameday': '2026-10-19',
+                'gameday': '2026-10-20',
                 'away_team': a,
                 'home_team': h,
                 'away_score': None,
@@ -158,7 +158,7 @@ def load_all_schedule_games():
             })
 
     # Exclusively filter and sort for 2026-27 season games
-    raw_games = [g for g in raw_games if g.get('gameday', '') >= '2026-10-19']
+    raw_games = [g for g in raw_games if g.get('gameday', '') >= '2026-10-20']
     raw_games.sort(key=lambda x: (x.get('gameday', ''), x.get('game_id', '')))
 
     enriched = []
@@ -301,7 +301,7 @@ def matchup_view(away, home):
 @app.route('/api/schedule')
 def api_schedule():
     all_games = load_all_schedule_games()
-    s_date = request.args.get('start_date', '2026-10-19')
+    s_date = request.args.get('start_date', '2026-10-20')
     e_date = request.args.get('end_date', '2027-04-14')
 
     filtered = [g for g in all_games if s_date <= g['gameday'] <= e_date]

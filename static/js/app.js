@@ -649,7 +649,7 @@ function renderScheduleGames() {
     if (!container) return;
 
     // Strict 2026-27 Season Schedule Filter
-    let games = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-19');
+    let games = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
 
     if (selectedScheduleDate && selectedScheduleDate !== 'all') {
         games = games.filter(g => g.gameday === selectedScheduleDate);
@@ -694,7 +694,7 @@ function renderScheduleDatePills() {
     const container = document.getElementById('schedule-date-pills');
     if (!container) return;
 
-    const seasonGames = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-19');
+    const seasonGames = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
 
     const dateCounts = {};
     seasonGames.forEach(g => {
@@ -702,7 +702,7 @@ function renderScheduleDatePills() {
         dateCounts[d] = (dateCounts[d] || 0) + 1;
     });
 
-    // Chronological order: Opening Night 2026-10-19 first, then upcoming dates
+    // Chronological order: Opening Night 2026-10-20 first, then upcoming dates
     const sortedDates = Object.keys(dateCounts).sort();
     const isAll = selectedScheduleDate === 'all';
 
@@ -741,7 +741,7 @@ function onScheduleSeasonChange(season) {
     if (season === '2026') {
         if (titleEl) titleEl.textContent = '2026-27 NBA Forensic Matchup Lab';
         if (seasonPill) seasonPill.textContent = '2026-27 Tracking';
-        startDate = '2026-10-19';
+        startDate = '2026-10-20';
         endDate = '2027-04-14';
     } else if (season === '2025') {
         if (titleEl) titleEl.textContent = '2025-26 NBA Forensic Matchup Lab';
