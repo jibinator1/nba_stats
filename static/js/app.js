@@ -40,7 +40,7 @@ const defaultSeasonStart = APP_DATA.startDate || '2025-10-02';
 // State variables: Start at start of last season to current date (dynamic)
 let startDate = defaultSeasonStart;
 let endDate = APP_DATA.endDate || clientTodayStr;
-let currentScheduleSeason = '2025';
+let currentScheduleSeason = '2026';
 let selectedScheduleDate = 'all';
 let currentScheduleTeam = 'ALL';
 let scheduleSearchQuery = '';
@@ -648,16 +648,8 @@ function renderScheduleGames() {
     const container = document.getElementById('schedule-games-container');
     if (!container) return;
 
-    let games = [...allScheduleGames];
-
-    if (currentScheduleSeason === '2026') {
-        games = games.filter(g => g.gameday && g.gameday >= '2026-10-19');
-    } else if (currentScheduleSeason === '2025') {
-        games = games.filter(g => g.gameday && g.gameday < '2026-10-19');
-    }
-
-    if (startDate) games = games.filter(g => g.gameday >= startDate);
-    if (endDate) games = games.filter(g => g.gameday <= endDate);
+    // Strict 2026-27 Season Schedule Filter
+    let games = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-19');
 
     if (selectedScheduleDate && selectedScheduleDate !== 'all') {
         games = games.filter(g => g.gameday === selectedScheduleDate);
@@ -688,7 +680,7 @@ function renderScheduleGames() {
             <div class="glass-panel rounded-xl p-12 text-center text-slate-400 space-y-2 border border-[#30363d]">
                 <i data-lucide="calendar-x" class="w-8 h-8 mx-auto text-slate-500 mb-1"></i>
                 <p class="font-medium text-slate-300">No scheduled matchups match the selected criteria.</p>
-                <p class="text-xs text-slate-500">Pick another slate date or broaden your date range.</p>
+                <p class="text-xs text-slate-500">Pick another slate date or reset your team filter.</p>
             </div>
         `;
     } else {
@@ -702,13 +694,7 @@ function renderScheduleDatePills() {
     const container = document.getElementById('schedule-date-pills');
     if (!container) return;
 
-    let seasonGames = allScheduleGames.filter(g => {
-        if (currentScheduleSeason === '2026' && g.gameday < '2026-10-19') return false;
-        if (currentScheduleSeason === '2025' && g.gameday >= '2026-10-19') return false;
-        if (startDate && g.gameday < startDate) return false;
-        if (endDate && g.gameday > endDate) return false;
-        return true;
-    });
+    const seasonGames = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-19');
 
     const dateCounts = {};
     seasonGames.forEach(g => {
@@ -716,11 +702,12 @@ function renderScheduleDatePills() {
         dateCounts[d] = (dateCounts[d] || 0) + 1;
     });
 
-    const sortedDates = Object.keys(dateCounts).sort().reverse();
+    // Chronological order: Opening Night 2026-10-19 first, then upcoming dates
+    const sortedDates = Object.keys(dateCounts).sort();
     const isAll = selectedScheduleDate === 'all';
 
     let html = `
-        <button onclick="filterScheduleDate('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
+        <button onclick="filterScheduleDate('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
             All Dates (${sortedDates.length})
         </button>
     `;
@@ -728,7 +715,7 @@ function renderScheduleDatePills() {
     sortedDates.forEach(d => {
         const isActive = selectedScheduleDate === d;
         html += `
-            <button onclick="filterScheduleDate('${d}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isActive ? 'bg-[#30363d] text-slate-100 border-slate-500 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
+            <button onclick="filterScheduleDate('${d}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isActive ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
                 ${d} <span class="text-[10px] text-slate-500 font-mono ml-0.5">(${dateCounts[d]})</span>
             </button>
         `;

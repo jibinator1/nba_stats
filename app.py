@@ -145,17 +145,21 @@ def load_all_schedule_games():
             print(f"Error fetching remote schedule_games.json: {e}")
 
     if not raw_games:
-        today_str = datetime.now().strftime("%Y-%m-%d")
         for a, h in DEFAULT_PAIRINGS:
             raw_games.append({
                 'game_id': f"NBA_{a}_{h}",
-                'gameday': today_str,
+                'gameday': '2026-10-19',
                 'away_team': a,
                 'home_team': h,
                 'away_score': None,
                 'home_score': None,
-                'is_final': False
+                'is_final': False,
+                'gametime': '7:30 PM ET'
             })
+
+    # Exclusively filter and sort for 2026-27 season games
+    raw_games = [g for g in raw_games if g.get('gameday', '') >= '2026-10-19']
+    raw_games.sort(key=lambda x: (x.get('gameday', ''), x.get('game_id', '')))
 
     enriched = []
     for g in raw_games:
@@ -166,7 +170,7 @@ def load_all_schedule_games():
         enriched.append({
             'game_id': g['game_id'],
             'gameday': g['gameday'],
-            'gametime': 'FINAL' if is_fin else '7:30 PM ET',
+            'gametime': g.get('gametime') or ('FINAL' if is_fin else '7:30 PM ET'),
             'away_team': away,
             'away_team_name': NBA_TEAM_NAMES.get(away, away),
             'away_record': g.get('away_record'),
@@ -297,26 +301,15 @@ def matchup_view(away, home):
 @app.route('/api/schedule')
 def api_schedule():
     all_games = load_all_schedule_games()
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    season = request.args.get('season', '2025')
-
-    default_s_date = '2026-10-19' if season == '2026' else '2025-10-02'
-    default_e_date = '2027-04-14' if season == '2026' else today_str
-
-    s_date = request.args.get('start_date', default_s_date)
-    e_date = request.args.get('end_date', default_e_date)
+    s_date = request.args.get('start_date', '2026-10-19')
+    e_date = request.args.get('end_date', '2027-04-14')
 
     filtered = [g for g in all_games if s_date <= g['gameday'] <= e_date]
-    if season == '2026':
-        filtered = [g for g in filtered if g['gameday'] >= '2026-10-19']
-    elif season == '2025':
-        filtered = [g for g in filtered if g['gameday'] < '2026-10-19']
-
-    unique_dates = sorted(set(g['gameday'] for g in filtered), reverse=True)
+    unique_dates = sorted(set(g['gameday'] for g in filtered))
     completed = [g for g in filtered if g.get('is_final')]
 
     return jsonify({
-        'season': season,
+        'season': '2026-27',
         'start_date': s_date,
         'end_date': e_date,
         'total_games': len(filtered),
