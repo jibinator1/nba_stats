@@ -226,7 +226,7 @@ function generateDeepDiveModalHtml(g) {
             </div>
 
             <!-- Pillar 1: Pace, Game Flow & Transition -->
-            <div>
+            <div id="bucket-pace" class="scroll-mt-20">
                 <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
                     <i data-lucide="gauge" class="w-3.5 h-3.5"></i>
                     <span>Pillar 1: Pace, Game Flow & Transition</span>
@@ -243,7 +243,7 @@ function generateDeepDiveModalHtml(g) {
             </div>
 
             <!-- Pillar 2: Perimeter & Paint Defense -->
-            <div>
+            <div id="bucket-defense" class="scroll-mt-20">
                 <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
                     <i data-lucide="shield" class="w-3.5 h-3.5"></i>
                     <span>Pillar 2: Perimeter & Paint Defense</span>
@@ -262,7 +262,7 @@ function generateDeepDiveModalHtml(g) {
             </div>
 
             <!-- Pillar 3: Offensive Play Type & Scheme -->
-            <div>
+            <div id="bucket-scheme" class="scroll-mt-20">
                 <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider py-1 px-2 bg-[#161b22] rounded flex items-center gap-1.5">
                     <i data-lucide="zap" class="w-3.5 h-3.5"></i>
                     <span>Pillar 3: Offensive Play Type & Scheme</span>
@@ -278,7 +278,7 @@ function generateDeepDiveModalHtml(g) {
         </div>
 
         <!-- 4. Pillar 4: Player Usage Profiles -->
-        <div class="glass-panel rounded-xl p-4 border border-[#30363d] space-y-3">
+        <div id="bucket-players" class="glass-panel rounded-xl p-4 border border-[#30363d] space-y-3 scroll-mt-20">
             <div class="flex items-center space-x-2 border-b border-[#30363d] pb-2">
                 <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
                 <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pillar 4: Player Usage Profiles (Top 4 Rotation Distributions)</h4>

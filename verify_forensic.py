@@ -50,6 +50,7 @@ def run_audit():
     routes = [
         ('/', 200),
         ('/profiles', 200),
+        ('/insights', 200),
         ('/api/schedule', 200),
         ('/api/player-profiles', 200),
         ('/api/forensic-teams', 200),

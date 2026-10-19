@@ -433,22 +433,29 @@ function reloadAllData() {
     safeCreateIcons();
 }
 
+let currentInsightsMatchup = null;
+
 function switchTab(tabId) {
     const schedSection = document.getElementById('tab-schedule');
     const profileSection = document.getElementById('tab-profiles');
+    const insightsSection = document.getElementById('tab-insights');
     const btnSched = document.getElementById('tab-btn-schedule');
     const btnProfiles = document.getElementById('tab-btn-profiles');
+    const btnInsights = document.getElementById('tab-btn-insights');
 
-    if (tabId === 'schedule') {
-        schedSection.classList.remove('hidden');
-        profileSection.classList.add('hidden');
-        btnSched.className = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
-        btnProfiles.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
-    } else {
-        schedSection.classList.add('hidden');
-        profileSection.classList.remove('hidden');
-        btnProfiles.className = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
-        btnSched.className = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
+    const activeClass = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
+    const inactiveClass = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
+
+    if (schedSection) schedSection.classList.toggle('hidden', tabId !== 'schedule');
+    if (profileSection) profileSection.classList.toggle('hidden', tabId !== 'profiles');
+    if (insightsSection) insightsSection.classList.toggle('hidden', tabId !== 'insights');
+
+    if (btnSched) btnSched.className = (tabId === 'schedule') ? activeClass : inactiveClass;
+    if (btnProfiles) btnProfiles.className = (tabId === 'profiles') ? activeClass : inactiveClass;
+    if (btnInsights) btnInsights.className = (tabId === 'insights') ? activeClass : inactiveClass;
+
+    if (tabId === 'insights' && !currentInsightsMatchup) {
+        loadInsightsTab();
     }
     safeCreateIcons();
 }
@@ -530,14 +537,14 @@ function renderGameCardHtml(g) {
                 </div>
                 <div class="flex items-center space-x-2">
                     ${statusBadge}
-                    <button onclick="openDeepDiveModal('${g.game_id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-800/60 transition flex items-center space-x-1.5 shadow-sm active:scale-95">
-                        <i data-lucide="scan" class="w-3.5 h-3.5"></i>
-                        <span>Deep Dive</span>
+                    <button onclick="event.stopPropagation(); openMatchupInsights('${aTeam}', '${hTeam}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-800/60 transition flex items-center space-x-1.5 shadow-sm active:scale-95 cursor-pointer" title="View Matchup Insights">
+                        <i data-lucide="brain" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Insights</span>
                     </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-12 items-center py-1 gap-2">
+            <div onclick="openMatchupInsights('${aTeam}', '${hTeam}')" class="grid grid-cols-12 items-center py-1.5 gap-2 cursor-pointer hover:bg-[#21262d]/40 rounded-lg px-1 transition" title="Click to view Matchup Insights for ${aTeam} @ ${hTeam}">
                 <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
                     <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
                         <img src="${getTeamLogoUrl(aTeam)}" alt="${aTeam}" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
@@ -776,36 +783,144 @@ async function compareCustomMatchup() {
     const away = document.getElementById('lab-away-select')?.value;
     const home = document.getElementById('lab-home-select')?.value;
     if (!away || !home) return;
+    openMatchupInsights(away, home);
+}
 
-    try {
-        const res = await fetch(`/api/matchup/${away}/${home}`);
-        const data = await res.json();
+function openMatchupInsights(awayTeam, homeTeam) {
+    if (!awayTeam || !homeTeam) return;
+    currentInsightsMatchup = {
+        away: awayTeam.toUpperCase(),
+        home: homeTeam.toUpperCase()
+    };
+    switchTab('insights');
+    populateInsightsMatchupDropdown(currentInsightsMatchup.away, currentInsightsMatchup.home);
+    loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        const customMatchup = {
-            game_id: `NBA_${away}_${home}_custom`,
-            gameday: 'Custom Matchup Analysis',
-            gametime: 'Head-to-Head Alignment',
-            is_final: false,
-            away_team: away,
-            away_team_name: teamNamesMap[away] || away,
-            home_team: home,
-            home_team_name: teamNamesMap[home] || home,
-            away_forensic: data.away_forensic,
-            home_forensic: data.home_forensic,
-            home_def_sim: data.home_def_vs_away_sim,
-            away_def_sim: data.away_def_vs_home_sim
-        };
-
-        allScheduleGames.unshift(customMatchup);
-        const container = document.getElementById('schedule-games-container');
-        if (container) {
-            container.innerHTML = renderGameCardHtml(customMatchup) + container.innerHTML;
-            safeCreateIcons(container);
+function loadInsightsTab() {
+    populateInsightsMatchupDropdown(currentInsightsMatchup?.away, currentInsightsMatchup?.home);
+    if (!currentInsightsMatchup) {
+        const selectEl = document.getElementById('insights-matchup-select');
+        if (selectEl && selectEl.value) {
+            const parts = selectEl.value.split('_');
+            if (parts.length >= 2) {
+                currentInsightsMatchup = { away: parts[0], home: parts[1] };
+            }
         }
-        openDeepDiveModal(customMatchup.game_id);
-    } catch (e) {
-        console.error("Matchup API error:", e);
     }
+    if (currentInsightsMatchup) {
+        loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+    }
+}
+
+function populateInsightsMatchupDropdown(selectedAway = null, selectedHome = null) {
+    const selectEl = document.getElementById('insights-matchup-select');
+    if (!selectEl) return;
+
+    let games = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
+    if (selectedScheduleDate && selectedScheduleDate !== 'all') {
+        const dateFiltered = games.filter(g => g.gameday === selectedScheduleDate);
+        if (dateFiltered.length > 0) games = dateFiltered;
+    }
+
+    if (games.length === 0) {
+        games = allScheduleGames.slice(0, 30);
+    }
+
+    if (selectedAway && selectedHome) {
+        const aU = selectedAway.toUpperCase();
+        const hU = selectedHome.toUpperCase();
+        const found = games.some(g => (g.away_team || '').toUpperCase() === aU && (g.home_team || '').toUpperCase() === hU);
+        if (!found) {
+            games.unshift({
+                away_team: aU,
+                home_team: hU,
+                gameday: 'Matchup Lab',
+                gametime: 'Custom Alignment'
+            });
+        }
+    }
+
+    const currentVal = selectEl.value;
+    let targetKey = (selectedAway && selectedHome) ? `${selectedAway.toUpperCase()}_${selectedHome.toUpperCase()}` : currentVal;
+    let optionsHtml = '';
+
+    games.forEach((g, idx) => {
+        const key = `${g.away_team}_${g.home_team}`;
+        const label = `${g.gameday ? g.gameday + ': ' : ''}${g.away_team} @ ${g.home_team}${g.gametime ? ' (' + g.gametime + ')' : ''}`;
+        if (idx === 0 && !targetKey) targetKey = key;
+        optionsHtml += `<option value="${key}">${label}</option>`;
+    });
+
+    selectEl.innerHTML = optionsHtml;
+    if (targetKey) {
+        selectEl.value = targetKey;
+        const parts = targetKey.split('_');
+        currentInsightsMatchup = { away: parts[0], home: parts[1] };
+    }
+}
+
+function onInsightsMatchupSelectChange(value) {
+    if (!value) return;
+    const parts = value.split('_');
+    if (parts.length >= 2) {
+        currentInsightsMatchup = { away: parts[0].toUpperCase(), home: parts[1].toUpperCase() };
+        loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+    }
+}
+
+function refreshCurrentInsights() {
+    if (!currentInsightsMatchup) {
+        loadInsightsTab();
+        return;
+    }
+    loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+}
+
+function loadMatchupInsights(awayTeam, homeTeam) {
+    const container = document.getElementById('insights-view-container');
+    if (!container) return;
+
+    const aTeam = awayTeam.toUpperCase();
+    const hTeam = homeTeam.toUpperCase();
+    const a = currentForensicTeams[aTeam] || allForensicTeams[aTeam] || {};
+    const h = currentForensicTeams[hTeam] || allForensicTeams[hTeam] || {};
+    const aPlayers = (currentPlayerProfiles && currentPlayerProfiles.length) ? currentPlayerProfiles.filter(p => p.team === aTeam) : allPlayerProfiles.filter(p => p.team === aTeam);
+    const hPlayers = (currentPlayerProfiles && currentPlayerProfiles.length) ? currentPlayerProfiles.filter(p => p.team === hTeam) : allPlayerProfiles.filter(p => p.team === hTeam);
+
+    let g = allScheduleGames.find(x => (x.away_team === aTeam && x.home_team === hTeam) || (x.away_team === hTeam && x.home_team === aTeam));
+    if (!g) {
+        g = {
+            game_id: `NBA_${aTeam}_${hTeam}`,
+            gameday: '2026-10-20',
+            gametime: '7:30 PM ET',
+            away_team: aTeam,
+            away_team_name: teamNamesMap[aTeam] || aTeam,
+            away_record: (a.gp > 0 ? `${a.gp} GP` : '--'),
+            home_team: hTeam,
+            home_team_name: teamNamesMap[hTeam] || hTeam,
+            home_record: (h.gp > 0 ? `${h.gp} GP` : '--'),
+            is_final: false,
+            away_forensic: a,
+            home_forensic: h,
+            away_players: aPlayers,
+            home_players: hPlayers,
+            home_def_sim: {},
+            away_def_sim: {}
+        };
+    } else {
+        g = {
+            ...g,
+            away_forensic: a,
+            home_forensic: h,
+            away_players: aPlayers,
+            home_players: hPlayers
+        };
+    }
+
+    container.innerHTML = generateDeepDiveModalHtml(g);
+    safeCreateIcons(container);
 }
 
 // Initialize on DOM load
@@ -825,7 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initAway = APP_DATA.initialAway;
     const initHome = APP_DATA.initialHome;
     if (initAway && initHome) {
-        setTimeout(() => openMatchupByTeams(initAway, initHome), 150);
+        setTimeout(() => openMatchupInsights(initAway, initHome), 150);
     }
 });
 

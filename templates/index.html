@@ -87,7 +87,7 @@
 
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 border-t border-[#30363d] overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type != 'profiles' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type not in ['profiles', 'insights'] else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
                 <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
                 <span id="nav-schedule-label">Matchup Lab</span>
             </button>
@@ -95,6 +95,10 @@
                 <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
                 <span>Player Usage Profiles</span>
                 <span id="profiles-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#30363d] text-cyan-300 font-mono">{{ player_profiles|length }}</span>
+            </button>
+            <button onclick="switchTab('insights')" id="tab-btn-insights" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type == 'insights' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+                <i data-lucide="brain" class="w-4 h-4 text-cyan-400"></i>
+                <span>Matchup Insights</span>
             </button>
         </div>
     </header>
@@ -105,7 +109,7 @@
         <!-- ============================================================== -->
         <!-- TAB 1: 4-PILLAR MATCHUP LAB & SCHEDULE                         -->
         <!-- ============================================================== -->
-        <section id="tab-schedule" class="{{ 'hidden' if page_type == 'profiles' else '' }} space-y-5">
+        <section id="tab-schedule" class="{{ 'hidden' if page_type in ['profiles', 'insights'] else '' }} space-y-5">
             <!-- Header & Control Bar -->
             <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#30363d] pb-4">
@@ -350,6 +354,76 @@
                             <!-- Populated via renderPlayerProfiles() -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </section>
+ 
+        <!-- ============================================================== -->
+        <!-- TAB 3: NBA FORENSIC MATCHUP INSIGHTS                           -->
+        <!-- ============================================================== -->
+        <section id="tab-insights" class="{{ '' if page_type == 'insights' else 'hidden' }} space-y-5">
+            <!-- Header & Control Toolbar -->
+            <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
+                                <i data-lucide="brain" class="w-4 h-4 text-cyan-400"></i>
+                                <span>NBA Forensic Matchup Insights</span>
+                            </h2>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-cyan-400 border border-[#30363d]">4 Analytical Pillars</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Descriptive forensic breakdown: Pace & Game Flow, Perimeter & Paint Defense, Shot Profiles, Play Types, Similar-Opponent Clusters, and Player Usage Distributions.
+                        </p>
+                    </div>
+
+                    <!-- Matchup Selectors & Actions -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center bg-[#21262d] border border-[#30363d] rounded-lg p-1 space-x-2 text-xs">
+                            <span class="text-slate-400 font-medium text-[11px] pl-2 flex items-center gap-1">
+                                <i data-lucide="crosshair" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                <span>Matchup:</span>
+                            </span>
+                            <select id="insights-matchup-select" onchange="onInsightsMatchupSelectChange(this.value)" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2.5 py-1 text-xs outline-none focus:border-cyan-500 font-medium cursor-pointer max-w-[260px] sm:max-w-xs truncate">
+                                <option value="">Select a matchup...</option>
+                            </select>
+                        </div>
+
+                        <button onclick="refreshCurrentInsights()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Reload Insights">
+                            <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 Intuitive Scouting Buckets Quick-Jumps -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-[#21262d]">
+                    <a href="#bucket-pace" class="px-2.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-[11px] text-slate-300 hover:text-slate-100 flex items-center justify-center space-x-1.5 text-center transition">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400 shrink-0"></i>
+                        <span class="truncate font-semibold">1. Pace & Game Flow</span>
+                    </a>
+                    <a href="#bucket-defense" class="px-2.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-[11px] text-slate-300 hover:text-slate-100 flex items-center justify-center space-x-1.5 text-center transition">
+                        <i data-lucide="shield" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+                        <span class="truncate font-semibold">2. Perimeter & Paint Defense</span>
+                    </a>
+                    <a href="#bucket-scheme" class="px-2.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-[11px] text-slate-300 hover:text-slate-100 flex items-center justify-center space-x-1.5 text-center transition">
+                        <i data-lucide="crosshair" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                        <span class="truncate font-semibold">3. Offensive Play Types</span>
+                    </a>
+                    <a href="#bucket-players" class="px-2.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-[11px] text-slate-300 hover:text-slate-100 flex items-center justify-center space-x-1.5 text-center transition">
+                        <i data-lucide="users" class="w-3.5 h-3.5 text-purple-400 shrink-0"></i>
+                        <span class="truncate font-semibold">4. Player Profiles & Comps</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Insights Dynamic Container -->
+            <div id="insights-view-container" class="space-y-5">
+                <div class="glass-panel rounded-xl p-12 text-center text-slate-400 space-y-3">
+                    <i data-lucide="mouse-pointer-click" class="w-7 h-7 mx-auto text-slate-500"></i>
+                    <p class="text-sm font-semibold text-slate-200">Select any matchup from the dropdown or click a game on Schedule & Matchups</p>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto">Clicking any game card immediately loads its complete 4-pillar forensic breakdown, shot zone alignment, and similar-opponent cluster.</p>
                 </div>
             </div>
         </section>

@@ -294,9 +294,13 @@ def index():
 def profiles():
     return render_main_dashboard(page_type='profiles')
 
+@app.route('/insights', methods=['GET'])
+def insights_view():
+    return render_main_dashboard(page_type='insights')
+
 @app.route('/matchup/<away>/<home>', methods=['GET'])
 def matchup_view(away, home):
-    return render_main_dashboard(page_type='schedule', initial_away=away.upper(), initial_home=home.upper())
+    return render_main_dashboard(page_type='insights', initial_away=away.upper(), initial_home=home.upper())
 
 @app.route('/api/schedule')
 def api_schedule():
