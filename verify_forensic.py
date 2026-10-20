@@ -241,6 +241,62 @@ def run_audit():
 
     print("  [PASS] All executive visual cards, 3 new callout cards, pillar ranks, player distribution bars, and SVG visual alignments verified.")
 
+    # 10. Verify Functional Role Archetypes & Grouped Positional Allowances (Guards / Wings / Bigs)
+    print("\n[10/10] Testing Functional Role Archetypes & Grouped Positional Matchup Tiers...")
+    sample_bos = f_teams['BOS']
+    sample_det = f_teams['DET']
+    
+    # Check Positional Allowances data structure
+    assert 'positional_allowances' in sample_bos, "Missing positional_allowances in BOS"
+    bos_pos = sample_bos['positional_allowances']
+    for stat in ['pts', 'reb', 'fg3m']:
+        assert stat in bos_pos, f"Missing {stat} in positional_allowances"
+        for tier in ['guards', 'wings', 'bigs']:
+            assert tier in bos_pos[stat], f"Missing {tier} in {stat}"
+            assert f'{tier}_pct' in bos_pos[stat], f"Missing {tier}_pct in {stat}"
+            assert f'{tier}_rank' in bos_pos[stat], f"Missing {tier}_rank in {stat}"
+
+    print(f"  BOS Positional Allowances:")
+    print(f"    PTS: Guards {bos_pos['pts']['guards']} (#{bos_pos['pts']['guards_rank']}) | Wings {bos_pos['pts']['wings']} (#{bos_pos['pts']['wings_rank']}) | Bigs {bos_pos['pts']['bigs']} (#{bos_pos['pts']['bigs_rank']})")
+    print(f"    REB: Guards {bos_pos['reb']['guards']} (#{bos_pos['reb']['guards_rank']}) | Wings {bos_pos['reb']['wings']} (#{bos_pos['reb']['wings_rank']}) | Bigs {bos_pos['reb']['bigs']} (#{bos_pos['reb']['bigs_rank']})")
+    print(f"    3PM: Guards {bos_pos['fg3m']['guards']} (#{bos_pos['fg3m']['guards_rank']}) | Wings {bos_pos['fg3m']['wings']} (#{bos_pos['fg3m']['wings_rank']}) | Bigs {bos_pos['fg3m']['bigs']} (#{bos_pos['fg3m']['bigs_rank']})")
+
+    # Check Defensive Play Type PPP allowed & ranks
+    assert 'playtypes_defense' in sample_bos, "Missing playtypes_defense in BOS"
+    roles_to_check = ['PnR_Ball_Handler', 'Spot_Up', 'Isolation', 'PnR_Roll_Man']
+    for role in roles_to_check:
+        assert role in sample_bos['playtypes_defense'], f"Missing {role} in playtypes_defense"
+        role_entry = sample_bos['playtypes_defense'][role]
+        assert 'allowed_ppp' in role_entry, f"Missing allowed_ppp for {role}"
+        assert 'rank' in role_entry, f"Missing rank for {role}"
+    print(f"  BOS Role Defense PPP Allowed:")
+    print(f"    PnR Ball Handler: {sample_bos['playtypes_defense']['PnR_Ball_Handler']['allowed_ppp']} PPP (#{sample_bos['playtypes_defense']['PnR_Ball_Handler']['rank']})")
+    print(f"    Spot-Up: {sample_bos['playtypes_defense']['Spot_Up']['allowed_ppp']} PPP (#{sample_bos['playtypes_defense']['Spot_Up']['rank']})")
+    print(f"    Isolation: {sample_bos['playtypes_defense']['Isolation']['allowed_ppp']} PPP (#{sample_bos['playtypes_defense']['Isolation']['rank']})")
+    print(f"    Roll Man / Rim Runner: {sample_bos['playtypes_defense']['PnR_Roll_Man']['allowed_ppp']} PPP (#{sample_bos['playtypes_defense']['PnR_Roll_Man']['rank']})")
+
+    # Check Player Role Archetypes
+    det_players = [p for p in players if p['team'] == 'DET']
+    assert len(det_players) > 0, "No DET players found"
+    cade = next((p for p in det_players if 'Cade' in p['player_name']), None)
+    assert cade is not None, "Cade Cunningham not found in DET roster"
+    assert 'role_archetype' in cade, "Missing role_archetype in Cade profile"
+    assert cade['role_archetype']['primary_role'] == 'Pick & Roll Ball Handler', f"Unexpected role for Cade: {cade['role_archetype']}"
+    print(f"  Cade Cunningham Role: {cade['role_archetype']['primary_role']} ({cade['role_archetype']['frequency']}%)")
+
+    # Check frontend modal code contains new UI cards
+    assert 'Grouped Positional Allowances (Guards / Wings / Bigs)' in modal_js_text, "Missing Grouped Positional Allowances header in modal.js"
+    assert 'Role Archetype Defense & Scheme Alignment' in modal_js_text, "Missing Role Archetype Defense header in modal.js"
+    assert 'Role Archetype Scheme Alignment' in modal_js_text, "Missing Role Archetype callout in modal.js"
+
+    # Test DET @ BOS matchup endpoint
+    res_matchup = client.get('/api/matchup/DET/BOS')
+    assert res_matchup.status_code == 200, f"Failed /api/matchup/DET/BOS: {res_matchup.status_code}"
+    m_data = res_matchup.json
+    assert 'away_forensic' in m_data and 'home_forensic' in m_data, "Missing forensic profiles in matchup payload"
+    assert 'positional_allowances' in m_data['home_forensic'], "Missing positional_allowances in matchup home profile"
+    print("  [PASS] /api/matchup/DET/BOS renders cleanly with positional allowances and role archetypes.")
+
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
     print("=" * 60)

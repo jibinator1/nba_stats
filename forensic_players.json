@@ -4,6 +4,10 @@
     "team": "ATL",
     "team_name": "Atlanta Hawks",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 35.0
+    },
     "games_played": 1,
     "is_small_sample": true,
     "season_avg": {
@@ -75,6 +79,10 @@
     "team": "ATL",
     "team_name": "Atlanta Hawks",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 21.5
+    },
     "games_played": 80,
     "is_small_sample": false,
     "season_avg": {
@@ -1279,6 +1287,10 @@
     "team": "ATL",
     "team_name": "Atlanta Hawks",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 40.1
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -2567,6 +2579,10 @@
     "team": "ATL",
     "team_name": "Atlanta Hawks",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 25.0
+    },
     "games_played": 84,
     "is_small_sample": false,
     "season_avg": {
@@ -3827,6 +3843,10 @@
     "team": "BOS",
     "team_name": "Boston Celtics",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 44.3
+    },
     "games_played": 87,
     "is_small_sample": false,
     "season_avg": {
@@ -5129,6 +5149,10 @@
     "team": "BOS",
     "team_name": "Boston Celtics",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 28.8
+    },
     "games_played": 81,
     "is_small_sample": false,
     "season_avg": {
@@ -6347,6 +6371,10 @@
     "team": "BOS",
     "team_name": "Boston Celtics",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 23.3
+    },
     "games_played": 22,
     "is_small_sample": false,
     "season_avg": {
@@ -6739,6 +6767,10 @@
     "team": "BOS",
     "team_name": "Boston Celtics",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 39.3
+    },
     "games_played": 89,
     "is_small_sample": false,
     "season_avg": {
@@ -8069,6 +8101,10 @@
     "team": "BKN",
     "team_name": "Brooklyn Nets",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 24.4
+    },
     "games_played": 56,
     "is_small_sample": false,
     "season_avg": {
@@ -8937,6 +8973,10 @@
     "team": "BKN",
     "team_name": "Brooklyn Nets",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
     "games_played": 6,
     "is_small_sample": true,
     "season_avg": {
@@ -9093,6 +9133,10 @@
     "team": "BKN",
     "team_name": "Brooklyn Nets",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 42.9
+    },
     "games_played": 73,
     "is_small_sample": false,
     "season_avg": {
@@ -10199,6 +10243,10 @@
     "team": "BKN",
     "team_name": "Brooklyn Nets",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 43.2
+    },
     "games_played": 70,
     "is_small_sample": false,
     "season_avg": {
@@ -11263,6 +11311,10 @@
     "team": "CHA",
     "team_name": "Charlotte Hornets",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 41.4
+    },
     "games_played": 88,
     "is_small_sample": false,
     "season_avg": {
@@ -12579,6 +12631,10 @@
     "team": "CHA",
     "team_name": "Charlotte Hornets",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 30.1
+    },
     "games_played": 84,
     "is_small_sample": false,
     "season_avg": {
@@ -13839,6 +13895,10 @@
     "team": "CHA",
     "team_name": "Charlotte Hornets",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 22.4
+    },
     "games_played": 71,
     "is_small_sample": false,
     "season_avg": {
@@ -14917,6 +14977,10 @@
     "team": "CHA",
     "team_name": "Charlotte Hornets",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 42.1
+    },
     "games_played": 78,
     "is_small_sample": false,
     "season_avg": {
@@ -16093,6 +16157,10 @@
     "team": "CHI",
     "team_name": "Chicago Bulls",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 35.2
+    },
     "games_played": 59,
     "is_small_sample": false,
     "season_avg": {
@@ -17003,6 +17071,10 @@
     "team": "CHI",
     "team_name": "Chicago Bulls",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 36.1
+    },
     "games_played": 82,
     "is_small_sample": false,
     "season_avg": {
@@ -18235,6 +18307,10 @@
     "team": "CHI",
     "team_name": "Chicago Bulls",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 26.3
+    },
     "games_played": 69,
     "is_small_sample": false,
     "season_avg": {
@@ -19285,6 +19361,10 @@
     "team": "CHI",
     "team_name": "Chicago Bulls",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
+    },
     "games_played": 67,
     "is_small_sample": false,
     "season_avg": {
@@ -20307,6 +20387,10 @@
     "team": "CLE",
     "team_name": "Cleveland Cavaliers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 33.9
+    },
     "games_played": 91,
     "is_small_sample": false,
     "season_avg": {
@@ -21665,6 +21749,10 @@
     "team": "CLE",
     "team_name": "Cleveland Cavaliers",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 36.0
+    },
     "games_played": 91,
     "is_small_sample": false,
     "season_avg": {
@@ -23023,6 +23111,10 @@
     "team": "CLE",
     "team_name": "Cleveland Cavaliers",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.5
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -24311,6 +24403,10 @@
     "team": "CLE",
     "team_name": "Cleveland Cavaliers",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 43.4
+    },
     "games_played": 77,
     "is_small_sample": false,
     "season_avg": {
@@ -25473,6 +25569,10 @@
     "team": "DAL",
     "team_name": "Dallas Mavericks",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 21.5
+    },
     "games_played": 74,
     "is_small_sample": false,
     "season_avg": {
@@ -26593,6 +26693,10 @@
     "team": "DAL",
     "team_name": "Dallas Mavericks",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
+    },
     "games_played": 60,
     "is_small_sample": false,
     "season_avg": {
@@ -27517,6 +27621,10 @@
     "team": "DAL",
     "team_name": "Dallas Mavericks",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 19.1
+    },
     "games_played": 24,
     "is_small_sample": false,
     "season_avg": {
@@ -27937,6 +28045,10 @@
     "team": "DAL",
     "team_name": "Dallas Mavericks",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
     "games_played": 78,
     "is_small_sample": false,
     "season_avg": {
@@ -29113,6 +29225,10 @@
     "team": "DEN",
     "team_name": "Denver Nuggets",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 34.7
+    },
     "games_played": 85,
     "is_small_sample": false,
     "season_avg": {
@@ -30387,6 +30503,10 @@
     "team": "DEN",
     "team_name": "Denver Nuggets",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 44.8
+    },
     "games_played": 75,
     "is_small_sample": false,
     "season_avg": {
@@ -31521,6 +31641,10 @@
     "team": "DEN",
     "team_name": "Denver Nuggets",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
+    },
     "games_played": 54,
     "is_small_sample": false,
     "season_avg": {
@@ -32361,6 +32485,10 @@
     "team": "DEN",
     "team_name": "Denver Nuggets",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 38.3
+    },
     "games_played": 65,
     "is_small_sample": false,
     "season_avg": {
@@ -33355,6 +33483,10 @@
     "team": "DET",
     "team_name": "Detroit Pistons",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 41.5
+    },
     "games_played": 81,
     "is_small_sample": false,
     "season_avg": {
@@ -34573,6 +34705,10 @@
     "team": "DET",
     "team_name": "Detroit Pistons",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
+    },
     "games_played": 80,
     "is_small_sample": false,
     "season_avg": {
@@ -35777,6 +35913,10 @@
     "team": "DET",
     "team_name": "Detroit Pistons",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 45.7
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -37065,6 +37205,10 @@
     "team": "DET",
     "team_name": "Detroit Pistons",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 48.0
+    },
     "games_played": 94,
     "is_small_sample": false,
     "season_avg": {
@@ -38465,6 +38609,10 @@
     "team": "GSW",
     "team_name": "Golden State Warriors",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 36.8
+    },
     "games_played": 49,
     "is_small_sample": false,
     "season_avg": {
@@ -39235,6 +39383,10 @@
     "team": "GSW",
     "team_name": "Golden State Warriors",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 16.4
+    },
     "games_played": 40,
     "is_small_sample": false,
     "season_avg": {
@@ -39879,6 +40031,10 @@
     "team": "GSW",
     "team_name": "Golden State Warriors",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 35.8
+    },
     "games_played": 89,
     "is_small_sample": false,
     "season_avg": {
@@ -41209,6 +41365,10 @@
     "team": "GSW",
     "team_name": "Golden State Warriors",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 44.1
+    },
     "games_played": 74,
     "is_small_sample": false,
     "season_avg": {
@@ -42329,6 +42489,10 @@
     "team": "HOU",
     "team_name": "Houston Rockets",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
+    },
     "games_played": 88,
     "is_small_sample": false,
     "season_avg": {
@@ -43645,6 +43809,10 @@
     "team": "HOU",
     "team_name": "Houston Rockets",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 21.8
+    },
     "games_played": 81,
     "is_small_sample": false,
     "season_avg": {
@@ -44863,6 +45031,10 @@
     "team": "HOU",
     "team_name": "Houston Rockets",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 35.7
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -46151,6 +46323,10 @@
     "team": "HOU",
     "team_name": "Houston Rockets",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 40.5
+    },
     "games_played": 81,
     "is_small_sample": false,
     "season_avg": {
@@ -47369,6 +47545,10 @@
     "team": "IND",
     "team_name": "Indiana Pacers",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 24.0
+    },
     "games_played": 65,
     "is_small_sample": false,
     "season_avg": {
@@ -48363,6 +48543,10 @@
     "team": "IND",
     "team_name": "Indiana Pacers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 33.3
+    },
     "games_played": 60,
     "is_small_sample": false,
     "season_avg": {
@@ -49287,6 +49471,10 @@
     "team": "IND",
     "team_name": "Indiana Pacers",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 46.5
+    },
     "games_played": 52,
     "is_small_sample": false,
     "season_avg": {
@@ -50099,6 +50287,10 @@
     "team": "IND",
     "team_name": "Indiana Pacers",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 38.0
+    },
     "games_played": 48,
     "is_small_sample": false,
     "season_avg": {
@@ -50855,6 +51047,10 @@
     "team": "LAC",
     "team_name": "LA Clippers",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 26.7
+    },
     "games_played": 69,
     "is_small_sample": false,
     "season_avg": {
@@ -51905,6 +52101,10 @@
     "team": "LAC",
     "team_name": "LA Clippers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 37.0
+    },
     "games_played": 46,
     "is_small_sample": false,
     "season_avg": {
@@ -52633,6 +52833,10 @@
     "team": "LAC",
     "team_name": "LA Clippers",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
+    },
     "games_played": 59,
     "is_small_sample": false,
     "season_avg": {
@@ -53543,6 +53747,10 @@
     "team": "LAC",
     "team_name": "LA Clippers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
+    },
     "games_played": 87,
     "is_small_sample": false,
     "season_avg": {
@@ -54845,6 +55053,10 @@
     "team": "LAL",
     "team_name": "Los Angeles Lakers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 47.0
+    },
     "games_played": 66,
     "is_small_sample": false,
     "season_avg": {
@@ -55853,6 +56065,10 @@
     "team": "LAL",
     "team_name": "Los Angeles Lakers",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 31.7
+    },
     "games_played": 61,
     "is_small_sample": false,
     "season_avg": {
@@ -56791,6 +57007,10 @@
     "team": "LAL",
     "team_name": "Los Angeles Lakers",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 22.1
+    },
     "games_played": 70,
     "is_small_sample": false,
     "season_avg": {
@@ -57855,6 +58075,10 @@
     "team": "LAL",
     "team_name": "Los Angeles Lakers",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 30.8
+    },
     "games_played": 83,
     "is_small_sample": false,
     "season_avg": {
@@ -59101,6 +59325,10 @@
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
     "position": "F",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 30.2
+    },
     "games_played": 6,
     "is_small_sample": true,
     "season_avg": {
@@ -59257,6 +59485,10 @@
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
     "position": "F",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 31.7
+    },
     "games_played": 7,
     "is_small_sample": true,
     "season_avg": {
@@ -59430,6 +59662,10 @@
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 48.5
+    },
     "games_played": 8,
     "is_small_sample": true,
     "season_avg": {
@@ -59620,6 +59856,10 @@
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 43.6
+    },
     "games_played": 20,
     "is_small_sample": false,
     "season_avg": {
@@ -59984,6 +60224,10 @@
     "team": "MIA",
     "team_name": "Miami Heat",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 32.1
+    },
     "games_played": 34,
     "is_small_sample": false,
     "season_avg": {
@@ -60544,6 +60788,10 @@
     "team": "MIA",
     "team_name": "Miami Heat",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 40.7
+    },
     "games_played": 79,
     "is_small_sample": false,
     "season_avg": {
@@ -61734,6 +61982,10 @@
     "team": "MIA",
     "team_name": "Miami Heat",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 28.2
+    },
     "games_played": 74,
     "is_small_sample": false,
     "season_avg": {
@@ -62854,6 +63106,10 @@
     "team": "MIA",
     "team_name": "Miami Heat",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 27.8
+    },
     "games_played": 64,
     "is_small_sample": false,
     "season_avg": {
@@ -63834,6 +64090,10 @@
     "team": "MIL",
     "team_name": "Milwaukee Bucks",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 32.6
+    },
     "games_played": 42,
     "is_small_sample": false,
     "season_avg": {
@@ -64506,6 +64766,10 @@
     "team": "MIL",
     "team_name": "Milwaukee Bucks",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 30.1
+    },
     "games_played": 78,
     "is_small_sample": false,
     "season_avg": {
@@ -65682,6 +65946,10 @@
     "team": "MIL",
     "team_name": "Milwaukee Bucks",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 54.0
+    },
     "games_played": 82,
     "is_small_sample": false,
     "season_avg": {
@@ -66914,6 +67182,10 @@
     "team": "MIL",
     "team_name": "Milwaukee Bucks",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 29.4
+    },
     "games_played": 38,
     "is_small_sample": false,
     "season_avg": {
@@ -67530,6 +67802,10 @@
     "team": "MIN",
     "team_name": "Minnesota Timberwolves",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 32.8
+    },
     "games_played": 74,
     "is_small_sample": false,
     "season_avg": {
@@ -68650,6 +68926,10 @@
     "team": "MIN",
     "team_name": "Minnesota Timberwolves",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 21.2
+    },
     "games_played": 94,
     "is_small_sample": false,
     "season_avg": {
@@ -70050,6 +70330,10 @@
     "team": "MIN",
     "team_name": "Minnesota Timberwolves",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
     "games_played": 88,
     "is_small_sample": false,
     "season_avg": {
@@ -71366,6 +71650,10 @@
     "team": "MIN",
     "team_name": "Minnesota Timberwolves",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 46.0
+    },
     "games_played": 92,
     "is_small_sample": false,
     "season_avg": {
@@ -72738,6 +73026,10 @@
     "team": "NOP",
     "team_name": "New Orleans Pelicans",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 37.8
+    },
     "games_played": 69,
     "is_small_sample": false,
     "season_avg": {
@@ -73788,6 +74080,10 @@
     "team": "NOP",
     "team_name": "New Orleans Pelicans",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 30.3
+    },
     "games_played": 75,
     "is_small_sample": false,
     "season_avg": {
@@ -74922,6 +75218,10 @@
     "team": "NOP",
     "team_name": "New Orleans Pelicans",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 20.7
+    },
     "games_played": 66,
     "is_small_sample": false,
     "season_avg": {
@@ -75930,6 +76230,10 @@
     "team": "NOP",
     "team_name": "New Orleans Pelicans",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 37.7
+    },
     "games_played": 58,
     "is_small_sample": false,
     "season_avg": {
@@ -76826,6 +77130,10 @@
     "team": "NYK",
     "team_name": "New York Knicks",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 37.1
+    },
     "games_played": 98,
     "is_small_sample": false,
     "season_avg": {
@@ -78282,6 +78590,10 @@
     "team": "NYK",
     "team_name": "New York Knicks",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 35.3
+    },
     "games_played": 87,
     "is_small_sample": false,
     "season_avg": {
@@ -79584,6 +79896,10 @@
     "team": "NYK",
     "team_name": "New York Knicks",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 29.6
+    },
     "games_played": 106,
     "is_small_sample": false,
     "season_avg": {
@@ -81152,6 +81468,10 @@
     "team": "NYK",
     "team_name": "New York Knicks",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 43.8
+    },
     "games_played": 98,
     "is_small_sample": false,
     "season_avg": {
@@ -82608,6 +82928,10 @@
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 40.5
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -83896,6 +84220,10 @@
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
     "games_played": 85,
     "is_small_sample": false,
     "season_avg": {
@@ -85170,6 +85498,10 @@
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 32.6
+    },
     "games_played": 38,
     "is_small_sample": false,
     "season_avg": {
@@ -85786,6 +86118,10 @@
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
+    },
     "games_played": 69,
     "is_small_sample": false,
     "season_avg": {
@@ -86836,6 +87172,10 @@
     "team": "ORL",
     "team_name": "Orlando Magic",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 22.5
+    },
     "games_played": 84,
     "is_small_sample": false,
     "season_avg": {
@@ -88096,6 +88436,10 @@
     "team": "ORL",
     "team_name": "Orlando Magic",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 28.0
+    },
     "games_played": 94,
     "is_small_sample": false,
     "season_avg": {
@@ -89496,6 +89840,10 @@
     "team": "ORL",
     "team_name": "Orlando Magic",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 39.3
+    },
     "games_played": 91,
     "is_small_sample": false,
     "season_avg": {
@@ -90854,6 +91202,10 @@
     "team": "ORL",
     "team_name": "Orlando Magic",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 21.4
+    },
     "games_played": 43,
     "is_small_sample": false,
     "season_avg": {
@@ -91540,6 +91892,10 @@
     "team": "PHI",
     "team_name": "Philadelphia 76ers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 35.0
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -92828,6 +93184,10 @@
     "team": "PHI",
     "team_name": "Philadelphia 76ers",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 31.3
+    },
     "games_played": 90,
     "is_small_sample": false,
     "season_avg": {
@@ -94172,6 +94532,10 @@
     "team": "PHI",
     "team_name": "Philadelphia 76ers",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 34.8
+    },
     "games_played": 49,
     "is_small_sample": false,
     "season_avg": {
@@ -94942,6 +95306,10 @@
     "team": "PHI",
     "team_name": "Philadelphia 76ers",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 39.7
+    },
     "games_played": 46,
     "is_small_sample": false,
     "season_avg": {
@@ -95670,6 +96038,10 @@
     "team": "PHX",
     "team_name": "Phoenix Suns",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 37.2
+    },
     "games_played": 73,
     "is_small_sample": false,
     "season_avg": {
@@ -96776,6 +97148,10 @@
     "team": "PHX",
     "team_name": "Phoenix Suns",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 27.3
+    },
     "games_played": 65,
     "is_small_sample": false,
     "season_avg": {
@@ -97770,6 +98146,10 @@
     "team": "PHX",
     "team_name": "Phoenix Suns",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 51.2
+    },
     "games_played": 56,
     "is_small_sample": false,
     "season_avg": {
@@ -98638,6 +99018,10 @@
     "team": "PHX",
     "team_name": "Phoenix Suns",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 51.6
+    },
     "games_played": 89,
     "is_small_sample": false,
     "season_avg": {
@@ -99968,6 +100352,10 @@
     "team": "POR",
     "team_name": "Portland Trail Blazers",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 46.9
+    },
     "games_played": 90,
     "is_small_sample": false,
     "season_avg": {
@@ -101312,6 +101700,10 @@
     "team": "POR",
     "team_name": "Portland Trail Blazers",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 23.4
+    },
     "games_played": 76,
     "is_small_sample": false,
     "season_avg": {
@@ -102460,6 +102852,10 @@
     "team": "POR",
     "team_name": "Portland Trail Blazers",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 30.8
+    },
     "games_played": 63,
     "is_small_sample": false,
     "season_avg": {
@@ -103426,6 +103822,10 @@
     "team": "POR",
     "team_name": "Portland Trail Blazers",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 33.7
+    },
     "games_played": 67,
     "is_small_sample": false,
     "season_avg": {
@@ -104448,6 +104848,10 @@
     "team": "SAC",
     "team_name": "Sacramento Kings",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
+    },
     "games_played": 25,
     "is_small_sample": false,
     "season_avg": {
@@ -104882,6 +105286,10 @@
     "team": "SAC",
     "team_name": "Sacramento Kings",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.8
+    },
     "games_played": 80,
     "is_small_sample": false,
     "season_avg": {
@@ -106086,6 +106494,10 @@
     "team": "SAC",
     "team_name": "Sacramento Kings",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 35.7
+    },
     "games_played": 43,
     "is_small_sample": false,
     "season_avg": {
@@ -106772,6 +107184,10 @@
     "team": "SAC",
     "team_name": "Sacramento Kings",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 20.8
+    },
     "games_played": 64,
     "is_small_sample": false,
     "season_avg": {
@@ -107752,6 +108168,10 @@
     "team": "SAS",
     "team_name": "San Antonio Spurs",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 31.1
+    },
     "games_played": 94,
     "is_small_sample": false,
     "season_avg": {
@@ -109152,6 +109572,10 @@
     "team": "SAS",
     "team_name": "San Antonio Spurs",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 42.7
+    },
     "games_played": 95,
     "is_small_sample": false,
     "season_avg": {
@@ -110566,6 +110990,10 @@
     "team": "SAS",
     "team_name": "San Antonio Spurs",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 32.9
+    },
     "games_played": 94,
     "is_small_sample": false,
     "season_avg": {
@@ -111966,6 +112394,10 @@
     "team": "SAS",
     "team_name": "San Antonio Spurs",
     "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 43.5
+    },
     "games_played": 92,
     "is_small_sample": false,
     "season_avg": {
@@ -113338,6 +113770,10 @@
     "team": "TOR",
     "team_name": "Toronto Raptors",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 16.7
+    },
     "games_played": 91,
     "is_small_sample": false,
     "season_avg": {
@@ -114696,6 +115132,10 @@
     "team": "TOR",
     "team_name": "Toronto Raptors",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
+    },
     "games_played": 86,
     "is_small_sample": false,
     "season_avg": {
@@ -115984,6 +116424,10 @@
     "team": "TOR",
     "team_name": "Toronto Raptors",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 27.5
+    },
     "games_played": 75,
     "is_small_sample": false,
     "season_avg": {
@@ -117118,6 +117562,10 @@
     "team": "TOR",
     "team_name": "Toronto Raptors",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
+    },
     "games_played": 69,
     "is_small_sample": false,
     "season_avg": {
@@ -118168,6 +118616,10 @@
     "team": "UTA",
     "team_name": "Utah Jazz",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
     "games_played": 5,
     "is_small_sample": true,
     "season_avg": {
@@ -118307,6 +118759,10 @@
     "team": "UTA",
     "team_name": "Utah Jazz",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 28.0
+    },
     "games_played": 44,
     "is_small_sample": false,
     "season_avg": {
@@ -119007,6 +119463,10 @@
     "team": "UTA",
     "team_name": "Utah Jazz",
     "position": "SG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
+    },
     "games_played": 15,
     "is_small_sample": false,
     "season_avg": {
@@ -119301,6 +119761,10 @@
     "team": "UTA",
     "team_name": "Utah Jazz",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 33.4
+    },
     "games_played": 58,
     "is_small_sample": false,
     "season_avg": {
@@ -120197,6 +120661,10 @@
     "team": "WAS",
     "team_name": "Washington Wizards",
     "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
     "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
@@ -120463,6 +120931,10 @@
     "team": "WAS",
     "team_name": "Washington Wizards",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 37.7
+    },
     "games_played": 15,
     "is_small_sample": false,
     "season_avg": {
@@ -120757,6 +121229,10 @@
     "team": "WAS",
     "team_name": "Washington Wizards",
     "position": "SF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 31.1
+    },
     "games_played": 51,
     "is_small_sample": false,
     "season_avg": {
@@ -121555,6 +122031,10 @@
     "team": "WAS",
     "team_name": "Washington Wizards",
     "position": "PG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 42.4
+    },
     "games_played": 85,
     "is_small_sample": false,
     "season_avg": {

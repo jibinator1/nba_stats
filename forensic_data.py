@@ -125,6 +125,7 @@ def load_injuries_by_team():
 def make_empty_team_profile(team):
     """Creates a blank forensic profile for a team with 0 games in the sample."""
     zones = ('restricted_area', 'paint_non_ra', 'mid_range', 'corner_3', 'above_break_3')
+    empty_pos = {'guards': None, 'wings': None, 'bigs': None, 'guards_pct': None, 'wings_pct': None, 'bigs_pct': None}
     return {
         'team': team,
         'team_name': NBA_TEAM_NAMES.get(team, team),
@@ -145,6 +146,7 @@ def make_empty_team_profile(team):
         'rebounding': {'dreb_secured_pct': None, 'oreb_allowed_pct': None},
         'playtypes_offense': {},
         'playtypes_defense': {},
+        'positional_allowances': {'pts': dict(empty_pos), 'reb': dict(empty_pos), 'fg3m': dict(empty_pos)},
         'turnover_profile': {
             'avg_total': None, 'live_ball_per_game': None, 'live_ball_pct': None,
             'dead_ball_per_game': None, 'dead_ball_pct': None,
@@ -163,6 +165,25 @@ def calculate_team_forensics(logs_df, paired_df):
     """Calculates all 4 pillars of forensic metrics for each of the 30 teams."""
     team_profiles = {}
     injuries_by_team = load_injuries_by_team()
+    
+    # Pre-aggregate opponent stats by grouped positional tiers (Guards, Wings, Bigs)
+    pos_file = os.path.join(BASE_DIR, 'positions.csv')
+    pos_map = {}
+    if os.path.exists(pos_file):
+        pos_df = pd.read_csv(pos_file)
+        pos_map = dict(zip(pos_df['Player'], pos_df['Pos']))
+    pos_map.update({
+        'Lamont Butler': 'PG', 'Trevon Scott': 'SF', 'Jimmy Butler III': 'SF',
+        'Alperen Sengun': 'C', 'Adama Bal': 'SG', 'AJ Green': 'SG',
+        'Luka Dončić': 'PG', 'Nikola Jokić': 'C', 'Nikola Joki?': 'C', 'Luka Don?i?': 'PG'
+    })
+    tier_map = {'PG': 'guards', 'SG': 'guards', 'SF': 'wings', 'PF': 'wings', 'C': 'bigs'}
+    
+    clean_opp_logs = logs_df.dropna(subset=['PLAYER_NAME', 'MATCHUP']).copy()
+    clean_opp_logs['POS'] = clean_opp_logs['PLAYER_NAME'].map(pos_map).fillna('SF')
+    clean_opp_logs['TIER'] = clean_opp_logs['POS'].map(tier_map).fillna('wings')
+    clean_opp_logs['OPP_TEAM'] = clean_opp_logs['MATCHUP'].apply(lambda x: str(x).split()[-1])
+    opp_tier_agg = clean_opp_logs.groupby(['OPP_TEAM', 'TIER'])[['PTS', 'REB', 'FG3M']].sum()
     
     # Pre-calculated team totals
     for team in NBA_TEAMS:
@@ -336,6 +357,29 @@ def calculate_team_forensics(logs_df, paired_df):
         # Paint touch volume
         paint_touches = round(21.5 + (team_fga - team_fg3a) * 0.35, 1)
 
+        # Grouped Positional Allowances (Guards: PG/SG, Wings: SF/PF, Bigs: C)
+        pos_allow = {}
+        for stat, stat_key in [('pts', 'PTS'), ('reb', 'REB'), ('fg3m', 'FG3M')]:
+            g_val = float(opp_tier_agg.loc[(team, 'guards'), stat_key]) if (team, 'guards') in opp_tier_agg.index else 0.0
+            w_val = float(opp_tier_agg.loc[(team, 'wings'), stat_key]) if (team, 'wings') in opp_tier_agg.index else 0.0
+            b_val = float(opp_tier_agg.loc[(team, 'bigs'), stat_key]) if (team, 'bigs') in opp_tier_agg.index else 0.0
+            tot_val = g_val + w_val + b_val
+            
+            g_pg = round(g_val / gp, 1) if gp > 0 else None
+            w_pg = round(w_val / gp, 1) if gp > 0 else None
+            b_pg = round(b_val / gp, 1) if gp > 0 else None
+            
+            g_pct = round((g_val / tot_val) * 100, 1) if tot_val > 0 else 33.3
+            w_pct = round((w_val / tot_val) * 100, 1) if tot_val > 0 else 33.3
+            b_pct = round(100.0 - g_pct - w_pct, 1) if tot_val > 0 else 33.4
+            
+            pos_allow[stat] = {
+                'guards': g_pg, 'wings': w_pg, 'bigs': b_pg,
+                'guards_pct': g_pct if gp > 0 else None,
+                'wings_pct': w_pct if gp > 0 else None,
+                'bigs_pct': b_pct if gp > 0 else None
+            }
+
         team_profiles[team] = {
             'team': team,
             'team_name': NBA_TEAM_NAMES.get(team, team),
@@ -383,6 +427,7 @@ def calculate_team_forensics(logs_df, paired_df):
                 'corner_3': {'freq': off_corner3_freq, 'ppp': off_corner3_ppp},
                 'above_break_3': {'freq': off_ab_break3_freq, 'ppp': off_ab_break3_ppp}
             },
+            'positional_allowances': pos_allow,
             'transition_ppp_allowed': round(1.18 * scale, 2),
             'wide_open_3pt': {
                 'allowed_freq': wide_open_3pa_freq,
@@ -470,6 +515,19 @@ def calculate_team_forensics(logs_df, paired_df):
         (('playtypes_offense', 'PnR_Ball_Handler', 'freq'), False, 'rank_pnr_bh_freq'),
         (('playtypes_offense', 'Isolation', 'freq'), False, 'rank_iso_freq'),
         (('playtypes_offense', 'Spot_Up', 'freq'), False, 'rank_spot_freq'),
+        (('playtypes_defense', 'PnR_Ball_Handler', 'allowed_ppp'), True, 'rank_pnr_bh_allowed_ppp'),
+        (('playtypes_defense', 'Spot_Up', 'allowed_ppp'), True, 'rank_spot_up_allowed_ppp'),
+        (('playtypes_defense', 'Isolation', 'allowed_ppp'), True, 'rank_iso_allowed_ppp'),
+        (('playtypes_defense', 'PnR_Roll_Man', 'allowed_ppp'), True, 'rank_pnr_rm_allowed_ppp'),
+        (('positional_allowances', 'pts', 'guards'), True, 'rank_pts_allowed_guards'),
+        (('positional_allowances', 'pts', 'wings'), True, 'rank_pts_allowed_wings'),
+        (('positional_allowances', 'pts', 'bigs'), True, 'rank_pts_allowed_bigs'),
+        (('positional_allowances', 'reb', 'guards'), True, 'rank_reb_allowed_guards'),
+        (('positional_allowances', 'reb', 'wings'), True, 'rank_reb_allowed_wings'),
+        (('positional_allowances', 'reb', 'bigs'), True, 'rank_reb_allowed_bigs'),
+        (('positional_allowances', 'fg3m', 'guards'), True, 'rank_fg3m_allowed_guards'),
+        (('positional_allowances', 'fg3m', 'wings'), True, 'rank_fg3m_allowed_wings'),
+        (('positional_allowances', 'fg3m', 'bigs'), True, 'rank_fg3m_allowed_bigs'),
         (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'),
         (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
         (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'),
@@ -505,6 +563,25 @@ def calculate_team_forensics(logs_df, paired_df):
         for t in NBA_TEAMS:
             if t not in ranked_teams:
                 team_profiles[t][rank_key] = None
+
+    # Populate ranks into playtypes_defense and positional_allowances sub-dicts
+    for t, prof in team_profiles.items():
+        if prof.get('playtypes_defense'):
+            pt_keys = [
+                ('PnR_Ball_Handler', 'rank_pnr_bh_allowed_ppp'),
+                ('Spot_Up', 'rank_spot_up_allowed_ppp'),
+                ('Isolation', 'rank_iso_allowed_ppp'),
+                ('PnR_Roll_Man', 'rank_pnr_rm_allowed_ppp')
+            ]
+            for pt, r_k in pt_keys:
+                if pt in prof['playtypes_defense']:
+                    prof['playtypes_defense'][pt]['rank'] = prof.get(r_k)
+        if prof.get('positional_allowances'):
+            for st in ['pts', 'reb', 'fg3m']:
+                if st in prof['positional_allowances']:
+                    prof['positional_allowances'][st]['guards_rank'] = prof.get(f'rank_{st}_allowed_guards')
+                    prof['positional_allowances'][st]['wings_rank'] = prof.get(f'rank_{st}_allowed_wings')
+                    prof['positional_allowances'][st]['bigs_rank'] = prof.get(f'rank_{st}_allowed_bigs')
 
     return team_profiles
 
@@ -720,11 +797,40 @@ def calculate_player_usage_profiles(logs_df):
             raw_pos = pos_map.get(p_name, 'F')
             clean_pos = raw_pos if (isinstance(raw_pos, str) and raw_pos.strip() and raw_pos != 'nan') else 'F'
             
+            # Primary offensive role archetype and frequency estimation
+            if clean_pos in ['PG', 'SG']:
+                if ast_pct >= 24.0 or usg_pct >= 26.0:
+                    primary_role = 'Pick & Roll Ball Handler'
+                    role_freq = round(min(52.0, max(25.0, usg_pct * 0.85 + ast_pct * 0.35)), 1)
+                elif avg_fg3a >= 4.5:
+                    primary_role = 'Spot-Up Shooter'
+                    role_freq = round(min(54.0, max(28.0, (avg_fg3a / max(1.0, p_logs['FGA'].mean())) * 75.0)), 1)
+                else:
+                    primary_role = 'Pick & Roll Ball Handler'
+                    role_freq = round(min(40.0, max(20.0, usg_pct * 0.9)), 1)
+            elif clean_pos in ['SF', 'PF']:
+                if usg_pct >= 25.0 and ast_pct >= 18.0:
+                    primary_role = 'Isolation Scorer'
+                    role_freq = round(min(35.0, max(18.0, usg_pct * 0.8)), 1)
+                elif avg_fg3a >= 3.5:
+                    primary_role = 'Spot-Up Shooter'
+                    role_freq = round(min(48.0, max(26.0, (avg_fg3a / max(1.0, p_logs['FGA'].mean())) * 70.0)), 1)
+                else:
+                    primary_role = 'Isolation Scorer'
+                    role_freq = round(min(28.0, max(15.0, usg_pct * 0.7)), 1)
+            else:
+                primary_role = 'Roll Man / Rim Runner'
+                role_freq = round(min(50.0, max(22.0, 20.0 + reb_pct * 0.8 + (avg_paint_pts / max(1.0, avg_pts)) * 18.0)), 1)
+
             player_profiles.append({
                 'player_name': p_name,
                 'team': team,
                 'team_name': NBA_TEAM_NAMES.get(team, team),
                 'position': clean_pos,
+                'role_archetype': {
+                    'primary_role': primary_role,
+                    'frequency': role_freq
+                },
                 'games_played': gp,
                 'is_small_sample': is_small_sample,
                 'season_avg': {

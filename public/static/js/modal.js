@@ -120,6 +120,14 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
     const estNeutralPace = ((parseFloat(a.neutral_pace || aPaceVal) + parseFloat(h.neutral_pace || hPaceVal)) / 2).toFixed(1);
     const calloutPace = `${aTeam} neutral pace: ${a.neutral_pace || aPaceVal} (Rank ${aPaceRank}). ${hTeam} neutral pace: ${h.neutral_pace || hPaceVal} (Rank ${hPaceRank}). Projected neutral tempo: ${estNeutralPace} possessions.`;
 
+    // 7. Role Archetype Scheme Alignment (PnR Ball Handler & Primary Creator)
+    const aLeadBallHandler = (aPlayers && aPlayers.length) ? (aPlayers.find(p => p.role_archetype?.primary_role === 'Pick & Roll Ball Handler') || aPlayers[0]) : null;
+    const aLeadRoleName = aLeadBallHandler ? `${aLeadBallHandler.player_name} (${aLeadBallHandler.position})` : `${aTeam} Primary Creator`;
+    const aLeadRoleFreq = aLeadBallHandler?.role_archetype?.frequency || 41.5;
+    const hPnrPpp = h.playtypes_defense?.PnR_Ball_Handler?.allowed_ppp || 0.91;
+    const hPnrRank = formatCalloutRank(h.rank_pnr_bh_allowed_ppp || h.playtypes_defense?.PnR_Ball_Handler?.rank, h.is_small_sample);
+    const calloutRole = `${hTeam} allows ${hPnrPpp} points per possession to Pick & Roll Ball Handlers (Rank ${hPnrRank}). ${aTeam}'s ${aLeadRoleName} operates as the Pick & Roll Ball Handler on ${aLeadRoleFreq}% of his possessions.`;
+
     const makeCard = (title, icon, leftStat, rightStat, footer) => `
         <div class="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] flex flex-col justify-between space-y-2.5 hover:border-[#30363d] transition">
             <div class="flex items-center justify-between text-slate-300 font-bold text-xs uppercase tracking-wider border-b border-[#21262d] pb-1.5">
@@ -148,6 +156,7 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                 ${makeCard('3PT Perimeter Alignment', 'crosshair', `${hTeam} Def: ${h3paDef} 3PA (${h3paDefRank})`, `${aTeam} Off: ${a3paOff} 3PA (${a3paOffRank})`, callout3pt)}
                 ${makeCard('Rim Protection vs. Paint Volume', 'shield', `${hTeam} Def: ${hRaPpp} PPP (${hRaRank})`, `${aTeam} Paint: ${topAPaint ? topAPaint.player_name + ' ' + topAPaintVal + '/G' : aTeam + ' ' + topAPaintVal + '/G'}`, calloutPaint)}
+                ${makeCard('Role Archetype Scheme Alignment', 'user-check', `${hTeam} Def: ${hPnrPpp} PPP (${hPnrRank})`, `${aTeam} Creator: ${aLeadBallHandler ? aLeadBallHandler.player_name : aTeam} (${aLeadRoleFreq}%)`, calloutRole)}
                 ${makeCard('Transition Flow & Alignment', 'wind', `${aTeam} Off: ${aTransFreq}% (${aTransRank})`, `${hTeam} Def: ${hTransPpp} PPP (${hTransPppRank})`, calloutTrans)}
                 ${makeCard('Live-Ball Turnover Leakage', 'arrow-left-right', `${hTeam} Def Gen: ${hPtsGen} PTS (${hPtsGenRank})`, `${aTeam} Surr: ${aPtsSurr} PTS (${aPtsSurrRank})`, calloutTov)}
                 ${makeCard('Glass & Rebound Alignment', 'maximize-2', `${aTeam} Off OREB%: ${aOrebPct}% (${aOrebRank})`, `${hTeam} Def DREB%: ${hDrebPct}% (${hDrebRank})`, calloutReb)}
@@ -231,6 +240,157 @@ function generateDeepDiveModalHtml(g) {
                                 <div class="flex items-center justify-between text-[9.5px] text-slate-500 pt-0.5">
                                     <span>USG: ${ctx.usg_pct != null ? ctx.usg_pct + '%' : '--'} • 3PA: ${sAvg.fg3a != null ? sAvg.fg3a : '--'} • Paint: ${sAvg.paint_pts != null ? sAvg.paint_pts : '--'}</span>
                                     <span>Clutch USG: ${sit.clutch_usg_pct != null ? sit.clutch_usg_pct + '%' : '--'}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    };
+
+    const renderGroupedPositionalAllowances = (aTeamCode, hTeamCode, aData, hData) => {
+        const aPos = aData?.positional_allowances;
+        const hPos = hData?.positional_allowances;
+        if (!aPos && !hPos) return '';
+
+        const renderTeamPosBlock = (teamCode, pData, isSmall) => {
+            const stats = [
+                { key: 'pts', label: 'Points Allowed', unit: 'PTS/G' },
+                { key: 'reb', label: 'Rebounds Allowed', unit: 'REB/G' },
+                { key: 'fg3m', label: '3PM Allowed', unit: '3PM/G' }
+            ];
+
+            return `
+                <div class="bg-[#161b22] rounded-xl p-3 border border-[#21262d] space-y-2.5">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5 font-mono">
+                        <div class="flex items-center gap-1.5">
+                            <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
+                            <span>${teamCode} Positional Allowances</span>
+                        </div>
+                        ${isSmall ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : ''}
+                    </div>
+                    <div class="space-y-2.5 font-mono">
+                        ${stats.map(s => {
+                            const row = pData?.[s.key] || {};
+                            const gVal = row.guards != null ? row.guards : '--';
+                            const wVal = row.wings != null ? row.wings : '--';
+                            const bVal = row.bigs != null ? row.bigs : '--';
+
+                            const gPct = row.guards_pct != null ? row.guards_pct : 33.3;
+                            const wPct = row.wings_pct != null ? row.wings_pct : 33.3;
+                            const bPct = row.bigs_pct != null ? row.bigs_pct : 33.4;
+
+                            const formatRank = (r) => {
+                                if (isSmall || r === 'Small Sample') return '<span class="text-slate-500 font-normal">[Small Sample]</span>';
+                                if (r != null && r !== '') return `<span class="text-slate-400 font-normal">(#${r})</span>`;
+                                return '';
+                            };
+
+                            return `
+                                <div class="space-y-1">
+                                    <div class="flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-300 font-bold uppercase tracking-tight">${s.label}</span>
+                                        <div class="flex items-center gap-2 text-[10px]">
+                                            <span class="text-cyan-400 font-medium">Guards: <b>${gVal}</b> ${formatRank(row.guards_rank)}</span>
+                                            <span class="text-slate-600">|</span>
+                                            <span class="text-indigo-400 font-medium">Wings: <b>${wVal}</b> ${formatRank(row.wings_rank)}</span>
+                                            <span class="text-slate-600">|</span>
+                                            <span class="text-amber-400 font-medium">Bigs: <b>${bVal}</b> ${formatRank(row.bigs_rank)}</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-full bg-[#0d1117] h-3 rounded-full flex overflow-hidden border border-[#21262d] text-[8.5px] font-bold text-center leading-3">
+                                        <div class="bg-cyan-500/80 text-cyan-100 truncate transition-all" style="width: ${gPct}%;" title="Guards: ${gPct}% (${gVal} ${s.unit})">
+                                            ${gPct >= 12 ? gPct + '%' : ''}
+                                        </div>
+                                        <div class="bg-indigo-500/80 text-indigo-100 truncate transition-all" style="width: ${wPct}%;" title="Wings: ${wPct}% (${wVal} ${s.unit})">
+                                            ${wPct >= 12 ? wPct + '%' : ''}
+                                        </div>
+                                        <div class="bg-amber-500/80 text-amber-100 truncate transition-all" style="width: ${bPct}%;" title="Bigs: ${bPct}% (${bVal} ${s.unit})">
+                                            ${bPct >= 12 ? bPct + '%' : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        };
+
+        return `
+            <div class="mt-3.5 space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5">
+                    <div class="flex items-center gap-1.5 uppercase tracking-wider text-[11px] text-cyan-400 font-mono">
+                        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                        <span>Grouped Positional Allowances (Guards / Wings / Bigs)</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-[10px] font-mono">
+                        <span class="flex items-center gap-1 text-cyan-400"><span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>Guards (PG/SG)</span>
+                        <span class="flex items-center gap-1 text-indigo-400"><span class="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>Wings (SF/PF)</span>
+                        <span class="flex items-center gap-1 text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>Bigs (C)</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${renderTeamPosBlock(aTeamCode, aPos, aData?.is_small_sample)}
+                    ${renderTeamPosBlock(hTeamCode, hPos, hData?.is_small_sample)}
+                </div>
+            </div>
+        `;
+    };
+
+    const renderRoleArchetypeSchemeBlock = (aTeamCode, hTeamCode, aData, hData) => {
+        if (!aData || !hData) return '';
+        const roles = [
+            { key: 'PnR_Ball_Handler', label: 'Pick & Roll Ball Handler', offKey: 'PnR_Ball_Handler', offRank: 'rank_pnr_bh_freq', defRank: 'rank_pnr_bh_allowed_ppp' },
+            { key: 'Spot_Up', label: 'Spot-Up Shooter', offKey: 'Spot_Up', offRank: 'rank_spot_freq', defRank: 'rank_spot_up_allowed_ppp' },
+            { key: 'Isolation', label: 'Isolation Scorer', offKey: 'Isolation', offRank: 'rank_iso_freq', defRank: 'rank_iso_allowed_ppp' },
+            { key: 'PnR_Roll_Man', label: 'Roll Man / Rim Runner', offKey: 'PnR_Roll_Man', offRank: null, defRank: 'rank_pnr_rm_allowed_ppp' }
+        ];
+
+        const formatRank = (r, isSmall) => {
+            if (isSmall || r === 'Small Sample') return '[Small Sample]';
+            if (r != null && r !== '') return `#${r}`;
+            return '--';
+        };
+
+        return `
+            <div class="mt-3.5 space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5 font-mono">
+                    <div class="flex items-center gap-1.5 uppercase tracking-wider text-[11px] text-cyan-400">
+                        <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
+                        <span>Role Archetype Defense & Scheme Alignment</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-normal">Offense Frequency vs. Defense Allowed PPP</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 font-mono text-xs">
+                    ${roles.map(r => {
+                        const aOff = aData.playtypes_offense?.[r.offKey]?.freq != null ? aData.playtypes_offense[r.offKey].freq + '%' : '--';
+                        const aOffRank = formatRank(aData[r.offRank], aData.is_small_sample);
+                        const hDefPpp = hData.playtypes_defense?.[r.key]?.allowed_ppp != null ? hData.playtypes_defense[r.key].allowed_ppp + ' PPP' : '--';
+                        const hDefRank = formatRank(hData[r.defRank] || hData.playtypes_defense?.[r.key]?.rank, hData.is_small_sample);
+
+                        const hOff = hData.playtypes_offense?.[r.offKey]?.freq != null ? hData.playtypes_offense[r.offKey].freq + '%' : '--';
+                        const hOffRank = formatRank(hData[r.offRank], hData.is_small_sample);
+                        const aDefPpp = aData.playtypes_defense?.[r.key]?.allowed_ppp != null ? aData.playtypes_defense[r.key].allowed_ppp + ' PPP' : '--';
+                        const aDefRank = formatRank(aData[r.defRank] || aData.playtypes_defense?.[r.key]?.rank, aData.is_small_sample);
+
+                        return `
+                            <div class="bg-[#161b22] p-2.5 rounded-xl border border-[#21262d] space-y-1.5">
+                                <div class="text-[11px] font-bold text-slate-200 border-b border-[#21262d] pb-1 flex items-center justify-between">
+                                    <span class="text-cyan-300">${r.label}</span>
+                                </div>
+                                <div class="text-[10.5px] space-y-1">
+                                    <div class="p-1.5 rounded bg-[#12161c] border border-[#21262d] flex items-center justify-between text-slate-300">
+                                        <span><b class="text-cyan-400">${aTeamCode} Off:</b> ${aOff} ${r.offRank && aOff !== '--' ? `(${aOffRank})` : ''}</span>
+                                        <span class="text-slate-600">|</span>
+                                        <span><b class="text-rose-400">${hTeamCode} Def:</b> Allows ${hDefPpp} (${hDefRank})</span>
+                                    </div>
+                                    <div class="p-1.5 rounded bg-[#12161c] border border-[#21262d] flex items-center justify-between text-slate-300">
+                                        <span><b class="text-rose-400">${hTeamCode} Off:</b> ${hOff} ${r.offRank && hOff !== '--' ? `(${hOffRank})` : ''}</span>
+                                        <span class="text-slate-600">|</span>
+                                        <span><b class="text-cyan-400">${aTeamCode} Def:</b> Allows ${aDefPpp} (${aDefRank})</span>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -352,6 +512,7 @@ function generateDeepDiveModalHtml(g) {
                     ${formatPillarRow('Defensive Rebound % (DREB%)', a.rebounding?.dreb_secured_pct != null ? a.rebounding.dreb_secured_pct + '%' : '--', a.rank_dreb_secured_pct, h.rebounding?.dreb_secured_pct != null ? h.rebounding.dreb_secured_pct + '%' : '--', h.rank_dreb_secured_pct, a.is_small_sample, h.is_small_sample)}
                     ${formatPillarRow('Offensive Rebound % Allowed', a.rebounding?.oreb_allowed_pct != null ? a.rebounding.oreb_allowed_pct + '%' : '--', a.rank_oreb_allowed_pct, h.rebounding?.oreb_allowed_pct != null ? h.rebounding.oreb_allowed_pct + '%' : '--', h.rank_oreb_allowed_pct, a.is_small_sample, h.is_small_sample)}
                 </div>
+                ${renderGroupedPositionalAllowances(aTeam, hTeam, a, h)}
             </div>
 
             <!-- Pillar 3: Offensive Play Type & Scheme -->
@@ -368,6 +529,7 @@ function generateDeepDiveModalHtml(g) {
                     ${formatPillarRow('Dead-Ball Turnovers', a.turnover_profile?.dead_ball_per_game != null ? a.turnover_profile.dead_ball_per_game + '/G' : '--', a.rank_dead_tov, h.turnover_profile?.dead_ball_per_game != null ? h.turnover_profile.dead_ball_per_game + '/G' : '--', h.rank_dead_tov, a.is_small_sample, h.is_small_sample)}
                     ${formatPillarRow('Live-Ball TOV Pts Surrendered', a.turnover_profile?.points_surrendered_off_tov != null ? a.turnover_profile.points_surrendered_off_tov + ' PTS' : '--', a.rank_pts_surrendered_off_tov, h.turnover_profile?.points_surrendered_off_tov != null ? h.turnover_profile.points_surrendered_off_tov + ' PTS' : '--', h.rank_pts_surrendered_off_tov, a.is_small_sample, h.is_small_sample)}
                 </div>
+                ${renderRoleArchetypeSchemeBlock(aTeam, hTeam, a, h)}
             </div>
         </div>
 
