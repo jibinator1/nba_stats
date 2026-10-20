@@ -44,54 +44,56 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
     const aOff = awayForensic.shot_profile_offense || {};
     const hDef = homeForensic.shot_profile_allowed || {};
 
-    let cellsHtml = '';
-    const cellW = 150;
-    const cellH = 84;
-
-    zones.forEach((z, idx) => {
+    const cardsHtml = zones.map(z => {
         const offFreq = aOff[z.id]?.freq || 20.0;
         const defPpp = hDef[z.id]?.ppp || 1.05;
 
-        let fill = '#1e293b';
-        let stroke = '#334155';
-        let textPppColor = '#94a3b8';
+        let borderStyle = 'border-[#334155] bg-[#1e293b]/40';
+        let textPppColor = 'text-slate-300';
 
         if (defPpp <= 0.95) {
-            fill = 'rgba(16, 185, 129, 0.12)';
-            stroke = 'rgba(16, 185, 129, 0.35)';
-            textPppColor = '#34d399';
+            borderStyle = 'border-emerald-700/60 bg-emerald-950/20';
+            textPppColor = 'text-emerald-400';
         } else if (defPpp >= 1.15) {
-            fill = 'rgba(239, 68, 68, 0.12)';
-            stroke = 'rgba(239, 68, 68, 0.35)';
-            textPppColor = '#f87171';
+            borderStyle = 'border-rose-700/60 bg-rose-950/20';
+            textPppColor = 'text-rose-400';
         }
 
-        const x = 15 + idx * (cellW + 10);
-        cellsHtml += `
-            <g transform="translate(${x}, 35)">
-                <rect width="${cellW}" height="${cellH}" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
-                <text x="14" y="24" fill="#e2e8f0" font-size="12" font-weight="bold" font-family="monospace">${z.label}</text>
-                <text x="14" y="47" fill="#94a3b8" font-size="11" font-family="sans-serif">${awayTeam} Offense: <tspan fill="#f1f5f9" font-weight="bold">${offFreq}%</tspan></text>
-                <text x="14" y="68" fill="#94a3b8" font-size="11" font-family="sans-serif">${homeTeam} Defense: <tspan fill="${textPppColor}" font-weight="bold">${defPpp} PPP</tspan></text>
-            </g>
+        const tooltipTrigger = (window.formatMetricLabelWithTooltip)
+            ? window.formatMetricLabelWithTooltip(z.label, z.label, 'tooltip-down')
+            : `<span class="stat-info-trigger font-mono font-bold text-slate-100"><span>${z.label}</span></span>`;
+
+        const pppFormatted = (window.formatInlinePpp)
+            ? window.formatInlinePpp(`${defPpp} PPP`, 'tooltip-down')
+            : `${defPpp} PPP`;
+
+        return `
+            <div class="flex-1 min-w-[130px] p-3 rounded-xl border ${borderStyle} flex flex-col justify-between space-y-2 hover:border-cyan-400/80 transition shadow-sm">
+                <div class="flex items-center justify-between text-xs font-bold font-mono">
+                    ${tooltipTrigger}
+                </div>
+                <div class="space-y-1 text-[11px] font-sans">
+                    <div class="text-slate-400">${awayTeam} Offense: <b class="text-slate-100 font-mono">${offFreq}%</b></div>
+                    <div class="text-slate-400">${homeTeam} Defense: <b class="${textPppColor} font-mono">${pppFormatted}</b></div>
+                </div>
+            </div>
         `;
-    });
+    }).join('');
 
     return `
-        <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+        <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 sm:p-4 space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-300 border-b border-[#21262d] pb-1.5">
                 <span class="flex items-center gap-1.5">
                     <i data-lucide="crosshair" class="w-3.5 h-3.5 text-cyan-400"></i>
                     <span>Shot Zone Alignment (Offense Generation vs. Defense Allowed PPP)</span>
                 </span>
-                <span class="text-[10px] text-slate-500 font-mono">Teal: &le;0.95 PPP | Red: &ge;1.15 PPP</span>
+                <span class="text-[10px] text-slate-400 font-mono">Teal: &le;0.95 PPP | Red: &ge;1.15 PPP</span>
             </div>
-            <div class="overflow-x-auto touch-scroll">
-                <svg viewBox="0 0 815 135" class="w-full min-w-[750px] h-auto">
-                    <rect width="815" height="135" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-                    <text x="15" y="22" fill="#94a3b8" font-size="10.5" font-weight="semibold" font-family="monospace">${awayTeam} ATTEMPTS FREQUENCY (%) VS. ${homeTeam} DEFENSIVE ALLOWANCE (PPP)</text>
-                    ${cellsHtml}
-                </svg>
+            <div class="text-[10.5px] font-mono text-slate-400 uppercase tracking-tight">
+                ${awayTeam} ATTEMPTS FREQUENCY (%) VS. ${homeTeam} DEFENSIVE ALLOWANCE (PPP)
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                ${cardsHtml}
             </div>
         </div>
     `;
@@ -116,56 +118,69 @@ function renderPlayTypeAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
     const aPt = awayForensic.playtypes_offense || {};
     const hPt = homeForensic.playtypes_defense || {};
 
-    let rowsHtml = '';
-    const maxBarW = 280;
-
-    playtypes.forEach((pt, idx) => {
+    const rowsHtml = playtypes.map(pt => {
         const freq = aPt[pt.id]?.freq || 20.0;
         const allowedPpp = hPt[pt.id]?.allowed_ppp || 0.95;
 
-        const barW = Math.min(maxBarW, (freq / 50.0) * maxBarW);
-        const y = 35 + idx * 30;
+        let pppColor = 'text-slate-300';
+        if (allowedPpp <= 0.92) pppColor = 'text-emerald-400';
+        else if (allowedPpp >= 1.08) pppColor = 'text-rose-400';
 
-        let pppColor = '#94a3b8';
-        if (allowedPpp <= 0.92) pppColor = '#34d399';
-        else if (allowedPpp >= 1.08) pppColor = '#f87171';
+        const barPct = Math.min(100, (freq / 45.0) * 100);
 
-        rowsHtml += `
-            <g transform="translate(15, ${y})">
-                <text x="0" y="14" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="monospace">${pt.label}</text>
-                <rect x="150" y="2" width="${maxBarW}" height="16" rx="3" fill="#21262d"/>
-                <rect x="150" y="2" width="${barW}" height="16" rx="3" fill="#0284c7"/>
-                <text x="${160 + barW}" y="14" fill="#cbd5e1" font-size="10" font-family="monospace">${freq}%</text>
-                <text x="490" y="14" fill="#94a3b8" font-size="10" font-family="sans-serif">${homeTeam} Allowed: <tspan fill="${pppColor}" font-weight="bold">${allowedPpp} PPP</tspan></text>
-            </g>
+        const tooltipTrigger = (window.formatMetricLabelWithTooltip)
+            ? window.formatMetricLabelWithTooltip(pt.label, pt.label, 'tooltip-down')
+            : `<span class="stat-info-trigger font-mono font-bold text-slate-100"><span>${pt.label}</span></span>`;
+
+        const pppFormatted = (window.formatInlinePpp)
+            ? window.formatInlinePpp(`${allowedPpp} PPP`, 'tooltip-down')
+            : `${allowedPpp} PPP`;
+
+        return `
+            <div class="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-[#161b22] border border-[#21262d] text-xs font-mono">
+                <div class="w-36 shrink-0 truncate">
+                    ${tooltipTrigger}
+                </div>
+                <div class="flex-1 flex items-center gap-2">
+                    <div class="w-full bg-[#0d1117] h-3 rounded-full overflow-hidden border border-[#21262d] flex">
+                        <div class="bg-cyan-500 h-full rounded-full transition-all" style="width: ${barPct}%;"></div>
+                    </div>
+                    <span class="w-12 text-slate-200 font-bold text-[11px]">${freq}%</span>
+                </div>
+                <div class="w-44 text-right text-[11px] text-slate-400 shrink-0 font-sans">
+                    ${homeTeam} Allowed: <b class="${pppColor} font-mono">${pppFormatted}</b>
+                </div>
+            </div>
         `;
-    });
+    }).join('');
+
+    const pnrTooltip = (window.formatMetricLabelWithTooltip) ? window.formatMetricLabelWithTooltip('PnR Ball Handler') : 'PnR Ball Handler';
+    const isoTooltip = (window.formatMetricLabelWithTooltip) ? window.formatMetricLabelWithTooltip('Isolation') : 'Isolation';
 
     return `
-        <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+        <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 sm:p-4 space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-300 border-b border-[#21262d] pb-1.5">
                 <span class="flex items-center gap-1.5">
                     <i data-lucide="bar-chart-horizontal" class="w-3.5 h-3.5 text-cyan-400"></i>
                     <span>Play Type Alignment (${awayTeam} Generation vs. ${homeTeam} Defense Allowed)</span>
                 </span>
-                <span class="text-[10px] text-slate-500 font-mono">Primary Schemes</span>
+                <span class="text-[10px] text-slate-400 font-mono">Primary Schemes</span>
             </div>
-            <div class="overflow-x-auto touch-scroll">
-                <svg viewBox="0 0 815 130" class="w-full min-w-[750px] h-auto">
-                    <rect width="815" height="130" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-                    <text x="15" y="20" fill="#94a3b8" font-size="10" font-weight="semibold" font-family="monospace">TOP 3 OFFENSIVE PLAY TYPES VS. DEFENSIVE ALLOWANCE</text>
-                    ${rowsHtml}
-                </svg>
+            <div class="text-[10.5px] font-mono text-slate-400 uppercase tracking-tight">
+                TOP 3 OFFENSIVE PLAY TYPES VS. DEFENSIVE ALLOWANCE
+            </div>
+            <div class="space-y-2">
+                ${rowsHtml}
             </div>
             <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${awayTeam} Primary Play: PnR Ball Handler (${(aPt.PnR_Ball_Handler?.freq || 20)}%)]
+                    [${awayTeam} Primary: ${pnrTooltip} (${(aPt.PnR_Ball_Handler?.freq || 20)}%)]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
                     [${homeTeam} Allowed: ${(hPt.PnR_Ball_Handler?.allowed_ppp || 0.91)} PPP on PnR]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [Isolation Frequency: ${(aPt.Isolation?.freq || 8.5)}%]
+                    [${isoTooltip} Frequency: ${(aPt.Isolation?.freq || 8.5)}%]
                 </span>
             </div>
         </div>
@@ -259,13 +274,13 @@ function renderPaceAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) 
             </div>
             <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${awayTeam} Pace: ${aPace}]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${awayTeam} Pace: ${aPace}`) : `${awayTeam} Pace: ${aPace}`}]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${homeTeam} Pace: ${hPace}]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${homeTeam} Pace: ${hPace}`) : `${homeTeam} Pace: ${hPace}`}]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-cyan-950/40 border border-cyan-800/60 text-cyan-300">
-                    [Expected Game Tempo: ${expPace} Poss/48m]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Expected Game Tempo', `Expected Game Tempo: ${expPace} Poss/48m`) : `Expected Game Tempo: ${expPace} Poss/48m`}]
                 </span>
             </div>
         </div>

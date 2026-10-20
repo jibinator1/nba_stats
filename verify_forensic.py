@@ -317,7 +317,14 @@ def run_audit():
     assert 'stat-info-box' in modal_js_text, "Missing stat-info-box in modal.js"
     assert 'formatMetricLabelWithTooltip' in modal_js_text, "Missing formatMetricLabelWithTooltip in modal.js"
     assert 'formatInlinePpp' in modal_js_text, "Missing formatInlinePpp in modal.js"
-    print("  [PASS] Interactive tooltips and definitions verified across forensic metrics.")
+    assert 'What it means:' in modal_js_text, "Missing 'What it means' in modal.js tooltips"
+    assert 'What type of players to look for:' in modal_js_text, "Missing 'What type of players to look for' in modal.js tooltips"
+    assert 'Rim (RA)' in modal_js_text and 'Downhill slashers' in modal_js_text, "Missing Rim (RA) scouting definition in modal.js"
+    
+    # Check visuals.js renders interactive tooltips for Shot Zones
+    assert 'renderShotZoneAlignmentSvg' in visuals_js_text, "Missing renderShotZoneAlignmentSvg in visuals.js"
+    assert 'formatMetricLabelWithTooltip' in visuals_js_text, "Missing formatMetricLabelWithTooltip call in visuals.js"
+    print("  [PASS] Interactive tooltips and 2-part definitions (meaning + player archetypes) verified across forensic metrics and shot zones.")
 
     # Check Cade Cunningham Pick & Roll Ball Handler operator text in insights
     assert "operates as the Pick & Roll Ball Handler on 41.5%" in modal_js_text, "Missing Cade Cunningham explicit operator text in modal.js"

@@ -8,86 +8,153 @@
 // Helper to resolve ESPN logo with correct team slugs
 const getLogoUrl = (t) => (window.getTeamLogoUrl ? window.getTeamLogoUrl(t) : `https://a.espncdn.com/i/teamlogos/nba/500/${String(t).toLowerCase()}.png`);
 
-// Comprehensive Forensic Definitions Dictionary
+// Comprehensive Forensic Definitions & Player Archetype Scouting Dictionary
 const FORENSIC_DEFINITIONS = {
-    'PPP': 'Points Per Possession: Total points scored divided by total offensive possessions. Measures true scoring efficiency independent of game tempo.',
-    'Pace': 'Estimated possessions per 48 minutes. Measures the overall speed and tempo of play.',
-    'Neutral Pace': 'Game tempo (possessions/48m) in neutral score environments (margin within 5 points), removing late-game intentional fouling and blowout distortions.',
-    'Transition Frequency': 'Percentage of possessions that begin immediately following live-ball changes of possession without facing a set defense.',
-    'Shot Clock Early (0-8s)': 'Possessions ending in a field goal attempt or turnover within the first 8 seconds of the shot clock (transition and quick strikes).',
-    'Shot Clock Mid (8-15s)': 'Possessions executed between 8 and 15 seconds into the shot clock (primary half-court sets and early secondary actions).',
-    'Shot Clock Late (15-24s)': 'Possessions forced into the final 9 seconds of the 24-second clock (broken plays, isolation resets, and late-clock bailouts).',
-    'Pace Leading 10+': 'Game tempo (possessions/48m) when holding a double-digit lead of 10+ points, showing whether a team accelerates or bleeds clock.',
-    'Pace Trailing 10+': 'Game tempo (possessions/48m) when trailing by 10+ points, showing urgency to speed up possession volume.',
-    'Pick & Roll Drop': 'Defensive coverage where the screener defender drops toward the rim to protect the paint while the perimeter defender recovers over the screen.',
-    'Pick & Roll Switch': 'Defensive coverage where both defenders exchange assignments directly on the screen to deny open pull-up shooting space.',
-    'Restricted Area Allowed': 'Defensive points per possession allowed directly inside the 4-foot restricted arc under the basket.',
-    'Paint Non-RA Allowed': 'Defensive points per possession allowed in the painted lane outside the restricted area (floaters, push shots, short hooks).',
-    'Corner 3 Allowed': 'Defensive points per possession allowed from the corner arcs (shortest three-point distance at 22 feet).',
-    'Transition Allowed PPP': 'Points per possession surrendered to opponents on fast breaks and transition opportunities.',
-    'Defensive Rebound % (DREB%)': 'Defensive Rebounding Percentage: Share of available defensive rebounds secured by the defending team on opponent misses.',
-    'Offensive Rebound % Allowed': 'Percentage of available offensive rebounds surrendered to the opponent, leading to second-chance scoring.',
-    'PnR Ball Handler Freq': 'Frequency of possessions where the ball handler uses an on-ball screen to shoot, drive, or draw a shooting foul.',
-    'Isolation Freq': 'Frequency of possessions where a creator attacks a defender one-on-one in space without an on-ball screen.',
-    'Spot-Up Freq': 'Frequency of possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout drives.',
-    'PnR Ball Handler Allowed PPP': 'Defensive points per possession allowed against opposing pick & roll ball handlers.',
-    'Spot-Up Allowed PPP': 'Defensive points per possession allowed against opposing spot-up shooters.',
-    'Isolation Allowed PPP': 'Defensive points per possession allowed against opposing isolation scorers.',
-    'Roll Man / Rim Runner Allowed': 'Defensive points per possession allowed against opposing roll men finishing at the rim or popping.',
-    'Live-Ball Turnovers': 'Turnovers that lead directly to active opponent possession (steals), typically yielding high-efficiency transition run-outs.',
-    'Dead-Ball Turnovers': 'Turnovers where play halts (e.g., out-of-bounds, traveling, offensive fouls), allowing the defense to set up in half-court.',
-    'Live-Ball TOV Pts Surrendered': 'Points per game surrendered to the opponent directly from live-ball giveaways.',
-    'Points Generated Off TOV': 'Points per game scored on possessions immediately following opponent turnovers.',
-    'Guards': 'Point Guards and Shooting Guards grouped together to eliminate modern positionless switching noise.',
-    'Wings': 'Small Forwards and Power Forwards grouped together to measure wing spacing, perimeter defense, and secondary glass control.',
-    'Bigs': 'Centers focused on rim protection, screening, and primary paint control.',
-    'Points Allowed': 'Average points per game surrendered by the defense to this specific grouped tier.',
-    'Rebounds Allowed': 'Average rebounds per game surrendered by the defense to this specific grouped tier.',
-    '3PM Allowed': 'Average three-pointers made per game surrendered by the defense to this specific grouped tier.',
-    'Pick & Roll Ball Handler': 'Possessions where the ball handler uses an on-ball screen to shoot, drive, or initiate passing reads.',
-    'Spot-Up Shooter': 'Possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout penetration.',
-    'Isolation Scorer': 'Possessions where an offensive creator attacks their defender in single coverage without an on-ball screen.',
-    'Roll Man / Rim Runner': 'The screener rolling to the rim for interior finishes or popping to open perimeter space.',
-    'USG': 'Usage Percentage: Estimate of team possessions used by a player through field goal attempts, free throw trips, and turnovers while on the floor.',
-    'USG%': 'Usage Percentage: Estimate of team possessions used by a player through field goal attempts, free throw trips, and turnovers while on the floor.',
-    'AST%': 'Assist Percentage: Percentage of teammate field goals assisted by a player while on the floor.',
-    'REB%': 'Rebound Percentage: Percentage of total available rebounds grabbed by a player while on the floor.',
-    'Clutch USG': 'Usage percentage during clutch situations (final 5 minutes of a game when the score margin is within 5 points).',
-    'Paint': 'Average points scored or touches inside the painted lane per game.',
-    'Floor': '25th percentile output across the player\'s last 10 games, showing standard scoring baseline.',
-    'Flr': '25th percentile output across the player\'s last 10 games, showing standard scoring baseline.',
-    'Median': '50th percentile output across the player\'s last 10 games, showing typical game production.',
-    'Med': '50th percentile output across the player\'s last 10 games, showing typical game production.',
-    'Ceiling': '75th percentile output across the player\'s last 10 games, showing standard high-end production.',
-    'Ceil': '75th percentile output across the player\'s last 10 games, showing standard high-end production.',
-    'OREB%': 'Offensive Rebound Rate: (Team OREB) / (Team OREB + Opp DREB). Measures efficiency on the offensive glass.',
-    'DREB%': 'Defensive Rebound Rate: (Team DREB) / (Team DREB + Opp OREB). Measures defensive rebound securing rate.',
-    'TOV': 'Turnovers committed per game, resulting in lost offensive possessions.',
-    'Opp TOV': 'Turnovers forced per game against opponents through steals, deflections, and shot clock violations.',
-    'Season PTS': 'Average total points scored per game during the regular season.',
-    'PTS': 'Points scored per game.',
-    'REB': 'Total rebounds secured per game.',
-    'AST': 'Total assists recorded per game.',
-    '3PA': 'Three-point field goal attempts per game.',
-    '3PM': 'Three-point field goals made per game.',
-    'MPG': 'Minutes played per game.'
+    'Rim (RA)': { meaning: 'Restricted Area (0-4 feet under the rim). Highest expected-value scoring zone in basketball with highest field goal percentage.', players: 'Downhill slashers, diving roll-man bigs, dunkers, drive-and-kick penetrators, and lob catchers.' },
+    'Paint (Non-RA)': { meaning: 'Painted key outside the 4-foot restricted arc (4-14 feet). Primarily consists of push shots, short hooks, and floaters over drop defenders.', players: 'Guards with floater and runner packages, short-roll bigs, and post-up operators.' },
+    'Mid-Range': { meaning: 'Two-point field goal zone between the painted lane and the three-point line (14-22 feet).', players: 'Pull-up jump shooters, isolation shot creators, tough-shot makers, and pick-and-pop forwards.' },
+    'Corner 3': { meaning: 'Three-point attempts from the baseline corners (22 feet, the shortest three-point distance on the floor).', players: 'Stationary 3-and-D wings, weakside corner floor spacers, and low-usage catch-and-shoot threats.' },
+    'Above Break 3': { meaning: 'Three-point attempts above the free throw line extended (23.75 feet). Requires higher shooting range and off-dribble ability.', players: 'Primary ball handlers shooting off screens, dynamic movement shooters off pindowns, and trailing stretch bigs.' },
+    '3PT Rate': { meaning: 'Percentage of total field goal attempts launched from beyond the three-point arc.', players: 'High-volume perimeter shooters, movement wings, and pick-and-pop bigs.' },
+    'PPP': { meaning: 'Points Per Possession: Total points scored divided by total offensive possessions. Measures true scoring efficiency independent of game tempo.', players: 'High-PPP players are efficient creators, high-efficiency roll finishers, and low-turnover shot makers.' },
+    'Pace': { meaning: 'Estimated possessions per 48 minutes. Dictates overall tempo, possession volume, and transition frequency.', players: 'High pace favors transition pushers, leak-out wings, and athletic rim runners; low pace favors half-court grinders.' },
+    'Expected Game Tempo': { meaning: 'Estimated combined game tempo (possessions/48m) normalizing both teams\' neutral tempo.', players: 'High tempo (>102) elevates transition wings and early 3PT pull-ups; low tempo (<98) rewards half-court post scorers and isolation shot creators.' },
+    'Neutral Pace': { meaning: 'Game tempo (possessions/48m) in neutral score environments (margin within 5 points), removing late-game intentional fouling and blowout distortions.', players: 'Disciplined half-court conductors and possession managers vs high-motor transition point guards.' },
+    'Transition Frequency': { meaning: 'Percentage of possessions that begin immediately following live-ball changes of possession without facing a set defense.', players: 'End-to-end pushing guards, athletic leak-out wings, and rim-running transition bigs.' },
+    'Shot Clock Early (0-8s)': { meaning: 'Possessions ending in a field goal attempt or turnover within the first 8 seconds of the shot clock (transition, semi-transition, quick-pitch attacks).', players: 'Fast-break initiators, early pull-up 3PT shooters, and rim-runners beating the defense down the floor.' },
+    'Shot Clock Mid (8-15s)': { meaning: 'Possessions executed between 8 and 15 seconds into the shot clock (primary half-court sets, early screens).', players: 'Pick-and-roll navigators, secondary action cutters, and planned set-play shooters.' },
+    'Shot Clock Late (15-24s)': { meaning: 'Possessions forced into the final 9 seconds of the 24-second clock (broken sets, isolation resets, late bailouts).', players: 'Self-creating scorers, tough-shot isolation shot makers, and contested bailout specialists.' },
+    'Pace Leading 10+': { meaning: 'Game tempo (possessions/48m) when holding a double-digit lead of 10+ points, showing whether a team accelerates or bleeds clock.', players: 'Possession-managing floor generals and turnover-averse ball handlers.' },
+    'Pace Trailing 10+': { meaning: 'Game tempo (possessions/48m) when trailing by 10+ points, showing urgency to speed up possession volume and shoot early.', players: 'Quick-trigger 3PT shooters and aggressive full-court pressing perimeter defenders.' },
+    'Pick & Roll Drop': { meaning: 'Defensive coverage where the screener defender drops toward the rim to protect the paint while the perimeter defender recovers over the screen.', players: 'Drop-coverage rim-protecting centers (defense); pull-up mid-range scorers and floater guards (offense).' },
+    'Pick & Roll Switch': { meaning: 'Defensive coverage where both defenders exchange assignments directly on the screen to deny open pull-up shooting space.', players: 'Switchable multi-positional wings (defense); isolation mismatch hunters (offense).' },
+    'Restricted Area Allowed': { meaning: 'Defensive points per possession allowed directly inside the 4-foot restricted arc under the basket.', players: 'Rim-protecting centers with high contest rates, vertical anchors, and help-side shot blockers.' },
+    'Paint Non-RA Allowed': { meaning: 'Defensive points per possession allowed in the painted lane outside the restricted area (floaters, push shots, short hooks).', players: 'Defenders who contest floater range; offensive guards with touch on runners and push shots.' },
+    'Corner 3 Allowed': { meaning: 'Defensive points per possession allowed from baseline corner three-pointers (shortest three-point distance at 22 feet).', players: 'Help-side defenders who recover on closeouts; corner spot-up shooters.' },
+    'Transition Allowed PPP': { meaning: 'Points per possession surrendered to opponents on fast breaks and transition opportunities.', players: 'Transition track-back defenders; dynamic open-floor transition runners.' },
+    'Defensive Rebound % (DREB%)': { meaning: 'Defensive Rebounding Percentage: Share of available defensive rebounds secured by the defending team on opponent misses.', players: 'Box-out centers, physical glass anchors, and rebounding guards/wings.' },
+    'Offensive Rebound % Allowed': { meaning: 'Percentage of available offensive rebounds surrendered to the opponent, leading to second-chance scoring.', players: 'Physical frontcourt box-out specialists vs relentless offensive crashers.' },
+    'PnR Ball Handler': { meaning: 'Possessions where the ball handler uses an on-ball screen to shoot, drive, or initiate passing reads.', players: 'Primary ball handlers, pick-and-roll navigators, and lead scoring point guards.' },
+    'PnR Ball Handler Freq': { meaning: 'Frequency of possessions where the ball handler uses an on-ball screen to shoot, drive, or draw a shooting foul.', players: 'High-usage floor generals and screen-manipulating guards.' },
+    'Spot-Up': { meaning: 'Possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout penetration.', players: 'Stationary floor spacers, 3-and-D wings, and spot-up forward threats.' },
+    'Spot-Up Freq': { meaning: 'Frequency of possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout drives.', players: 'Off-ball perimeter shooters and spacing wings.' },
+    'Isolation': { meaning: 'One-on-one possessions where an offensive creator attacks their defender in single coverage without an on-ball screen.', players: 'Isolation shot creators, one-on-one bucket getters, and mismatch hunters.' },
+    'Isolation Freq': { meaning: 'Frequency of possessions where a creator attacks a defender one-on-one in space without an on-ball screen.', players: 'High-usage isolation scorers and primary perimeter creators.' },
+    'PnR Ball Handler Allowed PPP': { meaning: 'Defensive points per possession allowed against opposing pick & roll ball handlers.', players: 'Point-of-attack perimeter defenders and POA screen navigators.' },
+    'Spot-Up Allowed PPP': { meaning: 'Defensive points per possession allowed against opposing spot-up shooters.', players: 'Closeout wings and perimeter rotation defenders.' },
+    'Isolation Allowed PPP': { meaning: 'Defensive points per possession allowed against opposing isolation scorers.', players: 'Lock-in on-ball wing stoppers and lateral agility perimeter defenders.' },
+    'Roll Man / Rim Runner': { meaning: 'The screener rolling to the rim for interior finishes or popping to open perimeter space.', players: 'Lob-threat diving centers, rolling rim runners, and pick-and-pop stretch bigs.' },
+    'Roll Man / Rim Runner Allowed': { meaning: 'Defensive points per possession allowed against opposing roll men finishing at the rim or popping.', players: 'Low-man taggers and physical interior post defenders.' },
+    'Live-Ball Turnovers': { meaning: 'Turnovers that lead directly to active opponent possession (steals), typically yielding high-efficiency transition run-outs.', players: 'Ball-hawks and passing lane disruptors (defense); careless ball handlers (offense).' },
+    'Dead-Ball Turnovers': { meaning: 'Turnovers where play halts (e.g., out-of-bounds, traveling, offensive fouls), allowing the defense to set up in half-court.', players: 'Charge-taking defenders and whistle-forcing perimeter defenders.' },
+    'Live-Ball TOV Pts Surrendered': { meaning: 'Points per game surrendered to the opponent directly from live-ball giveaways.', players: 'Fast-break transition leak-outs and transition finishing guards.' },
+    'Points Generated Off TOV': { meaning: 'Points per game scored on possessions immediately following opponent turnovers.', players: 'Defensive ball-hawks, steal leaders, and open-court finishers.' },
+    'Guards': { meaning: 'Point Guards and Shooting Guards grouped together to eliminate modern positionless switching noise.', players: 'Primary ball handlers, pull-up shooters, screen navigators, and perimeter initiators.' },
+    'Wings': { meaning: 'Small Forwards and Power Forwards grouped together to measure wing spacing, perimeter defense, and secondary glass control.', players: '3-and-D forwards, slashing wings, weakside help defenders, and isolation wings.' },
+    'Bigs': { meaning: 'Centers focused on rim protection, screening, and primary paint control.', players: 'Rim protectors, dive-and-lob bigs, post scorers, and defensive rebounding anchors.' },
+    'Points Allowed': { meaning: 'Average points per game surrendered by the defense to this specific grouped tier.', players: 'Identifies which positional tier (Guards, Wings, or Bigs) produces the highest scoring volume against this defense.' },
+    'Rebounds Allowed': { meaning: 'Average rebounds per game surrendered by the defense to this specific grouped tier.', players: 'Identifies whether opposing guards, wings, or centers secure the bulk of rebounds against this team.' },
+    '3PM Allowed': { meaning: 'Average three-pointers made per game surrendered by the defense to this specific grouped tier.', players: 'Highlights which positional group gets open perimeter attempts against this defensive scheme.' },
+    'Pick & Roll Ball Handler': { meaning: 'Possessions where the ball handler uses an on-ball screen to shoot, drive, or initiate passing reads.', players: 'Primary ball handlers, pick-and-roll navigators, and lead scoring point guards.' },
+    'Spot-Up Shooter': { meaning: 'Possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout penetration.', players: 'Stationary floor spacers, 3-and-D wings, and spot-up forward threats.' },
+    'Isolation Scorer': { meaning: 'Possessions where an offensive creator attacks their defender in single coverage without an on-ball screen.', players: 'Isolation shot creators, one-on-one bucket getters, and mismatch hunters.' },
+    'USG': { meaning: 'Usage Percentage: Estimate of team possessions used by a player through field goal attempts, free throw trips, and turnovers while on the floor.', players: 'High-USG (>28%) indicates focal point offensive engine; low-USG (<18%) indicates role player/spacer.' },
+    'USG%': { meaning: 'Usage Percentage: Estimate of team possessions used by a player through field goal attempts, free throw trips, and turnovers while on the floor.', players: 'High-USG (>28%) indicates focal point offensive engine; low-USG (<18%) indicates role player/spacer.' },
+    'AST%': { meaning: 'Assist Percentage: Percentage of teammate field goals assisted by a player while on the floor.', players: 'High AST% (>30%) indicates primary playmakers and table-setters.' },
+    'REB%': { meaning: 'Rebound Percentage: Percentage of total available rebounds grabbed by a player while on the floor.', players: 'High REB% (>15%) indicates dominant glass cleaners and interior rebounders.' },
+    'Clutch USG': { meaning: 'Usage percentage during clutch situations (final 5 minutes of a game when the score margin is within 5 points).', players: 'Identifies the designated closer or go-to isolation creator in high-leverage late-game possessions.' },
+    'Paint': { meaning: 'Average points scored or touches inside the painted lane per game.', players: 'Post-up bigs, downhill paint-touch drivers, and interior cutters.' },
+    'Floor': { meaning: '25th percentile output across the player\'s last 10 games, showing standard scoring baseline.', players: 'High-floor players maintain dependable output even on off-shooting nights.' },
+    'Flr': { meaning: '25th percentile output across the player\'s last 10 games, showing standard scoring baseline.', players: 'High-floor players maintain dependable output even on off-shooting nights.' },
+    'Median': { meaning: '50th percentile output across the player\'s last 10 games, showing typical game production.', players: 'Represents the most realistic median game performance for the player.' },
+    'Med': { meaning: '50th percentile output across the player\'s last 10 games, showing typical game production.', players: 'Represents the most realistic median game performance for the player.' },
+    'Ceiling': { meaning: '75th percentile output across the player\'s last 10 games, showing standard high-end production.', players: 'High-ceiling players have explosive upside in favorable matchups or high-possession games.' },
+    'Ceil': { meaning: '75th percentile output across the player\'s last 10 games, showing standard high-end production.', players: 'High-ceiling players have explosive upside in favorable matchups or high-possession games.' },
+    'OREB%': { meaning: 'Offensive Rebound Rate: (Team OREB) / (Team OREB + Opp DREB). Measures efficiency on the offensive glass.', players: 'Frontcourt crashers, tip-in bigs, and high-motor offensive rebounders.' },
+    'DREB%': { meaning: 'Defensive Rebound Rate: (Team DREB) / (Team DREB + Opp OREB). Measures defensive rebound securing rate.', players: 'Physical centers and strong defensive rebounders who prevent second-chance points.' },
+    'TOV': { meaning: 'Turnovers committed per game, resulting in lost offensive possessions.', players: 'High-turnover players are aggressive high-usage passers or loose ball handlers.' },
+    'Opp TOV': { meaning: 'Turnovers forced per game against opponents through steals, deflections, and shot clock violations.', players: 'Active-hands perimeter defenders, deflection leaders, and aggressive trap schemes.' },
+    'Season PTS': { meaning: 'Average total points scored per game during the regular season.', players: 'Primary scoring options, secondary bucket-getters, and perimeter specialists.' },
+    'PTS': { meaning: 'Points scored per game.', players: 'High-volume scorers, spot-up floor spacers, and transition finishers.' },
+    'REB': { meaning: 'Total rebounds secured per game.', players: 'Rebounding centers, athletic glass-cleaning wings, and gang-rebounding guards.' },
+    'AST': { meaning: 'Total assists recorded per game.', players: 'Pick-and-roll orchestrators, kick-out passers, and transition table-setters.' },
+    '3PA': { meaning: 'Three-point field goal attempts per game.', players: 'Volume 3PT shooters, movement perimeter threats, and spacing bigs.' },
+    '3PM': { meaning: 'Three-point field goals made per game.', players: 'Efficient perimeter shooters and catch-and-shoot snipers.' },
+    'MPG': { meaning: 'Minutes played per game.', players: 'Core rotation players and starters logging heavy floor time.' }
 };
 
-function formatMetricLabelWithTooltip(label) {
-    const def = FORENSIC_DEFINITIONS[label];
-    if (!def) return label;
-    return `<span class="stat-info-trigger"><span>${label}</span><span class="stat-info-box">${def}</span></span>`;
+// Aliases
+FORENSIC_DEFINITIONS['Rim'] = FORENSIC_DEFINITIONS['Rim (RA)'];
+FORENSIC_DEFINITIONS['Paint Non-RA'] = FORENSIC_DEFINITIONS['Paint (Non-RA)'];
+FORENSIC_DEFINITIONS['PnR_Ball_Handler'] = FORENSIC_DEFINITIONS['PnR Ball Handler'];
+FORENSIC_DEFINITIONS['Spot_Up'] = FORENSIC_DEFINITIONS['Spot-Up'];
+FORENSIC_DEFINITIONS['PnR_Roll_Man'] = FORENSIC_DEFINITIONS['Roll Man / Rim Runner'];
+
+function formatMetricLabelWithTooltip(label, customTitle, tooltipClass) {
+    const item = FORENSIC_DEFINITIONS[label];
+    if (!item) return label;
+    const title = customTitle || label;
+    const cls = tooltipClass ? `stat-info-box ${tooltipClass}` : 'stat-info-box';
+    let body = '';
+    if (typeof item === 'object') {
+        body = `
+            <span class="${cls} block">
+                <span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block">
+                    <span class="text-cyan-400 font-mono">${title}</span>
+                    <span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Scouting Context</span>
+                </span>
+                <span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block">
+                    <b class="text-slate-400 font-sans font-semibold">What it means:</b> ${item.meaning}
+                </span>
+                <span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block">
+                    <b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${item.players}
+                </span>
+            </span>
+        `;
+    } else {
+        body = `
+            <span class="${cls} block">
+                <span class="font-bold text-slate-100 text-[11px] mb-1 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block">
+                    <span class="text-cyan-400 font-mono">${title}</span>
+                </span>
+                <span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">
+                    ${item}
+                </span>
+            </span>
+        `;
+    }
+    return `<span class="stat-info-trigger"><span>${label}</span>${body}</span>`;
 }
 
-function formatInlinePpp(valStr) {
+function formatInlinePpp(valStr, tooltipClass) {
     if (valStr == null) return valStr;
     const str = String(valStr);
     if (str.includes('PPP')) {
-        const pppDef = FORENSIC_DEFINITIONS['PPP'];
-        return str.replace('PPP', `<span class="stat-info-trigger text-cyan-300 font-medium"><span>PPP</span><span class="stat-info-box">${pppDef}</span></span>`);
+        const item = FORENSIC_DEFINITIONS['PPP'];
+        const cls = tooltipClass ? `stat-info-box ${tooltipClass}` : 'stat-info-box';
+        const pppBox = `
+            <span class="${cls} block">
+                <span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block">
+                    <span class="text-cyan-400 font-mono">PPP (Points Per Possession)</span>
+                    <span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Efficiency Metric</span>
+                </span>
+                <span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block">
+                    <b class="text-slate-400 font-sans font-semibold">What it means:</b> ${item.meaning || item}
+                </span>
+                <span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block">
+                    <b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${item.players || 'High-PPP players are efficient creators and high-percentage finishers.'}
+                </span>
+            </span>
+        `;
+        return str.replace('PPP', `<span class="stat-info-trigger text-cyan-300 font-medium"><span>PPP</span>${pppBox}</span>`);
     }
     return valStr;
 }
+
+// Attach to window for global access across scripts
+window.FORENSIC_DEFINITIONS = FORENSIC_DEFINITIONS;
+window.formatMetricLabelWithTooltip = formatMetricLabelWithTooltip;
+window.formatInlinePpp = formatInlinePpp;
 
 // Canonical Pillar Row Formatter: outputs "Value (#Rank of 30)" or "Value [Small Sample]"
 function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
