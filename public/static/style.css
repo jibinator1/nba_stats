@@ -199,7 +199,7 @@ tbody tr.selected-row {
 
 .stat-info-trigger:hover {
     color: #ffffff;
-    border-bottom-color: rgba(226, 232, 240, 0.85);
+    border-bottom-color: rgba(34, 211, 238, 0.85);
 }
 
 .stat-info-box {
@@ -209,7 +209,7 @@ tbody tr.selected-row {
     bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%) translateY(4px);
-    width: 250px;
+    width: 260px;
     max-width: calc(100vw - 32px);
     padding: 8px 11px;
     background: rgba(18, 22, 28, 0.98);
@@ -223,8 +223,11 @@ tbody tr.selected-row {
     line-height: 1.45;
     text-transform: none;
     letter-spacing: normal;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
+    text-align: left;
     pointer-events: none;
-    z-index: 100;
+    z-index: 9999;
     transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
     transition-delay: 0s;
 }

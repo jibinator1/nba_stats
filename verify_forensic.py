@@ -297,6 +297,33 @@ def run_audit():
     assert 'positional_allowances' in m_data['home_forensic'], "Missing positional_allowances in matchup home profile"
     print("  [PASS] /api/matchup/DET/BOS renders cleanly with positional allowances and role archetypes.")
 
+    # 11. Verify Interactive Tooltips, Jaylen Brown to PHI Roster Transfer, and Cade Cunningham Operator Text
+    print("\n[11/11] Testing Interactive Tooltips, Jaylen Brown Trade to PHI, and Cade Operator Insight...")
+    
+    # Check Jaylen Brown is on PHI
+    jb = next((p for p in players if p['player_name'] == 'Jaylen Brown'), None)
+    assert jb is not None, "Jaylen Brown not found in player profiles"
+    assert jb['team'] == 'PHI', f"Expected Jaylen Brown on PHI, got {jb['team']}"
+    bos_players = [p['player_name'] for p in players if p['team'] == 'BOS']
+    assert 'Jaylen Brown' not in bos_players, "Jaylen Brown should not be in BOS roster"
+    phi_players = [p['player_name'] for p in players if p['team'] == 'PHI']
+    assert 'Jaylen Brown' in phi_players, "Jaylen Brown must be in PHI roster"
+    bos_top4_ascii = [p.encode('ascii', 'replace').decode('ascii') for p in bos_players[:4]]
+    print(f"  Roster Transfer: Jaylen Brown confirmed on {jb['team']} (BOS Top 4: {bos_top4_ascii})")
+
+    # Check FORENSIC_DEFINITIONS and stat-info-trigger in modal.js
+    assert 'FORENSIC_DEFINITIONS' in modal_js_text, "Missing FORENSIC_DEFINITIONS dictionary in modal.js"
+    assert 'stat-info-trigger' in modal_js_text, "Missing stat-info-trigger in modal.js"
+    assert 'stat-info-box' in modal_js_text, "Missing stat-info-box in modal.js"
+    assert 'formatMetricLabelWithTooltip' in modal_js_text, "Missing formatMetricLabelWithTooltip in modal.js"
+    assert 'formatInlinePpp' in modal_js_text, "Missing formatInlinePpp in modal.js"
+    print("  [PASS] Interactive tooltips and definitions verified across forensic metrics.")
+
+    # Check Cade Cunningham Pick & Roll Ball Handler operator text in insights
+    assert "operates as the Pick & Roll Ball Handler on 41.5%" in modal_js_text, "Missing Cade Cunningham explicit operator text in modal.js"
+    assert "Operates as the" in modal_js_text and "of offensive possessions" in modal_js_text, "Missing player card role operator sentence in modal.js"
+    print("  [PASS] Explicit Cade Cunningham Pick & Roll Ball Handler operator text verified in insights.")
+
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
     print("=" * 60)

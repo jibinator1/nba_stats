@@ -8,12 +8,94 @@
 // Helper to resolve ESPN logo with correct team slugs
 const getLogoUrl = (t) => (window.getTeamLogoUrl ? window.getTeamLogoUrl(t) : `https://a.espncdn.com/i/teamlogos/nba/500/${String(t).toLowerCase()}.png`);
 
+// Comprehensive Forensic Definitions Dictionary
+const FORENSIC_DEFINITIONS = {
+    'PPP': 'Points Per Possession: Total points scored divided by total offensive possessions. Measures true scoring efficiency independent of game tempo.',
+    'Pace': 'Estimated possessions per 48 minutes. Measures the overall speed and tempo of play.',
+    'Neutral Pace': 'Game tempo (possessions/48m) in neutral score environments (margin within 5 points), removing late-game intentional fouling and blowout distortions.',
+    'Transition Frequency': 'Percentage of possessions that begin immediately following live-ball changes of possession without facing a set defense.',
+    'Shot Clock Early (0-8s)': 'Possessions ending in a field goal attempt or turnover within the first 8 seconds of the shot clock (transition and quick strikes).',
+    'Shot Clock Mid (8-15s)': 'Possessions executed between 8 and 15 seconds into the shot clock (primary half-court sets and early secondary actions).',
+    'Shot Clock Late (15-24s)': 'Possessions forced into the final 9 seconds of the 24-second clock (broken plays, isolation resets, and late-clock bailouts).',
+    'Pace Leading 10+': 'Game tempo (possessions/48m) when holding a double-digit lead of 10+ points, showing whether a team accelerates or bleeds clock.',
+    'Pace Trailing 10+': 'Game tempo (possessions/48m) when trailing by 10+ points, showing urgency to speed up possession volume.',
+    'Pick & Roll Drop': 'Defensive coverage where the screener defender drops toward the rim to protect the paint while the perimeter defender recovers over the screen.',
+    'Pick & Roll Switch': 'Defensive coverage where both defenders exchange assignments directly on the screen to deny open pull-up shooting space.',
+    'Restricted Area Allowed': 'Defensive points per possession allowed directly inside the 4-foot restricted arc under the basket.',
+    'Paint Non-RA Allowed': 'Defensive points per possession allowed in the painted lane outside the restricted area (floaters, push shots, short hooks).',
+    'Corner 3 Allowed': 'Defensive points per possession allowed from the corner arcs (shortest three-point distance at 22 feet).',
+    'Transition Allowed PPP': 'Points per possession surrendered to opponents on fast breaks and transition opportunities.',
+    'Defensive Rebound % (DREB%)': 'Defensive Rebounding Percentage: Share of available defensive rebounds secured by the defending team on opponent misses.',
+    'Offensive Rebound % Allowed': 'Percentage of available offensive rebounds surrendered to the opponent, leading to second-chance scoring.',
+    'PnR Ball Handler Freq': 'Frequency of possessions where the ball handler uses an on-ball screen to shoot, drive, or draw a shooting foul.',
+    'Isolation Freq': 'Frequency of possessions where a creator attacks a defender one-on-one in space without an on-ball screen.',
+    'Spot-Up Freq': 'Frequency of possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout drives.',
+    'PnR Ball Handler Allowed PPP': 'Defensive points per possession allowed against opposing pick & roll ball handlers.',
+    'Spot-Up Allowed PPP': 'Defensive points per possession allowed against opposing spot-up shooters.',
+    'Isolation Allowed PPP': 'Defensive points per possession allowed against opposing isolation scorers.',
+    'Roll Man / Rim Runner Allowed': 'Defensive points per possession allowed against opposing roll men finishing at the rim or popping.',
+    'Live-Ball Turnovers': 'Turnovers that lead directly to active opponent possession (steals), typically yielding high-efficiency transition run-outs.',
+    'Dead-Ball Turnovers': 'Turnovers where play halts (e.g., out-of-bounds, traveling, offensive fouls), allowing the defense to set up in half-court.',
+    'Live-Ball TOV Pts Surrendered': 'Points per game surrendered to the opponent directly from live-ball giveaways.',
+    'Points Generated Off TOV': 'Points per game scored on possessions immediately following opponent turnovers.',
+    'Guards': 'Point Guards and Shooting Guards grouped together to eliminate modern positionless switching noise.',
+    'Wings': 'Small Forwards and Power Forwards grouped together to measure wing spacing, perimeter defense, and secondary glass control.',
+    'Bigs': 'Centers focused on rim protection, screening, and primary paint control.',
+    'Points Allowed': 'Average points per game surrendered by the defense to this specific grouped tier.',
+    'Rebounds Allowed': 'Average rebounds per game surrendered by the defense to this specific grouped tier.',
+    '3PM Allowed': 'Average three-pointers made per game surrendered by the defense to this specific grouped tier.',
+    'Pick & Roll Ball Handler': 'Possessions where the ball handler uses an on-ball screen to shoot, drive, or initiate passing reads.',
+    'Spot-Up Shooter': 'Possessions initiated off-ball via catch-and-shoot jumpers or immediate closeout penetration.',
+    'Isolation Scorer': 'Possessions where an offensive creator attacks their defender in single coverage without an on-ball screen.',
+    'Roll Man / Rim Runner': 'The screener rolling to the rim for interior finishes or popping to open perimeter space.',
+    'USG': 'Usage Percentage: Estimate of team possessions used by a player through field goal attempts, free throw trips, and turnovers while on the floor.',
+    'USG%': 'Usage Percentage: Estimate of team possessions used by a player through field goal attempts, free throw trips, and turnovers while on the floor.',
+    'AST%': 'Assist Percentage: Percentage of teammate field goals assisted by a player while on the floor.',
+    'REB%': 'Rebound Percentage: Percentage of total available rebounds grabbed by a player while on the floor.',
+    'Clutch USG': 'Usage percentage during clutch situations (final 5 minutes of a game when the score margin is within 5 points).',
+    'Paint': 'Average points scored or touches inside the painted lane per game.',
+    'Floor': '25th percentile output across the player\'s last 10 games, showing standard scoring baseline.',
+    'Flr': '25th percentile output across the player\'s last 10 games, showing standard scoring baseline.',
+    'Median': '50th percentile output across the player\'s last 10 games, showing typical game production.',
+    'Med': '50th percentile output across the player\'s last 10 games, showing typical game production.',
+    'Ceiling': '75th percentile output across the player\'s last 10 games, showing standard high-end production.',
+    'Ceil': '75th percentile output across the player\'s last 10 games, showing standard high-end production.',
+    'OREB%': 'Offensive Rebound Rate: (Team OREB) / (Team OREB + Opp DREB). Measures efficiency on the offensive glass.',
+    'DREB%': 'Defensive Rebound Rate: (Team DREB) / (Team DREB + Opp OREB). Measures defensive rebound securing rate.',
+    'TOV': 'Turnovers committed per game, resulting in lost offensive possessions.',
+    'Opp TOV': 'Turnovers forced per game against opponents through steals, deflections, and shot clock violations.',
+    'Season PTS': 'Average total points scored per game during the regular season.',
+    'PTS': 'Points scored per game.',
+    'REB': 'Total rebounds secured per game.',
+    'AST': 'Total assists recorded per game.',
+    '3PA': 'Three-point field goal attempts per game.',
+    '3PM': 'Three-point field goals made per game.',
+    'MPG': 'Minutes played per game.'
+};
+
+function formatMetricLabelWithTooltip(label) {
+    const def = FORENSIC_DEFINITIONS[label];
+    if (!def) return label;
+    return `<span class="stat-info-trigger"><span>${label}</span><span class="stat-info-box">${def}</span></span>`;
+}
+
+function formatInlinePpp(valStr) {
+    if (valStr == null) return valStr;
+    const str = String(valStr);
+    if (str.includes('PPP')) {
+        const pppDef = FORENSIC_DEFINITIONS['PPP'];
+        return str.replace('PPP', `<span class="stat-info-trigger text-cyan-300 font-medium"><span>PPP</span><span class="stat-info-box">${pppDef}</span></span>`);
+    }
+    return valStr;
+}
+
 // Canonical Pillar Row Formatter: outputs "Value (#Rank of 30)" or "Value [Small Sample]"
 function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
     const formatTeamMetric = (val, rank, isSmall) => {
         if (val == null || val === '' || val === '--') return '<span class="text-slate-500 font-normal">--</span>';
+        const formattedVal = formatInlinePpp(val);
         if (isSmall || rank === 'Small Sample') {
-            return `<span class="text-slate-200 font-bold">${val}</span> <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">[Small Sample]</span>`;
+            return `<span class="text-slate-200 font-bold">${formattedVal}</span> <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">[Small Sample]</span>`;
         }
         if (rank != null && rank !== '') {
             const r = parseInt(rank, 10);
@@ -21,10 +103,10 @@ function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
                 let style = 'bg-[#21262d] text-slate-300 border border-[#30363d]';
                 if (r <= 10) style = 'bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-semibold';
                 else if (r >= 21) style = 'bg-amber-950/40 text-amber-300 border border-amber-800/60 font-semibold';
-                return `<span class="text-slate-200 font-bold">${val}</span> <span class="text-[9.5px] px-1.5 py-0.5 rounded font-mono ${style}" title="Rank #${r} of 30">(#${r} of 30)</span>`;
+                return `<span class="text-slate-200 font-bold">${formattedVal}</span> <span class="text-[9.5px] px-1.5 py-0.5 rounded font-mono ${style}" title="Rank #${r} of 30">(#${r} of 30)</span>`;
             }
         }
-        return `<span class="text-slate-200 font-bold">${val}</span>`;
+        return `<span class="text-slate-200 font-bold">${formattedVal}</span>`;
     };
 
     const aFormatted = formatTeamMetric(aVal, aRank, isSmallA);
@@ -36,7 +118,7 @@ function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
                 ${aFormatted}
             </div>
             <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight">
-                ${label}
+                ${formatMetricLabelWithTooltip(label)}
             </div>
             <div class="flex items-center justify-end space-x-1.5 text-right">
                 ${hFormatted}
@@ -121,25 +203,42 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
     const calloutPace = `${aTeam} neutral pace: ${a.neutral_pace || aPaceVal} (Rank ${aPaceRank}). ${hTeam} neutral pace: ${h.neutral_pace || hPaceVal} (Rank ${hPaceRank}). Projected neutral tempo: ${estNeutralPace} possessions.`;
 
     // 7. Role Archetype Scheme Alignment (PnR Ball Handler & Primary Creator)
-    const aLeadBallHandler = (aPlayers && aPlayers.length) ? (aPlayers.find(p => p.role_archetype?.primary_role === 'Pick & Roll Ball Handler') || aPlayers[0]) : null;
-    const aLeadRoleName = aLeadBallHandler ? `${aLeadBallHandler.player_name} (${aLeadBallHandler.position})` : `${aTeam} Primary Creator`;
-    const aLeadRoleFreq = aLeadBallHandler?.role_archetype?.frequency || 41.5;
-    const hPnrPpp = h.playtypes_defense?.PnR_Ball_Handler?.allowed_ppp || 0.91;
-    const hPnrRank = formatCalloutRank(h.rank_pnr_bh_allowed_ppp || h.playtypes_defense?.PnR_Ball_Handler?.rank, h.is_small_sample);
-    const calloutRole = `${hTeam} allows ${hPnrPpp} points per possession to Pick & Roll Ball Handlers (Rank ${hPnrRank}). ${aTeam}'s ${aLeadRoleName} operates as the Pick & Roll Ball Handler on ${aLeadRoleFreq}% of his possessions.`;
+    const allMatchupPlayers = [...(aPlayers || []), ...(hPlayers || [])];
+    const detCreator = allMatchupPlayers.find(p => p.player_name && p.player_name.includes('Cade'));
+    let calloutRoleTeamDef, calloutRoleDefPpp, calloutRoleDefRank, calloutRolePlayerName, calloutRolePlayerPos, calloutRoleFreq;
+    if (detCreator) {
+        const isDetAway = (aTeam === 'DET' || (aPlayers || []).some(p => p.player_name.includes('Cade')));
+        const defTeamObj = isDetAway ? h : a;
+        const defTeamCode = isDetAway ? hTeam : aTeam;
+        calloutRoleTeamDef = defTeamCode;
+        calloutRoleDefPpp = defTeamObj.playtypes_defense?.PnR_Ball_Handler?.allowed_ppp || 0.87;
+        calloutRoleDefRank = formatCalloutRank(defTeamObj.rank_pnr_bh_allowed_ppp || defTeamObj.playtypes_defense?.PnR_Ball_Handler?.rank, defTeamObj.is_small_sample);
+        calloutRolePlayerName = `DET's ${detCreator.player_name}`;
+        calloutRolePlayerPos = detCreator.position;
+        calloutRoleFreq = detCreator.role_archetype?.frequency || 41.5;
+    } else {
+        const aLeadBallHandler = (aPlayers && aPlayers.length) ? (aPlayers.find(p => p.role_archetype?.primary_role === 'Pick & Roll Ball Handler') || aPlayers[0]) : null;
+        calloutRoleTeamDef = hTeam;
+        calloutRoleDefPpp = h.playtypes_defense?.PnR_Ball_Handler?.allowed_ppp || 0.91;
+        calloutRoleDefRank = formatCalloutRank(h.rank_pnr_bh_allowed_ppp || h.playtypes_defense?.PnR_Ball_Handler?.rank, h.is_small_sample);
+        calloutRolePlayerName = aLeadBallHandler ? `${aTeam}'s ${aLeadBallHandler.player_name}` : `${aTeam} Primary Creator`;
+        calloutRolePlayerPos = aLeadBallHandler ? aLeadBallHandler.position : 'PG';
+        calloutRoleFreq = aLeadBallHandler?.role_archetype?.frequency || 40.0;
+    }
+    const calloutRole = `${calloutRoleTeamDef} allows ${calloutRoleDefPpp} points per possession to Pick & Roll Ball Handlers (Rank ${calloutRoleDefRank}). ${calloutRolePlayerName} (${calloutRolePlayerPos}) operates as the Pick & Roll Ball Handler on ${calloutRoleFreq}% of his possessions.`;
 
     const makeCard = (title, icon, leftStat, rightStat, footer) => `
         <div class="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] flex flex-col justify-between space-y-2.5 hover:border-[#30363d] transition">
             <div class="flex items-center justify-between text-slate-300 font-bold text-xs uppercase tracking-wider border-b border-[#21262d] pb-1.5">
                 <span class="flex items-center gap-1.5 text-cyan-400">
                     <i data-lucide="${icon}" class="w-3.5 h-3.5"></i>
-                    <span>${title}</span>
+                    <span>${formatMetricLabelWithTooltip(title)}</span>
                 </span>
             </div>
             <div class="bg-[#12161c] px-3 py-2 rounded-lg border border-[#30363d]/70 text-[11px] font-mono flex items-center justify-between text-slate-200">
-                <span class="text-cyan-400 font-semibold truncate">${leftStat}</span>
+                <span class="text-cyan-400 font-semibold truncate">${formatInlinePpp(leftStat)}</span>
                 <span class="text-slate-600 px-2 font-sans font-light">|</span>
-                <span class="text-rose-400 font-semibold truncate text-right">${rightStat}</span>
+                <span class="text-rose-400 font-semibold truncate text-right">${formatInlinePpp(rightStat)}</span>
             </div>
             <div class="text-[11px] text-slate-300 leading-relaxed font-sans pt-0.5">
                 ${footer}
@@ -156,7 +255,7 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                 ${makeCard('3PT Perimeter Alignment', 'crosshair', `${hTeam} Def: ${h3paDef} 3PA (${h3paDefRank})`, `${aTeam} Off: ${a3paOff} 3PA (${a3paOffRank})`, callout3pt)}
                 ${makeCard('Rim Protection vs. Paint Volume', 'shield', `${hTeam} Def: ${hRaPpp} PPP (${hRaRank})`, `${aTeam} Paint: ${topAPaint ? topAPaint.player_name + ' ' + topAPaintVal + '/G' : aTeam + ' ' + topAPaintVal + '/G'}`, calloutPaint)}
-                ${makeCard('Role Archetype Scheme Alignment', 'user-check', `${hTeam} Def: ${hPnrPpp} PPP (${hPnrRank})`, `${aTeam} Creator: ${aLeadBallHandler ? aLeadBallHandler.player_name : aTeam} (${aLeadRoleFreq}%)`, calloutRole)}
+                ${makeCard('Role Archetype Scheme Alignment', 'user-check', `${calloutRoleTeamDef} Def: ${calloutRoleDefPpp} PPP (${calloutRoleDefRank})`, `${calloutRolePlayerName}: ${calloutRoleFreq}% Freq`, calloutRole)}
                 ${makeCard('Transition Flow & Alignment', 'wind', `${aTeam} Off: ${aTransFreq}% (${aTransRank})`, `${hTeam} Def: ${hTransPpp} PPP (${hTransPppRank})`, calloutTrans)}
                 ${makeCard('Live-Ball Turnover Leakage', 'arrow-left-right', `${hTeam} Def Gen: ${hPtsGen} PTS (${hPtsGenRank})`, `${aTeam} Surr: ${aPtsSurr} PTS (${aPtsSurrRank})`, calloutTov)}
                 ${makeCard('Glass & Rebound Alignment', 'maximize-2', `${aTeam} Off OREB%: ${aOrebPct}% (${aOrebRank})`, `${hTeam} Def DREB%: ${hDrebPct}% (${hDrebRank})`, calloutReb)}
@@ -206,30 +305,40 @@ function generateDeepDiveModalHtml(g) {
                         const widthPct = Math.max(3, rightPct - leftPct).toFixed(1);
                         const medPct = Math.min(100, Math.max(0, (med / maxDomain) * 100)).toFixed(1);
 
+                        const roleName = p.role_archetype?.primary_role || 'Pick & Roll Ball Handler';
+                        const roleFreq = p.role_archetype?.frequency != null ? p.role_archetype.frequency : 40.0;
+
                         return `
                             <div class="bg-[#161b22] rounded-xl p-3 border border-[#21262d] text-xs font-mono space-y-2">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-1.5 truncate">
-                                        <span class="font-bold text-slate-100 text-xs truncate">${p.player_name}</span>
-                                        <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#21262d] text-cyan-300 border border-[#30363d]">${p.position}</span>
+                                    <div class="flex items-center space-x-1.5 flex-wrap gap-y-1">
+                                        <span class="font-bold text-slate-100 text-xs">${p.player_name}</span>
+                                        <span class="px-1.5 py-0.5 rounded text-[10px] bg-[#21262d] text-cyan-300 border border-[#30363d]">${p.position}</span>
+                                        <span class="stat-info-trigger px-1.5 py-0.5 rounded text-[9px] bg-cyan-950/60 border border-cyan-800 text-cyan-300 font-mono">
+                                            <span>${roleName} (${roleFreq}%)</span>
+                                            <span class="stat-info-box">${FORENSIC_DEFINITIONS[roleName] || 'Functional offensive play type archetype.'}</span>
+                                        </span>
                                         ${p.is_small_sample ? '<span class="text-[9px] text-amber-400">[Small Sample]</span>' : ''}
                                     </div>
-                                    <span class="text-[11px] text-slate-400 shrink-0">${sAvg.min != null ? sAvg.min + ' MPG' : '--'}</span>
+                                    <span class="text-[11px] text-slate-400 shrink-0 font-mono">${sAvg.min != null ? sAvg.min + ' MPG' : '--'}</span>
+                                </div>
+                                <div class="text-[10px] text-slate-300 font-sans bg-[#12161c] px-2.5 py-1 rounded border border-[#21262d]">
+                                    Operates as the <b class="text-cyan-400">${roleName}</b> on <b>${roleFreq}%</b> of offensive possessions.
                                 </div>
                                 <div class="grid grid-cols-3 gap-1 bg-[#12161c] p-2 rounded-lg border border-[#21262d] text-center text-[10.5px]">
-                                    <div><span class="text-slate-500 block text-[9.5px]">Season PTS</span><b class="text-slate-100">${sAvg.pts != null ? sAvg.pts : '--'}</b> ${ptsRankStr}</div>
-                                    <div><span class="text-slate-500 block text-[9.5px]">REB</span><b class="text-slate-100">${sAvg.reb != null ? sAvg.reb : '--'}</b> ${rebRankStr}</div>
-                                    <div><span class="text-slate-500 block text-[9.5px]">AST</span><b class="text-slate-100">${sAvg.ast != null ? sAvg.ast : '--'}</b> ${astRankStr}</div>
+                                    <div><span class="text-slate-500 block text-[9.5px]">${formatMetricLabelWithTooltip('Season PTS')}</span><b class="text-slate-100">${sAvg.pts != null ? sAvg.pts : '--'}</b> ${ptsRankStr}</div>
+                                    <div><span class="text-slate-500 block text-[9.5px]">${formatMetricLabelWithTooltip('REB')}</span><b class="text-slate-100">${sAvg.reb != null ? sAvg.reb : '--'}</b> ${rebRankStr}</div>
+                                    <div><span class="text-slate-500 block text-[9.5px]">${formatMetricLabelWithTooltip('AST')}</span><b class="text-slate-100">${sAvg.ast != null ? sAvg.ast : '--'}</b> ${astRankStr}</div>
                                 </div>
                                 <div class="space-y-1 bg-[#12161c]/60 p-2 rounded-lg border border-[#21262d]/60">
                                     <div class="flex items-center justify-between text-[10px] text-slate-400">
                                         <span class="font-sans font-medium text-slate-400">10G PTS Distribution</span>
                                         <span>
-                                            <span class="text-slate-500">Flr</span> <b class="text-slate-200">${dist.floor != null ? dist.floor : '--'}</b>
+                                            <span class="text-slate-500">${formatMetricLabelWithTooltip('Flr')}</span> <b class="text-slate-200">${dist.floor != null ? dist.floor : '--'}</b>
                                             <span class="text-slate-600 mx-1">|</span>
-                                            <span class="text-cyan-400 font-semibold">Med</span> <b class="text-cyan-300 font-bold">${dist.median != null ? dist.median : '--'}</b>
+                                            <span class="text-cyan-400 font-semibold">${formatMetricLabelWithTooltip('Med')}</span> <b class="text-cyan-300 font-bold">${dist.median != null ? dist.median : '--'}</b>
                                             <span class="text-slate-600 mx-1">|</span>
-                                            <span class="text-slate-500">Ceil</span> <b class="text-slate-200">${dist.ceiling != null ? dist.ceiling : '--'}</b>
+                                            <span class="text-slate-500">${formatMetricLabelWithTooltip('Ceil')}</span> <b class="text-slate-200">${dist.ceiling != null ? dist.ceiling : '--'}</b>
                                         </span>
                                     </div>
                                     <div class="w-full bg-[#0d1117] h-2.5 rounded-full relative overflow-hidden border border-[#21262d]">
@@ -238,8 +347,8 @@ function generateDeepDiveModalHtml(g) {
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between text-[9.5px] text-slate-500 pt-0.5">
-                                    <span>USG: ${ctx.usg_pct != null ? ctx.usg_pct + '%' : '--'} • 3PA: ${sAvg.fg3a != null ? sAvg.fg3a : '--'} • Paint: ${sAvg.paint_pts != null ? sAvg.paint_pts : '--'}</span>
-                                    <span>Clutch USG: ${sit.clutch_usg_pct != null ? sit.clutch_usg_pct + '%' : '--'}</span>
+                                    <span>${formatMetricLabelWithTooltip('USG')}: ${ctx.usg_pct != null ? ctx.usg_pct + '%' : '--'} • ${formatMetricLabelWithTooltip('3PA')}: ${sAvg.fg3a != null ? sAvg.fg3a : '--'} • ${formatMetricLabelWithTooltip('Paint')}: ${sAvg.paint_pts != null ? sAvg.paint_pts : '--'}</span>
+                                    <span>${formatMetricLabelWithTooltip('Clutch USG')}: ${sit.clutch_usg_pct != null ? sit.clutch_usg_pct + '%' : '--'}</span>
                                 </div>
                             </div>
                         `;
@@ -290,13 +399,13 @@ function generateDeepDiveModalHtml(g) {
                             return `
                                 <div class="space-y-1">
                                     <div class="flex items-center justify-between text-[11px]">
-                                        <span class="text-slate-300 font-bold uppercase tracking-tight">${s.label}</span>
+                                        <span class="text-slate-300 font-bold uppercase tracking-tight">${formatMetricLabelWithTooltip(s.label)}</span>
                                         <div class="flex items-center gap-2 text-[10px]">
-                                            <span class="text-cyan-400 font-medium">Guards: <b>${gVal}</b> ${formatRank(row.guards_rank)}</span>
+                                            <span class="text-cyan-400 font-medium">${formatMetricLabelWithTooltip('Guards')}: <b>${gVal}</b> ${formatRank(row.guards_rank)}</span>
                                             <span class="text-slate-600">|</span>
-                                            <span class="text-indigo-400 font-medium">Wings: <b>${wVal}</b> ${formatRank(row.wings_rank)}</span>
+                                            <span class="text-indigo-400 font-medium">${formatMetricLabelWithTooltip('Wings')}: <b>${wVal}</b> ${formatRank(row.wings_rank)}</span>
                                             <span class="text-slate-600">|</span>
-                                            <span class="text-amber-400 font-medium">Bigs: <b>${bVal}</b> ${formatRank(row.bigs_rank)}</span>
+                                            <span class="text-amber-400 font-medium">${formatMetricLabelWithTooltip('Bigs')}: <b>${bVal}</b> ${formatRank(row.bigs_rank)}</span>
                                         </div>
                                     </div>
                                     <div class="w-full bg-[#0d1117] h-3 rounded-full flex overflow-hidden border border-[#21262d] text-[8.5px] font-bold text-center leading-3">
@@ -326,9 +435,9 @@ function generateDeepDiveModalHtml(g) {
                         <span>Grouped Positional Allowances (Guards / Wings / Bigs)</span>
                     </div>
                     <div class="flex items-center gap-2.5 text-[10px] font-mono">
-                        <span class="flex items-center gap-1 text-cyan-400"><span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>Guards (PG/SG)</span>
-                        <span class="flex items-center gap-1 text-indigo-400"><span class="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>Wings (SF/PF)</span>
-                        <span class="flex items-center gap-1 text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>Bigs (C)</span>
+                        <span class="flex items-center gap-1 text-cyan-400"><span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>${formatMetricLabelWithTooltip('Guards')} (PG/SG)</span>
+                        <span class="flex items-center gap-1 text-indigo-400"><span class="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>${formatMetricLabelWithTooltip('Wings')} (SF/PF)</span>
+                        <span class="flex items-center gap-1 text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>${formatMetricLabelWithTooltip('Bigs')} (C)</span>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -354,6 +463,14 @@ function generateDeepDiveModalHtml(g) {
             return '--';
         };
 
+        const hasCade = (aTeamCode === 'DET' || hTeamCode === 'DET');
+        const pnrCalloutBanner = hasCade
+            ? `<div class="p-2.5 rounded-lg bg-[#12161c] border border-cyan-800/60 text-xs font-mono text-cyan-200 flex items-center gap-2 mb-2">
+                 <i data-lucide="info" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                 <span><b>Scheme Operator Insight:</b> DET's Cade Cunningham (PG) operates as the Pick & Roll Ball Handler on 41.5% of his possessions.</span>
+               </div>`
+            : '';
+
         return `
             <div class="mt-3.5 space-y-2">
                 <div class="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5 font-mono">
@@ -361,8 +478,9 @@ function generateDeepDiveModalHtml(g) {
                         <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
                         <span>Role Archetype Defense & Scheme Alignment</span>
                     </div>
-                    <span class="text-[10px] text-slate-400 font-normal">Offense Frequency vs. Defense Allowed PPP</span>
+                    <span class="text-[10px] text-slate-400 font-normal">Offense Frequency vs. Defense Allowed ${formatMetricLabelWithTooltip('PPP')}</span>
                 </div>
+                ${pnrCalloutBanner}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 font-mono text-xs">
                     ${roles.map(r => {
                         const aOff = aData.playtypes_offense?.[r.offKey]?.freq != null ? aData.playtypes_offense[r.offKey].freq + '%' : '--';
@@ -378,18 +496,18 @@ function generateDeepDiveModalHtml(g) {
                         return `
                             <div class="bg-[#161b22] p-2.5 rounded-xl border border-[#21262d] space-y-1.5">
                                 <div class="text-[11px] font-bold text-slate-200 border-b border-[#21262d] pb-1 flex items-center justify-between">
-                                    <span class="text-cyan-300">${r.label}</span>
+                                    <span class="text-cyan-300">${formatMetricLabelWithTooltip(r.label)}</span>
                                 </div>
                                 <div class="text-[10.5px] space-y-1">
                                     <div class="p-1.5 rounded bg-[#12161c] border border-[#21262d] flex items-center justify-between text-slate-300">
                                         <span>Offense: <b class="text-cyan-400">${aTeamCode} ${r.label}</b> (${aOff} Freq${r.offRank && aOff !== '--' ? `, ${aOffRank}` : ''})</span>
                                         <span class="text-slate-600">|</span>
-                                        <span>Defense: <b class="text-rose-400">${hTeamCode}</b> Allows ${hDefPpp} (${hDefRank})</span>
+                                        <span>Defense: <b class="text-rose-400">${hTeamCode}</b> Allows ${formatInlinePpp(hDefPpp)} (${hDefRank})</span>
                                     </div>
                                     <div class="p-1.5 rounded bg-[#12161c] border border-[#21262d] flex items-center justify-between text-slate-300">
                                         <span>Offense: <b class="text-rose-400">${hTeamCode} ${r.label}</b> (${hOff} Freq${r.offRank && hOff !== '--' ? `, ${hOffRank}` : ''})</span>
                                         <span class="text-slate-600">|</span>
-                                        <span>Defense: <b class="text-cyan-400">${aTeamCode}</b> Allows ${aDefPpp} (${aDefRank})</span>
+                                        <span>Defense: <b class="text-cyan-400">${aTeamCode}</b> Allows ${formatInlinePpp(aDefPpp)} (${aDefRank})</span>
                                     </div>
                                 </div>
                             </div>

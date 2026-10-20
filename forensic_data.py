@@ -713,6 +713,13 @@ def calculate_player_usage_profiles(logs_df):
     logs_sorted = logs_clean.sort_values('GAME_DATE', ascending=False)
     player_current_team = logs_sorted.groupby('PLAYER_NAME')['TEAM_ABBREVIATION'].first()
 
+    # Roster overrides (recent trades / signings)
+    team_overrides = {
+        'Jaylen Brown': 'PHI'
+    }
+    for p_name, t_code in team_overrides.items():
+        player_current_team[p_name] = t_code
+
     # Team totals for USG% computation
     team_totals = logs_clean.groupby('TEAM_ABBREVIATION').agg({
         'FGA': 'sum',

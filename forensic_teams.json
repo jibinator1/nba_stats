@@ -200,8 +200,8 @@
     "fg_pct": 47.0,
     "fg_pct_opp": 47.3,
     "injuries": [
-      "Trae Young",
-      "Mouhamed Gueye"
+      "Mouhamed Gueye",
+      "Trae Young"
     ],
     "rank_pace": 6,
     "rank_neutral_pace": 9,
@@ -1238,8 +1238,8 @@
     "fg_pct": 46.9,
     "fg_pct_opp": 47.7,
     "injuries": [
-      "Zach Collins",
-      "Josh Giddey"
+      "Josh Giddey",
+      "Zach Collins"
     ],
     "rank_pace": 3,
     "rank_neutral_pace": 5,
@@ -1759,8 +1759,8 @@
     "fg_pct": 46.6,
     "fg_pct_opp": 47.4,
     "injuries": [
-      "Anthony Davis",
-      "Dereck Lively II"
+      "Dereck Lively II",
+      "Anthony Davis"
     ],
     "rank_pace": 4,
     "rank_neutral_pace": 7,
@@ -3059,8 +3059,8 @@
     "fg_pct": 45.8,
     "fg_pct_opp": 48.8,
     "injuries": [
-      "RayJ Dennis",
-      "Johnny Furphy"
+      "Johnny Furphy",
+      "RayJ Dennis"
     ],
     "rank_pace": 9,
     "rank_neutral_pace": 11,
@@ -3839,13 +3839,13 @@
     "fg_pct": 45.5,
     "fg_pct_opp": 48.6,
     "injuries": [
-      "Zach Edey",
       "Jaylen Wells",
-      "Jaren Jackson Jr.",
-      "Ja Morant",
-      "PJ Hall",
       "Adama-Alpha Bal",
-      "Scotty Pippen Jr."
+      "PJ Hall",
+      "Zach Edey",
+      "Scotty Pippen Jr.",
+      "Ja Morant",
+      "Jaren Jackson Jr."
     ],
     "rank_pace": 5,
     "rank_neutral_pace": 4,
@@ -4105,9 +4105,9 @@
     "fg_pct": 46.6,
     "fg_pct_opp": 46.3,
     "injuries": [
+      "Trevor Keels",
       "Myron Gardner",
-      "Bam Adebayo",
-      "Trevor Keels"
+      "Bam Adebayo"
     ],
     "rank_pace": 1,
     "rank_neutral_pace": 3,
@@ -4627,8 +4627,8 @@
     "fg_pct": 47.5,
     "fg_pct_opp": 46.2,
     "injuries": [
-      "Donte DiVincenzo",
-      "Rob Dillingham"
+      "Rob Dillingham",
+      "Donte DiVincenzo"
     ],
     "rank_pace": 11,
     "rank_neutral_pace": 13,
@@ -5408,8 +5408,8 @@
     "fg_pct": 47.9,
     "fg_pct_opp": 43.8,
     "injuries": [
-      "Ajay Mitchell",
-      "Isaiah Hartenstein"
+      "Isaiah Hartenstein",
+      "Ajay Mitchell"
     ],
     "rank_pace": 17,
     "rank_neutral_pace": 18,
@@ -6190,8 +6190,8 @@
     "fg_pct": 45.5,
     "fg_pct_opp": 46.9,
     "injuries": [
-      "CJ Huntley",
-      "Mark Williams"
+      "Mark Williams",
+      "CJ Huntley"
     ],
     "rank_pace": 23,
     "rank_neutral_pace": 21,
@@ -6711,8 +6711,8 @@
     "fg_pct": 46.8,
     "fg_pct_opp": 49.4,
     "injuries": [
-      "Zach LaVine",
-      "Keegan Murray"
+      "Keegan Murray",
+      "Zach LaVine"
     ],
     "rank_pace": 18,
     "rank_neutral_pace": 17,
@@ -7230,9 +7230,9 @@
     "fg_pct": 47.7,
     "fg_pct_opp": 46.6,
     "injuries": [
-      "Alijah Martin",
       "Brandon Ingram",
-      "Chucky Hepburn"
+      "Chucky Hepburn",
+      "Alijah Martin"
     ],
     "rank_pace": 21,
     "rank_neutral_pace": 12,
@@ -7753,8 +7753,8 @@
     "fg_pct_opp": 48.6,
     "injuries": [
       "Alex Sarr",
-      "Keshon Gilbert",
-      "Jamir Watkins"
+      "Jamir Watkins",
+      "Keshon Gilbert"
     ],
     "rank_pace": 6,
     "rank_neutral_pace": 1,
