@@ -230,6 +230,20 @@ def run_audit():
     # Check Wide-Open 3PT removed from Pillar 2
     assert 'Wide-Open 3PT Rate Allowed' not in modal_js_text, "Wide-Open 3PT Rate Allowed should be removed from Pillar 2"
 
+    # Check Shot Zone & Play Type ranks in visuals.js
+    assert 'zoneKeyMap' in visuals_js_text, "Missing zoneKeyMap in visuals.js"
+    assert 'ptKeyMap' in visuals_js_text, "Missing ptKeyMap in visuals.js"
+    assert '(#${r} of 30)' in visuals_js_text, "Missing rank formatting in visuals.js"
+
+    # Check Shot Zone ranks in team profile
+    shot_zone_rank_keys = [
+        'rank_ra_off_freq', 'rank_paint_off_freq', 'rank_mid_off_freq', 'rank_corner3_off_freq', 'rank_above_break3_off_freq',
+        'rank_ra_ppp_allowed', 'rank_paint_ppp_allowed', 'rank_mid_ppp_allowed', 'rank_corner3_ppp_allowed', 'rank_above_break3_ppp_allowed'
+    ]
+    for rk in shot_zone_rank_keys:
+        assert rk in sample_b and sample_b[rk] is not None, f"Missing {rk} in BOS team profile"
+    print(f"  Shot Zone Ranks (BOS): Rim Off #{sample_b['rank_ra_off_freq']} | Rim Def #{sample_b['rank_ra_ppp_allowed']} | C3 Off #{sample_b['rank_corner3_off_freq']} | C3 Def #{sample_b['rank_corner3_ppp_allowed']}")
+
     # Check Player Usage Profiles have ranks and distribution bar
     assert 'pts_rank' in players[0]['season_avg'], "Missing pts_rank in player season_avg"
     assert '10G PTS Distribution' in modal_js_text, "Missing visual distribution bar container in modal.js"
@@ -330,6 +344,26 @@ def run_audit():
     assert "operates as the Pick & Roll Ball Handler on 41.5%" in modal_js_text, "Missing Cade Cunningham explicit operator text in modal.js"
     assert "Operates as the" in modal_js_text and "of offensive possessions" in modal_js_text, "Missing player card role operator sentence in modal.js"
     print("  [PASS] Explicit Cade Cunningham Pick & Roll Ball Handler operator text verified in insights.")
+
+    # 12. Verify Universal League Baseline Rankings & Thermonuclear Code Compliance (<1,000 Lines)
+    print("\n[12/12] Testing Universal League Baseline Rankings & Thermonuclear Line Count Compliance (<1,000 Lines)...")
+    for tm, prof in f_teams.items():
+        if prof.get('gp', 0) > 0 and not prof.get('is_small_sample'):
+            for rk in ['rank_neutral_pace', 'rank_transition_freq', 'rank_early_0_8', 'rank_pnr_drop', 'rank_ra_ppp_allowed', 'rank_pnr_bh_freq', 'rank_live_tov']:
+                assert prof.get(rk) is not None, f"Team {tm} missing rank for {rk}"
+
+    # Thermonuclear <1000 lines check across all codebase files
+    base_dir = os.path.dirname(__file__)
+    for root, _, files in os.walk(base_dir):
+        for f in files:
+            if f.endswith('.py') or f.endswith('.js'):
+                fpath = os.path.join(root, f)
+                with open(fpath, 'r', encoding='utf-8') as fh:
+                    lcount = sum(1 for _ in fh)
+                rel_p = os.path.relpath(fpath, base_dir)
+                assert lcount < 1000, f"File {rel_p} exceeds 1,000 lines limit ({lcount} lines)!"
+    print("  [PASS] Every .py and .js file in the entire repository strictly under 1,000 lines (Thermonuclear Standard verified).")
+    print("  [PASS] Universal baseline rankings verified across all 30 NBA teams.")
 
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")

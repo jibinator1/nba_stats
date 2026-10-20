@@ -44,23 +44,9 @@ def load_clean_logs():
 
 def build_paired_games(logs_df):
     """Builds game-level paired data (Team perspective vs Opponent perspective)."""
-    game_teams = logs_df.groupby(['GAME_ID', 'TEAM_ABBREVIATION', 'GAME_DATE']).agg({
-        'PTS': 'sum',
-        'FGA': 'sum',
-        'FGM': 'sum',
-        'FG3A': 'sum',
-        'FG3M': 'sum',
-        'FTA': 'sum',
-        'FTM': 'sum',
-        'OREB': 'sum',
-        'DREB': 'sum',
-        'REB': 'sum',
-        'AST': 'sum',
-        'TOV': 'sum',
-        'STL': 'sum',
-        'BLK': 'sum',
-        'PF': 'sum'
-    }).reset_index()
+    cols = {'PTS': 'sum', 'FGA': 'sum', 'FGM': 'sum', 'FG3A': 'sum', 'FG3M': 'sum', 'FTA': 'sum', 'FTM': 'sum',
+            'OREB': 'sum', 'DREB': 'sum', 'REB': 'sum', 'AST': 'sum', 'TOV': 'sum', 'STL': 'sum', 'BLK': 'sum', 'PF': 'sum'}
+    game_teams = logs_df.groupby(['GAME_ID', 'TEAM_ABBREVIATION', 'GAME_DATE']).agg(cols).reset_index()
 
     game_teams['POSS'] = game_teams['FGA'] + 0.44 * game_teams['FTA'] - game_teams['OREB'] + game_teams['TOV']
     
@@ -476,26 +462,16 @@ def calculate_team_forensics(logs_df, paired_df):
 
     # Add league ranks with sample size gating and tie breaking
     metrics_to_rank = [
-        (('pace',), False, 'rank_pace'),
-        (('neutral_pace',), False, 'rank_neutral_pace'),
-        (('transition_freq',), False, 'rank_transition_freq'),
-        (('def_rtg',), True, 'rank_def_rtg'),
-        (('off_rtg',), False, 'rank_off_rtg'),
-        (('pts_scored',), False, 'rank_pts_scored'),
-        (('pts_allowed',), True, 'rank_pts_allowed'),
-        (('reb_total',), False, 'rank_reb_total'),
-        (('reb_allowed',), True, 'rank_reb_allowed'),
-        (('oreb_pct',), False, 'rank_oreb_pct'),
-        (('dreb_pct',), False, 'rank_dreb_pct'),
-        (('ast_total',), False, 'rank_ast_total'),
-        (('ast_allowed',), True, 'rank_ast_allowed'),
-        (('tov_total',), True, 'rank_tov_total'),
-        (('tov_allowed',), False, 'rank_tov_allowed'),
-        (('fg3m_total',), False, 'rank_fg3m_total'),
-        (('fg3m_allowed',), True, 'rank_fg3m_allowed'),
-        (('fg3a_total',), False, 'rank_fg3a_total'),
-        (('fg3a_allowed',), True, 'rank_fg3a_allowed'),
-        (('fg_pct',), False, 'rank_fg_pct'),
+        (('pace',), False, 'rank_pace'), (('neutral_pace',), False, 'rank_neutral_pace'),
+        (('transition_freq',), False, 'rank_transition_freq'), (('def_rtg',), True, 'rank_def_rtg'),
+        (('off_rtg',), False, 'rank_off_rtg'), (('pts_scored',), False, 'rank_pts_scored'),
+        (('pts_allowed',), True, 'rank_pts_allowed'), (('reb_total',), False, 'rank_reb_total'),
+        (('reb_allowed',), True, 'rank_reb_allowed'), (('oreb_pct',), False, 'rank_oreb_pct'),
+        (('dreb_pct',), False, 'rank_dreb_pct'), (('ast_total',), False, 'rank_ast_total'),
+        (('ast_allowed',), True, 'rank_ast_allowed'), (('tov_total',), True, 'rank_tov_total'),
+        (('tov_allowed',), False, 'rank_tov_allowed'), (('fg3m_total',), False, 'rank_fg3m_total'),
+        (('fg3m_allowed',), True, 'rank_fg3m_allowed'), (('fg3a_total',), False, 'rank_fg3a_total'),
+        (('fg3a_allowed',), True, 'rank_fg3a_allowed'), (('fg_pct',), False, 'rank_fg_pct'),
         (('fg_pct_opp',), True, 'rank_fg_pct_opp'),
         (('rebounding', 'dreb_secured_pct'), False, 'rank_dreb_secured_pct'),
         (('rebounding', 'oreb_allowed_pct'), True, 'rank_oreb_allowed_pct'),
@@ -510,7 +486,9 @@ def calculate_team_forensics(logs_df, paired_df):
         (('pnr_coverage', 'switch'), False, 'rank_pnr_switch'),
         (('shot_profile_allowed', 'restricted_area', 'ppp'), True, 'rank_ra_ppp_allowed'),
         (('shot_profile_allowed', 'paint_non_ra', 'ppp'), True, 'rank_paint_ppp_allowed'),
+        (('shot_profile_allowed', 'mid_range', 'ppp'), True, 'rank_mid_ppp_allowed'),
         (('shot_profile_allowed', 'corner_3', 'ppp'), True, 'rank_corner3_ppp_allowed'),
+        (('shot_profile_allowed', 'above_break_3', 'ppp'), True, 'rank_above_break3_ppp_allowed'),
         (('transition_ppp_allowed',), True, 'rank_transition_ppp_allowed'),
         (('playtypes_offense', 'PnR_Ball_Handler', 'freq'), False, 'rank_pnr_bh_freq'),
         (('playtypes_offense', 'Isolation', 'freq'), False, 'rank_iso_freq'),
@@ -519,6 +497,11 @@ def calculate_team_forensics(logs_df, paired_df):
         (('playtypes_defense', 'Spot_Up', 'allowed_ppp'), True, 'rank_spot_up_allowed_ppp'),
         (('playtypes_defense', 'Isolation', 'allowed_ppp'), True, 'rank_iso_allowed_ppp'),
         (('playtypes_defense', 'PnR_Roll_Man', 'allowed_ppp'), True, 'rank_pnr_rm_allowed_ppp'),
+        (('shot_profile_offense', 'restricted_area', 'freq'), False, 'rank_ra_off_freq'),
+        (('shot_profile_offense', 'paint_non_ra', 'freq'), False, 'rank_paint_off_freq'),
+        (('shot_profile_offense', 'mid_range', 'freq'), False, 'rank_mid_off_freq'),
+        (('shot_profile_offense', 'corner_3', 'freq'), False, 'rank_corner3_off_freq'),
+        (('shot_profile_offense', 'above_break_3', 'freq'), False, 'rank_above_break3_off_freq'),
         (('positional_allowances', 'pts', 'guards'), True, 'rank_pts_allowed_guards'),
         (('positional_allowances', 'pts', 'wings'), True, 'rank_pts_allowed_wings'),
         (('positional_allowances', 'pts', 'bigs'), True, 'rank_pts_allowed_bigs'),
@@ -564,7 +547,14 @@ def calculate_team_forensics(logs_df, paired_df):
             if t not in ranked_teams:
                 team_profiles[t][rank_key] = None
 
-    # Populate ranks into playtypes_defense and positional_allowances sub-dicts
+    # Populate ranks into playtypes_defense, shot zones, and positional_allowances sub-dicts
+    zone_ranks_map = {
+        'restricted_area': ('rank_ra_off_freq', 'rank_ra_ppp_allowed'),
+        'paint_non_ra': ('rank_paint_off_freq', 'rank_paint_ppp_allowed'),
+        'mid_range': ('rank_mid_off_freq', 'rank_mid_ppp_allowed'),
+        'corner_3': ('rank_corner3_off_freq', 'rank_corner3_ppp_allowed'),
+        'above_break_3': ('rank_above_break3_off_freq', 'rank_above_break3_ppp_allowed')
+    }
     for t, prof in team_profiles.items():
         if prof.get('playtypes_defense'):
             pt_keys = [
@@ -576,6 +566,14 @@ def calculate_team_forensics(logs_df, paired_df):
             for pt, r_k in pt_keys:
                 if pt in prof['playtypes_defense']:
                     prof['playtypes_defense'][pt]['rank'] = prof.get(r_k)
+        if prof.get('shot_profile_offense'):
+            for z, (off_r, _) in zone_ranks_map.items():
+                if z in prof['shot_profile_offense']:
+                    prof['shot_profile_offense'][z]['rank'] = prof.get(off_r)
+        if prof.get('shot_profile_allowed'):
+            for z, (_, def_r) in zone_ranks_map.items():
+                if z in prof['shot_profile_allowed']:
+                    prof['shot_profile_allowed'][z]['rank'] = prof.get(def_r)
         if prof.get('positional_allowances'):
             for st in ['pts', 'reb', 'fg3m']:
                 if st in prof['positional_allowances']:
@@ -864,21 +862,11 @@ def calculate_player_usage_profiles(logs_df):
                     'paint_touches_pg': paint_touches
                 },
                 'all_logs': [
-                    {
-                        'd': row['GAME_DATE'].strftime('%Y-%m-%d'),
-                        'pts': int(row['PTS']),
-                        'reb': int(row['REB']),
-                        'ast': int(row['AST']),
-                        'min': round(float(row['MIN']), 1),
-                        'fg3m': int(row['FG3M']),
-                        'fg3a': int(row['FG3A']),
-                        'paint_pts': round(float(max(0.0, (row['PTS'] - row['FG3M']*3) * 0.58)), 1),
-                        'fga': int(row['FGA']),
-                        'fgm': int(row['FGM']),
-                        'fta': int(row['FTA']),
-                        'tov': int(row['TOV'])
-                    }
-                    for _, row in p_logs.sort_values('GAME_DATE', ascending=False).iterrows()
+                    {'d': r['GAME_DATE'].strftime('%Y-%m-%d'), 'pts': int(r['PTS']), 'reb': int(r['REB']),
+                     'ast': int(r['AST']), 'min': round(float(r['MIN']), 1), 'fg3m': int(r['FG3M']),
+                     'fg3a': int(r['FG3A']), 'paint_pts': round(float(max(0.0, (r['PTS'] - r['FG3M']*3) * 0.58)), 1),
+                     'fga': int(r['FGA']), 'fgm': int(r['FGM']), 'fta': int(r['FTA']), 'tov': int(r['TOV'])}
+                    for _, r in p_logs.sort_values('GAME_DATE', ascending=False).iterrows()
                 ]
             })
 

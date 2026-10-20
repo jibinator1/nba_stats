@@ -44,9 +44,25 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
     const aOff = awayForensic.shot_profile_offense || {};
     const hDef = homeForensic.shot_profile_allowed || {};
 
+    const formatRank = (r, isSmall) => {
+        if (isSmall || r === 'Small Sample') return '<span class="text-slate-500 font-mono text-[9px]">[Small Sample]</span>';
+        if (r != null && r !== '') return `<span class="text-slate-400 font-mono text-[9.5px]">(#${r} of 30)</span>`;
+        return '';
+    };
+
+    const zoneKeyMap = {
+        restricted_area: { off: 'rank_ra_off_freq', def: 'rank_ra_ppp_allowed' },
+        paint_non_ra: { off: 'rank_paint_off_freq', def: 'rank_paint_ppp_allowed' },
+        mid_range: { off: 'rank_mid_off_freq', def: 'rank_mid_ppp_allowed' },
+        corner_3: { off: 'rank_corner3_off_freq', def: 'rank_corner3_ppp_allowed' },
+        above_break_3: { off: 'rank_above_break3_off_freq', def: 'rank_above_break3_ppp_allowed' }
+    };
+
     const cardsHtml = zones.map(z => {
         const offFreq = aOff[z.id]?.freq || 20.0;
         const defPpp = hDef[z.id]?.ppp || 1.05;
+        const offRank = aOff[z.id]?.rank || awayForensic[zoneKeyMap[z.id]?.off];
+        const defRank = hDef[z.id]?.rank || homeForensic[zoneKeyMap[z.id]?.def];
 
         let borderStyle = 'border-[#334155] bg-[#1e293b]/40';
         let textPppColor = 'text-slate-300';
@@ -73,8 +89,14 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
                     ${tooltipTrigger}
                 </div>
                 <div class="space-y-1 text-[11px] font-sans">
-                    <div class="text-slate-400">${awayTeam} Offense: <b class="text-slate-100 font-mono">${offFreq}%</b></div>
-                    <div class="text-slate-400">${homeTeam} Defense: <b class="${textPppColor} font-mono">${pppFormatted}</b></div>
+                    <div class="text-slate-400 flex items-center justify-between">
+                        <span>${awayTeam} Off: <b class="text-slate-100 font-mono">${offFreq}%</b></span>
+                        ${formatRank(offRank, awayForensic.is_small_sample)}
+                    </div>
+                    <div class="text-slate-400 flex items-center justify-between">
+                        <span>${homeTeam} Def: <b class="${textPppColor} font-mono">${pppFormatted}</b></span>
+                        ${formatRank(defRank, homeForensic.is_small_sample)}
+                    </div>
                 </div>
             </div>
         `;
@@ -118,9 +140,23 @@ function renderPlayTypeAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
     const aPt = awayForensic.playtypes_offense || {};
     const hPt = homeForensic.playtypes_defense || {};
 
+    const formatRank = (r, isSmall) => {
+        if (isSmall || r === 'Small Sample') return '<span class="text-slate-500 font-mono text-[9px]">[Small Sample]</span>';
+        if (r != null && r !== '') return `<span class="text-slate-400 font-mono text-[9.5px]">(#${r} of 30)</span>`;
+        return '';
+    };
+
+    const ptKeyMap = {
+        PnR_Ball_Handler: { off: 'rank_pnr_bh_freq', def: 'rank_pnr_bh_allowed_ppp' },
+        Spot_Up: { off: 'rank_spot_freq', def: 'rank_spot_up_allowed_ppp' },
+        Isolation: { off: 'rank_iso_freq', def: 'rank_iso_allowed_ppp' }
+    };
+
     const rowsHtml = playtypes.map(pt => {
         const freq = aPt[pt.id]?.freq || 20.0;
         const allowedPpp = hPt[pt.id]?.allowed_ppp || 0.95;
+        const offRank = awayForensic[ptKeyMap[pt.id]?.off];
+        const defRank = homeForensic[ptKeyMap[pt.id]?.def] || hPt[pt.id]?.rank;
 
         let pppColor = 'text-slate-300';
         if (allowedPpp <= 0.92) pppColor = 'text-emerald-400';
@@ -145,10 +181,10 @@ function renderPlayTypeAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
                     <div class="w-full bg-[#0d1117] h-3 rounded-full overflow-hidden border border-[#21262d] flex">
                         <div class="bg-cyan-500 h-full rounded-full transition-all" style="width: ${barPct}%;"></div>
                     </div>
-                    <span class="w-12 text-slate-200 font-bold text-[11px]">${freq}%</span>
+                    <span class="w-28 text-slate-200 font-bold text-[11px] text-right font-mono">${freq}% ${formatRank(offRank, awayForensic.is_small_sample)}</span>
                 </div>
-                <div class="w-44 text-right text-[11px] text-slate-400 shrink-0 font-sans">
-                    ${homeTeam} Allowed: <b class="${pppColor} font-mono">${pppFormatted}</b>
+                <div class="w-56 text-right text-[11px] text-slate-400 shrink-0 font-sans">
+                    ${homeTeam} Allowed: <b class="${pppColor} font-mono">${pppFormatted}</b> ${formatRank(defRank, homeForensic.is_small_sample)}
                 </div>
             </div>
         `;
@@ -274,10 +310,10 @@ function renderPaceAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) 
             </div>
             <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${awayTeam} Pace: ${aPace}`) : `${awayTeam} Pace: ${aPace}`}]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${awayTeam} Pace: ${aPace}`) : `${awayTeam} Pace: ${aPace}`} ${awayForensic.is_small_sample ? '[Small Sample]' : (awayForensic.rank_pace ? `(#${awayForensic.rank_pace} of 30)` : '')}]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${homeTeam} Pace: ${hPace}`) : `${homeTeam} Pace: ${hPace}`}]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${homeTeam} Pace: ${hPace}`) : `${homeTeam} Pace: ${hPace}`} ${homeForensic.is_small_sample ? '[Small Sample]' : (homeForensic.rank_pace ? `(#${homeForensic.rank_pace} of 30)` : '')}]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-cyan-950/40 border border-cyan-800/60 text-cyan-300">
                     [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Expected Game Tempo', `Expected Game Tempo: ${expPace} Poss/48m`) : `Expected Game Tempo: ${expPace} Poss/48m`}]

@@ -33,45 +33,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.8,
-        "ppp": 1.28
+        "ppp": 1.28,
+        "rank": 12
       },
       "paint_non_ra": {
         "freq": 16.1,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 13
       },
       "mid_range": {
         "freq": 15.7,
-        "ppp": 0.85
+        "ppp": 0.85,
+        "rank": 13
       },
       "corner_3": {
         "freq": 9.0,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 10
       },
       "above_break_3": {
         "freq": 31.4,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 10
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 29.7,
-        "ppp": 1.31
+        "ppp": 1.31,
+        "rank": 19
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.93
+        "ppp": 0.93,
+        "rank": 19
       },
       "mid_range": {
         "freq": 11.3,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 19
       },
       "corner_3": {
         "freq": 10.3,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 11
       },
       "above_break_3": {
         "freq": 32.7,
-        "ppp": 1.09
+        "ppp": 1.09,
+        "rank": 11
       }
     },
     "positional_allowances": {
@@ -237,7 +247,9 @@
     "rank_pnr_switch": 8,
     "rank_ra_ppp_allowed": 12,
     "rank_paint_ppp_allowed": 13,
+    "rank_mid_ppp_allowed": 13,
     "rank_corner3_ppp_allowed": 10,
+    "rank_above_break3_ppp_allowed": 10,
     "rank_transition_ppp_allowed": 12,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -246,6 +258,11 @@
     "rank_spot_up_allowed_ppp": 10,
     "rank_iso_allowed_ppp": 9,
     "rank_pnr_rm_allowed_ppp": 10,
+    "rank_ra_off_freq": 19,
+    "rank_paint_off_freq": 19,
+    "rank_mid_off_freq": 19,
+    "rank_corner3_off_freq": 11,
+    "rank_above_break3_off_freq": 11,
     "rank_pts_allowed_guards": 7,
     "rank_pts_allowed_wings": 23,
     "rank_pts_allowed_bigs": 18,
@@ -294,45 +311,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.0,
-        "ppp": 1.25
+        "ppp": 1.25,
+        "rank": 4
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 3
       },
       "mid_range": {
         "freq": 12.2,
-        "ppp": 0.83
+        "ppp": 0.83,
+        "rank": 4
       },
       "corner_3": {
         "freq": 9.6,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 4
       },
       "above_break_3": {
         "freq": 35.2,
-        "ppp": 1.04
+        "ppp": 1.04,
+        "rank": 4
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 27.3,
-        "ppp": 1.36
+        "ppp": 1.36,
+        "rank": 28
       },
       "paint_non_ra": {
         "freq": 14.7,
-        "ppp": 0.97
+        "ppp": 0.97,
+        "rank": 28
       },
       "mid_range": {
         "freq": 10.6,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 28
       },
       "corner_3": {
         "freq": 11.4,
-        "ppp": 1.21
+        "ppp": 1.21,
+        "rank": 3
       },
       "above_break_3": {
         "freq": 36.0,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 3
       }
     },
     "positional_allowances": {
@@ -495,7 +522,9 @@
     "rank_pnr_switch": 6,
     "rank_ra_ppp_allowed": 4,
     "rank_paint_ppp_allowed": 3,
+    "rank_mid_ppp_allowed": 4,
     "rank_corner3_ppp_allowed": 4,
+    "rank_above_break3_ppp_allowed": 4,
     "rank_transition_ppp_allowed": 4,
     "rank_pnr_bh_freq": 5,
     "rank_iso_freq": 5,
@@ -504,6 +533,11 @@
     "rank_spot_up_allowed_ppp": 4,
     "rank_iso_allowed_ppp": 4,
     "rank_pnr_rm_allowed_ppp": 4,
+    "rank_ra_off_freq": 28,
+    "rank_paint_off_freq": 28,
+    "rank_mid_off_freq": 28,
+    "rank_corner3_off_freq": 3,
+    "rank_above_break3_off_freq": 3,
     "rank_pts_allowed_guards": 3,
     "rank_pts_allowed_wings": 1,
     "rank_pts_allowed_bigs": 10,
@@ -552,45 +586,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 29.5,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 24
       },
       "paint_non_ra": {
         "freq": 16.3,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 22
       },
       "mid_range": {
         "freq": 15.4,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 23
       },
       "corner_3": {
         "freq": 9.4,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 22
       },
       "above_break_3": {
         "freq": 29.4,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 22
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 28.4,
-        "ppp": 1.24
+        "ppp": 1.24,
+        "rank": 25
       },
       "paint_non_ra": {
         "freq": 15.3,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 25
       },
       "mid_range": {
         "freq": 10.9,
-        "ppp": 0.82
+        "ppp": 0.82,
+        "rank": 25
       },
       "corner_3": {
         "freq": 10.9,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 6
       },
       "above_break_3": {
         "freq": 34.5,
-        "ppp": 1.03
+        "ppp": 1.03,
+        "rank": 6
       }
     },
     "positional_allowances": {
@@ -753,7 +797,9 @@
     "rank_pnr_switch": 13,
     "rank_ra_ppp_allowed": 24,
     "rank_paint_ppp_allowed": 22,
+    "rank_mid_ppp_allowed": 23,
     "rank_corner3_ppp_allowed": 22,
+    "rank_above_break3_ppp_allowed": 22,
     "rank_transition_ppp_allowed": 24,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -762,6 +808,11 @@
     "rank_spot_up_allowed_ppp": 22,
     "rank_iso_allowed_ppp": 22,
     "rank_pnr_rm_allowed_ppp": 24,
+    "rank_ra_off_freq": 25,
+    "rank_paint_off_freq": 25,
+    "rank_mid_off_freq": 25,
+    "rank_corner3_off_freq": 6,
+    "rank_above_break3_off_freq": 6,
     "rank_pts_allowed_guards": 10,
     "rank_pts_allowed_wings": 16,
     "rank_pts_allowed_bigs": 25,
@@ -810,45 +861,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.3,
-        "ppp": 1.27
+        "ppp": 1.27,
+        "rank": 9
       },
       "paint_non_ra": {
         "freq": 16.2,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 9
       },
       "mid_range": {
         "freq": 15.5,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 9
       },
       "corner_3": {
         "freq": 9.6,
-        "ppp": 1.12
+        "ppp": 1.12,
+        "rank": 7
       },
       "above_break_3": {
         "freq": 31.4,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 6
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 26.7,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 29
       },
       "paint_non_ra": {
         "freq": 14.4,
-        "ppp": 0.95
+        "ppp": 0.95,
+        "rank": 29
       },
       "mid_range": {
         "freq": 10.2,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 29
       },
       "corner_3": {
         "freq": 11.7,
-        "ppp": 1.19
+        "ppp": 1.19,
+        "rank": 2
       },
       "above_break_3": {
         "freq": 37.0,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 2
       }
     },
     "positional_allowances": {
@@ -977,8 +1038,8 @@
     "fg_pct": 45.8,
     "fg_pct_opp": 46.8,
     "injuries": [
-      "Kon Knueppel",
-      "Grant Williams"
+      "Grant Williams",
+      "Kon Knueppel"
     ],
     "rank_pace": 22,
     "rank_neutral_pace": 24,
@@ -1014,7 +1075,9 @@
     "rank_pnr_switch": 17,
     "rank_ra_ppp_allowed": 9,
     "rank_paint_ppp_allowed": 9,
+    "rank_mid_ppp_allowed": 9,
     "rank_corner3_ppp_allowed": 7,
+    "rank_above_break3_ppp_allowed": 6,
     "rank_transition_ppp_allowed": 7,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -1023,6 +1086,11 @@
     "rank_spot_up_allowed_ppp": 6,
     "rank_iso_allowed_ppp": 9,
     "rank_pnr_rm_allowed_ppp": 7,
+    "rank_ra_off_freq": 29,
+    "rank_paint_off_freq": 29,
+    "rank_mid_off_freq": 29,
+    "rank_corner3_off_freq": 2,
+    "rank_above_break3_off_freq": 2,
     "rank_pts_allowed_guards": 8,
     "rank_pts_allowed_wings": 10,
     "rank_pts_allowed_bigs": 13,
@@ -1071,45 +1139,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 26.6,
-        "ppp": 1.32
+        "ppp": 1.32,
+        "rank": 22
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 22
       },
       "mid_range": {
         "freq": 16.6,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 22
       },
       "corner_3": {
         "freq": 9.4,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 22
       },
       "above_break_3": {
         "freq": 31.4,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 22
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 28.9,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 22
       },
       "paint_non_ra": {
         "freq": 15.6,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 21
       },
       "mid_range": {
         "freq": 11.1,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 22
       },
       "corner_3": {
         "freq": 10.7,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 8
       },
       "above_break_3": {
         "freq": 33.7,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 9
       }
     },
     "positional_allowances": {
@@ -1275,7 +1353,9 @@
     "rank_pnr_switch": 15,
     "rank_ra_ppp_allowed": 22,
     "rank_paint_ppp_allowed": 22,
+    "rank_mid_ppp_allowed": 22,
     "rank_corner3_ppp_allowed": 22,
+    "rank_above_break3_ppp_allowed": 22,
     "rank_transition_ppp_allowed": 22,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -1284,6 +1364,11 @@
     "rank_spot_up_allowed_ppp": 22,
     "rank_iso_allowed_ppp": 22,
     "rank_pnr_rm_allowed_ppp": 22,
+    "rank_ra_off_freq": 22,
+    "rank_paint_off_freq": 21,
+    "rank_mid_off_freq": 22,
+    "rank_corner3_off_freq": 8,
+    "rank_above_break3_off_freq": 9,
     "rank_pts_allowed_guards": 17,
     "rank_pts_allowed_wings": 29,
     "rank_pts_allowed_bigs": 28,
@@ -1332,45 +1417,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.0,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 15
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 13
       },
       "mid_range": {
         "freq": 14.3,
-        "ppp": 0.85
+        "ppp": 0.85,
+        "rank": 13
       },
       "corner_3": {
         "freq": 9.2,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 15
       },
       "above_break_3": {
         "freq": 32.5,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 15
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 28.7,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 23
       },
       "paint_non_ra": {
         "freq": 15.5,
-        "ppp": 0.95
+        "ppp": 0.95,
+        "rank": 23
       },
       "mid_range": {
         "freq": 11.1,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 22
       },
       "corner_3": {
         "freq": 10.7,
-        "ppp": 1.19
+        "ppp": 1.19,
+        "rank": 8
       },
       "above_break_3": {
         "freq": 34.0,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 8
       }
     },
     "positional_allowances": {
@@ -1535,7 +1630,9 @@
     "rank_pnr_switch": 21,
     "rank_ra_ppp_allowed": 15,
     "rank_paint_ppp_allowed": 13,
+    "rank_mid_ppp_allowed": 13,
     "rank_corner3_ppp_allowed": 15,
+    "rank_above_break3_ppp_allowed": 15,
     "rank_transition_ppp_allowed": 15,
     "rank_pnr_bh_freq": 5,
     "rank_iso_freq": 5,
@@ -1544,6 +1641,11 @@
     "rank_spot_up_allowed_ppp": 15,
     "rank_iso_allowed_ppp": 15,
     "rank_pnr_rm_allowed_ppp": 15,
+    "rank_ra_off_freq": 23,
+    "rank_paint_off_freq": 23,
+    "rank_mid_off_freq": 22,
+    "rank_corner3_off_freq": 8,
+    "rank_above_break3_off_freq": 8,
     "rank_pts_allowed_guards": 2,
     "rank_pts_allowed_wings": 27,
     "rank_pts_allowed_bigs": 12,
@@ -1592,45 +1694,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 26.8,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 15
       },
       "paint_non_ra": {
         "freq": 15.9,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 17
       },
       "mid_range": {
         "freq": 18.0,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 17
       },
       "corner_3": {
         "freq": 9.5,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 15
       },
       "above_break_3": {
         "freq": 29.8,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 18
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 33.4,
-        "ppp": 1.26
+        "ppp": 1.26,
+        "rank": 5
       },
       "paint_non_ra": {
         "freq": 18.0,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 4
       },
       "mid_range": {
         "freq": 12.8,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 5
       },
       "corner_3": {
         "freq": 8.6,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 26
       },
       "above_break_3": {
         "freq": 27.2,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 26
       }
     },
     "positional_allowances": {
@@ -1759,8 +1871,8 @@
     "fg_pct": 46.6,
     "fg_pct_opp": 47.4,
     "injuries": [
-      "Dereck Lively II",
-      "Anthony Davis"
+      "Anthony Davis",
+      "Dereck Lively II"
     ],
     "rank_pace": 4,
     "rank_neutral_pace": 7,
@@ -1796,7 +1908,9 @@
     "rank_pnr_switch": 24,
     "rank_ra_ppp_allowed": 15,
     "rank_paint_ppp_allowed": 17,
+    "rank_mid_ppp_allowed": 17,
     "rank_corner3_ppp_allowed": 15,
+    "rank_above_break3_ppp_allowed": 18,
     "rank_transition_ppp_allowed": 15,
     "rank_pnr_bh_freq": 1,
     "rank_iso_freq": 1,
@@ -1805,6 +1919,11 @@
     "rank_spot_up_allowed_ppp": 18,
     "rank_iso_allowed_ppp": 18,
     "rank_pnr_rm_allowed_ppp": 15,
+    "rank_ra_off_freq": 5,
+    "rank_paint_off_freq": 4,
+    "rank_mid_off_freq": 5,
+    "rank_corner3_off_freq": 26,
+    "rank_above_break3_off_freq": 26,
     "rank_pts_allowed_guards": 15,
     "rank_pts_allowed_wings": 20,
     "rank_pts_allowed_bigs": 26,
@@ -1853,45 +1972,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.0,
-        "ppp": 1.31
+        "ppp": 1.31,
+        "rank": 20
       },
       "paint_non_ra": {
         "freq": 16.4,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 17
       },
       "mid_range": {
         "freq": 14.0,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 17
       },
       "corner_3": {
         "freq": 9.7,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 19
       },
       "above_break_3": {
         "freq": 32.9,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 18
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 30.8,
-        "ppp": 1.37
+        "ppp": 1.37,
+        "rank": 14
       },
       "paint_non_ra": {
         "freq": 16.6,
-        "ppp": 0.98
+        "ppp": 0.98,
+        "rank": 14
       },
       "mid_range": {
         "freq": 11.8,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 13
       },
       "corner_3": {
         "freq": 9.8,
-        "ppp": 1.23
+        "ppp": 1.23,
+        "rank": 16
       },
       "above_break_3": {
         "freq": 31.0,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 16
       }
     },
     "positional_allowances": {
@@ -2056,7 +2185,9 @@
     "rank_pnr_switch": 30,
     "rank_ra_ppp_allowed": 20,
     "rank_paint_ppp_allowed": 17,
+    "rank_mid_ppp_allowed": 17,
     "rank_corner3_ppp_allowed": 19,
+    "rank_above_break3_ppp_allowed": 18,
     "rank_transition_ppp_allowed": 21,
     "rank_pnr_bh_freq": 25,
     "rank_iso_freq": 25,
@@ -2065,6 +2196,11 @@
     "rank_spot_up_allowed_ppp": 18,
     "rank_iso_allowed_ppp": 18,
     "rank_pnr_rm_allowed_ppp": 19,
+    "rank_ra_off_freq": 14,
+    "rank_paint_off_freq": 14,
+    "rank_mid_off_freq": 13,
+    "rank_corner3_off_freq": 16,
+    "rank_above_break3_off_freq": 16,
     "rank_pts_allowed_guards": 10,
     "rank_pts_allowed_wings": 24,
     "rank_pts_allowed_bigs": 15,
@@ -2113,45 +2249,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.9,
-        "ppp": 1.22
+        "ppp": 1.22,
+        "rank": 2
       },
       "paint_non_ra": {
         "freq": 15.4,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 2
       },
       "mid_range": {
         "freq": 13.4,
-        "ppp": 0.81
+        "ppp": 0.81,
+        "rank": 2
       },
       "corner_3": {
         "freq": 8.7,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 2
       },
       "above_break_3": {
         "freq": 34.6,
-        "ppp": 1.02
+        "ppp": 1.02,
+        "rank": 2
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 33.9,
-        "ppp": 1.32
+        "ppp": 1.32,
+        "rank": 2
       },
       "paint_non_ra": {
         "freq": 18.2,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 2
       },
       "mid_range": {
         "freq": 13.0,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 2
       },
       "corner_3": {
         "freq": 8.4,
-        "ppp": 1.18
+        "ppp": 1.18,
+        "rank": 29
       },
       "above_break_3": {
         "freq": 26.5,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 29
       }
     },
     "positional_allowances": {
@@ -2314,7 +2460,9 @@
     "rank_pnr_switch": 9,
     "rank_ra_ppp_allowed": 2,
     "rank_paint_ppp_allowed": 2,
+    "rank_mid_ppp_allowed": 2,
     "rank_corner3_ppp_allowed": 2,
+    "rank_above_break3_ppp_allowed": 2,
     "rank_transition_ppp_allowed": 2,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -2323,6 +2471,11 @@
     "rank_spot_up_allowed_ppp": 2,
     "rank_iso_allowed_ppp": 1,
     "rank_pnr_rm_allowed_ppp": 2,
+    "rank_ra_off_freq": 2,
+    "rank_paint_off_freq": 2,
+    "rank_mid_off_freq": 2,
+    "rank_corner3_off_freq": 29,
+    "rank_above_break3_off_freq": 29,
     "rank_pts_allowed_guards": 9,
     "rank_pts_allowed_wings": 4,
     "rank_pts_allowed_bigs": 1,
@@ -2371,45 +2524,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.5,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 15
       },
       "paint_non_ra": {
         "freq": 16.3,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 13
       },
       "mid_range": {
         "freq": 14.4,
-        "ppp": 0.85
+        "ppp": 0.85,
+        "rank": 13
       },
       "corner_3": {
         "freq": 8.8,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 15
       },
       "above_break_3": {
         "freq": 32.0,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 15
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 26.1,
-        "ppp": 1.3
+        "ppp": 1.3,
+        "rank": 30
       },
       "paint_non_ra": {
         "freq": 14.1,
-        "ppp": 0.93
+        "ppp": 0.93,
+        "rank": 30
       },
       "mid_range": {
         "freq": 10.1,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 30
       },
       "corner_3": {
         "freq": 11.9,
-        "ppp": 1.16
+        "ppp": 1.16,
+        "rank": 1
       },
       "above_break_3": {
         "freq": 37.8,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 1
       }
     },
     "positional_allowances": {
@@ -2575,7 +2738,9 @@
     "rank_pnr_switch": 1,
     "rank_ra_ppp_allowed": 15,
     "rank_paint_ppp_allowed": 13,
+    "rank_mid_ppp_allowed": 13,
     "rank_corner3_ppp_allowed": 15,
+    "rank_above_break3_ppp_allowed": 15,
     "rank_transition_ppp_allowed": 15,
     "rank_pnr_bh_freq": 28,
     "rank_iso_freq": 28,
@@ -2584,6 +2749,11 @@
     "rank_spot_up_allowed_ppp": 15,
     "rank_iso_allowed_ppp": 15,
     "rank_pnr_rm_allowed_ppp": 15,
+    "rank_ra_off_freq": 30,
+    "rank_paint_off_freq": 30,
+    "rank_mid_off_freq": 30,
+    "rank_corner3_off_freq": 1,
+    "rank_above_break3_off_freq": 1,
     "rank_pts_allowed_guards": 26,
     "rank_pts_allowed_wings": 12,
     "rank_pts_allowed_bigs": 4,
@@ -2632,45 +2802,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.6,
-        "ppp": 1.26
+        "ppp": 1.26,
+        "rank": 6
       },
       "paint_non_ra": {
         "freq": 15.7,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 6
       },
       "mid_range": {
         "freq": 16.8,
-        "ppp": 0.83
+        "ppp": 0.83,
+        "rank": 4
       },
       "corner_3": {
         "freq": 9.1,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 6
       },
       "above_break_3": {
         "freq": 30.8,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 6
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 33.5,
-        "ppp": 1.34
+        "ppp": 1.34,
+        "rank": 3
       },
       "paint_non_ra": {
         "freq": 18.0,
-        "ppp": 0.95
+        "ppp": 0.95,
+        "rank": 4
       },
       "mid_range": {
         "freq": 13.0,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 2
       },
       "corner_3": {
         "freq": 8.5,
-        "ppp": 1.19
+        "ppp": 1.19,
+        "rank": 27
       },
       "above_break_3": {
         "freq": 27.0,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 27
       }
     },
     "positional_allowances": {
@@ -2835,7 +3015,9 @@
     "rank_pnr_switch": 5,
     "rank_ra_ppp_allowed": 6,
     "rank_paint_ppp_allowed": 6,
+    "rank_mid_ppp_allowed": 4,
     "rank_corner3_ppp_allowed": 6,
+    "rank_above_break3_ppp_allowed": 6,
     "rank_transition_ppp_allowed": 6,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -2844,6 +3026,11 @@
     "rank_spot_up_allowed_ppp": 6,
     "rank_iso_allowed_ppp": 6,
     "rank_pnr_rm_allowed_ppp": 6,
+    "rank_ra_off_freq": 3,
+    "rank_paint_off_freq": 4,
+    "rank_mid_off_freq": 2,
+    "rank_corner3_off_freq": 27,
+    "rank_above_break3_off_freq": 27,
     "rank_pts_allowed_guards": 1,
     "rank_pts_allowed_wings": 19,
     "rank_pts_allowed_bigs": 10,
@@ -2892,45 +3079,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.9,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 24
       },
       "paint_non_ra": {
         "freq": 16.2,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 22
       },
       "mid_range": {
         "freq": 18.1,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 23
       },
       "corner_3": {
         "freq": 9.5,
-        "ppp": 1.18
+        "ppp": 1.18,
+        "rank": 25
       },
       "above_break_3": {
         "freq": 28.3,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 26
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 29.8,
-        "ppp": 1.26
+        "ppp": 1.26,
+        "rank": 18
       },
       "paint_non_ra": {
         "freq": 16.1,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 17
       },
       "mid_range": {
         "freq": 11.5,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 17
       },
       "corner_3": {
         "freq": 10.2,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 13
       },
       "above_break_3": {
         "freq": 32.4,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 13
       }
     },
     "positional_allowances": {
@@ -3059,8 +3256,8 @@
     "fg_pct": 45.8,
     "fg_pct_opp": 48.8,
     "injuries": [
-      "Johnny Furphy",
-      "RayJ Dennis"
+      "RayJ Dennis",
+      "Johnny Furphy"
     ],
     "rank_pace": 9,
     "rank_neutral_pace": 11,
@@ -3096,7 +3293,9 @@
     "rank_pnr_switch": 23,
     "rank_ra_ppp_allowed": 24,
     "rank_paint_ppp_allowed": 22,
+    "rank_mid_ppp_allowed": 23,
     "rank_corner3_ppp_allowed": 25,
+    "rank_above_break3_ppp_allowed": 26,
     "rank_transition_ppp_allowed": 24,
     "rank_pnr_bh_freq": 28,
     "rank_iso_freq": 28,
@@ -3105,6 +3304,11 @@
     "rank_spot_up_allowed_ppp": 26,
     "rank_iso_allowed_ppp": 22,
     "rank_pnr_rm_allowed_ppp": 24,
+    "rank_ra_off_freq": 18,
+    "rank_paint_off_freq": 17,
+    "rank_mid_off_freq": 17,
+    "rank_corner3_off_freq": 13,
+    "rank_above_break3_off_freq": 13,
     "rank_pts_allowed_guards": 29,
     "rank_pts_allowed_wings": 22,
     "rank_pts_allowed_bigs": 19,
@@ -3153,45 +3357,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.4,
-        "ppp": 1.3
+        "ppp": 1.3,
+        "rank": 19
       },
       "paint_non_ra": {
         "freq": 16.1,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 17
       },
       "mid_range": {
         "freq": 13.5,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 17
       },
       "corner_3": {
         "freq": 9.0,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 19
       },
       "above_break_3": {
         "freq": 33.0,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 18
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 31.0,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 12
       },
       "paint_non_ra": {
         "freq": 16.7,
-        "ppp": 0.95
+        "ppp": 0.95,
+        "rank": 10
       },
       "mid_range": {
         "freq": 11.8,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 13
       },
       "corner_3": {
         "freq": 9.7,
-        "ppp": 1.19
+        "ppp": 1.19,
+        "rank": 18
       },
       "above_break_3": {
         "freq": 30.8,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 18
       }
     },
     "positional_allowances": {
@@ -3320,8 +3534,8 @@
     "fg_pct": 48.4,
     "fg_pct_opp": 46.9,
     "injuries": [
-      "Jordan Miller",
-      "Bradley Beal"
+      "Bradley Beal",
+      "Jordan Miller"
     ],
     "rank_pace": 29,
     "rank_neutral_pace": 29,
@@ -3357,7 +3571,9 @@
     "rank_pnr_switch": 9,
     "rank_ra_ppp_allowed": 19,
     "rank_paint_ppp_allowed": 17,
+    "rank_mid_ppp_allowed": 17,
     "rank_corner3_ppp_allowed": 19,
+    "rank_above_break3_ppp_allowed": 18,
     "rank_transition_ppp_allowed": 19,
     "rank_pnr_bh_freq": 1,
     "rank_iso_freq": 1,
@@ -3366,6 +3582,11 @@
     "rank_spot_up_allowed_ppp": 18,
     "rank_iso_allowed_ppp": 18,
     "rank_pnr_rm_allowed_ppp": 19,
+    "rank_ra_off_freq": 12,
+    "rank_paint_off_freq": 10,
+    "rank_mid_off_freq": 13,
+    "rank_corner3_off_freq": 18,
+    "rank_above_break3_off_freq": 18,
     "rank_pts_allowed_guards": 12,
     "rank_pts_allowed_wings": 6,
     "rank_pts_allowed_bigs": 19,
@@ -3414,45 +3635,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.3,
-        "ppp": 1.31
+        "ppp": 1.31,
+        "rank": 20
       },
       "paint_non_ra": {
         "freq": 16.2,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 17
       },
       "mid_range": {
         "freq": 14.3,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 17
       },
       "corner_3": {
         "freq": 9.2,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 19
       },
       "above_break_3": {
         "freq": 32.0,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 18
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 31.6,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 8
       },
       "paint_non_ra": {
         "freq": 17.0,
-        "ppp": 0.95
+        "ppp": 0.95,
+        "rank": 8
       },
       "mid_range": {
         "freq": 12.2,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 7
       },
       "corner_3": {
         "freq": 9.4,
-        "ppp": 1.19
+        "ppp": 1.19,
+        "rank": 22
       },
       "above_break_3": {
         "freq": 29.8,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 22
       }
     },
     "positional_allowances": {
@@ -3615,7 +3846,9 @@
     "rank_pnr_switch": 26,
     "rank_ra_ppp_allowed": 20,
     "rank_paint_ppp_allowed": 17,
+    "rank_mid_ppp_allowed": 17,
     "rank_corner3_ppp_allowed": 19,
+    "rank_above_break3_ppp_allowed": 18,
     "rank_transition_ppp_allowed": 19,
     "rank_pnr_bh_freq": 25,
     "rank_iso_freq": 25,
@@ -3624,6 +3857,11 @@
     "rank_spot_up_allowed_ppp": 18,
     "rank_iso_allowed_ppp": 18,
     "rank_pnr_rm_allowed_ppp": 19,
+    "rank_ra_off_freq": 8,
+    "rank_paint_off_freq": 8,
+    "rank_mid_off_freq": 7,
+    "rank_corner3_off_freq": 22,
+    "rank_above_break3_off_freq": 22,
     "rank_pts_allowed_guards": 12,
     "rank_pts_allowed_wings": 17,
     "rank_pts_allowed_bigs": 8,
@@ -3672,45 +3910,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.5,
-        "ppp": 1.32
+        "ppp": 1.32,
+        "rank": 22
       },
       "paint_non_ra": {
         "freq": 16.1,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 22
       },
       "mid_range": {
         "freq": 12.9,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 23
       },
       "corner_3": {
         "freq": 9.1,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 22
       },
       "above_break_3": {
         "freq": 33.4,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 22
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 29.1,
-        "ppp": 1.28
+        "ppp": 1.28,
+        "rank": 21
       },
       "paint_non_ra": {
         "freq": 15.6,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 21
       },
       "mid_range": {
         "freq": 11.2,
-        "ppp": 0.85
+        "ppp": 0.85,
+        "rank": 21
       },
       "corner_3": {
         "freq": 10.6,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 10
       },
       "above_break_3": {
         "freq": 33.5,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 10
       }
     },
     "positional_allowances": {
@@ -3839,13 +4087,13 @@
     "fg_pct": 45.5,
     "fg_pct_opp": 48.6,
     "injuries": [
-      "Jaylen Wells",
-      "Adama-Alpha Bal",
-      "PJ Hall",
       "Zach Edey",
+      "Jaren Jackson Jr.",
+      "PJ Hall",
+      "Adama-Alpha Bal",
       "Scotty Pippen Jr.",
       "Ja Morant",
-      "Jaren Jackson Jr."
+      "Jaylen Wells"
     ],
     "rank_pace": 5,
     "rank_neutral_pace": 4,
@@ -3881,7 +4129,9 @@
     "rank_pnr_switch": 19,
     "rank_ra_ppp_allowed": 22,
     "rank_paint_ppp_allowed": 22,
+    "rank_mid_ppp_allowed": 23,
     "rank_corner3_ppp_allowed": 22,
+    "rank_above_break3_ppp_allowed": 22,
     "rank_transition_ppp_allowed": 22,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -3890,6 +4140,11 @@
     "rank_spot_up_allowed_ppp": 22,
     "rank_iso_allowed_ppp": 22,
     "rank_pnr_rm_allowed_ppp": 22,
+    "rank_ra_off_freq": 21,
+    "rank_paint_off_freq": 21,
+    "rank_mid_off_freq": 21,
+    "rank_corner3_off_freq": 10,
+    "rank_above_break3_off_freq": 10,
     "rank_pts_allowed_guards": 17,
     "rank_pts_allowed_wings": 30,
     "rank_pts_allowed_bigs": 24,
@@ -3938,45 +4193,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 26.8,
-        "ppp": 1.28
+        "ppp": 1.28,
+        "rank": 12
       },
       "paint_non_ra": {
         "freq": 16.3,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 13
       },
       "mid_range": {
         "freq": 14.8,
-        "ppp": 0.85
+        "ppp": 0.85,
+        "rank": 13
       },
       "corner_3": {
         "freq": 9.2,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 10
       },
       "above_break_3": {
         "freq": 32.9,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 10
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 31.1,
-        "ppp": 1.32
+        "ppp": 1.32,
+        "rank": 10
       },
       "paint_non_ra": {
         "freq": 16.7,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 10
       },
       "mid_range": {
         "freq": 12.1,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 10
       },
       "corner_3": {
         "freq": 9.6,
-        "ppp": 1.18
+        "ppp": 1.18,
+        "rank": 21
       },
       "above_break_3": {
         "freq": 30.5,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 21
       }
     },
     "positional_allowances": {
@@ -4105,9 +4370,9 @@
     "fg_pct": 46.6,
     "fg_pct_opp": 46.3,
     "injuries": [
+      "Bam Adebayo",
       "Trevor Keels",
-      "Myron Gardner",
-      "Bam Adebayo"
+      "Myron Gardner"
     ],
     "rank_pace": 1,
     "rank_neutral_pace": 3,
@@ -4143,7 +4408,9 @@
     "rank_pnr_switch": 2,
     "rank_ra_ppp_allowed": 12,
     "rank_paint_ppp_allowed": 13,
+    "rank_mid_ppp_allowed": 13,
     "rank_corner3_ppp_allowed": 10,
+    "rank_above_break3_ppp_allowed": 10,
     "rank_transition_ppp_allowed": 12,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -4152,6 +4419,11 @@
     "rank_spot_up_allowed_ppp": 10,
     "rank_iso_allowed_ppp": 9,
     "rank_pnr_rm_allowed_ppp": 10,
+    "rank_ra_off_freq": 10,
+    "rank_paint_off_freq": 10,
+    "rank_mid_off_freq": 10,
+    "rank_corner3_off_freq": 21,
+    "rank_above_break3_off_freq": 21,
     "rank_pts_allowed_guards": 23,
     "rank_pts_allowed_wings": 21,
     "rank_pts_allowed_bigs": 17,
@@ -4200,45 +4472,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.0,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 24
       },
       "paint_non_ra": {
         "freq": 16.4,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 22
       },
       "mid_range": {
         "freq": 10.7,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 23
       },
       "corner_3": {
         "freq": 9.5,
-        "ppp": 1.18
+        "ppp": 1.18,
+        "rank": 25
       },
       "above_break_3": {
         "freq": 35.4,
-        "ppp": 1.11
+        "ppp": 1.11,
+        "rank": 26
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 28.1,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 26
       },
       "paint_non_ra": {
         "freq": 15.1,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 26
       },
       "mid_range": {
         "freq": 10.9,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 25
       },
       "corner_3": {
         "freq": 11.0,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 5
       },
       "above_break_3": {
         "freq": 34.9,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 5
       }
     },
     "positional_allowances": {
@@ -4403,7 +4685,9 @@
     "rank_pnr_switch": 29,
     "rank_ra_ppp_allowed": 24,
     "rank_paint_ppp_allowed": 22,
+    "rank_mid_ppp_allowed": 23,
     "rank_corner3_ppp_allowed": 25,
+    "rank_above_break3_ppp_allowed": 26,
     "rank_transition_ppp_allowed": 24,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -4412,6 +4696,11 @@
     "rank_spot_up_allowed_ppp": 26,
     "rank_iso_allowed_ppp": 22,
     "rank_pnr_rm_allowed_ppp": 24,
+    "rank_ra_off_freq": 26,
+    "rank_paint_off_freq": 26,
+    "rank_mid_off_freq": 25,
+    "rank_corner3_off_freq": 5,
+    "rank_above_break3_off_freq": 5,
     "rank_pts_allowed_guards": 22,
     "rank_pts_allowed_wings": 18,
     "rank_pts_allowed_bigs": 8,
@@ -4460,45 +4749,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.5,
-        "ppp": 1.27
+        "ppp": 1.27,
+        "rank": 9
       },
       "paint_non_ra": {
         "freq": 15.8,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 9
       },
       "mid_range": {
         "freq": 18.3,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 9
       },
       "corner_3": {
         "freq": 9.2,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 10
       },
       "above_break_3": {
         "freq": 29.2,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 10
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 30.8,
-        "ppp": 1.31
+        "ppp": 1.31,
+        "rank": 14
       },
       "paint_non_ra": {
         "freq": 16.6,
-        "ppp": 0.93
+        "ppp": 0.93,
+        "rank": 14
       },
       "mid_range": {
         "freq": 11.8,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 13
       },
       "corner_3": {
         "freq": 9.8,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 16
       },
       "above_break_3": {
         "freq": 31.0,
-        "ppp": 1.09
+        "ppp": 1.09,
+        "rank": 16
       }
     },
     "positional_allowances": {
@@ -4627,8 +4926,8 @@
     "fg_pct": 47.5,
     "fg_pct_opp": 46.2,
     "injuries": [
-      "Rob Dillingham",
-      "Donte DiVincenzo"
+      "Donte DiVincenzo",
+      "Rob Dillingham"
     ],
     "rank_pace": 11,
     "rank_neutral_pace": 13,
@@ -4664,7 +4963,9 @@
     "rank_pnr_switch": 27,
     "rank_ra_ppp_allowed": 9,
     "rank_paint_ppp_allowed": 9,
+    "rank_mid_ppp_allowed": 9,
     "rank_corner3_ppp_allowed": 10,
+    "rank_above_break3_ppp_allowed": 10,
     "rank_transition_ppp_allowed": 7,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -4673,6 +4974,11 @@
     "rank_spot_up_allowed_ppp": 10,
     "rank_iso_allowed_ppp": 9,
     "rank_pnr_rm_allowed_ppp": 10,
+    "rank_ra_off_freq": 14,
+    "rank_paint_off_freq": 14,
+    "rank_mid_off_freq": 13,
+    "rank_corner3_off_freq": 16,
+    "rank_above_break3_off_freq": 16,
     "rank_pts_allowed_guards": 27,
     "rank_pts_allowed_wings": 1,
     "rank_pts_allowed_bigs": 26,
@@ -4721,45 +5027,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.2,
-        "ppp": 1.33
+        "ppp": 1.33,
+        "rank": 24
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.94
+        "ppp": 0.94,
+        "rank": 22
       },
       "mid_range": {
         "freq": 11.8,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 23
       },
       "corner_3": {
         "freq": 9.1,
-        "ppp": 1.18
+        "ppp": 1.18,
+        "rank": 25
       },
       "above_break_3": {
         "freq": 34.9,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 22
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 33.5,
-        "ppp": 1.3
+        "ppp": 1.3,
+        "rank": 3
       },
       "paint_non_ra": {
         "freq": 18.1,
-        "ppp": 0.93
+        "ppp": 0.93,
+        "rank": 3
       },
       "mid_range": {
         "freq": 12.9,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 4
       },
       "corner_3": {
         "freq": 8.5,
-        "ppp": 1.16
+        "ppp": 1.16,
+        "rank": 27
       },
       "above_break_3": {
         "freq": 27.0,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 27
       }
     },
     "positional_allowances": {
@@ -4924,7 +5240,9 @@
     "rank_pnr_switch": 11,
     "rank_ra_ppp_allowed": 24,
     "rank_paint_ppp_allowed": 22,
+    "rank_mid_ppp_allowed": 23,
     "rank_corner3_ppp_allowed": 25,
+    "rank_above_break3_ppp_allowed": 22,
     "rank_transition_ppp_allowed": 24,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -4933,6 +5251,11 @@
     "rank_spot_up_allowed_ppp": 22,
     "rank_iso_allowed_ppp": 22,
     "rank_pnr_rm_allowed_ppp": 24,
+    "rank_ra_off_freq": 3,
+    "rank_paint_off_freq": 3,
+    "rank_mid_off_freq": 4,
+    "rank_corner3_off_freq": 27,
+    "rank_above_break3_off_freq": 27,
     "rank_pts_allowed_guards": 28,
     "rank_pts_allowed_wings": 14,
     "rank_pts_allowed_bigs": 29,
@@ -4981,45 +5304,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.4,
-        "ppp": 1.25
+        "ppp": 1.25,
+        "rank": 4
       },
       "paint_non_ra": {
         "freq": 16.4,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 3
       },
       "mid_range": {
         "freq": 11.5,
-        "ppp": 0.83
+        "ppp": 0.83,
+        "rank": 4
       },
       "corner_3": {
         "freq": 9.3,
-        "ppp": 1.1
+        "ppp": 1.1,
+        "rank": 4
       },
       "above_break_3": {
         "freq": 35.4,
-        "ppp": 1.04
+        "ppp": 1.04,
+        "rank": 4
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 29.9,
-        "ppp": 1.36
+        "ppp": 1.36,
+        "rank": 17
       },
       "paint_non_ra": {
         "freq": 16.1,
-        "ppp": 0.97
+        "ppp": 0.97,
+        "rank": 17
       },
       "mid_range": {
         "freq": 11.5,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 17
       },
       "corner_3": {
         "freq": 10.2,
-        "ppp": 1.21
+        "ppp": 1.21,
+        "rank": 13
       },
       "above_break_3": {
         "freq": 32.3,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 14
       }
     },
     "positional_allowances": {
@@ -5184,7 +5517,9 @@
     "rank_pnr_switch": 20,
     "rank_ra_ppp_allowed": 4,
     "rank_paint_ppp_allowed": 3,
+    "rank_mid_ppp_allowed": 4,
     "rank_corner3_ppp_allowed": 4,
+    "rank_above_break3_ppp_allowed": 4,
     "rank_transition_ppp_allowed": 4,
     "rank_pnr_bh_freq": 5,
     "rank_iso_freq": 5,
@@ -5193,6 +5528,11 @@
     "rank_spot_up_allowed_ppp": 4,
     "rank_iso_allowed_ppp": 4,
     "rank_pnr_rm_allowed_ppp": 4,
+    "rank_ra_off_freq": 17,
+    "rank_paint_off_freq": 17,
+    "rank_mid_off_freq": 17,
+    "rank_corner3_off_freq": 13,
+    "rank_above_break3_off_freq": 14,
     "rank_pts_allowed_guards": 5,
     "rank_pts_allowed_wings": 3,
     "rank_pts_allowed_bigs": 2,
@@ -5241,45 +5581,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.0,
-        "ppp": 1.21
+        "ppp": 1.21,
+        "rank": 1
       },
       "paint_non_ra": {
         "freq": 15.9,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 1
       },
       "mid_range": {
         "freq": 12.9,
-        "ppp": 0.8
+        "ppp": 0.8,
+        "rank": 1
       },
       "corner_3": {
         "freq": 8.8,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 1
       },
       "above_break_3": {
         "freq": 35.4,
-        "ppp": 1.01
+        "ppp": 1.01,
+        "rank": 1
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 29.7,
-        "ppp": 1.35
+        "ppp": 1.35,
+        "rank": 19
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.96
+        "ppp": 0.96,
+        "rank": 19
       },
       "mid_range": {
         "freq": 11.3,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 19
       },
       "corner_3": {
         "freq": 10.3,
-        "ppp": 1.2
+        "ppp": 1.2,
+        "rank": 11
       },
       "above_break_3": {
         "freq": 32.7,
-        "ppp": 1.12
+        "ppp": 1.12,
+        "rank": 11
       }
     },
     "positional_allowances": {
@@ -5445,7 +5795,9 @@
     "rank_pnr_switch": 3,
     "rank_ra_ppp_allowed": 1,
     "rank_paint_ppp_allowed": 1,
+    "rank_mid_ppp_allowed": 1,
     "rank_corner3_ppp_allowed": 1,
+    "rank_above_break3_ppp_allowed": 1,
     "rank_transition_ppp_allowed": 1,
     "rank_pnr_bh_freq": 1,
     "rank_iso_freq": 1,
@@ -5454,6 +5806,11 @@
     "rank_spot_up_allowed_ppp": 1,
     "rank_iso_allowed_ppp": 1,
     "rank_pnr_rm_allowed_ppp": 1,
+    "rank_ra_off_freq": 19,
+    "rank_paint_off_freq": 19,
+    "rank_mid_off_freq": 19,
+    "rank_corner3_off_freq": 11,
+    "rank_above_break3_off_freq": 11,
     "rank_pts_allowed_guards": 3,
     "rank_pts_allowed_wings": 7,
     "rank_pts_allowed_bigs": 3,
@@ -5502,45 +5859,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 27.8,
-        "ppp": 1.26
+        "ppp": 1.26,
+        "rank": 6
       },
       "paint_non_ra": {
         "freq": 16.0,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 6
       },
       "mid_range": {
         "freq": 17.3,
-        "ppp": 0.83
+        "ppp": 0.83,
+        "rank": 4
       },
       "corner_3": {
         "freq": 9.2,
-        "ppp": 1.12
+        "ppp": 1.12,
+        "rank": 7
       },
       "above_break_3": {
         "freq": 29.7,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 6
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 31.9,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 7
       },
       "paint_non_ra": {
         "freq": 17.2,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 7
       },
       "mid_range": {
         "freq": 12.2,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 7
       },
       "corner_3": {
         "freq": 9.3,
-        "ppp": 1.16
+        "ppp": 1.16,
+        "rank": 24
       },
       "above_break_3": {
         "freq": 29.4,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 24
       }
     },
     "positional_allowances": {
@@ -5706,7 +6073,9 @@
     "rank_pnr_switch": 21,
     "rank_ra_ppp_allowed": 6,
     "rank_paint_ppp_allowed": 6,
+    "rank_mid_ppp_allowed": 4,
     "rank_corner3_ppp_allowed": 7,
+    "rank_above_break3_ppp_allowed": 6,
     "rank_transition_ppp_allowed": 7,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -5715,6 +6084,11 @@
     "rank_spot_up_allowed_ppp": 6,
     "rank_iso_allowed_ppp": 6,
     "rank_pnr_rm_allowed_ppp": 7,
+    "rank_ra_off_freq": 7,
+    "rank_paint_off_freq": 7,
+    "rank_mid_off_freq": 7,
+    "rank_corner3_off_freq": 24,
+    "rank_above_break3_off_freq": 24,
     "rank_pts_allowed_guards": 16,
     "rank_pts_allowed_wings": 11,
     "rank_pts_allowed_bigs": 16,
@@ -5763,45 +6137,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.2,
-        "ppp": 1.29
+        "ppp": 1.29,
+        "rank": 15
       },
       "paint_non_ra": {
         "freq": 15.8,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 17
       },
       "mid_range": {
         "freq": 13.1,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 17
       },
       "corner_3": {
         "freq": 9.1,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 15
       },
       "above_break_3": {
         "freq": 33.8,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 15
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 31.6,
-        "ppp": 1.3
+        "ppp": 1.3,
+        "rank": 8
       },
       "paint_non_ra": {
         "freq": 17.0,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 8
       },
       "mid_range": {
         "freq": 12.2,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 7
       },
       "corner_3": {
         "freq": 9.4,
-        "ppp": 1.16
+        "ppp": 1.16,
+        "rank": 22
       },
       "above_break_3": {
         "freq": 29.8,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 22
       }
     },
     "positional_allowances": {
@@ -5966,7 +6350,9 @@
     "rank_pnr_switch": 12,
     "rank_ra_ppp_allowed": 15,
     "rank_paint_ppp_allowed": 17,
+    "rank_mid_ppp_allowed": 17,
     "rank_corner3_ppp_allowed": 15,
+    "rank_above_break3_ppp_allowed": 15,
     "rank_transition_ppp_allowed": 15,
     "rank_pnr_bh_freq": 25,
     "rank_iso_freq": 25,
@@ -5975,6 +6361,11 @@
     "rank_spot_up_allowed_ppp": 15,
     "rank_iso_allowed_ppp": 15,
     "rank_pnr_rm_allowed_ppp": 15,
+    "rank_ra_off_freq": 8,
+    "rank_paint_off_freq": 8,
+    "rank_mid_off_freq": 7,
+    "rank_corner3_off_freq": 22,
+    "rank_above_break3_off_freq": 22,
     "rank_pts_allowed_guards": 20,
     "rank_pts_allowed_wings": 15,
     "rank_pts_allowed_bigs": 13,
@@ -6023,45 +6414,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 29.0,
-        "ppp": 1.27
+        "ppp": 1.27,
+        "rank": 9
       },
       "paint_non_ra": {
         "freq": 16.3,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 9
       },
       "mid_range": {
         "freq": 13.3,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 9
       },
       "corner_3": {
         "freq": 8.9,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 10
       },
       "above_break_3": {
         "freq": 32.5,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 10
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 28.5,
-        "ppp": 1.3
+        "ppp": 1.3,
+        "rank": 24
       },
       "paint_non_ra": {
         "freq": 15.4,
-        "ppp": 0.93
+        "ppp": 0.93,
+        "rank": 24
       },
       "mid_range": {
         "freq": 11.0,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 24
       },
       "corner_3": {
         "freq": 10.8,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 7
       },
       "above_break_3": {
         "freq": 34.3,
-        "ppp": 1.09
+        "ppp": 1.09,
+        "rank": 7
       }
     },
     "positional_allowances": {
@@ -6227,7 +6628,9 @@
     "rank_pnr_switch": 7,
     "rank_ra_ppp_allowed": 9,
     "rank_paint_ppp_allowed": 9,
+    "rank_mid_ppp_allowed": 9,
     "rank_corner3_ppp_allowed": 10,
+    "rank_above_break3_ppp_allowed": 10,
     "rank_transition_ppp_allowed": 7,
     "rank_pnr_bh_freq": 1,
     "rank_iso_freq": 1,
@@ -6236,6 +6639,11 @@
     "rank_spot_up_allowed_ppp": 10,
     "rank_iso_allowed_ppp": 9,
     "rank_pnr_rm_allowed_ppp": 10,
+    "rank_ra_off_freq": 24,
+    "rank_paint_off_freq": 24,
+    "rank_mid_off_freq": 24,
+    "rank_corner3_off_freq": 7,
+    "rank_above_break3_off_freq": 7,
     "rank_pts_allowed_guards": 12,
     "rank_pts_allowed_wings": 8,
     "rank_pts_allowed_bigs": 7,
@@ -6284,45 +6692,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.1,
-        "ppp": 1.28
+        "ppp": 1.28,
+        "rank": 12
       },
       "paint_non_ra": {
         "freq": 15.8,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 9
       },
       "mid_range": {
         "freq": 16.8,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 9
       },
       "corner_3": {
         "freq": 9.3,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 10
       },
       "above_break_3": {
         "freq": 30.0,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 10
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 27.7,
-        "ppp": 1.28
+        "ppp": 1.28,
+        "rank": 27
       },
       "paint_non_ra": {
         "freq": 14.9,
-        "ppp": 0.91
+        "ppp": 0.91,
+        "rank": 27
       },
       "mid_range": {
         "freq": 10.7,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 27
       },
       "corner_3": {
         "freq": 11.2,
-        "ppp": 1.15
+        "ppp": 1.15,
+        "rank": 4
       },
       "above_break_3": {
         "freq": 35.5,
-        "ppp": 1.07
+        "ppp": 1.07,
+        "rank": 4
       }
     },
     "positional_allowances": {
@@ -6487,7 +6905,9 @@
     "rank_pnr_switch": 28,
     "rank_ra_ppp_allowed": 12,
     "rank_paint_ppp_allowed": 9,
+    "rank_mid_ppp_allowed": 9,
     "rank_corner3_ppp_allowed": 10,
+    "rank_above_break3_ppp_allowed": 10,
     "rank_transition_ppp_allowed": 12,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -6496,6 +6916,11 @@
     "rank_spot_up_allowed_ppp": 10,
     "rank_iso_allowed_ppp": 9,
     "rank_pnr_rm_allowed_ppp": 10,
+    "rank_ra_off_freq": 27,
+    "rank_paint_off_freq": 27,
+    "rank_mid_off_freq": 27,
+    "rank_corner3_off_freq": 4,
+    "rank_above_break3_off_freq": 4,
     "rank_pts_allowed_guards": 19,
     "rank_pts_allowed_wings": 13,
     "rank_pts_allowed_bigs": 22,
@@ -6544,45 +6969,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.6,
-        "ppp": 1.36
+        "ppp": 1.36,
+        "rank": 28
       },
       "paint_non_ra": {
         "freq": 16.2,
-        "ppp": 0.96
+        "ppp": 0.96,
+        "rank": 28
       },
       "mid_range": {
         "freq": 14.1,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 28
       },
       "corner_3": {
         "freq": 9.3,
-        "ppp": 1.2
+        "ppp": 1.2,
+        "rank": 28
       },
       "above_break_3": {
         "freq": 31.8,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 28
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 34.2,
-        "ppp": 1.27
+        "ppp": 1.27,
+        "rank": 1
       },
       "paint_non_ra": {
         "freq": 18.4,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 1
       },
       "mid_range": {
         "freq": 13.2,
-        "ppp": 0.85
+        "ppp": 0.85,
+        "rank": 1
       },
       "corner_3": {
         "freq": 8.2,
-        "ppp": 1.13
+        "ppp": 1.13,
+        "rank": 30
       },
       "above_break_3": {
         "freq": 26.0,
-        "ppp": 1.06
+        "ppp": 1.06,
+        "rank": 30
       }
     },
     "positional_allowances": {
@@ -6748,7 +7183,9 @@
     "rank_pnr_switch": 14,
     "rank_ra_ppp_allowed": 28,
     "rank_paint_ppp_allowed": 28,
+    "rank_mid_ppp_allowed": 28,
     "rank_corner3_ppp_allowed": 28,
+    "rank_above_break3_ppp_allowed": 28,
     "rank_transition_ppp_allowed": 28,
     "rank_pnr_bh_freq": 28,
     "rank_iso_freq": 28,
@@ -6757,6 +7194,11 @@
     "rank_spot_up_allowed_ppp": 28,
     "rank_iso_allowed_ppp": 28,
     "rank_pnr_rm_allowed_ppp": 28,
+    "rank_ra_off_freq": 1,
+    "rank_paint_off_freq": 1,
+    "rank_mid_off_freq": 1,
+    "rank_corner3_off_freq": 30,
+    "rank_above_break3_off_freq": 30,
     "rank_pts_allowed_guards": 24,
     "rank_pts_allowed_wings": 26,
     "rank_pts_allowed_bigs": 22,
@@ -6805,45 +7247,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 26.4,
-        "ppp": 1.24
+        "ppp": 1.24,
+        "rank": 3
       },
       "paint_non_ra": {
         "freq": 15.7,
-        "ppp": 0.88
+        "ppp": 0.88,
+        "rank": 3
       },
       "mid_range": {
         "freq": 17.4,
-        "ppp": 0.82
+        "ppp": 0.82,
+        "rank": 3
       },
       "corner_3": {
         "freq": 9.4,
-        "ppp": 1.09
+        "ppp": 1.09,
+        "rank": 3
       },
       "above_break_3": {
         "freq": 31.1,
-        "ppp": 1.03
+        "ppp": 1.03,
+        "rank": 3
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 30.1,
-        "ppp": 1.35
+        "ppp": 1.35,
+        "rank": 16
       },
       "paint_non_ra": {
         "freq": 16.2,
-        "ppp": 0.96
+        "ppp": 0.96,
+        "rank": 16
       },
       "mid_range": {
         "freq": 11.6,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 16
       },
       "corner_3": {
         "freq": 10.1,
-        "ppp": 1.21
+        "ppp": 1.21,
+        "rank": 15
       },
       "above_break_3": {
         "freq": 32.0,
-        "ppp": 1.12
+        "ppp": 1.12,
+        "rank": 15
       }
     },
     "positional_allowances": {
@@ -7006,7 +7458,9 @@
     "rank_pnr_switch": 18,
     "rank_ra_ppp_allowed": 3,
     "rank_paint_ppp_allowed": 3,
+    "rank_mid_ppp_allowed": 3,
     "rank_corner3_ppp_allowed": 3,
+    "rank_above_break3_ppp_allowed": 3,
     "rank_transition_ppp_allowed": 3,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -7015,6 +7469,11 @@
     "rank_spot_up_allowed_ppp": 3,
     "rank_iso_allowed_ppp": 3,
     "rank_pnr_rm_allowed_ppp": 3,
+    "rank_ra_off_freq": 16,
+    "rank_paint_off_freq": 16,
+    "rank_mid_off_freq": 16,
+    "rank_corner3_off_freq": 15,
+    "rank_above_break3_off_freq": 15,
     "rank_pts_allowed_guards": 5,
     "rank_pts_allowed_wings": 9,
     "rank_pts_allowed_bigs": 4,
@@ -7063,45 +7522,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.5,
-        "ppp": 1.26
+        "ppp": 1.26,
+        "rank": 6
       },
       "paint_non_ra": {
         "freq": 16.1,
-        "ppp": 0.89
+        "ppp": 0.89,
+        "rank": 6
       },
       "mid_range": {
         "freq": 13.1,
-        "ppp": 0.83
+        "ppp": 0.83,
+        "rank": 4
       },
       "corner_3": {
         "freq": 9.0,
-        "ppp": 1.12
+        "ppp": 1.12,
+        "rank": 7
       },
       "above_break_3": {
         "freq": 33.3,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 6
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 33.0,
-        "ppp": 1.31
+        "ppp": 1.31,
+        "rank": 6
       },
       "paint_non_ra": {
         "freq": 17.8,
-        "ppp": 0.93
+        "ppp": 0.93,
+        "rank": 6
       },
       "mid_range": {
         "freq": 12.6,
-        "ppp": 0.87
+        "ppp": 0.87,
+        "rank": 6
       },
       "corner_3": {
         "freq": 8.8,
-        "ppp": 1.17
+        "ppp": 1.17,
+        "rank": 25
       },
       "above_break_3": {
         "freq": 27.8,
-        "ppp": 1.09
+        "ppp": 1.09,
+        "rank": 25
       }
     },
     "positional_allowances": {
@@ -7268,7 +7737,9 @@
     "rank_pnr_switch": 4,
     "rank_ra_ppp_allowed": 6,
     "rank_paint_ppp_allowed": 6,
+    "rank_mid_ppp_allowed": 4,
     "rank_corner3_ppp_allowed": 7,
+    "rank_above_break3_ppp_allowed": 6,
     "rank_transition_ppp_allowed": 7,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -7277,6 +7748,11 @@
     "rank_spot_up_allowed_ppp": 6,
     "rank_iso_allowed_ppp": 6,
     "rank_pnr_rm_allowed_ppp": 7,
+    "rank_ra_off_freq": 6,
+    "rank_paint_off_freq": 6,
+    "rank_mid_off_freq": 6,
+    "rank_corner3_off_freq": 25,
+    "rank_above_break3_off_freq": 25,
     "rank_pts_allowed_guards": 21,
     "rank_pts_allowed_wings": 5,
     "rank_pts_allowed_bigs": 4,
@@ -7325,45 +7801,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.1,
-        "ppp": 1.37
+        "ppp": 1.37,
+        "rank": 29
       },
       "paint_non_ra": {
         "freq": 16.5,
-        "ppp": 0.97
+        "ppp": 0.97,
+        "rank": 29
       },
       "mid_range": {
         "freq": 10.0,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 28
       },
       "corner_3": {
         "freq": 9.1,
-        "ppp": 1.21
+        "ppp": 1.21,
+        "rank": 29
       },
       "above_break_3": {
         "freq": 36.3,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 29
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 30.9,
-        "ppp": 1.3
+        "ppp": 1.3,
+        "rank": 13
       },
       "paint_non_ra": {
         "freq": 16.7,
-        "ppp": 0.92
+        "ppp": 0.92,
+        "rank": 10
       },
       "mid_range": {
         "freq": 11.9,
-        "ppp": 0.86
+        "ppp": 0.86,
+        "rank": 11
       },
       "corner_3": {
         "freq": 9.7,
-        "ppp": 1.16
+        "ppp": 1.16,
+        "rank": 18
       },
       "above_break_3": {
         "freq": 30.8,
-        "ppp": 1.08
+        "ppp": 1.08,
+        "rank": 18
       }
     },
     "positional_allowances": {
@@ -7528,7 +8014,9 @@
     "rank_pnr_switch": 25,
     "rank_ra_ppp_allowed": 29,
     "rank_paint_ppp_allowed": 29,
+    "rank_mid_ppp_allowed": 28,
     "rank_corner3_ppp_allowed": 29,
+    "rank_above_break3_ppp_allowed": 29,
     "rank_transition_ppp_allowed": 28,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -7537,6 +8025,11 @@
     "rank_spot_up_allowed_ppp": 28,
     "rank_iso_allowed_ppp": 29,
     "rank_pnr_rm_allowed_ppp": 29,
+    "rank_ra_off_freq": 13,
+    "rank_paint_off_freq": 10,
+    "rank_mid_off_freq": 11,
+    "rank_corner3_off_freq": 18,
+    "rank_above_break3_off_freq": 18,
     "rank_pts_allowed_guards": 30,
     "rank_pts_allowed_wings": 27,
     "rank_pts_allowed_bigs": 21,
@@ -7585,45 +8078,55 @@
     "shot_profile_allowed": {
       "restricted_area": {
         "freq": 28.4,
-        "ppp": 1.37
+        "ppp": 1.37,
+        "rank": 29
       },
       "paint_non_ra": {
         "freq": 15.8,
-        "ppp": 0.97
+        "ppp": 0.97,
+        "rank": 29
       },
       "mid_range": {
         "freq": 15.2,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 28
       },
       "corner_3": {
         "freq": 9.4,
-        "ppp": 1.21
+        "ppp": 1.21,
+        "rank": 29
       },
       "above_break_3": {
         "freq": 31.2,
-        "ppp": 1.14
+        "ppp": 1.14,
+        "rank": 29
       }
     },
     "shot_profile_offense": {
       "restricted_area": {
         "freq": 31.1,
-        "ppp": 1.26
+        "ppp": 1.26,
+        "rank": 10
       },
       "paint_non_ra": {
         "freq": 16.7,
-        "ppp": 0.9
+        "ppp": 0.9,
+        "rank": 10
       },
       "mid_range": {
         "freq": 11.9,
-        "ppp": 0.84
+        "ppp": 0.84,
+        "rank": 11
       },
       "corner_3": {
         "freq": 9.7,
-        "ppp": 1.12
+        "ppp": 1.12,
+        "rank": 18
       },
       "above_break_3": {
         "freq": 30.6,
-        "ppp": 1.05
+        "ppp": 1.05,
+        "rank": 20
       }
     },
     "positional_allowances": {
@@ -7752,8 +8255,8 @@
     "fg_pct": 46.2,
     "fg_pct_opp": 48.6,
     "injuries": [
-      "Alex Sarr",
       "Jamir Watkins",
+      "Alex Sarr",
       "Keshon Gilbert"
     ],
     "rank_pace": 6,
@@ -7790,7 +8293,9 @@
     "rank_pnr_switch": 15,
     "rank_ra_ppp_allowed": 29,
     "rank_paint_ppp_allowed": 29,
+    "rank_mid_ppp_allowed": 28,
     "rank_corner3_ppp_allowed": 29,
+    "rank_above_break3_ppp_allowed": 29,
     "rank_transition_ppp_allowed": 28,
     "rank_pnr_bh_freq": 8,
     "rank_iso_freq": 8,
@@ -7799,6 +8304,11 @@
     "rank_spot_up_allowed_ppp": 28,
     "rank_iso_allowed_ppp": 29,
     "rank_pnr_rm_allowed_ppp": 29,
+    "rank_ra_off_freq": 10,
+    "rank_paint_off_freq": 10,
+    "rank_mid_off_freq": 11,
+    "rank_corner3_off_freq": 18,
+    "rank_above_break3_off_freq": 20,
     "rank_pts_allowed_guards": 25,
     "rank_pts_allowed_wings": 25,
     "rank_pts_allowed_bigs": 30,

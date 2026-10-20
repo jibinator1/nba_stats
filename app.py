@@ -254,26 +254,74 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
 
     # Rank metrics across teams with games
     metrics_to_rank = [
-        ('pace', False), ('def_rtg', True), ('off_rtg', False),
-        ('pts_scored', False), ('pts_allowed', True),
-        ('reb_total', False), ('reb_allowed', True),
-        ('oreb_pct', False), ('dreb_pct', False),
-        ('ast_total', False), ('ast_allowed', True),
-        ('tov_total', True), ('tov_allowed', False),
-        ('fg3m_total', False), ('fg3m_allowed', True),
-        ('fg3a_total', False), ('fg3a_allowed', True),
-        ('fg_pct', False), ('fg_pct_opp', True)
+        (('pace',), False, 'rank_pace'), (('neutral_pace',), False, 'rank_neutral_pace'),
+        (('transition_freq',), False, 'rank_transition_freq'), (('def_rtg',), True, 'rank_def_rtg'),
+        (('off_rtg',), False, 'rank_off_rtg'), (('pts_scored',), False, 'rank_pts_scored'),
+        (('pts_allowed',), True, 'rank_pts_allowed'), (('reb_total',), False, 'rank_reb_total'),
+        (('reb_allowed',), True, 'rank_reb_allowed'), (('oreb_pct',), False, 'rank_oreb_pct'),
+        (('dreb_pct',), False, 'rank_dreb_pct'), (('ast_total',), False, 'rank_ast_total'),
+        (('ast_allowed',), True, 'rank_ast_allowed'), (('tov_total',), True, 'rank_tov_total'),
+        (('tov_allowed',), False, 'rank_tov_allowed'), (('fg3m_total',), False, 'rank_fg3m_total'),
+        (('fg3m_allowed',), True, 'rank_fg3m_allowed'), (('fg3a_total',), False, 'rank_fg3a_total'),
+        (('fg3a_allowed',), True, 'rank_fg3a_allowed'), (('fg_pct',), False, 'rank_fg_pct'),
+        (('fg_pct_opp',), True, 'rank_fg_pct_opp'),
+        (('rebounding', 'dreb_secured_pct'), False, 'rank_dreb_secured_pct'),
+        (('rebounding', 'oreb_allowed_pct'), True, 'rank_oreb_allowed_pct'),
+        (('shot_clock', 'early_0_8'), False, 'rank_early_0_8'),
+        (('shot_clock', 'mid_8_15'), False, 'rank_mid_8_15'),
+        (('shot_clock', 'late_15_24'), True, 'rank_late_15_24'),
+        (('game_script', 'leading_10', 'pace'), False, 'rank_pace_leading_10'),
+        (('game_script', 'trailing_10', 'pace'), False, 'rank_pace_trailing_10'),
+        (('pnr_coverage', 'drop'), False, 'rank_pnr_drop'),
+        (('pnr_coverage', 'switch'), False, 'rank_pnr_switch'),
+        (('shot_profile_allowed', 'restricted_area', 'ppp'), True, 'rank_ra_ppp_allowed'),
+        (('shot_profile_allowed', 'paint_non_ra', 'ppp'), True, 'rank_paint_ppp_allowed'),
+        (('shot_profile_allowed', 'mid_range', 'ppp'), True, 'rank_mid_ppp_allowed'),
+        (('shot_profile_allowed', 'corner_3', 'ppp'), True, 'rank_corner3_ppp_allowed'),
+        (('shot_profile_allowed', 'above_break_3', 'ppp'), True, 'rank_above_break3_ppp_allowed'),
+        (('transition_ppp_allowed',), True, 'rank_transition_ppp_allowed'),
+        (('playtypes_offense', 'PnR_Ball_Handler', 'freq'), False, 'rank_pnr_bh_freq'),
+        (('playtypes_offense', 'Isolation', 'freq'), False, 'rank_iso_freq'),
+        (('playtypes_offense', 'Spot_Up', 'freq'), False, 'rank_spot_freq'),
+        (('playtypes_defense', 'PnR_Ball_Handler', 'allowed_ppp'), True, 'rank_pnr_bh_allowed_ppp'),
+        (('playtypes_defense', 'Spot_Up', 'allowed_ppp'), True, 'rank_spot_up_allowed_ppp'),
+        (('playtypes_defense', 'Isolation', 'allowed_ppp'), True, 'rank_iso_allowed_ppp'),
+        (('playtypes_defense', 'PnR_Roll_Man', 'allowed_ppp'), True, 'rank_pnr_rm_allowed_ppp'),
+        (('shot_profile_offense', 'restricted_area', 'freq'), False, 'rank_ra_off_freq'),
+        (('shot_profile_offense', 'paint_non_ra', 'freq'), False, 'rank_paint_off_freq'),
+        (('shot_profile_offense', 'mid_range', 'freq'), False, 'rank_mid_off_freq'),
+        (('shot_profile_offense', 'corner_3', 'freq'), False, 'rank_corner3_off_freq'),
+        (('shot_profile_offense', 'above_break_3', 'freq'), False, 'rank_above_break3_off_freq'),
+        (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'),
+        (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
+        (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'),
+        (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov')
     ]
-    for metric, ascending in metrics_to_rank:
-        tuples = [(t, prof[metric]) for t, prof in teams_dict.items() if prof.get('gp', 0) > 0 and prof.get(metric) is not None]
+    for path, ascending, r_key in metrics_to_rank:
+        tuples = []
+        for t, prof in teams_dict.items():
+            if prof.get('gp', 0) == 0:
+                continue
+            curr = prof
+            for k in path:
+                if isinstance(curr, dict) and k in curr:
+                    curr = curr[k]
+                else:
+                    curr = None
+                    break
+            if curr is not None:
+                tuples.append((t, float(curr)))
         tuples.sort(key=lambda x: x[1], reverse=not ascending)
         ranked = set()
-        for idx, (t, _) in enumerate(tuples):
+        r = 1
+        for idx, (t, v) in enumerate(tuples):
             ranked.add(t)
-            teams_dict[t][f'rank_{metric}'] = 'Small Sample' if teams_dict[t].get('is_small_sample') else (idx + 1)
+            if idx > 0 and v != tuples[idx - 1][1]:
+                r = idx + 1
+            teams_dict[t][r_key] = 'Small Sample' if teams_dict[t].get('is_small_sample') else r
         for t in NBA_TEAMS:
             if t not in ranked:
-                teams_dict[t][f'rank_{metric}'] = None
+                teams_dict[t][r_key] = None
 
     return teams_dict
 
