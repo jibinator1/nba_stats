@@ -483,6 +483,108 @@ def api_player_profiles():
         'players': filtered
     })
 
+@app.route('/api/floor-streak')
+def api_floor_streak():
+    """
+    Returns the Player Floor Breach Streak for all tracked rotation players against a hard floor threshold line.
+    Streak = consecutive most-recent games meeting or exceeding the hard floor threshold line ((1 - margin) * baseline median).
+    """
+    stat_param = request.args.get('stat', 'PTS').upper()
+    if stat_param not in ['PTS', 'REB', 'AST']:
+        stat_param = 'PTS'
+    stat_key = stat_param.lower()
+
+    try:
+        margin = float(request.args.get('margin', 0.30))
+    except (ValueError, TypeError):
+        margin = 0.30
+
+    try:
+        min_games = int(request.args.get('min_games', 4))
+    except (ValueError, TypeError):
+        min_games = 4
+
+    try:
+        min_streak = int(request.args.get('min_streak', 0))
+    except (ValueError, TypeError):
+        min_streak = 0
+
+    pos_filter = request.args.get('pos', 'ALL').upper()
+    team_filter = request.args.get('team', 'ALL').upper()
+    s_date = request.args.get('start_date')
+    e_date = request.args.get('end_date')
+
+    _, _, player_profiles, _, _ = load_forensic_data()
+
+    results = []
+    for p in player_profiles:
+        if pos_filter != 'ALL' and p.get('position', '').upper() != pos_filter:
+            continue
+        if team_filter != 'ALL' and p.get('team', '').upper() != team_filter:
+            continue
+
+        logs = p.get('all_logs', [])
+        if s_date and e_date:
+            logs = [lg for lg in logs if s_date <= lg.get('d', '') <= e_date]
+        elif s_date:
+            logs = [lg for lg in logs if lg.get('d', '') >= s_date]
+        elif e_date:
+            logs = [lg for lg in logs if lg.get('d', '') <= e_date]
+
+        if len(logs) < min_games:
+            continue
+
+        vals = [float(lg.get(stat_key, 0)) for lg in logs]
+        if not vals:
+            continue
+
+        s_vals = sorted(vals)
+        n = len(s_vals)
+        med = float(s_vals[n // 2] if n % 2 == 1 else (s_vals[n // 2 - 1] + s_vals[n // 2]) / 2.0)
+        threshold = round((1.0 - margin) * med, 1)
+
+        streak = 0
+        for v in vals:
+            if v >= threshold:
+                streak += 1
+            else:
+                break
+
+        if streak < min_streak:
+            continue
+
+        tier = 'Breached (0)'
+        if streak >= 8:
+            tier = 'Consistent (8+)'
+        elif streak >= 5:
+            tier = 'Solid Floor (5-7)'
+        elif streak >= 1:
+            tier = 'Developing (1-4)'
+
+        results.append({
+            'player_name': p.get('player_name'),
+            'team': p.get('team'),
+            'team_name': p.get('team_name'),
+            'position': p.get('position'),
+            'stat': stat_param,
+            'baseline_median': med,
+            'margin_used': margin,
+            'floor_threshold': threshold,
+            'floor_streak': streak,
+            'reliability_tier': tier,
+            'games_played': len(logs),
+            'recent_logs': vals[:10]
+        })
+
+    results.sort(key=lambda x: x['floor_streak'], reverse=True)
+    return jsonify({
+        'status': 'success',
+        'count': len(results),
+        'stat': stat_param,
+        'margin': margin,
+        'players': results
+    })
+
 @app.route('/api/forensic-teams')
 def api_forensic_teams():
     forensic_teams, _, _, team_game_logs, last_updated = load_forensic_data()

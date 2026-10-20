@@ -92,8 +92,8 @@
                 <span id="nav-schedule-label">Matchup Lab</span>
             </button>
             <button onclick="switchTab('profiles')" id="tab-btn-profiles" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type == 'profiles' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
-                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
-                <span>Player Usage Profiles</span>
+                <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i>
+                <span>Player Floor Streaks</span>
                 <span id="profiles-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#30363d] text-cyan-300 font-mono">{{ player_profiles|length }}</span>
             </button>
             <button onclick="switchTab('insights')" id="tab-btn-insights" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type == 'insights' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
@@ -235,7 +235,7 @@
 
 
         <!-- ============================================================== -->
-        <!-- TAB 2: PLAYER USAGE PROFILES (UPGRADED FROM FLOOR STREAKS)    -->
+        <!-- TAB 2: PLAYER FLOOR STREAKS (PTS, REB, AST)                    -->
         <!-- ============================================================== -->
         <section id="tab-profiles" class="{{ 'hidden' if page_type != 'profiles' else '' }} space-y-5">
             <!-- Header & Overview -->
@@ -244,45 +244,45 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
-                                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
-                                <span>Player Usage Profiles</span>
+                                <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Player Floor Streaks</span>
                             </h2>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-cyan-400 border border-[#30363d]">Top 4 Rotations • 10-Game Distribution Percentiles</span>
+                            <span id="floor-margin-badge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-cyan-400 border border-[#30363d]">Hard Line Threshold (-30% Margin)</span>
                         </div>
                         <p class="text-xs text-slate-400 mt-1">
-                            Descriptive distributions displaying Typical Floor (25th percentile), Usual Output (Median), and Typical Ceiling (75th percentile) alongside USG%, AST%, REB%, and situational clutch volume.
+                            Tracks consecutive games where player production meets or exceeds their established hard floor threshold (-x% margin off baseline median). Evaluated as a hard line across historical games.
                         </p>
                     </div>
 
                     <div class="flex items-center gap-3">
                         <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1.5">
                             <span class="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
-                            <span>2026 Tracking Baseline Active</span>
+                            <span id="floor-active-timeline-text">2026 Tracking Baseline Active</span>
                         </div>
-                        <button onclick="reloadAllData()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Profiles">
+                        <button onclick="reloadFloorStreaks()" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#30363d] text-slate-200 text-xs rounded-lg transition flex items-center gap-1.5" title="Recalculate Floor Streaks">
                             <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-slate-400"></i>
-                            <span>Refresh Profiles</span>
+                            <span>Refresh Streaks</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- KPI Ribbon -->
+                <!-- KPI Metric Summary Ribbon -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#30363d]">
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Tracked Rotation Players</span>
-                        <div id="profiles-kpi-total" class="text-xs font-semibold font-mono text-slate-200 mt-1">{{ player_profiles|length }}</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Longest Active Streak</span>
+                        <div id="floor-kpi-longest" class="text-xs font-semibold font-mono text-slate-200 mt-1">--</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Active on Current Slate</span>
-                        <div id="profiles-kpi-active" class="text-xs font-semibold font-mono text-cyan-400 mt-1">All Teams</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Consistent (8+ Games)</span>
+                        <div id="floor-kpi-consistent" class="text-xs font-semibold font-mono text-emerald-400 mt-1">--</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Primary Usage Core (&gt;28% USG)</span>
-                        <div id="profiles-kpi-high-usg" class="text-xs font-semibold font-mono text-slate-200 mt-1">--</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Solid Floor (5-7 Games)</span>
+                        <div id="floor-kpi-solid" class="text-xs font-semibold font-mono text-cyan-400 mt-1">--</div>
                     </div>
                     <div class="bg-[#21262d]/80 border border-[#30363d] rounded-lg p-3">
-                        <span class="text-[11px] text-slate-400 block font-medium">Sample Gating Status</span>
-                        <div class="text-xs font-semibold font-mono text-emerald-400 mt-1">Verified (&gt;10 GP)</div>
+                        <span class="text-[11px] text-slate-400 block font-medium">Developing (1-4 Games)</span>
+                        <div id="floor-kpi-developing" class="text-xs font-semibold font-mono text-slate-300 mt-1">--</div>
                     </div>
                 </div>
             </div>
@@ -291,8 +291,8 @@
             <div class="glass-panel rounded-xl p-4 border border-[#30363d] flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-3">
                     <!-- Search Input -->
-                    <div class="relative w-56">
-                        <input type="text" id="profile-search-input" oninput="onProfileSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-cyan-500 font-medium">
+                    <div class="relative w-52">
+                        <input type="text" id="floor-search-input" oninput="onFloorSearch(this.value)" placeholder="Search player or team..." class="w-full bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-cyan-500 font-medium">
                         <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
                     </div>
 
@@ -300,58 +300,97 @@
                     <div class="flex items-center gap-1.5 bg-[#161b22] px-2.5 py-1 rounded-lg border border-[#30363d] min-w-0 max-w-full overflow-hidden">
                         <span class="text-xs text-slate-400 font-semibold flex items-center gap-1 shrink-0">
                             <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-400"></i>
-                            <span>Playing Tonight:</span>
+                            <span>Game Slate:</span>
                         </span>
-                        <div id="profile-date-chips" class="flex items-center gap-1 overflow-x-auto max-w-[240px] sm:max-w-[320px] md:max-w-[420px] py-0.5 whitespace-nowrap scrollbar-thin shrink">
-                            <button id="btn-profile-all-dates" onclick="clearProfileDateFilter()" class="chip active text-[11px] py-0.5 px-2.5 rounded shrink-0 bg-[#30363d] text-slate-100 font-bold" title="Show all dates">All Slates</button>
+                        <div id="floor-date-chips" class="flex items-center gap-1 overflow-x-auto max-w-[220px] sm:max-w-[300px] md:max-w-[360px] py-0.5 whitespace-nowrap scrollbar-thin shrink">
+                            <button id="btn-floor-all-dates" onclick="clearFloorDateFilter()" class="chip active text-[11px] py-0.5 px-2.5 rounded shrink-0 bg-[#30363d] text-slate-100 font-bold" title="Show all dates">All Slates</button>
                         </div>
-                        <input type="date" id="profile-date-picker" onchange="onProfileDateChange(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-mono cursor-pointer shrink-0" title="Select custom slate date">
+                        <input type="date" id="floor-date-picker" onchange="onFloorDateChange(this.value)" class="bg-[#21262d] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-mono cursor-pointer shrink-0" title="Select custom slate date">
                     </div>
 
                     <!-- Position Filter Chips -->
                     <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                        <button onclick="setProfilePosFilter('ALL')" id="profile-filter-pos-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
-                        <button onclick="setProfilePosFilter('PG')" id="profile-filter-pos-PG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
-                        <button onclick="setProfilePosFilter('SG')" id="profile-filter-pos-SG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
-                        <button onclick="setProfilePosFilter('SF')" id="profile-filter-pos-SF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
-                        <button onclick="setProfilePosFilter('PF')" id="profile-filter-pos-PF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
-                        <button onclick="setProfilePosFilter('C')" id="profile-filter-pos-C" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
+                        <button onclick="setFloorPosFilter('ALL')" id="floor-filter-pos-ALL" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">ALL</button>
+                        <button onclick="setFloorPosFilter('PG')" id="floor-filter-pos-PG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PG</button>
+                        <button onclick="setFloorPosFilter('SG')" id="floor-filter-pos-SG" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SG</button>
+                        <button onclick="setFloorPosFilter('SF')" id="floor-filter-pos-SF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">SF</button>
+                        <button onclick="setFloorPosFilter('PF')" id="floor-filter-pos-PF" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">PF</button>
+                        <button onclick="setFloorPosFilter('C')" id="floor-filter-pos-C" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
                     </div>
 
-                    <!-- Stat Metric Selector Chips -->
+                    <!-- Stat Metric Selector Chips (PTS, REB, AST) -->
                     <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                        <button onclick="setProfileStatFilter('PTS')" id="profile-filter-stat-PTS" class="px-2.5 py-1 rounded bg-[#30363d] text-slate-100 font-semibold">PTS</button>
-                        <button onclick="setProfileStatFilter('REB')" id="profile-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
-                        <button onclick="setProfileStatFilter('AST')" id="profile-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
+                        <button onclick="setFloorStatFilter('PTS')" id="floor-filter-stat-PTS" class="px-2.5 py-1 rounded bg-[#30363d] text-cyan-300 font-bold border border-cyan-800/60">PTS</button>
+                        <button onclick="setFloorStatFilter('REB')" id="floor-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
+                        <button onclick="setFloorStatFilter('AST')" id="floor-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
+                    </div>
+
+                    <!-- Minimum Streak Filter -->
+                    <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
+                        <span class="text-[11px] font-medium">Streak:</span>
+                        <select id="floor-streak-filter-select" onchange="setFloorStreakFilter(this.value)" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-medium cursor-pointer">
+                            <option value="0">All (0+)</option>
+                            <option value="1" selected>All Active (1+)</option>
+                            <option value="2">Active (2+)</option>
+                            <option value="5">Solid (5+)</option>
+                            <option value="8">Consistent (8+)</option>
+                        </select>
+                    </div>
+
+                    <!-- Min Games Filter -->
+                    <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
+                        <span class="text-[11px] font-medium">Min Games:</span>
+                        <select id="floor-games-filter-select" onchange="setFloorMinGamesFilter(this.value)" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-medium cursor-pointer">
+                            <option value="4" selected>4+ Games</option>
+                            <option value="8">8+ Games</option>
+                            <option value="12">12+ Games</option>
+                            <option value="20">20+ Games</option>
+                        </select>
+                    </div>
+
+                    <!-- Floor Margin Filter (x%) -->
+                    <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1">
+                        <span class="text-[11px] font-medium text-cyan-400">Floor Margin:</span>
+                        <select id="floor-margin-filter-select" onchange="setFloorMarginFilter(this.value)" class="bg-[#161b22] border border-[#30363d] text-slate-200 rounded px-2 py-0.5 text-xs outline-none focus:border-cyan-500 font-medium cursor-pointer">
+                            <option value="0.10">-10% (Tight)</option>
+                            <option value="0.15">-15%</option>
+                            <option value="0.20">-20%</option>
+                            <option value="0.25">-25%</option>
+                            <option value="0.30" selected>-30% (Standard)</option>
+                            <option value="0.35">-35%</option>
+                            <option value="0.40">-40%</option>
+                            <option value="0.50">-50% (Wide)</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="text-xs text-slate-400 font-mono">
-                    Displaying <span id="profile-visible-count" class="text-slate-100 font-bold">{{ player_profiles|length }}</span> rotation profiles
+                    Showing <span id="floor-visible-count" class="text-slate-100 font-bold">{{ player_profiles|length }}</span> tracked players
                 </div>
             </div>
 
-            <!-- Player Profiles Table -->
+            <!-- Floor Streaks Data Table -->
             <div class="glass-panel rounded-xl overflow-hidden border border-[#30363d]">
                 <div class="overflow-x-auto max-h-[750px] overflow-y-auto touch-scroll">
                     <table class="w-full text-left text-xs border-collapse">
                         <thead class="bg-[#21262d] sticky top-0 z-10 text-slate-400 font-medium border-b border-[#30363d]">
                             <tr>
-                                <th class="text-center w-12 py-2.5 px-3">#</th>
-                                <th class="th-sortable py-2.5 px-3" onclick="sortProfiles('player_name')">Player</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('position')">Pos</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('team')">Team</th>
-                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortProfiles('season_avg')">Season Averages</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('floor')">Typical Floor (25th %ile)</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('median')">Usual Output (Median)</th>
-                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortProfiles('ceiling')">Typical Ceiling (75th %ile)</th>
-                                <th class="text-center py-2.5 px-3">Context Rates (USG / AST / REB)</th>
-                                <th class="text-center py-2.5 px-3">Situational Usage</th>
-                                <th class="text-left py-2.5 px-3 min-w-[200px]">Last 10 Game Distribution</th>
+                                <th class="th-sortable text-center w-12 py-2.5 px-3" onclick="sortFloorStreaks('rank')">#</th>
+                                <th class="th-sortable py-2.5 px-3" onclick="sortFloorStreaks('player_name')">Player</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('position')">Pos</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('team')">Team</th>
+                                <th class="text-left py-2.5 px-3">Tracked Metric</th>
+                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortFloorStreaks('baseline_median')">Baseline (Median)</th>
+                                <th class="text-center py-2.5 px-3">Floor Margin</th>
+                                <th class="th-sortable text-right py-2.5 px-3" onclick="sortFloorStreaks('floor_threshold')">Floor Threshold</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('floor_streak')">Floor Streak</th>
+                                <th class="text-center py-2.5 px-3">Reliability Tier</th>
+                                <th class="th-sortable text-center py-2.5 px-3" onclick="sortFloorStreaks('games_played')">Games</th>
+                                <th class="text-left py-2.5 px-3 min-w-[220px]">Recent Game Log Sequence</th>
                             </tr>
                         </thead>
-                        <tbody id="player-profile-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
-                            <!-- Populated via renderPlayerProfiles() -->
+                        <tbody id="floor-streak-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
+                            <!-- Populated via renderFloorStreaks() / renderPlayerProfiles() -->
                         </tbody>
                     </table>
                 </div>

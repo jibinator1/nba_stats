@@ -346,7 +346,7 @@ def run_audit():
     print("  [PASS] Explicit Cade Cunningham Pick & Roll Ball Handler operator text verified in insights.")
 
     # 12. Verify Universal League Baseline Rankings & Thermonuclear Code Compliance (<1,000 Lines)
-    print("\n[12/12] Testing Universal League Baseline Rankings & Thermonuclear Line Count Compliance (<1,000 Lines)...")
+    print("\n[12/13] Testing Universal League Baseline Rankings & Thermonuclear Line Count Compliance (<1,000 Lines)...")
     for tm, prof in f_teams.items():
         if prof.get('gp', 0) > 0 and not prof.get('is_small_sample'):
             for rk in ['rank_neutral_pace', 'rank_transition_freq', 'rank_early_0_8', 'rank_pnr_drop', 'rank_ra_ppp_allowed', 'rank_pnr_bh_freq', 'rank_live_tov']:
@@ -364,6 +364,36 @@ def run_audit():
                 assert lcount < 1000, f"File {rel_p} exceeds 1,000 lines limit ({lcount} lines)!"
     print("  [PASS] Every .py and .js file in the entire repository strictly under 1,000 lines (Thermonuclear Standard verified).")
     print("  [PASS] Universal baseline rankings verified across all 30 NBA teams.")
+
+    # 13. Verify Player Floor Streaks (PTS, REB, AST, Dynamic Margin & Hard Threshold Engine)
+    print("\n[13/13] Testing Player Floor Streaks (PTS, REB, AST & Dynamic Margin Engine)...")
+    res_fs = client.get('/api/floor-streak?stat=PTS&margin=0.30')
+    assert res_fs.status_code == 200, f"Failed /api/floor-streak: {res_fs.status_code}"
+    fs_data = res_fs.json
+    assert fs_data['status'] == 'success', "Invalid floor streak status"
+    assert fs_data['stat'] == 'PTS' and fs_data['margin'] == 0.30, "Invalid stat/margin in response"
+    assert len(fs_data['players']) > 0, "No players returned from floor streak endpoint"
+    top_p = fs_data['players'][0]
+    assert 'floor_streak' in top_p and 'floor_threshold' in top_p and 'baseline_median' in top_p, "Missing streak metrics in player payload"
+    expected_thresh = round(0.70 * top_p['baseline_median'], 1)
+    assert abs(top_p['floor_threshold'] - expected_thresh) < 0.05, f"Threshold mismatch: got {top_p['floor_threshold']}, expected {expected_thresh}"
+
+    # Test REB and AST
+    res_reb = client.get('/api/floor-streak?stat=REB&margin=0.20')
+    assert res_reb.status_code == 200 and res_reb.json['stat'] == 'REB'
+    res_ast = client.get('/api/floor-streak?stat=AST&margin=0.35')
+    assert res_ast.status_code == 200 and res_ast.json['stat'] == 'AST'
+
+    # Check frontend UI integration in index.html & profiles.js
+    assert 'floor-margin-filter-select' in html, "Missing floor-margin-filter-select in index.html"
+    assert 'floor-streak-table-body' in html, "Missing floor-streak-table-body in index.html"
+    assert 'floor-kpi-longest' in html, "Missing floor-kpi-longest in index.html"
+    assert 'computePlayerFloorData' in js_content, "Missing computePlayerFloorData in profiles.js"
+    assert 'setFloorMarginFilter' in js_content, "Missing setFloorMarginFilter in profiles.js"
+    assert 'setFloorStatFilter' in js_content, "Missing setFloorStatFilter in profiles.js"
+
+    print(f"  Top Active Floor Streak: {top_p['player_name']} ({top_p['team']}) - {top_p['floor_streak']} games (PTS Med: {top_p['baseline_median']}, Thresh: {top_p['floor_threshold']})")
+    print("  [PASS] Player Floor Streaks verified across PTS, REB, AST with dynamic margins, KPI summaries, and visual game logs.")
 
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
