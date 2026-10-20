@@ -81,22 +81,16 @@ def load_injuries_by_team():
         inj_df = pd.read_csv(inj_file)
         inj_players = set(inj_df['Player'].dropna().str.strip())
         player_to_team = {}
-        pos_file = os.path.join(BASE_DIR, 'positions.csv')
-        if os.path.exists(pos_file):
-            pos_df = pd.read_csv(pos_file)
-            team_clean = {'CHO': 'CHA', 'BRK': 'BKN', 'PHO': 'PHX'}
-            for _, r in pos_df.iterrows():
-                p = str(r['Player']).strip()
-                tm = str(r['Team']).strip()
-                player_to_team[p] = team_clean.get(tm, tm)
-
-        logs_file = os.path.join(BASE_DIR, 'logs.csv')
+        logs_file, pos_file = os.path.join(BASE_DIR, 'logs.csv'), os.path.join(BASE_DIR, 'positions.csv')
         if os.path.exists(logs_file):
-            logs_df = pd.read_csv(logs_file, nrows=100000)
-            for _, r in logs_df.iterrows():
+            for _, r in pd.read_csv(logs_file, nrows=100000).iterrows():
                 p = str(r['PLAYER_NAME']).strip()
-                if p in inj_players:
-                    player_to_team[p] = str(r['TEAM_ABBREVIATION']).strip()
+                if p in inj_players: player_to_team[p] = str(r['TEAM_ABBREVIATION']).strip()
+        if os.path.exists(pos_file):
+            team_clean = {'CHO': 'CHA', 'BRK': 'BKN', 'PHO': 'PHX'}
+            for _, r in pd.read_csv(pos_file).iterrows():
+                p, tm = str(r['Player']).strip(), str(r['Team']).strip()
+                if p in inj_players and tm and tm != 'nan': player_to_team[p] = team_clean.get(tm, tm)
 
         inj_by_team = {}
         for p in inj_players:
@@ -503,18 +497,12 @@ def calculate_team_forensics(logs_df, paired_df):
         (('shot_profile_offense', 'corner_3', 'freq'), False, 'rank_corner3_off_freq'),
         (('shot_profile_offense', 'above_break_3', 'freq'), False, 'rank_above_break3_off_freq'),
         (('positional_allowances', 'pts', 'guards'), True, 'rank_pts_allowed_guards'),
-        (('positional_allowances', 'pts', 'wings'), True, 'rank_pts_allowed_wings'),
-        (('positional_allowances', 'pts', 'bigs'), True, 'rank_pts_allowed_bigs'),
-        (('positional_allowances', 'reb', 'guards'), True, 'rank_reb_allowed_guards'),
-        (('positional_allowances', 'reb', 'wings'), True, 'rank_reb_allowed_wings'),
-        (('positional_allowances', 'reb', 'bigs'), True, 'rank_reb_allowed_bigs'),
-        (('positional_allowances', 'fg3m', 'guards'), True, 'rank_fg3m_allowed_guards'),
-        (('positional_allowances', 'fg3m', 'wings'), True, 'rank_fg3m_allowed_wings'),
-        (('positional_allowances', 'fg3m', 'bigs'), True, 'rank_fg3m_allowed_bigs'),
-        (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'),
-        (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
-        (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'),
-        (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov')
+        (('positional_allowances', 'pts', 'wings'), True, 'rank_pts_allowed_wings'), (('positional_allowances', 'pts', 'bigs'), True, 'rank_pts_allowed_bigs'),
+        (('positional_allowances', 'reb', 'guards'), True, 'rank_reb_allowed_guards'), (('positional_allowances', 'reb', 'wings'), True, 'rank_reb_allowed_wings'),
+        (('positional_allowances', 'reb', 'bigs'), True, 'rank_reb_allowed_bigs'), (('positional_allowances', 'fg3m', 'guards'), True, 'rank_fg3m_allowed_guards'),
+        (('positional_allowances', 'fg3m', 'wings'), True, 'rank_fg3m_allowed_wings'), (('positional_allowances', 'fg3m', 'bigs'), True, 'rank_fg3m_allowed_bigs'),
+        (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'), (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
+        (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'), (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov')
     ]
     for path, ascending, rank_key in metrics_to_rank:
         tuples = []
@@ -685,38 +673,34 @@ def calculate_player_usage_profiles(logs_df):
     Calculates 10-game distributions (25th floor, 50th usual, 75th ceiling)
     for PTS, REB, AST; USG%, AST%, REB%, clutch usage, paint touches.
     """
-    # Load player positions map
+    # Load player positions map and 2026-27 team rosters from positions.csv
     pos_file = os.path.join(BASE_DIR, 'positions.csv')
-    pos_map = {}
+    pos_map, pos_teams = {}, {}
+    team_clean = {'CHO': 'CHA', 'BRK': 'BKN', 'PHO': 'PHX'}
     if os.path.exists(pos_file):
         pos_df = pd.read_csv(pos_file)
         pos_map = dict(zip(pos_df['Player'], pos_df['Pos']))
+        for _, r in pos_df.iterrows():
+            tm = str(r['Team']).strip()
+            if tm and tm != 'nan':
+                pos_teams[str(r['Player']).strip()] = team_clean.get(tm, tm)
 
-    # Overrides for players with special naming, diacritics or recent rookie signings
     pos_map.update({
-        'Lamont Butler': 'PG',
-        'Trevon Scott': 'SF',
-        'Jimmy Butler III': 'SF',
-        'Alperen Sengun': 'C',
-        'Adama Bal': 'SG',
-        'AJ Green': 'SG',
-        'Luka Dončić': 'PG',
-        'Nikola Jokić': 'C',
-        'Nikola Joki?': 'C',
-        'Luka Don?i?': 'PG'
+        'Lamont Butler': 'PG', 'Trevon Scott': 'SF', 'Jimmy Butler III': 'SF', 'Alperen Sengun': 'C',
+        'Adama Bal': 'SG', 'AJ Green': 'SG', 'Luka Dončić': 'PG', 'Nikola Jokić': 'C',
+        'Nikola Joki?': 'C', 'Luka Don?i?': 'PG', 'Nikola Vučević': 'C', 'Nikola Vucevic': 'C',
+        'Kristaps Porziņģis': 'C', 'Dennis Schröder': 'PG'
     })
 
-    # Track each player's current active team from their latest game date in logs
+    # Track each player's current active team from logs as fallback, overridden by 2026-27 contracts
     logs_clean = logs_df.dropna(subset=['PLAYER_NAME'])
     logs_sorted = logs_clean.sort_values('GAME_DATE', ascending=False)
     player_current_team = logs_sorted.groupby('PLAYER_NAME')['TEAM_ABBREVIATION'].first()
 
-    # Roster overrides (recent trades / signings)
-    team_overrides = {
-        'Jaylen Brown': 'PHI'
-    }
-    for p_name, t_code in team_overrides.items():
+    for p_name, t_code in pos_teams.items():
         player_current_team[p_name] = t_code
+    for orig, target in {'Jimmy Butler': 'Jimmy Butler III', 'Alperen Şengün': 'Alperen Sengun', 'A.J. Green': 'AJ Green'}.items():
+        if orig in pos_teams: player_current_team[target] = pos_teams[orig]
 
     # Team totals for USG% computation
     team_totals = logs_clean.groupby('TEAM_ABBREVIATION').agg({
