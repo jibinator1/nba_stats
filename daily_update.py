@@ -52,7 +52,7 @@ def record_run_success():
 def fetch_logs():
     print("Fetching latest game logs from NBA API...")
     try:
-        logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', headers=headers).get_data_frames()[0]
+        logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', season_type_nullable='Regular Season', headers=headers).get_data_frames()[0]
         logs.to_csv(os.path.join(SCRIPT_DIR, "logs.csv"), index=False)
         print("Successfully updated logs.csv!")
         return True

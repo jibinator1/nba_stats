@@ -395,6 +395,25 @@ def run_audit():
     print(f"  Top Active Floor Streak: {top_p['player_name']} ({top_p['team']}) - {top_p['floor_streak']} games (PTS Med: {top_p['baseline_median']}, Thresh: {top_p['floor_threshold']})")
     print("  [PASS] Player Floor Streaks verified across PTS, REB, AST with dynamic margins, KPI summaries, and visual game logs.")
 
+    # 14. Verify Playoff Game Exclusion Across All Datasets
+    print("\n[14/14] Testing Playoff and Postseason Game Exclusion Across All Datasets...")
+    with open(os.path.join(base_dir, 'forensic_team_game_logs.json'), 'r', encoding='utf-8') as f:
+        t_game_logs = json.load(f)
+    postseason_team_logs = [lg for lg in t_game_logs if lg['d'] >= '2026-04-14']
+    assert len(postseason_team_logs) == 0, f"Found {len(postseason_team_logs)} postseason team logs in forensic_team_game_logs.json"
+
+    with open(os.path.join(base_dir, 'forensic_players.json'), 'r', encoding='utf-8') as f:
+        cached_players = json.load(f)
+    postseason_player_logs = [lg for p in cached_players for lg in p.get('all_logs', []) if lg['d'] >= '2026-04-14']
+    assert len(postseason_player_logs) == 0, f"Found {len(postseason_player_logs)} postseason player logs in forensic_players.json"
+
+    max_d_team = max(lg['d'] for lg in t_game_logs)
+    max_d_player = max(lg['d'] for p in cached_players for lg in p.get('all_logs', []))
+    assert max_d_team == '2026-04-12', f"Expected max team date 2026-04-12, got {max_d_team}"
+    assert max_d_player == '2026-04-12', f"Expected max player date 2026-04-12, got {max_d_player}"
+    print(f"  Max Team Log Date: {max_d_team} | Max Player Log Date: {max_d_player}")
+    print("  [PASS] Confirmed 100% exclusion of playoff and postseason games from team logs, player profiles, and streaks.")
+
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
     print("=" * 60)

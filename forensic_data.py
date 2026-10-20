@@ -33,12 +33,15 @@ NBA_TEAM_NAMES = {
 }
 
 def load_clean_logs():
-    """Loads logs.csv and filters to active 30 NBA teams."""
+    """Loads logs.csv, filters to active 30 NBA teams, and excludes playoff/play-in games."""
     logs_path = os.path.join(BASE_DIR, 'logs.csv')
     if not os.path.exists(logs_path):
         return pd.DataFrame()
     df = pd.read_csv(logs_path)
     df = df[df['TEAM_ABBREVIATION'].isin(NBA_TEAMS)].copy()
+    # Exclude playoff and play-in games (NBA game_id prefix 4/004 and 5/005)
+    g_str = df['GAME_ID'].astype(str)
+    df = df[~g_str.str.startswith(('004', '4', '005', '5'))].copy()
     df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
     return df
 
