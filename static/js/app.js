@@ -106,6 +106,27 @@ const STAT_EXPLANATIONS = {
     'Dead-Ball Turnovers': 'Turnovers resulting in whistle stoppages (out-of-bounds, travel, offensive foul).'
 };
 
+// Statistically significant positional allowance metrics (ANOVA p < 0.05 across 30 teams)
+const SIGNIFICANT_POS_KEYS = [
+    'c_pts_allowed', 'c_reb_allowed', 'c_ast_allowed', 'c_fg3m_allowed', 'c_pra_allowed',
+    'pf_pts_allowed', 'pf_reb_allowed', 'pf_ast_allowed', 'pf_pra_allowed',
+    'sf_reb_allowed', 'sf_ast_allowed', 'sf_pra_allowed',
+    'sg_pts_allowed', 'sg_reb_allowed', 'sg_ast_allowed', 'sg_fg3m_allowed', 'sg_pra_allowed',
+    'pg_pts_allowed', 'pg_reb_allowed', 'pg_ast_allowed', 'pg_fg3m_allowed', 'pg_pra_allowed'
+];
+
+const POS_METRIC_LABELS = {
+    'c_pts_allowed': 'Center PTS Allowed', 'c_reb_allowed': 'Center REB Allowed', 'c_ast_allowed': 'Center AST Allowed', 'c_fg3m_allowed': 'Center 3PM Allowed', 'c_pra_allowed': 'Center PRA Allowed',
+    'pf_pts_allowed': 'PF PTS Allowed', 'pf_reb_allowed': 'PF REB Allowed', 'pf_ast_allowed': 'PF AST Allowed', 'pf_pra_allowed': 'PF PRA Allowed',
+    'sf_reb_allowed': 'SF REB Allowed', 'sf_ast_allowed': 'SF AST Allowed', 'sf_pra_allowed': 'SF PRA Allowed',
+    'sg_pts_allowed': 'SG PTS Allowed', 'sg_reb_allowed': 'SG REB Allowed', 'sg_ast_allowed': 'SG AST Allowed', 'sg_fg3m_allowed': 'SG 3PM Allowed', 'sg_pra_allowed': 'SG PRA Allowed',
+    'pg_pts_allowed': 'PG PTS Allowed', 'pg_reb_allowed': 'PG REB Allowed', 'pg_ast_allowed': 'PG AST Allowed', 'pg_fg3m_allowed': 'PG 3PM Allowed', 'pg_pra_allowed': 'PG PRA Allowed'
+};
+
+SIGNIFICANT_POS_KEYS.forEach(k => {
+    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate elite defensive containment.`;
+});
+
 // Rank Badge Formatter with Sample Size Gating & Hover Tooltip
 function formatRankBadge(rank, isSmallSample) {
     if (rank == null || rank === '') return '';
@@ -128,18 +149,9 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
 
     let tooltipBody = '';
     if (def && typeof def === 'object') {
-        tooltipBody = `
-            <span class="stat-info-box block">
-                <span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block"><span class="text-cyan-400 font-mono">${label}</span><span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Scouting Context</span></span>
-                <span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block"><b class="text-slate-400 font-sans font-semibold">What it means:</b> ${def.meaning}</span>
-                <span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block"><b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${def.players}</span>
-            </span>`;
+        tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block"><span class="text-cyan-400 font-mono">${label}</span><span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Scouting Context</span></span><span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block"><b class="text-slate-400 font-sans font-semibold">What it means:</b> ${def.meaning}</span><span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block"><b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${def.players}</span></span>`;
     } else if (exp) {
-        tooltipBody = `
-            <span class="stat-info-box block">
-                <span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span>
-                <span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span>
-            </span>`;
+        tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span><span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span></span>`;
     }
 
     return `
@@ -214,28 +226,13 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         if (gp === 0) {
             currentForensicTeams[t] = createEmptyTeamProfile(t);
         } else {
-            const totPoss = tGames.reduce((acc, g) => acc + (g.poss || 100), 0);
-            const pace = (totPoss / (gp * 48)) * 48;
-            const totPts = tGames.reduce((acc, g) => acc + g.pts, 0);
-            const totPtsOpp = tGames.reduce((acc, g) => acc + g.opp_pts, 0);
-            const totReb = tGames.reduce((acc, g) => acc + g.reb, 0);
-            const totRebOpp = tGames.reduce((acc, g) => acc + g.opp_reb, 0);
-            const totAst = tGames.reduce((acc, g) => acc + g.ast, 0);
-            const totAstOpp = tGames.reduce((acc, g) => acc + g.opp_ast, 0);
-            const totFg3m = tGames.reduce((acc, g) => acc + g.fg3m, 0);
-            const totFg3mOpp = tGames.reduce((acc, g) => acc + g.opp_fg3m, 0);
-            const totFg3a = tGames.reduce((acc, g) => acc + g.fg3a, 0);
-            const totFg3aOpp = tGames.reduce((acc, g) => acc + g.opp_fg3a, 0);
-            const totFgm = tGames.reduce((acc, g) => acc + g.fgm, 0);
-            const totFga = tGames.reduce((acc, g) => acc + g.fga, 0);
-            const totFgmOpp = tGames.reduce((acc, g) => acc + g.opp_fgm, 0);
-            const totFgaOpp = tGames.reduce((acc, g) => acc + g.opp_fga, 0);
-            const totDreb = tGames.reduce((acc, g) => acc + (g.dreb || 0), 0);
-            const totOreb = tGames.reduce((acc, g) => acc + (g.oreb || 0), 0);
-            const totDrebOpp = tGames.reduce((acc, g) => acc + (g.opp_dreb || 0), 0);
-            const totOrebOpp = tGames.reduce((acc, g) => acc + (g.opp_oreb || 0), 0);
-            const totTov = tGames.reduce((acc, g) => acc + (g.tov || 0), 0);
-            const totOppTov = tGames.reduce((acc, g) => acc + (g.opp_tov || 0), 0);
+            const sumK = (k) => tGames.reduce((acc, g) => acc + (g[k] || 0), 0);
+            const totPoss = tGames.reduce((acc, g) => acc + (g.poss || 100), 0), pace = (totPoss / (gp * 48)) * 48;
+            const totPts = sumK('pts'), totPtsOpp = sumK('opp_pts'), totReb = sumK('reb'), totRebOpp = sumK('opp_reb');
+            const totAst = sumK('ast'), totAstOpp = sumK('opp_ast'), totFg3m = sumK('fg3m'), totFg3mOpp = sumK('opp_fg3m');
+            const totFg3a = sumK('fg3a'), totFg3aOpp = sumK('opp_fg3a'), totFgm = sumK('fgm'), totFga = sumK('fga');
+            const totFgmOpp = sumK('opp_fgm'), totFgaOpp = sumK('opp_fga'), totDreb = sumK('dreb'), totOreb = sumK('oreb');
+            const totDrebOpp = sumK('opp_dreb'), totOrebOpp = sumK('opp_oreb'), totTov = sumK('tov'), totOppTov = sumK('opp_tov');
 
             const orebPct = (totOreb + totDrebOpp > 0) ? (totOreb / (totOreb + totDrebOpp) * 100).toFixed(1) : null;
             const drebPct = (totDreb + totOrebOpp > 0) ? (totDreb / (totDreb + totOrebOpp) * 100).toFixed(1) : null;
@@ -328,7 +325,8 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 fg3a_total: (totFg3a / gp).toFixed(1),
                 fg3a_allowed: (totFg3aOpp / gp).toFixed(1),
                 fg_pct: fgPct,
-                fg_pct_opp: fgPctOpp
+                fg_pct_opp: fgPctOpp,
+                ...SIGNIFICANT_POS_KEYS.reduce((acc, k) => { acc[k] = baseProf[k] || null; return acc; }, {})
             };
         }
     });
@@ -361,6 +359,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         { path: ['turnover_profile', 'live_ball_per_game'], asc: true, rKey: 'rank_live_tov' }, { path: ['turnover_profile', 'dead_ball_per_game'], asc: true, rKey: 'rank_dead_tov' },
         { path: ['turnover_profile', 'points_generated_off_tov'], asc: false, rKey: 'rank_pts_generated_off_tov' }, { path: ['turnover_profile', 'points_surrendered_off_tov'], asc: true, rKey: 'rank_pts_surrendered_off_tov' }
     ];
+    SIGNIFICANT_POS_KEYS.forEach(k => forensicRanksConfig.push({ path: [k], asc: true, rKey: 'rank_' + k }));
 
     forensicRanksConfig.forEach(({ path, asc, rKey }) => {
         const tuples = [];
@@ -368,12 +367,8 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             const prof = currentForensicTeams[t];
             if (!prof || prof.gp === 0) return;
             let val = prof;
-            for (const p of path) {
-                val = val?.[p];
-            }
-            if (val != null && !isNaN(parseFloat(val))) {
-                tuples.push({ team: t, val: parseFloat(val) });
-            }
+            for (const p of path) val = val?.[p];
+            if (val != null && !isNaN(parseFloat(val))) tuples.push({ team: t, val: parseFloat(val) });
         });
 
         tuples.sort((a, b) => asc ? (a.val - b.val) : (b.val - a.val));
@@ -382,15 +377,10 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         tuples.forEach((item, idx) => {
             rankedTeams.add(item.team);
             if (idx > 0 && item.val !== tuples[idx - 1].val) r = idx + 1;
-            const rankVal = currentForensicTeams[item.team].is_small_sample ? 'Small Sample' : r;
-            currentForensicTeams[item.team][rKey] = rankVal;
+            currentForensicTeams[item.team][rKey] = currentForensicTeams[item.team].is_small_sample ? 'Small Sample' : r;
         });
 
-        allTeams.forEach(t => {
-            if (!rankedTeams.has(t)) {
-                currentForensicTeams[t][rKey] = null;
-            }
-        });
+        allTeams.forEach(t => { if (!rankedTeams.has(t)) currentForensicTeams[t][rKey] = null; });
     });
 
     const zoneMap = {
@@ -502,9 +492,11 @@ function switchTab(tabId) {
     const schedSection = document.getElementById('tab-schedule');
     const profileSection = document.getElementById('tab-profiles');
     const insightsSection = document.getElementById('tab-insights');
+    const positionalSection = document.getElementById('tab-positional');
     const btnSched = document.getElementById('tab-btn-schedule');
     const btnProfiles = document.getElementById('tab-btn-profiles');
     const btnInsights = document.getElementById('tab-btn-insights');
+    const btnPositional = document.getElementById('tab-btn-positional');
 
     const activeClass = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
     const inactiveClass = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
@@ -512,13 +504,18 @@ function switchTab(tabId) {
     if (schedSection) schedSection.classList.toggle('hidden', tabId !== 'schedule');
     if (profileSection) profileSection.classList.toggle('hidden', tabId !== 'profiles');
     if (insightsSection) insightsSection.classList.toggle('hidden', tabId !== 'insights');
+    if (positionalSection) positionalSection.classList.toggle('hidden', tabId !== 'positional');
 
     if (btnSched) btnSched.className = (tabId === 'schedule') ? activeClass : inactiveClass;
     if (btnProfiles) btnProfiles.className = (tabId === 'profiles') ? activeClass : inactiveClass;
     if (btnInsights) btnInsights.className = (tabId === 'insights') ? activeClass : inactiveClass;
+    if (btnPositional) btnPositional.className = (tabId === 'positional') ? activeClass : inactiveClass;
 
     if (tabId === 'insights' && !currentInsightsMatchup) {
         loadInsightsTab();
+    }
+    if (tabId === 'positional' && !window.hasLoadedPositional) {
+        if (typeof loadPositionalTab === 'function') loadPositionalTab();
     }
     safeCreateIcons();
 }
@@ -532,7 +529,8 @@ const STAT_CARD_METRICS = [
     { label: 'Threes Made (3PM)', key: 'fg3m_total', rankKey: 'rank_fg3m_total' }, { label: '3PM Allowed / G', key: 'fg3m_allowed', rankKey: 'rank_fg3m_allowed' },
     { label: 'Threes Attempted (3PA)', key: 'fg3a_total', rankKey: 'rank_fg3a_total' }, { label: '3PA Allowed / G', key: 'fg3a_allowed', rankKey: 'rank_fg3a_allowed' },
     { label: 'FG% (Field Goal %)', key: 'fg_pct', rankKey: 'rank_fg_pct', isPct: true }, { label: 'FG% Allowed', key: 'fg_pct_opp', rankKey: 'rank_fg_pct_opp', isPct: true },
-    { label: 'Pace (Poss/48m)', key: 'pace', rankKey: 'rank_pace' }, { label: 'Offensive Rating', key: 'off_rtg', rankKey: 'rank_off_rtg' }, { label: 'Defensive Rating', key: 'def_rtg', rankKey: 'rank_def_rtg' }
+    { label: 'Pace (Poss/48m)', key: 'pace', rankKey: 'rank_pace' }, { label: 'Offensive Rating', key: 'off_rtg', rankKey: 'rank_off_rtg' }, { label: 'Defensive Rating', key: 'def_rtg', rankKey: 'rank_def_rtg' },
+    ...SIGNIFICANT_POS_KEYS.map(k => ({ label: POS_METRIC_LABELS[k], key: k, rankKey: 'rank_' + k }))
 ];
 
 function renderFunnelZone(label, aGen, hAllow, aTeam, hTeam) {

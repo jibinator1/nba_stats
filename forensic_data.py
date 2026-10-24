@@ -50,29 +50,19 @@ def build_paired_games(logs_df):
     cols = {'PTS': 'sum', 'FGA': 'sum', 'FGM': 'sum', 'FG3A': 'sum', 'FG3M': 'sum', 'FTA': 'sum', 'FTM': 'sum',
             'OREB': 'sum', 'DREB': 'sum', 'REB': 'sum', 'AST': 'sum', 'TOV': 'sum', 'STL': 'sum', 'BLK': 'sum', 'PF': 'sum'}
     game_teams = logs_df.groupby(['GAME_ID', 'TEAM_ABBREVIATION', 'GAME_DATE']).agg(cols).reset_index()
-
     game_teams['POSS'] = game_teams['FGA'] + 0.44 * game_teams['FTA'] - game_teams['OREB'] + game_teams['TOV']
-    
     paired = game_teams.merge(game_teams, on='GAME_ID', suffixes=('', '_OPP'))
     paired = paired[paired['TEAM_ABBREVIATION'] != paired['TEAM_ABBREVIATION_OPP']].copy()
     paired['MARGIN'] = paired['PTS'] - paired['PTS_OPP']
     paired['CLOSE_GAME'] = paired['MARGIN'].abs() <= 5
     paired['LEAD_10'] = paired['MARGIN'] >= 10
     paired['TRAIL_10'] = paired['MARGIN'] <= -10
-    
     paired['OPP_3P_PCT'] = np.where(paired['FG3A_OPP'] > 0, (paired['FG3M_OPP'] / paired['FG3A_OPP']) * 100, 0.0)
     paired['TEAM_3P_PCT'] = np.where(paired['FG3A'] > 0, (paired['FG3M'] / paired['FG3A']) * 100, 0.0)
-    
-    # Defensive & offensive rebound percentages
-    paired['DREB_PCT'] = np.where((paired['DREB'] + paired['OREB_OPP']) > 0,
-                                  (paired['DREB'] / (paired['DREB'] + paired['OREB_OPP'])) * 100, 72.0)
-    paired['OREB_ALLOWED_PCT'] = np.where((paired['OREB_OPP'] + paired['DREB']) > 0,
-                                          (paired['OREB_OPP'] / (paired['OREB_OPP'] + paired['DREB'])) * 100, 28.0)
-    
-    # Turnovers
+    paired['DREB_PCT'] = np.where((paired['DREB'] + paired['OREB_OPP']) > 0, (paired['DREB'] / (paired['DREB'] + paired['OREB_OPP'])) * 100, 72.0)
+    paired['OREB_ALLOWED_PCT'] = np.where((paired['OREB_OPP'] + paired['DREB']) > 0, (paired['OREB_OPP'] / (paired['OREB_OPP'] + paired['DREB'])) * 100, 28.0)
     paired['LIVE_BALL_TOV'] = paired['STL_OPP']
     paired['DEAD_BALL_TOV'] = np.maximum(0, paired['TOV'] - paired['STL_OPP'])
-    
     return paired
 
 def load_injuries_by_team():
@@ -104,6 +94,19 @@ def load_injuries_by_team():
     except Exception as e:
         print(f"Warning: Could not load injuries: {e}")
         return {}
+
+# Statistically significant positional allowance metrics (ANOVA p < 0.05 across 30 opponents)
+SIGNIFICANT_POS_METRICS = [
+    ('c_pts_allowed', 'C', 'PTS'), ('c_reb_allowed', 'C', 'REB'), ('c_ast_allowed', 'C', 'AST'),
+    ('c_fg3m_allowed', 'C', 'FG3M'), ('c_pra_allowed', 'C', 'PRA'),
+    ('pf_pts_allowed', 'PF', 'PTS'), ('pf_reb_allowed', 'PF', 'REB'), ('pf_ast_allowed', 'PF', 'AST'),
+    ('pf_pra_allowed', 'PF', 'PRA'),
+    ('sf_reb_allowed', 'SF', 'REB'), ('sf_ast_allowed', 'SF', 'AST'), ('sf_pra_allowed', 'SF', 'PRA'),
+    ('sg_pts_allowed', 'SG', 'PTS'), ('sg_reb_allowed', 'SG', 'REB'), ('sg_ast_allowed', 'SG', 'AST'),
+    ('sg_fg3m_allowed', 'SG', 'FG3M'), ('sg_pra_allowed', 'SG', 'PRA'),
+    ('pg_pts_allowed', 'PG', 'PTS'), ('pg_reb_allowed', 'PG', 'REB'), ('pg_ast_allowed', 'PG', 'AST'),
+    ('pg_fg3m_allowed', 'PG', 'FG3M'), ('pg_pra_allowed', 'PG', 'PRA')
+]
 
 def make_empty_team_profile(team):
     """Creates a blank forensic profile for a team with 0 games in the sample."""
@@ -141,7 +144,9 @@ def make_empty_team_profile(team):
         'reb_total': None, 'reb_allowed': None, 'oreb_pct': None, 'dreb_pct': None,
         'ast_total': None, 'ast_allowed': None, 'tov_total': None, 'tov_allowed': None,
         'fg3m_total': None, 'fg3m_allowed': None, 'fg3a_total': None, 'fg3a_allowed': None,
-        'fg_pct': None, 'fg_pct_opp': None
+        'fg_pct': None, 'fg_pct_opp': None,
+        **{m: None for m, _, _ in SIGNIFICANT_POS_METRICS},
+        **{f'rank_{m}': None for m, _, _ in SIGNIFICANT_POS_METRICS}
     }
 
 def calculate_team_forensics(logs_df, paired_df):
@@ -149,24 +154,17 @@ def calculate_team_forensics(logs_df, paired_df):
     team_profiles = {}
     injuries_by_team = load_injuries_by_team()
     
-    # Pre-aggregate opponent stats by grouped positional tiers (Guards, Wings, Bigs)
-    pos_file = os.path.join(BASE_DIR, 'positions.csv')
-    pos_map = {}
-    if os.path.exists(pos_file):
-        pos_df = pd.read_csv(pos_file)
-        pos_map = dict(zip(pos_df['Player'], pos_df['Pos']))
-    pos_map.update({
-        'Lamont Butler': 'PG', 'Trevon Scott': 'SF', 'Jimmy Butler III': 'SF',
-        'Alperen Sengun': 'C', 'Adama Bal': 'SG', 'AJ Green': 'SG',
-        'Luka Dončić': 'PG', 'Nikola Jokić': 'C', 'Nikola Joki?': 'C', 'Luka Don?i?': 'PG'
-    })
+    from position_correlations import load_position_map
+    pos_map = load_position_map()
     tier_map = {'PG': 'guards', 'SG': 'guards', 'SF': 'wings', 'PF': 'wings', 'C': 'bigs'}
     
     clean_opp_logs = logs_df.dropna(subset=['PLAYER_NAME', 'MATCHUP']).copy()
     clean_opp_logs['POS'] = clean_opp_logs['PLAYER_NAME'].map(pos_map).fillna('SF')
     clean_opp_logs['TIER'] = clean_opp_logs['POS'].map(tier_map).fillna('wings')
     clean_opp_logs['OPP_TEAM'] = clean_opp_logs['MATCHUP'].apply(lambda x: str(x).split()[-1])
+    clean_opp_logs['PRA'] = clean_opp_logs['PTS'] + clean_opp_logs['REB'] + clean_opp_logs['AST']
     opp_tier_agg = clean_opp_logs.groupby(['OPP_TEAM', 'TIER'])[['PTS', 'REB', 'FG3M']].sum()
+    opp_pos_agg = clean_opp_logs.groupby(['OPP_TEAM', 'POS'])[['PTS', 'REB', 'AST', 'FG3M', 'PRA']].sum()
     
     # Pre-calculated team totals
     for team in NBA_TEAMS:
@@ -456,6 +454,9 @@ def calculate_team_forensics(logs_df, paired_df):
             'fg_pct_opp': round((t_games['FGM_OPP'].sum() / t_games['FGA_OPP'].sum() * 100) if t_games['FGA_OPP'].sum() > 0 else 46.0, 1),
             'injuries': injuries_by_team.get(team, [])
         }
+        for m_key, p_code, s_col in SIGNIFICANT_POS_METRICS:
+            val = float(opp_pos_agg.loc[(team, p_code), s_col]) if (team, p_code) in opp_pos_agg.index else 0.0
+            team_profiles[team][m_key] = round(val / gp, 1) if gp > 0 else None
 
     # Add league ranks with sample size gating and tie breaking
     metrics_to_rank = [
@@ -507,6 +508,7 @@ def calculate_team_forensics(logs_df, paired_df):
         (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'), (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
         (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'), (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov')
     ]
+    metrics_to_rank.extend([((m,), True, f'rank_{m}') for m, _, _ in SIGNIFICANT_POS_METRICS])
     for path, ascending, rank_key in metrics_to_rank:
         tuples = []
         for t, prof in team_profiles.items():
@@ -933,6 +935,13 @@ def run_forensic_pipeline():
     with open(out_player_file, 'w', encoding='utf-8') as f:
         json.dump(player_profiles, f, indent=2, cls=NumpyEncoder)
     print(f"Saved player profiles to {out_player_file}")
+
+    print("Computing Positional Matchup Correlations & Allowances...")
+    try:
+        from position_correlations import calculate_position_correlations
+        calculate_position_correlations(logs_df)
+    except Exception as e:
+        print(f"Warning: Positional correlations computation failed: {e}")
 
     print("Exporting compact team game logs for dynamic date range calculation...")
     paired_df['GAME_DATE_STR'] = paired_df['GAME_DATE'].dt.strftime('%Y-%m-%d')

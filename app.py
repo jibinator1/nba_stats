@@ -123,6 +123,32 @@ def load_forensic_data():
         return {}, {}, [], [], "Sync Error"
 
 
+def load_position_correlations():
+    """Loads positional matchup correlation dataset with fallback to calculation engine."""
+    corr_path = os.path.join(BASE_DIR, 'forensic_position_correlations.json')
+    if os.path.exists(corr_path):
+        try:
+            with open(corr_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading positional correlations: {e}")
+
+    if IS_VERCEL:
+        try:
+            r = requests.get(f"{GITHUB_RAW_BASE}forensic_position_correlations.json", timeout=6)
+            if r.status_code == 200:
+                return r.json()
+        except Exception as e:
+            print(f"Error fetching remote positional correlations: {e}")
+
+    try:
+        from position_correlations import calculate_position_correlations
+        return calculate_position_correlations()
+    except Exception as e:
+        print(f"Fallback generation error for positional correlations: {e}")
+        return {'metadata': {}, 'anova': {}, 'cross_position_correlations': {}, 'matchups': []}
+
+
 def load_all_schedule_games():
     """Loads all schedule games with normalized metadata."""
     json_path = os.path.join(BASE_DIR, 'schedule_games.json')
@@ -339,7 +365,7 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     return render_template('index.html',
                            page_type=page_type,
                            all_games=all_games,
-                           start_date='2025-10-02',
+                           start_date='2026-10-20',
                            end_date=today_str,
                            forensic_teams=forensic_teams,
                            player_profiles=player_profiles,
@@ -366,6 +392,10 @@ def profiles():
 @app.route('/insights', methods=['GET'])
 def insights_view():
     return render_main_dashboard(page_type='insights')
+
+@app.route('/positional', methods=['GET'])
+def positional_view():
+    return render_main_dashboard(page_type='positional')
 
 @app.route('/matchup/<away>/<home>', methods=['GET'])
 def matchup_view(away, home):
@@ -629,6 +659,43 @@ def api_matchup(away, home):
         'away_def_vs_home_sim': similarity_lookups.get(away, {}).get(home, {}),
         'away_top_rotation': [p for p in player_profiles if p['team'] == away],
         'home_top_rotation': [p for p in player_profiles if p['team'] == home]
+    })
+
+@app.route('/api/positional-correlations')
+def api_positional_correlations():
+    data = load_position_correlations()
+    position = request.args.get('position')
+    metric = request.args.get('metric')
+    opponent = request.args.get('opponent')
+    category = request.args.get('category')
+    
+    matchups = data.get('matchups', [])
+    if position:
+        matchups = [m for m in matchups if m['position'].upper() == position.upper()]
+    if metric:
+        matchups = [m for m in matchups if m['metric'].upper() == metric.upper()]
+    if opponent:
+        matchups = [m for m in matchups if m['opponent'].upper() == opponent.upper()]
+    if category:
+        matchups = [m for m in matchups if m['effect_category'].lower() == category.lower()]
+
+    # Extract relevant ANOVA & cross-correlation slices if specific filters provided
+    anova_slice = data.get('anova', {})
+    if position and position.upper() in anova_slice:
+        anova_slice = anova_slice[position.upper()]
+        if metric and metric.upper() in anova_slice:
+            anova_slice = anova_slice[metric.upper()]
+
+    cross_corr_slice = data.get('cross_position_correlations', {})
+    if metric and metric.upper() in cross_corr_slice:
+        cross_corr_slice = cross_corr_slice[metric.upper()]
+
+    return jsonify({
+        'metadata': data.get('metadata', {}),
+        'anova': anova_slice,
+        'cross_position_correlations': cross_corr_slice,
+        'matchups': matchups,
+        'count': len(matchups)
     })
 
 @app.route('/api/status')

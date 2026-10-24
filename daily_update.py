@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import json
 import argparse
 import subprocess
 import requests
@@ -27,6 +28,14 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9"
 }
 
+def get_current_season():
+    """Dynamically determines active NBA season string (e.g. '2026-27')."""
+    now = datetime.now()
+    if now.month >= 10:
+        return f"{now.year}-{str(now.year + 1)[-2:]}"
+    else:
+        return f"{now.year - 1}-{str(now.year)[-2:]}"
+
 def has_run_today():
     """Checks if the daily update has already executed today."""
     if not os.path.exists(LAST_RUN_FILE):
@@ -49,12 +58,87 @@ def record_run_success():
     except Exception as e:
         print(f"[Tracker Warning] Could not record last run timestamp: {e}")
 
-def fetch_logs():
-    print("Fetching latest game logs from NBA API...")
+def update_schedule_scores(logs_df=None):
+    """Updates completed games in schedule_games.json with final scores and is_final status."""
+    sched_path = os.path.join(SCRIPT_DIR, 'schedule_games.json')
+    if not os.path.exists(sched_path):
+        return
+    if logs_df is None:
+        logs_path = os.path.join(SCRIPT_DIR, 'logs.csv')
+        if not os.path.exists(logs_path):
+            return
+        logs_df = pd.read_csv(logs_path)
+    
+    if logs_df.empty:
+        return
+
     try:
-        logs = playergamelogs.PlayerGameLogs(season_nullable='2025-26', season_type_nullable='Regular Season', headers=headers).get_data_frames()[0]
-        logs.to_csv(os.path.join(SCRIPT_DIR, "logs.csv"), index=False)
-        print("Successfully updated logs.csv!")
+        print("Synchronizing completed game box scores to schedule_games.json...")
+        with open(sched_path, 'r', encoding='utf-8') as f:
+            schedule = json.load(f)
+
+        df = logs_df.copy()
+        df['DATE_STR'] = pd.to_datetime(df['GAME_DATE']).dt.strftime('%Y-%m-%d')
+        team_scores = df.groupby(['GAME_ID', 'DATE_STR', 'TEAM_ABBREVIATION'])['PTS'].sum().reset_index()
+
+        game_lookup = {}
+        for (gid, d_str), grp in team_scores.groupby(['GAME_ID', 'DATE_STR']):
+            pts_map = dict(zip(grp['TEAM_ABBREVIATION'], grp['PTS']))
+            if len(pts_map) == 2:
+                team_key = frozenset(pts_map.keys())
+                game_lookup[(d_str, team_key)] = {
+                    'game_id': str(gid).lstrip('0'),
+                    'scores': pts_map
+                }
+
+        updated_count = 0
+        for g in schedule:
+            gday = g.get('gameday')
+            away = g.get('away_team')
+            home = g.get('home_team')
+            key = (gday, frozenset([away, home]))
+            if key in game_lookup:
+                info = game_lookup[key]
+                g['away_score'] = int(info['scores'].get(away, 0))
+                g['home_score'] = int(info['scores'].get(home, 0))
+                g['is_final'] = True
+                g['game_id'] = info['game_id']
+                updated_count += 1
+
+        with open(sched_path, 'w', encoding='utf-8') as f:
+            json.dump(schedule, f, indent=2)
+        print(f"Successfully updated {updated_count} completed games in schedule_games.json!")
+    except Exception as e:
+        print(f"Warning: Failed to update schedule scores: {e}")
+
+def fetch_logs():
+    current_season = get_current_season()
+    print(f"Fetching latest game logs for {current_season} regular season from NBA API...")
+    logs_file = os.path.join(SCRIPT_DIR, "logs.csv")
+    try:
+        current_logs = playergamelogs.PlayerGameLogs(
+            season_nullable=current_season,
+            season_type_nullable='Regular Season',
+            headers=headers
+        ).get_data_frames()[0]
+        
+        if os.path.exists(logs_file):
+            try:
+                existing_logs = pd.read_csv(logs_file)
+                combined_logs = pd.concat([existing_logs, current_logs], ignore_index=True)
+                combined_logs.drop_duplicates(subset=['GAME_ID', 'PLAYER_ID'], keep='last', inplace=True)
+                combined_logs.to_csv(logs_file, index=False)
+                print(f"Successfully updated logs.csv! Total records: {len(combined_logs)} (Current season: {len(current_logs)})")
+                update_schedule_scores(combined_logs)
+            except Exception as e:
+                print(f"Warning: Could not merge existing logs ({e}), saving current season logs...")
+                current_logs.to_csv(logs_file, index=False)
+                update_schedule_scores(current_logs)
+        else:
+            current_logs.to_csv(logs_file, index=False)
+            print("Successfully created logs.csv!")
+            update_schedule_scores(current_logs)
+
         return True
     except Exception as e:
         print(f"Error fetching logs: {e}")
@@ -68,34 +152,41 @@ def update_todays_games():
         'LeagueID': '00',
         'gameDate': datetime.now().strftime('%m/%d/%Y')
     }
-    try:
-        r = requests.get(url, params=params, headers=headers, timeout=12)
-        if r.status_code == 200:
-            data = r.json()
-            result_sets = data.get('resultSets', [])
-            line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
-            if line_score:
-                df = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
-                df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv(os.path.join(SCRIPT_DIR, 'todays_games.csv'), index=False)
-                print("Successfully updated todays_games.csv")
-                return True
-    except Exception as e:
-        print(f"Error updating today's games: {e}")
-    return False
+    for attempt in range(2):
+        try:
+            r = requests.get(url, params=params, headers=headers, timeout=25)
+            if r.status_code == 200:
+                data = r.json()
+                result_sets = data.get('resultSets', [])
+                line_score = next((rs for rs in result_sets if rs['name'] == 'LineScore'), None)
+                if line_score:
+                    df = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
+                    df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv(os.path.join(SCRIPT_DIR, 'todays_games.csv'), index=False)
+                    print("Successfully updated todays_games.csv")
+                    return True
+        except Exception as e:
+            print(f"Attempt {attempt + 1} updating today's games: {e}")
+            time.sleep(1)
+            
+    print("Notice: Could not refresh todays_games.csv from API; using existing cache if present.")
+    return os.path.exists(os.path.join(SCRIPT_DIR, 'todays_games.csv'))
 
 def fetch_injuries():
     print("Fetching injury report from CBS Sports...")
     try:
         url = "https://www.cbssports.com/nba/injuries/"
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
         soup = BeautifulSoup(r.text, 'html.parser')
         injured_players = [a.text.strip() for a in soup.select('span.CellPlayerName--long a')]
-        pd.Series(injured_players, name="Player").to_csv(os.path.join(SCRIPT_DIR, "injuries.csv"), index=False)
-        print(f"Successfully updated injuries.csv ({len(injured_players)} players)")
-        return True
+        if injured_players:
+            pd.Series(injured_players, name="Player").to_csv(os.path.join(SCRIPT_DIR, "injuries.csv"), index=False)
+            print(f"Successfully updated injuries.csv ({len(injured_players)} players)")
+            return True
     except Exception as e:
         print(f"Error fetching injuries: {e}")
-    return False
+        
+    print("Notice: Could not refresh injuries.csv; using existing cache if present.")
+    return os.path.exists(os.path.join(SCRIPT_DIR, "injuries.csv"))
 
 def push_to_github():
     print("\n--- Syncing to GitHub ---")
@@ -126,7 +217,11 @@ def main():
     
     # Local Data Fetching & Forensic Processing
     from forensic_data import run_forensic_pipeline
-    if fetch_logs() and update_todays_games() and fetch_injuries():
+    logs_ok = fetch_logs()
+    update_todays_games()
+    fetch_injuries()
+
+    if logs_ok:
         print("Executing forensic scouting analytics pipeline...")
         run_forensic_pipeline()
         if AUTO_PUSH:
@@ -137,7 +232,7 @@ def main():
         duration = end_time - start_time
         print(f"\n[{end_time}] Process complete! Time taken: {duration}")
     else:
-        print("Data fetching failed.")
+        print("Game log fetching failed.")
 
 if __name__ == "__main__":
     main()

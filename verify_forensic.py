@@ -143,7 +143,7 @@ def run_audit():
 
     # 7. Verify Date Range Gating & Zero-Game Blank Stats
     print("\n[7/8] Testing Date-Filtered Forensic Gating (Zero Games -> Blank / Null)...")
-    res_zero = client.get('/api/forensic-teams?start_date=2026-10-20&end_date=2026-10-25')
+    res_zero = client.get('/api/forensic-teams?start_date=2027-07-01&end_date=2027-07-05')
     zero_teams = res_zero.json.get('forensic_teams', {})
     assert 'BOS' in zero_teams, "Missing BOS in zero_teams"
     bos_zero = zero_teams['BOS']
@@ -154,7 +154,7 @@ def run_audit():
     assert bos_zero['oreb_pct'] is None, f"Expected oreb_pct is None, got {bos_zero['oreb_pct']}"
     print(f"  Zero-Game Window BOS: GP={bos_zero['gp']} | PTS={bos_zero['pts_scored']} | Rank={bos_zero['rank_pts_scored']}")
 
-    res_players_zero = client.get('/api/player-profiles?start_date=2026-10-20&end_date=2026-10-25')
+    res_players_zero = client.get('/api/player-profiles?start_date=2027-07-01&end_date=2027-07-05')
     players_zero = res_players_zero.json.get('players', [])
     assert len(players_zero) > 0, "Expected players list"
     assert players_zero[0]['games_played'] == 0, f"Expected player gp 0, got {players_zero[0]['games_played']}"
@@ -399,18 +399,18 @@ def run_audit():
     print("\n[14/14] Testing Playoff and Postseason Game Exclusion Across All Datasets...")
     with open(os.path.join(base_dir, 'forensic_team_game_logs.json'), 'r', encoding='utf-8') as f:
         t_game_logs = json.load(f)
-    postseason_team_logs = [lg for lg in t_game_logs if lg['d'] >= '2026-04-14']
+    postseason_team_logs = [lg for lg in t_game_logs if '2026-04-14' <= lg['d'] <= '2026-10-01']
     assert len(postseason_team_logs) == 0, f"Found {len(postseason_team_logs)} postseason team logs in forensic_team_game_logs.json"
 
     with open(os.path.join(base_dir, 'forensic_players.json'), 'r', encoding='utf-8') as f:
         cached_players = json.load(f)
-    postseason_player_logs = [lg for p in cached_players for lg in p.get('all_logs', []) if lg['d'] >= '2026-04-14']
+    postseason_player_logs = [lg for p in cached_players for lg in p.get('all_logs', []) if '2026-04-14' <= lg['d'] <= '2026-10-01']
     assert len(postseason_player_logs) == 0, f"Found {len(postseason_player_logs)} postseason player logs in forensic_players.json"
 
     max_d_team = max(lg['d'] for lg in t_game_logs)
     max_d_player = max(lg['d'] for p in cached_players for lg in p.get('all_logs', []))
-    assert max_d_team == '2026-04-12', f"Expected max team date 2026-04-12, got {max_d_team}"
-    assert max_d_player == '2026-04-12', f"Expected max player date 2026-04-12, got {max_d_player}"
+    assert max_d_team >= '2026-10-20', f"Expected max team date >= 2026-10-20, got {max_d_team}"
+    assert max_d_player >= '2026-10-20', f"Expected max player date >= 2026-10-20, got {max_d_player}"
     print(f"  Max Team Log Date: {max_d_team} | Max Player Log Date: {max_d_player}")
     print("  [PASS] Confirmed 100% exclusion of playoff and postseason games from team logs, player profiles, and streaks.")
 

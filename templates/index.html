@@ -87,7 +87,7 @@
 
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 border-t border-[#30363d] overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type not in ['profiles', 'insights'] else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type not in ['profiles', 'insights', 'positional'] else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
                 <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
                 <span id="nav-schedule-label">Matchup Lab</span>
             </button>
@@ -100,6 +100,10 @@
                 <i data-lucide="brain" class="w-4 h-4 text-cyan-400"></i>
                 <span>Matchup Insights</span>
             </button>
+            <button onclick="switchTab('positional')" id="tab-btn-positional" class="py-2.5 px-1 border-b-2 {{ 'border-cyan-400 text-slate-100 font-semibold' if page_type == 'positional' else 'border-transparent text-slate-400 hover:text-slate-200 font-medium' }} text-xs flex items-center space-x-2 transition whitespace-nowrap">
+                <i data-lucide="crosshair" class="w-4 h-4 text-cyan-400"></i>
+                <span>Positional Matchup Lab</span>
+            </button>
         </div>
     </header>
 
@@ -109,7 +113,7 @@
         <!-- ============================================================== -->
         <!-- TAB 1: 4-PILLAR MATCHUP LAB & SCHEDULE                         -->
         <!-- ============================================================== -->
-        <section id="tab-schedule" class="{{ 'hidden' if page_type in ['profiles', 'insights'] else '' }} space-y-5">
+        <section id="tab-schedule" class="{{ 'hidden' if page_type in ['profiles', 'insights', 'positional'] else '' }} space-y-5">
             <!-- Header & Control Bar -->
             <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#30363d] pb-4">
@@ -467,6 +471,145 @@
             </div>
         </section>
 
+        <!-- ============================================================== -->
+        <!-- TAB 4: POSITIONAL MATCHUP LAB & CORRELATIONS                   -->
+        <!-- ============================================================== -->
+        <section id="tab-positional" class="{{ '' if page_type == 'positional' else 'hidden' }} space-y-5">
+            <!-- Header & Filter Bar -->
+            <div class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-4">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#30363d] pb-4">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-100 flex items-center space-x-2">
+                            <i data-lucide="crosshair" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Positional Matchup Correlation Lab</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Evaluates how positions perform relative to their personal season baselines against each NBA defense (mean/median deltas, ANOVA, Cohen's d effect sizes).
+                        </p>
+                    </div>
+
+                    <!-- Filter Controls Summary -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Summary Badges -->
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-emerald-900/60 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[11px] text-emerald-400 font-semibold">Boosted:</span>
+                            <span id="count-boosted" class="text-emerald-300 text-xs font-bold font-mono">0</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-slate-700/60 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[11px] text-slate-400 font-semibold">Neutral:</span>
+                            <span id="count-neutral" class="text-slate-300 text-xs font-bold font-mono">0</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-rose-900/60 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[11px] text-rose-400 font-semibold">Suppressed:</span>
+                            <span id="count-suppressed" class="text-rose-300 text-xs font-bold font-mono">0</span>
+                        </div>
+
+                        <!-- Search Input -->
+                        <div class="relative w-full sm:w-36">
+                            <input type="text" id="positional-search-input" oninput="onPositionalSearch(this.value)" placeholder="Search team..." class="bg-[#21262d] border border-[#30363d] text-slate-200 text-xs rounded-lg pl-7 pr-3 py-1.5 focus:border-cyan-500 outline-none font-medium placeholder-slate-500 w-full">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Position Selector Pills -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Select Position / Tier:</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <button id="pos-btn-PG" onclick="setPosFilter('PG')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 text-slate-900 shadow-sm transition">PG</button>
+                        <button id="pos-btn-SG" onclick="setPosFilter('SG')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">SG</button>
+                        <button id="pos-btn-SF" onclick="setPosFilter('SF')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">SF</button>
+                        <button id="pos-btn-PF" onclick="setPosFilter('PF')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">PF</button>
+                        <button id="pos-btn-C" onclick="setPosFilter('C')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">C</button>
+                        <span class="w-px h-5 bg-[#30363d] mx-1"></span>
+                        <button id="pos-btn-Guards" onclick="setPosFilter('Guards')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Guards (PG+SG)</button>
+                        <button id="pos-btn-Wings" onclick="setPosFilter('Wings')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Wings (SF+PF)</button>
+                        <button id="pos-btn-Bigs" onclick="setPosFilter('Bigs')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Bigs (C)</button>
+                    </div>
+                </div>
+
+                <!-- Metric Selector Pills & Effect Filter -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#30363d]/60">
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <span class="text-[11px] font-semibold text-slate-400 mr-1">Stat:</span>
+                        <button id="metric-btn-PTS" onclick="setMetricFilter('PTS')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 text-slate-900 shadow-sm transition">Points (PTS)</button>
+                        <button id="metric-btn-REB" onclick="setMetricFilter('REB')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Rebounds (REB)</button>
+                        <button id="metric-btn-AST" onclick="setMetricFilter('AST')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Assists (AST)</button>
+                        <button id="metric-btn-FG3M" onclick="setMetricFilter('FG3M')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">3-Pointers (3PM)</button>
+                        <button id="metric-btn-PRA" onclick="setMetricFilter('PRA')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">PRA (PTS+REB+AST)</button>
+                    </div>
+
+                    <div class="flex items-center space-x-1">
+                        <span class="text-[11px] font-semibold text-slate-400 mr-1">Filter:</span>
+                        <button id="effect-btn-ALL" onclick="setEffectFilter('ALL')" class="px-2.5 py-1 rounded text-[11px] font-bold bg-slate-200 text-slate-900 transition">All Teams</button>
+                        <button id="effect-btn-boosted" onclick="setEffectFilter('boosted')" class="px-2.5 py-1 rounded text-[11px] font-medium bg-[#21262d] text-emerald-400 hover:text-emerald-300 border border-emerald-900/60 transition">Boosted</button>
+                        <button id="effect-btn-neutral" onclick="setEffectFilter('neutral')" class="px-2.5 py-1 rounded text-[11px] font-medium bg-[#21262d] text-slate-400 hover:text-slate-200 border border-[#30363d] transition">Neutral</button>
+                        <button id="effect-btn-suppressed" onclick="setEffectFilter('suppressed')" class="px-2.5 py-1 rounded text-[11px] font-medium bg-[#21262d] text-rose-400 hover:text-rose-300 border border-rose-900/60 transition">Suppressed</button>
+                    </div>
+                </div>
+
+                <!-- Dynamic ANOVA Banner -->
+                <div id="positional-anova-banner"></div>
+            </div>
+
+            <!-- Positional Matchups Data Table -->
+            <div class="glass-panel rounded-xl border border-[#30363d] overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-[#30363d] text-slate-400 bg-[#161b22]/90 font-mono text-[11px]">
+                                <th class="text-center w-12 py-2.5 px-3">#</th>
+                                <th class="py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('opponent')">
+                                    <div class="flex items-center space-x-1"><span>Opponent Defense</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-center py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('effect_category')">
+                                    <div class="flex items-center justify-center space-x-1"><span>Matchup Impact</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-right py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('mean_diff')">
+                                    <div class="flex items-center justify-end space-x-1"><span>Mean Delta</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-right py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('median_diff')">
+                                    <div class="flex items-center justify-end space-x-1"><span>Median Delta</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-right py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('pct_over_med')">
+                                    <div class="flex items-center justify-end space-x-1"><span>% Over Median</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-right py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('cohens_d')">
+                                    <div class="flex items-center justify-end space-x-1"><span>Cohen's d</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-right py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('p_val_ttest')">
+                                    <div class="flex items-center justify-end space-x-1"><span>Significance (p)</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                                <th class="text-center py-2.5 px-3 cursor-pointer hover:text-slate-200" onclick="sortPositionalTable('sample_size')">
+                                    <div class="flex items-center justify-center space-x-1"><span>Games</span><i data-lucide="arrow-up-down" class="w-3 h-3"></i></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="positional-table-body" class="divide-y divide-[#30363d]/60 text-slate-300">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cross-Position Correlation Heatmap / Matrix Card -->
+            <div id="cross-position-matrix-card" class="glass-panel rounded-xl p-5 border border-[#30363d] space-y-3">
+                <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-100 flex items-center space-x-2">
+                            <i data-lucide="grid" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Cross-Position Defensive Allowance Correlation</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">
+                            Correlation matrix between defensive allowances across positions for the active stat. High values (r &gt; 0.60) indicate shared positional bleeding.
+                        </p>
+                    </div>
+                </div>
+                <div id="cross-matrix-content"></div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -487,11 +630,20 @@
             initialAway: {{ (initial_away if initial_away is defined else None) | tojson }},
             initialHome: {{ (initial_home if initial_home is defined else None) | tojson }}
         };
+        window.NBA_TEAM_NAMES = {{ team_names | tojson }};
     </script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/visuals.js') }}"></script>
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profiles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/positional.js') }}"></script>
+    {% if page_type == 'positional' %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof switchTab === 'function') switchTab('positional');
+        });
+    </script>
+    {% endif %}
 
     <!-- ============================================================== -->
     <!-- DEEP DIVE MODAL OVERLAY                                        -->
