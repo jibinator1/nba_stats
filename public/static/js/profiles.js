@@ -416,7 +416,7 @@ function renderFloorStreaks() {
                 <td class="text-center py-2.5 px-3">${tierBadge}</td>
                 <td class="text-center font-mono text-slate-400 py-2.5 px-3">${p.games_played}</td>
                 <td class="py-2.5 px-3 font-mono">
-                    <div class="flex items-center gap-1 flex-wrap">${gameLogsHtml || '--'}</div>
+                    <div class="flex items-center gap-1 flex-nowrap">${gameLogsHtml || '--'}</div>
                 </td>
             </tr>
         `;

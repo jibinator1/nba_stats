@@ -125,6 +125,12 @@ def fetch_logs():
         if os.path.exists(logs_file):
             try:
                 existing_logs = pd.read_csv(logs_file)
+                # Normalize GAME_ID (strip leading zeros / str) and PLAYER_ID before merging
+                existing_logs['GAME_ID'] = existing_logs['GAME_ID'].astype(str).str.lstrip('0')
+                current_logs['GAME_ID'] = current_logs['GAME_ID'].astype(str).str.lstrip('0')
+                existing_logs['PLAYER_ID'] = existing_logs['PLAYER_ID'].astype(int)
+                current_logs['PLAYER_ID'] = current_logs['PLAYER_ID'].astype(int)
+
                 combined_logs = pd.concat([existing_logs, current_logs], ignore_index=True)
                 combined_logs.drop_duplicates(subset=['GAME_ID', 'PLAYER_ID'], keep='last', inplace=True)
                 combined_logs.to_csv(logs_file, index=False)
@@ -132,9 +138,11 @@ def fetch_logs():
                 update_schedule_scores(combined_logs)
             except Exception as e:
                 print(f"Warning: Could not merge existing logs ({e}), saving current season logs...")
+                current_logs['GAME_ID'] = current_logs['GAME_ID'].astype(str).str.lstrip('0')
                 current_logs.to_csv(logs_file, index=False)
                 update_schedule_scores(current_logs)
         else:
+            current_logs['GAME_ID'] = current_logs['GAME_ID'].astype(str).str.lstrip('0')
             current_logs.to_csv(logs_file, index=False)
             print("Successfully created logs.csv!")
             update_schedule_scores(current_logs)

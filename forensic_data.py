@@ -42,6 +42,8 @@ def load_clean_logs():
     # Exclude playoff and play-in games (NBA game_id prefix 4/004 and 5/005)
     g_str = df['GAME_ID'].astype(str)
     df = df[~g_str.str.startswith(('004', '4', '005', '5'))].copy()
+    clean_gid = df['GAME_ID'].astype(str).str.lstrip('0')
+    df = df.loc[~clean_gid.str.cat(df['PLAYER_ID'].astype(str), sep='_').duplicated(keep='last')].copy()
     df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
     return df
 
@@ -855,7 +857,7 @@ def calculate_player_usage_profiles(logs_df):
                      'ast': int(r['AST']), 'min': round(float(r['MIN']), 1), 'fg3m': int(r['FG3M']),
                      'fg3a': int(r['FG3A']), 'paint_pts': round(float(max(0.0, (r['PTS'] - r['FG3M']*3) * 0.58)), 1),
                      'fga': int(r['FGA']), 'fgm': int(r['FGM']), 'fta': int(r['FTA']), 'tov': int(r['TOV'])}
-                    for _, r in p_logs.sort_values('GAME_DATE', ascending=False).iterrows()
+                    for _, r in p_logs.sort_values(['GAME_DATE', 'GAME_ID'], ascending=[False, False]).iterrows()
                 ]
             })
 
