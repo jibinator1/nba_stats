@@ -1040,8 +1040,8 @@
     "fg_pct_opp": 46.7,
     "injuries": [
       "Coby White",
-      "Grant Williams",
-      "Kon Knueppel"
+      "Kon Knueppel",
+      "Grant Williams"
     ],
     "rank_pace": 22,
     "rank_neutral_pace": 28,
@@ -1317,11 +1317,7 @@
     "fg3a_allowed": 38.2,
     "fg_pct": 46.9,
     "fg_pct_opp": 47.8,
-    "injuries": [
-      "Josh Giddey",
-      "Zach Collins",
-      "Dailyn Swain"
-    ],
+    "injuries": [],
     "rank_pace": 4,
     "rank_neutral_pace": 5,
     "rank_transition_freq": 1,
@@ -1597,8 +1593,8 @@
     "fg_pct": 48.2,
     "fg_pct_opp": 46.4,
     "injuries": [
-      "Nae'Qwan Tomlin",
-      "Khalifa Diop"
+      "Khalifa Diop",
+      "Nae'Qwan Tomlin"
     ],
     "rank_pace": 14,
     "rank_neutral_pace": 23,
@@ -1875,10 +1871,11 @@
     "fg_pct": 46.6,
     "fg_pct_opp": 47.8,
     "injuries": [
-      "Dereck Lively II",
-      "Tarik Biberovic",
       "Santi Aldama",
-      "Caleb Martin"
+      "Cooper Flagg",
+      "Tarik Biberovic",
+      "Caleb Martin",
+      "Dereck Lively II"
     ],
     "rank_pace": 3,
     "rank_neutral_pace": 7,
@@ -2155,9 +2152,9 @@
     "fg_pct": 49.6,
     "fg_pct_opp": 46.8,
     "injuries": [
-      "Spencer Jones",
+      "Cameron Johnson",
       "Julian Strawther",
-      "Cameron Johnson"
+      "Spencer Jones"
     ],
     "rank_pace": 19,
     "rank_neutral_pace": 18,
@@ -2434,7 +2431,8 @@
     "fg_pct": 48.5,
     "fg_pct_opp": 44.3,
     "injuries": [
-      "Taurean Prince"
+      "Ausar Thompson",
+      "Jalen Duren"
     ],
     "rank_pace": 14,
     "rank_neutral_pace": 9,
@@ -2711,10 +2709,11 @@
     "fg_pct": 46.1,
     "fg_pct_opp": 48.0,
     "injuries": [
-      "Charles Bassey",
       "Brandin Podziemski",
       "Moses Moody",
-      "Jimmy Butler"
+      "Charles Bassey",
+      "Jimmy Butler",
+      "Stephen Curry"
     ],
     "rank_pace": 18,
     "rank_neutral_pace": 22,
@@ -2991,8 +2990,7 @@
     "fg_pct": 47.9,
     "fg_pct_opp": 46.0,
     "injuries": [
-      "Reed Sheppard",
-      "Steven Adams"
+      "Reed Sheppard"
     ],
     "rank_pace": 26,
     "rank_neutral_pace": 20,
@@ -3270,10 +3268,8 @@
     "fg_pct_opp": 48.9,
     "injuries": [
       "Ben Sheppard",
-      "Johnny Furphy",
-      "Tony Bradley",
-      "Aaron Nesmith",
-      "T.J. McConnell"
+      "T.J. McConnell",
+      "Johnny Furphy"
     ],
     "rank_pace": 10,
     "rank_neutral_pace": 12,
@@ -3550,8 +3546,8 @@
     "fg_pct": 48.4,
     "fg_pct_opp": 46.9,
     "injuries": [
-      "Jordan Miller",
       "Max Strus",
+      "Jordan Miller",
       "Brandon Ingram"
     ],
     "rank_pace": 29,
@@ -3829,9 +3825,9 @@
     "fg_pct": 50.2,
     "fg_pct_opp": 48.3,
     "injuries": [
+      "Cameron Carr",
       "Jake LaRavia",
-      "Adou Thiero",
-      "Cameron Carr"
+      "Adou Thiero"
     ],
     "rank_pace": 23,
     "rank_neutral_pace": 24,
@@ -4108,9 +4104,7 @@
     "fg_pct": 45.6,
     "fg_pct_opp": 48.5,
     "injuries": [
-      "Jordan Hawkins",
-      "Cedric Coward",
-      "Isaiah Stewart"
+      "Cedric Coward"
     ],
     "rank_pace": 5,
     "rank_neutral_pace": 4,
@@ -5214,6 +5208,7 @@
     "fg_pct": 46.6,
     "fg_pct_opp": 47.7,
     "injuries": [
+      "Yves Missi",
       "Trey Alexander"
     ],
     "rank_pace": 10,
@@ -6043,9 +6038,10 @@
     "fg_pct": 46.4,
     "fg_pct_opp": 47.6,
     "injuries": [
-      "Jonathan Isaac",
-      "Jett Howard",
       "Anthony Black",
+      "Jett Howard",
+      "Paolo Banchero",
+      "Jonathan Isaac",
       "Noah Penda"
     ],
     "rank_pace": 9,
@@ -6324,7 +6320,8 @@
     "fg_pct_opp": 46.7,
     "injuries": [
       "Dean Wade",
-      "Ariel Hukporti"
+      "Ariel Hukporti",
+      "LeBron James"
     ],
     "rank_pace": 13,
     "rank_neutral_pace": 13,
@@ -6603,8 +6600,8 @@
     "injuries": [
       "Luke Kennard",
       "Bradley Beal",
-      "Mark Williams",
-      "Oso Ighodaro"
+      "Oso Ighodaro",
+      "Mark Williams"
     ],
     "rank_pace": 24,
     "rank_neutral_pace": 21,
@@ -6881,9 +6878,9 @@
     "fg_pct": 45.3,
     "fg_pct_opp": 47.1,
     "injuries": [
-      "Shaedon Sharpe",
+      "Branden Carlson",
       "Chris Youngblood",
-      "Branden Carlson"
+      "Shaedon Sharpe"
     ],
     "rank_pace": 8,
     "rank_neutral_pace": 3,
@@ -7161,9 +7158,8 @@
     "fg_pct_opp": 49.4,
     "injuries": [
       "Ben Simmons",
-      "Malik Monk",
-      "Dylan Cardwell",
-      "Maxime Raynaud"
+      "Maxime Raynaud",
+      "Dylan Cardwell"
     ],
     "rank_pace": 20,
     "rank_neutral_pace": 16,
@@ -7440,9 +7436,7 @@
     "fg_pct": 48.3,
     "fg_pct_opp": 45.1,
     "injuries": [
-      "Keldon Johnson",
       "Tobias Harris",
-      "De'Aaron Fox",
       "Jayden Quaintance"
     ],
     "rank_pace": 16,
@@ -7994,7 +7988,9 @@
     "fg3a_allowed": 41.1,
     "fg_pct": 46.7,
     "fg_pct_opp": 49.4,
-    "injuries": [],
+    "injuries": [
+      "Blake Hinson"
+    ],
     "rank_pace": 2,
     "rank_neutral_pace": 1,
     "rank_transition_freq": 1,
@@ -8271,8 +8267,8 @@
     "fg_pct_opp": 48.8,
     "injuries": [
       "AJ Dybantsa",
-      "Jamir Watkins",
-      "Tristan Vukcevic"
+      "Tristan Vukcevic",
+      "Jamir Watkins"
     ],
     "rank_pace": 6,
     "rank_neutral_pace": 1,
