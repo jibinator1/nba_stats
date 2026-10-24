@@ -124,7 +124,7 @@ const POS_METRIC_LABELS = {
 };
 
 SIGNIFICANT_POS_KEYS.forEach(k => {
-    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate elite defensive containment.`;
+    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
 });
 
 // Rank Badge Formatter with Sample Size Gating & Hover Tooltip
