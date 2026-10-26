@@ -28,6 +28,10 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9"
 }
 
+ESPN_TO_NBA = {
+    'GS': 'GSW', 'NO': 'NOP', 'NY': 'NYK', 'SA': 'SAS', 'UTAH': 'UTA', 'WSH': 'WAS'
+}
+
 def get_current_season():
     """Dynamically determines active NBA season string (e.g. '2026-27')."""
     now = datetime.now()
@@ -162,7 +166,7 @@ def update_todays_games():
     }
     for attempt in range(2):
         try:
-            r = requests.get(url, params=params, headers=headers, timeout=25)
+            r = requests.get(url, params=params, headers=headers, timeout=10)
             if r.status_code == 200:
                 data = r.json()
                 result_sets = data.get('resultSets', [])
@@ -170,12 +174,34 @@ def update_todays_games():
                 if line_score:
                     df = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
                     df[['GAME_ID', 'TEAM_ABBREVIATION']].to_csv(os.path.join(SCRIPT_DIR, 'todays_games.csv'), index=False)
-                    print("Successfully updated todays_games.csv")
+                    print("Successfully updated todays_games.csv from NBA API")
                     return True
         except Exception as e:
-            print(f"Attempt {attempt + 1} updating today's games: {e}")
+            print(f"Attempt {attempt + 1} updating today's games via NBA API: {e}")
             time.sleep(1)
-            
+
+    print("Falling back to ESPN Scoreboard API for today's games...")
+    try:
+        today_espn = datetime.now().strftime('%Y%m%d')
+        espn_url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={today_espn}"
+        r = requests.get(espn_url, timeout=10)
+        if r.status_code == 200:
+            events = r.json().get('events', [])
+            rows = []
+            for ev in events:
+                gid = str(ev.get('id', ''))
+                comps = ev.get('competitions', [{}])[0].get('competitors', [])
+                for comp in comps:
+                    raw_abbr = comp.get('team', {}).get('abbreviation', '')
+                    abbr = ESPN_TO_NBA.get(raw_abbr, raw_abbr)
+                    rows.append({'GAME_ID': gid, 'TEAM_ABBREVIATION': abbr})
+            if rows:
+                pd.DataFrame(rows).to_csv(os.path.join(SCRIPT_DIR, 'todays_games.csv'), index=False)
+                print(f"Successfully updated todays_games.csv from ESPN ({len(events)} matchups)")
+                return True
+    except Exception as e:
+        print(f"ESPN fallback for today's games failed: {e}")
+
     print("Notice: Could not refresh todays_games.csv from API; using existing cache if present.")
     return os.path.exists(os.path.join(SCRIPT_DIR, 'todays_games.csv'))
 
