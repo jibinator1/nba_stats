@@ -239,7 +239,7 @@
 
 
         <!-- ============================================================== -->
-        <!-- TAB 2: PLAYER FLOOR STREAKS (PTS, REB, AST)                    -->
+        <!-- TAB 2: PLAYER FLOOR STREAKS (PTS, REB, AST, PA, PR, RA, 3PM)   -->
         <!-- ============================================================== -->
         <section id="tab-profiles" class="{{ 'hidden' if page_type != 'profiles' else '' }} space-y-5">
             <!-- Header & Overview -->
@@ -322,11 +322,15 @@
                         <button onclick="setFloorPosFilter('C')" id="floor-filter-pos-C" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">C</button>
                     </div>
 
-                    <!-- Stat Metric Selector Chips (PTS, REB, AST) -->
-                    <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs">
-                        <button onclick="setFloorStatFilter('PTS')" id="floor-filter-stat-PTS" class="px-2.5 py-1 rounded bg-[#30363d] text-cyan-300 font-bold border border-cyan-800/60">PTS</button>
-                        <button onclick="setFloorStatFilter('REB')" id="floor-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">REB</button>
-                        <button onclick="setFloorStatFilter('AST')" id="floor-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">AST</button>
+                    <!-- Stat Metric Selector Chips (PTS, REB, AST, PA, PR, RA, 3PM) -->
+                    <div class="flex items-center gap-1 bg-[#21262d] border border-[#30363d] rounded-lg p-1 text-xs overflow-x-auto max-w-full scrollbar-none touch-pan-x">
+                        <button onclick="setFloorStatFilter('PTS')" id="floor-filter-stat-PTS" class="px-2.5 py-1 rounded bg-[#30363d] text-cyan-300 font-bold border border-cyan-800/60 shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="true" aria-label="Points (PTS)" title="Points">PTS</button>
+                        <button onclick="setFloorStatFilter('REB')" id="floor-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Rebounds (REB)" title="Rebounds">REB</button>
+                        <button onclick="setFloorStatFilter('AST')" id="floor-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Assists (AST)" title="Assists">AST</button>
+                        <button onclick="setFloorStatFilter('PA')" id="floor-filter-stat-PA" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Points + Assists (PA)" title="Points + Assists">PA</button>
+                        <button onclick="setFloorStatFilter('PR')" id="floor-filter-stat-PR" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Points + Rebounds (PR)" title="Points + Rebounds">PR</button>
+                        <button onclick="setFloorStatFilter('RA')" id="floor-filter-stat-RA" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Rebounds + Assists (RA)" title="Rebounds + Assists">RA</button>
+                        <button onclick="setFloorStatFilter('3PM')" id="floor-filter-stat-3PM" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="3-Pointers Made (3PM)" title="3-Pointers Made (Threes)">3PM</button>
                     </div>
 
                     <!-- Minimum Streak Filter -->

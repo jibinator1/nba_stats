@@ -18,7 +18,11 @@ let floorSortAsc = false;
 let floorSelectedDate = '';
 
 function computePlayerFloorData(players, statKey, margin, minGames) {
-    const statName = statKey.toLowerCase();
+    let rawStat = (statKey || 'PTS').toString().trim().toUpperCase();
+    if (rawStat === 'THREES') rawStat = '3PM';
+    if (!['PTS', 'REB', 'AST', 'PA', 'PR', 'RA', '3PM'].includes(rawStat)) {
+        rawStat = 'PTS';
+    }
     const results = [];
 
     // Map next upcoming game per team from allScheduleGames
@@ -45,8 +49,25 @@ function computePlayerFloorData(players, statKey, margin, minGames) {
         if (logs.length < minGames) return;
 
         const vals = logs.map(lg => {
-            const v = lg[statName];
-            return typeof v === 'number' ? v : (parseFloat(v) || 0);
+            if (rawStat === 'PA') {
+                const pts = typeof lg.pts === 'number' ? lg.pts : (parseFloat(lg.pts) || 0);
+                const ast = typeof lg.ast === 'number' ? lg.ast : (parseFloat(lg.ast) || 0);
+                return pts + ast;
+            } else if (rawStat === 'PR') {
+                const pts = typeof lg.pts === 'number' ? lg.pts : (parseFloat(lg.pts) || 0);
+                const reb = typeof lg.reb === 'number' ? lg.reb : (parseFloat(lg.reb) || 0);
+                return pts + reb;
+            } else if (rawStat === 'RA') {
+                const reb = typeof lg.reb === 'number' ? lg.reb : (parseFloat(lg.reb) || 0);
+                const ast = typeof lg.ast === 'number' ? lg.ast : (parseFloat(lg.ast) || 0);
+                return reb + ast;
+            } else if (rawStat === '3PM') {
+                const fg3m = typeof lg.fg3m === 'number' ? lg.fg3m : (parseFloat(lg.fg3m) || 0);
+                return fg3m;
+            } else {
+                const v = lg[rawStat.toLowerCase()];
+                return typeof v === 'number' ? v : (parseFloat(v) || 0);
+            }
         });
 
         if (vals.length === 0) return;
@@ -59,15 +80,17 @@ function computePlayerFloorData(players, statKey, margin, minGames) {
             : parseFloat(((sorted[n / 2 - 1] + sorted[n / 2]) / 2).toFixed(1));
 
         // Hard floor threshold line: Median * (1 - margin)
-        const floorThreshold = Math.round((1.0 - margin) * baselineMedian * 10) / 10;
+        const floorThreshold = Number(((1.0 - margin) * baselineMedian).toFixed(1));
 
         // Consecutive unbroken games meeting or exceeding floor threshold from most recent backwards
         let streak = 0;
-        for (let i = 0; i < vals.length; i++) {
-            if (vals[i] >= floorThreshold) {
-                streak++;
-            } else {
-                break;
+        if (baselineMedian > 0 && floorThreshold > 0) {
+            for (let i = 0; i < vals.length; i++) {
+                if (vals[i] >= floorThreshold) {
+                    streak++;
+                } else {
+                    break;
+                }
             }
         }
 
@@ -84,7 +107,7 @@ function computePlayerFloorData(players, statKey, margin, minGames) {
             team: teamCode,
             team_name: p.team_name || teamCode,
             position: p.position || '--',
-            stat_key: statKey.toUpperCase(),
+            stat_key: rawStat,
             games_played: logs.length,
             baseline_median: baselineMedian,
             margin_used: margin,
@@ -116,21 +139,28 @@ function updateFloorKPIs(computedList) {
         return;
     }
 
-    let longest = computedList[0];
+    let longest = null;
     for (const p of computedList) {
-        if ((p.floor_streak || 0) > (longest.floor_streak || 0)) {
-            longest = p;
+        if ((p.floor_streak || 0) > 0) {
+            if (!longest || p.floor_streak > longest.floor_streak ||
+                (p.floor_streak === longest.floor_streak && (p.baseline_median || 0) > (longest.baseline_median || 0))) {
+                longest = p;
+            }
         }
     }
 
-    if (longestEl && longest) {
-        longestEl.innerHTML = `
-            <div class="flex items-center space-x-1.5 truncate">
-                <span class="font-bold text-slate-100">${longest.player_name}</span>
-                <span class="text-slate-400">(${longest.team})</span>
-                <span class="text-cyan-400 font-extrabold">• ${longest.floor_streak} games</span>
-            </div>
-        `;
+    if (longestEl) {
+        if (longest) {
+            longestEl.innerHTML = `
+                <div class="flex items-center space-x-1.5 truncate">
+                    <span class="font-bold text-slate-100">${longest.player_name}</span>
+                    <span class="text-slate-400">(${longest.team})</span>
+                    <span class="text-cyan-400 font-extrabold">• ${longest.floor_streak} games</span>
+                </div>
+            `;
+        } else {
+            longestEl.innerHTML = '<span class="text-slate-500 font-medium">None active (0 games)</span>';
+        }
     }
 
     const consistentCount = computedList.filter(p => p.floor_streak >= 8).length;
@@ -220,13 +250,20 @@ function setFloorMarginFilter(val) {
 }
 
 function setFloorStatFilter(stat) {
-    floorFilterStat = (stat || 'PTS').toUpperCase();
-    ['PTS', 'REB', 'AST'].forEach(s => {
+    let sNorm = (stat || 'PTS').toString().trim().toUpperCase();
+    if (sNorm === 'THREES') sNorm = '3PM';
+    if (!['PTS', 'REB', 'AST', 'PA', 'PR', 'RA', '3PM'].includes(sNorm)) {
+        sNorm = 'PTS';
+    }
+    floorFilterStat = sNorm;
+    ['PTS', 'REB', 'AST', 'PA', 'PR', 'RA', '3PM'].forEach(s => {
         const btn = document.getElementById(`floor-filter-stat-${s}`) || document.getElementById(`profile-filter-stat-${s}`);
         if (btn) {
-            btn.className = (s === floorFilterStat)
-                ? 'px-2.5 py-1 rounded bg-[#30363d] text-cyan-300 font-bold border border-cyan-800/60'
-                : 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium';
+            const isActive = (s === floorFilterStat);
+            btn.className = isActive
+                ? 'px-2.5 py-1 rounded bg-[#30363d] text-cyan-300 font-bold border border-cyan-800/60 shrink-0 cursor-pointer touch-manipulation select-none'
+                : 'px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none';
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         }
     });
     renderFloorStreaks();
@@ -349,6 +386,17 @@ function renderFloorStreaks() {
         if (typeof vB === 'string') vB = vB.toLowerCase();
         if (vA < vB) return floorSortAsc ? -1 : 1;
         if (vA > vB) return floorSortAsc ? 1 : -1;
+
+        if (floorSortCol === 'floor_streak' || floorSortCol === 'rank') {
+            const medA = a.baseline_median || 0;
+            const medB = b.baseline_median || 0;
+            if (medA < medB) return floorSortAsc ? -1 : 1;
+            if (medA > medB) return floorSortAsc ? 1 : -1;
+            const nameA = a.player_name || '';
+            const nameB = b.player_name || '';
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+        }
         return 0;
     });
 
@@ -369,7 +417,17 @@ function renderFloorStreaks() {
     }
 
     const marginPct = Math.round(floorMargin * 100);
-    const statLabel = floorFilterStat === 'PTS' ? 'Points (PTS)' : (floorFilterStat === 'REB' ? 'Rebounds (REB)' : 'Assists (AST)');
+    const STAT_LABELS = {
+        'PTS': 'Points (PTS)',
+        'REB': 'Rebounds (REB)',
+        'AST': 'Assists (AST)',
+        'PA': 'Points + Assists (PA)',
+        'PR': 'Points + Rebounds (PR)',
+        'RA': 'Rebounds + Assists (RA)',
+        '3PM': '3-Pointers Made (3PM)',
+        'THREES': '3-Pointers Made (3PM)'
+    };
+    const statLabel = STAT_LABELS[floorFilterStat] || floorFilterStat;
 
     tbody.innerHTML = computed.map((p, idx) => {
         const streak = p.floor_streak || 0;
@@ -384,8 +442,8 @@ function renderFloorStreaks() {
 
         const gameLogsHtml = (p.recent_logs || []).map(val => {
             const num = parseFloat(val);
-            const meetsFloor = !isNaN(num) && num >= p.floor_threshold;
-            return `<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono ${meetsFloor ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-800/80 font-bold' : 'bg-[#21262d] text-slate-400 border border-[#30363d] line-through decoration-red-500/50'}" title="${meetsFloor ? `Met Floor (${val} >= ${p.floor_threshold})` : `Breached Floor (${val} < ${p.floor_threshold})`}">${val}</span>`;
+            const meetsFloor = !isNaN(num) && p.floor_threshold > 0 && num >= p.floor_threshold;
+            return `<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono ${meetsFloor ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-800/80 font-bold' : 'bg-[#21262d] text-slate-400 border border-[#30363d] line-through decoration-red-500/50'}" title="${meetsFloor ? `Met Floor (${val} >= ${p.floor_threshold})` : (p.floor_threshold > 0 ? `Breached Floor (${val} < ${p.floor_threshold})` : `No Baseline Floor (${val})`)}">${val}</span>`;
         }).join(' ');
 
         const teamLogoUrl = (typeof window.getTeamLogoUrl === 'function')

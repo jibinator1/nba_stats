@@ -365,8 +365,8 @@ def run_audit():
     print("  [PASS] Every .py and .js file in the entire repository strictly under 1,000 lines (Thermonuclear Standard verified).")
     print("  [PASS] Universal baseline rankings verified across all 30 NBA teams.")
 
-    # 13. Verify Player Floor Streaks (PTS, REB, AST, Dynamic Margin & Hard Threshold Engine)
-    print("\n[13/13] Testing Player Floor Streaks (PTS, REB, AST & Dynamic Margin Engine)...")
+    # 13. Verify Player Floor Streaks (PTS, REB, AST, PA, PR, RA, 3PM / THREES & Dynamic Margin Engine)
+    print("\n[13/13] Testing Player Floor Streaks (PTS, REB, AST, PA, PR, RA, 3PM / THREES & Dynamic Margin Engine)...")
     res_fs = client.get('/api/floor-streak?stat=PTS&margin=0.30')
     assert res_fs.status_code == 200, f"Failed /api/floor-streak: {res_fs.status_code}"
     fs_data = res_fs.json
@@ -384,16 +384,105 @@ def run_audit():
     res_ast = client.get('/api/floor-streak?stat=AST&margin=0.35')
     assert res_ast.status_code == 200 and res_ast.json['stat'] == 'AST'
 
+    # Load player reference logs to verify accuracy of composite and 3PT calculations
+    with open(os.path.join(base_dir, 'forensic_players.json'), 'r', encoding='utf-8') as pf:
+        ref_players = json.load(pf)
+    test_p = next(p for p in ref_players if len(p.get('all_logs', [])) >= 4)
+    tp_name = test_p['player_name']
+    tp_logs = test_p['all_logs']
+
+    # Test PA (Points + Assists)
+    res_pa = client.get('/api/floor-streak?stat=PA&margin=0.30')
+    assert res_pa.status_code == 200, f"Failed /api/floor-streak?stat=PA: {res_pa.status_code}"
+    pa_data = res_pa.json
+    assert pa_data['status'] == 'success' and pa_data['stat'] == 'PA'
+    pa_p = next((p for p in pa_data['players'] if p['player_name'] == tp_name), None)
+    assert pa_p is not None, f"Test player {tp_name} missing from PA results"
+    expected_pa_logs = [float(lg.get('pts', 0) + lg.get('ast', 0)) for lg in tp_logs[:10]]
+    assert pa_p['recent_logs'] == expected_pa_logs, f"PA logs mismatch for {tp_name}: got {pa_p['recent_logs']}, expected {expected_pa_logs}"
+    assert abs(pa_p['floor_threshold'] - round(0.70 * pa_p['baseline_median'], 1)) < 0.05
+
+    # Test PR (Points + Rebounds)
+    res_pr = client.get('/api/floor-streak?stat=PR&margin=0.30')
+    assert res_pr.status_code == 200, f"Failed /api/floor-streak?stat=PR: {res_pr.status_code}"
+    pr_data = res_pr.json
+    assert pr_data['status'] == 'success' and pr_data['stat'] == 'PR'
+    pr_p = next((p for p in pr_data['players'] if p['player_name'] == tp_name), None)
+    assert pr_p is not None, f"Test player {tp_name} missing from PR results"
+    expected_pr_logs = [float(lg.get('pts', 0) + lg.get('reb', 0)) for lg in tp_logs[:10]]
+    assert pr_p['recent_logs'] == expected_pr_logs, f"PR logs mismatch for {tp_name}: got {pr_p['recent_logs']}, expected {expected_pr_logs}"
+    assert abs(pr_p['floor_threshold'] - round(0.70 * pr_p['baseline_median'], 1)) < 0.05
+
+    # Test RA (Rebounds + Assists)
+    res_ra = client.get('/api/floor-streak?stat=RA&margin=0.30')
+    assert res_ra.status_code == 200, f"Failed /api/floor-streak?stat=RA: {res_ra.status_code}"
+    ra_data = res_ra.json
+    assert ra_data['status'] == 'success' and ra_data['stat'] == 'RA'
+    ra_p = next((p for p in ra_data['players'] if p['player_name'] == tp_name), None)
+    assert ra_p is not None, f"Test player {tp_name} missing from RA results"
+    expected_ra_logs = [float(lg.get('reb', 0) + lg.get('ast', 0)) for lg in tp_logs[:10]]
+    assert ra_p['recent_logs'] == expected_ra_logs, f"RA logs mismatch for {tp_name}: got {ra_p['recent_logs']}, expected {expected_ra_logs}"
+    assert abs(ra_p['floor_threshold'] - round(0.70 * ra_p['baseline_median'], 1)) < 0.05
+
+    # Test THREES & 3PM (3-Pointers Made)
+    res_threes = client.get('/api/floor-streak?stat=THREES&margin=0.30')
+    assert res_threes.status_code == 200, f"Failed /api/floor-streak?stat=THREES: {res_threes.status_code}"
+    assert res_threes.json['status'] == 'success' and res_threes.json['stat'] == 'THREES'
+
+    res_3pm = client.get('/api/floor-streak?stat=3PM&margin=0.30')
+    assert res_3pm.status_code == 200, f"Failed /api/floor-streak?stat=3PM: {res_3pm.status_code}"
+    pm_data = res_3pm.json
+    assert pm_data['status'] == 'success' and pm_data['stat'] == '3PM'
+    pm_p = next((p for p in pm_data['players'] if p['player_name'] == tp_name), None)
+    assert pm_p is not None, f"Test player {tp_name} missing from 3PM results"
+    expected_pm_logs = [float(lg.get('fg3m', 0)) for lg in tp_logs[:10]]
+    assert pm_p['recent_logs'] == expected_pm_logs, f"3PM logs mismatch for {tp_name}: got {pm_p['recent_logs']}, expected {expected_pm_logs}"
+    assert abs(pm_p['floor_threshold'] - round(0.70 * pm_p['baseline_median'], 1)) < 0.05
+
+    # Edge Case: Players with 0 baseline median for 3PM must have floor_streak == 0 (no false-positive streaks)
+    zero_med_3pm = [p for p in pm_data['players'] if p['baseline_median'] <= 0]
+    assert len(zero_med_3pm) > 0, "Expected non-shooting players with 0 baseline median in 3PM dataset"
+    for zp in zero_med_3pm:
+        assert zp['floor_streak'] == 0, f"Player {zp['player_name']} has 0 median 3PM but non-zero streak {zp['floor_streak']}"
+    top_3pm = pm_data['players'][0]
+    assert top_3pm['floor_streak'] > 0 and top_3pm['baseline_median'] > 0, "Top 3PM streak player must have positive streak and median"
+
+    # Edge Case: Case-insensitivity & parameter fallbacks
+    res_case = client.get('/api/floor-streak?stat=pa&margin=0.30')
+    assert res_case.status_code == 200 and res_case.json['stat'] == 'PA'
+    res_fallback = client.get('/api/floor-streak?stat=INVALID_STAT&margin=0.30')
+    assert res_fallback.status_code == 200 and res_fallback.json['stat'] == 'PTS'
+    res_min_streak = client.get('/api/floor-streak?stat=PR&min_streak=5')
+    assert res_min_streak.status_code == 200
+    for p in res_min_streak.json['players']:
+        assert p['floor_streak'] >= 5, f"Player {p['player_name']} has streak {p['floor_streak']} < 5 with min_streak=5"
+
+    # Edge Case: Whitespace tolerance in stat query parameter
+    res_ws_pa = client.get('/api/floor-streak?stat=  PA  &margin=0.30')
+    assert res_ws_pa.status_code == 200 and res_ws_pa.json['stat'] == 'PA', "Failed whitespace tolerance for ?stat=  PA  "
+    res_ws_3pm = client.get('/api/floor-streak?stat= 3PM &margin=0.30')
+    assert res_ws_3pm.status_code == 200 and res_ws_3pm.json['stat'] == '3PM', "Failed whitespace tolerance for ?stat= 3PM "
+
     # Check frontend UI integration in index.html & profiles.js
     assert 'floor-margin-filter-select' in html, "Missing floor-margin-filter-select in index.html"
     assert 'floor-streak-table-body' in html, "Missing floor-streak-table-body in index.html"
     assert 'floor-kpi-longest' in html, "Missing floor-kpi-longest in index.html"
+    assert 'floor-filter-stat-PA' in html, "Missing floor-filter-stat-PA in index.html"
+    assert 'floor-filter-stat-PR' in html, "Missing floor-filter-stat-PR in index.html"
+    assert 'floor-filter-stat-RA' in html, "Missing floor-filter-stat-RA in index.html"
+    assert 'floor-filter-stat-3PM' in html, "Missing floor-filter-stat-3PM in index.html"
+    assert 'overflow-x-auto max-w-full' in html, "Missing mobile responsive scroll on stat chip container in index.html"
+    assert 'touch-manipulation' in html, "Missing touch-manipulation optimization on stat buttons in index.html"
     assert 'computePlayerFloorData' in js_content, "Missing computePlayerFloorData in profiles.js"
     assert 'setFloorMarginFilter' in js_content, "Missing setFloorMarginFilter in profiles.js"
     assert 'setFloorStatFilter' in js_content, "Missing setFloorStatFilter in profiles.js"
+    assert 'Points + Assists (PA)' in js_content, "Missing Points + Assists (PA) label in profiles.js"
+    assert 'Points + Rebounds (PR)' in js_content, "Missing Points + Rebounds (PR) label in profiles.js"
+    assert 'Rebounds + Assists (RA)' in js_content, "Missing Rebounds + Assists (RA) label in profiles.js"
+    assert '3-Pointers Made (3PM)' in js_content, "Missing 3-Pointers Made (3PM) label in profiles.js"
 
     print(f"  Top Active Floor Streak: {top_p['player_name']} ({top_p['team']}) - {top_p['floor_streak']} games (PTS Med: {top_p['baseline_median']}, Thresh: {top_p['floor_threshold']})")
-    print("  [PASS] Player Floor Streaks verified across PTS, REB, AST with dynamic margins, KPI summaries, and visual game logs.")
+    print("  [PASS] Player Floor Streaks verified across PTS, REB, AST, PA, PR, RA, 3PM/THREES with dynamic margins, KPI summaries, and visual game logs.")
 
     # 14. Verify Playoff Game Exclusion Across All Datasets
     print("\n[14/14] Testing Playoff and Postseason Game Exclusion Across All Datasets...")

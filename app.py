@@ -519,23 +519,28 @@ def api_floor_streak():
     Returns the Player Floor Breach Streak for all tracked rotation players against a hard floor threshold line.
     Streak = consecutive most-recent games meeting or exceeding the hard floor threshold line ((1 - margin) * baseline median).
     """
-    stat_param = request.args.get('stat', 'PTS').upper()
-    if stat_param not in ['PTS', 'REB', 'AST']:
+    stat_param = (request.args.get('stat', 'PTS') or 'PTS').strip().upper()
+    if stat_param not in ['PTS', 'REB', 'AST', 'PA', 'PR', 'RA', 'THREES', '3PM']:
         stat_param = 'PTS'
-    stat_key = stat_param.lower()
 
     try:
         margin = float(request.args.get('margin', 0.30))
+        if margin <= 0.0 or margin >= 1.0:
+            margin = 0.30
     except (ValueError, TypeError):
         margin = 0.30
 
     try:
         min_games = int(request.args.get('min_games', 4))
+        if min_games < 1:
+            min_games = 1
     except (ValueError, TypeError):
         min_games = 4
 
     try:
         min_streak = int(request.args.get('min_streak', 0))
+        if min_streak < 0:
+            min_streak = 0
     except (ValueError, TypeError):
         min_streak = 0
 
@@ -564,7 +569,17 @@ def api_floor_streak():
         if len(logs) < min_games:
             continue
 
-        vals = [float(lg.get(stat_key, 0)) for lg in logs]
+        if stat_param == 'PA':
+            vals = [float(lg.get('pts') or 0) + float(lg.get('ast') or 0) for lg in logs]
+        elif stat_param == 'PR':
+            vals = [float(lg.get('pts') or 0) + float(lg.get('reb') or 0) for lg in logs]
+        elif stat_param == 'RA':
+            vals = [float(lg.get('reb') or 0) + float(lg.get('ast') or 0) for lg in logs]
+        elif stat_param in ['THREES', '3PM']:
+            vals = [float(lg.get('fg3m') or 0) for lg in logs]
+        else:
+            stat_key = stat_param.lower()
+            vals = [float(lg.get(stat_key) or 0) for lg in logs]
         if not vals:
             continue
 
@@ -574,11 +589,12 @@ def api_floor_streak():
         threshold = round((1.0 - margin) * med, 1)
 
         streak = 0
-        for v in vals:
-            if v >= threshold:
-                streak += 1
-            else:
-                break
+        if med > 0 and threshold > 0:
+            for v in vals:
+                if v >= threshold:
+                    streak += 1
+                else:
+                    break
 
         if streak < min_streak:
             continue
@@ -606,7 +622,7 @@ def api_floor_streak():
             'recent_logs': vals[:10]
         })
 
-    results.sort(key=lambda x: x['floor_streak'], reverse=True)
+    results.sort(key=lambda x: (x['floor_streak'], x['baseline_median']), reverse=True)
     return jsonify({
         'status': 'success',
         'count': len(results),
