@@ -101,19 +101,12 @@ const STAT_EXPLANATIONS = {
 };
 // Statistically significant positional allowance metrics (ANOVA p < 0.05 across 30 teams)
 
-const SIGNIFICANT_POS_KEYS = [
-    'c_pts_allowed', 'c_reb_allowed', 'c_ast_allowed', 'c_fg3m_allowed', 'c_pra_allowed',
-    'pf_pts_allowed', 'pf_reb_allowed', 'pf_ast_allowed', 'pf_pra_allowed',
-    'sf_reb_allowed', 'sf_ast_allowed', 'sf_pra_allowed',
-    'sg_pts_allowed', 'sg_reb_allowed', 'sg_ast_allowed', 'sg_fg3m_allowed', 'sg_pra_allowed',
-    'pg_pts_allowed', 'pg_reb_allowed', 'pg_ast_allowed', 'pg_fg3m_allowed', 'pg_pra_allowed'
-];
+const SIGNIFICANT_POS_KEYS = ['c_pts_allowed', 'c_reb_allowed', 'c_ast_allowed', 'c_fg3m_allowed', 'pf_pts_allowed', 'pf_reb_allowed', 'pf_ast_allowed', 'sf_reb_allowed', 'sf_ast_allowed', 'sg_pts_allowed', 'sg_reb_allowed', 'sg_ast_allowed', 'sg_fg3m_allowed', 'pg_pts_allowed', 'pg_reb_allowed', 'pg_ast_allowed', 'pg_fg3m_allowed'];
 const POS_METRIC_LABELS = {
-    'c_pts_allowed': 'Center PTS Allowed', 'c_reb_allowed': 'Center REB Allowed', 'c_ast_allowed': 'Center AST Allowed', 'c_fg3m_allowed': 'Center 3PM Allowed', 'c_pra_allowed': 'Center PRA Allowed',
-    'pf_pts_allowed': 'PF PTS Allowed', 'pf_reb_allowed': 'PF REB Allowed', 'pf_ast_allowed': 'PF AST Allowed', 'pf_pra_allowed': 'PF PRA Allowed',
-    'sf_reb_allowed': 'SF REB Allowed', 'sf_ast_allowed': 'SF AST Allowed', 'sf_pra_allowed': 'SF PRA Allowed',
-    'sg_pts_allowed': 'SG PTS Allowed', 'sg_reb_allowed': 'SG REB Allowed', 'sg_ast_allowed': 'SG AST Allowed', 'sg_fg3m_allowed': 'SG 3PM Allowed', 'sg_pra_allowed': 'SG PRA Allowed',
-    'pg_pts_allowed': 'PG PTS Allowed', 'pg_reb_allowed': 'PG REB Allowed', 'pg_ast_allowed': 'PG AST Allowed', 'pg_fg3m_allowed': 'PG 3PM Allowed', 'pg_pra_allowed': 'PG PRA Allowed'
+    'c_pts_allowed': 'Center PTS Allowed', 'c_reb_allowed': 'Center REB Allowed', 'c_ast_allowed': 'Center AST Allowed', 'c_fg3m_allowed': 'Center 3PM Allowed',
+    'pf_pts_allowed': 'PF PTS Allowed', 'pf_reb_allowed': 'PF REB Allowed', 'pf_ast_allowed': 'PF AST Allowed', 'sf_reb_allowed': 'SF REB Allowed', 'sf_ast_allowed': 'SF AST Allowed',
+    'sg_pts_allowed': 'SG PTS Allowed', 'sg_reb_allowed': 'SG REB Allowed', 'sg_ast_allowed': 'SG AST Allowed', 'sg_fg3m_allowed': 'SG 3PM Allowed',
+    'pg_pts_allowed': 'PG PTS Allowed', 'pg_reb_allowed': 'PG REB Allowed', 'pg_ast_allowed': 'PG AST Allowed', 'pg_fg3m_allowed': 'PG 3PM Allowed'
 };
 SIGNIFICANT_POS_KEYS.forEach(k => {
     STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
@@ -485,7 +478,8 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
     if (!sDate || !eDate) return;
     if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
     try {
-        const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`);
+        const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
+        const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}&min_minutes=${encodeURIComponent(minM)}`);
         if (res.ok) {
             const data = await res.json();
             if (sDate !== startDate || eDate !== endDate) return;
@@ -505,6 +499,16 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
         console.warn('Positional date filter update:', err);
     }
 }
+
+window.currentMinMinutes = 20;
+function onMinMinutesChange(val) {
+    const minM = parseFloat(val);
+    window.currentMinMinutes = isNaN(minM) ? 20 : minM;
+    updatePositionalDeltasForDateRange(startDate, endDate);
+    if (typeof loadPositionalTab === 'function' && window.hasLoadedPositional) loadPositionalTab();
+    if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
+}
+window.onMinMinutesChange = onMinMinutesChange;
 
 function onDateRangeChange() {
     startDate = document.getElementById('input-start-date').value;

@@ -87,4 +87,29 @@ nba_stats/
 
 ---
 
+## 📋 Engineering Handoff & TODO List
+
+### ✅ Recently Completed
+- [x] **Combo Metrics Removal:** Completely removed all combo stats (PRA, PR, PA, RA) across the entire engine:
+  - Positional defense allowances (c_pra_allowed, pf_pra_allowed, sf_pra_allowed, sg_pra_allowed, pg_pra_allowed).
+  - Positional matchup correlations (position_correlations.py, METRICS = ['PTS', 'REB', 'AST', 'FG3M']).
+  - Positional matchup UI tab and buttons (index.html, static/js/positional.js).
+  - Matchup comparison cards and deep-dive modals (static/js/app.js, public/static/js/app.js).
+  - Player floor streaks filter bar (index.html, static/js/profiles.js, public/static/js/profiles.js).
+- [x] **Garbage Minutes Filter (Minimum Minutes Avg per Player):**
+  - Added interactive Min Mins Avg input box in the Matchup Lab top control bar (index.html, default 20).
+  - Filtered opponent positional allowances and correlations by player average minutes (player_avg_min >= min_minutes).
+  - Dynamic API integration: /api/positional-correlations?min_minutes=....
+  - Filtered Player Floor Streaks table to exclude players averaging below the specified minimum minutes.
+  - Regenerated orensic_position_correlations.json (960 records) and orensic_teams.json.
+- [x] **Thermonuclear Line Count Standard:** Confirmed all .py and .js files remain strictly under 1,000 lines.
+
+### 📝 Handoff TODOs (Check Later)
+- [ ] **Run Full Test & Audit Suite:** Run python verify_forensic.py and python test_position_correlations.py to verify full audit checks and test passing.
+- [ ] **Vercel Remote Deployment Sync:** Check Vercel serverless deployment build and live site sync.
+- [ ] **UI Mobile Viewport Verification:** Verify alignment of the new Min Mins Avg box on narrow mobile viewports.
+
+---
+
 *NBA Forensic Scouting Engine • Strictly Descriptive Analytics*
+ • Strictly Descriptive Analytics*

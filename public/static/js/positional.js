@@ -30,9 +30,11 @@ async function loadPositionalTab() {
     try {
         const sDate = document.getElementById('input-start-date')?.value || window.startDate;
         const eDate = document.getElementById('input-end-date')?.value || window.endDate;
-        const url = (sDate && eDate)
-            ? `/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`
-            : '/api/positional-correlations';
+        const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
+        let url = `/api/positional-correlations?min_minutes=${encodeURIComponent(minM)}`;
+        if (sDate && eDate) {
+            url += `&start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`;
+        }
         const res = await fetch(url);
         if (!res.ok) throw new Error('API request failed');
         positionalData = await res.json();
@@ -94,7 +96,7 @@ function updatePillStyles() {
     });
 
     // Metric pills
-    ['PTS', 'REB', 'AST', 'FG3M', 'PRA'].forEach(m => {
+    ['PTS', 'REB', 'AST', 'FG3M'].forEach(m => {
         const btn = document.getElementById(`metric-btn-${m}`);
         if (btn) {
             btn.className = (currentMetricFilter === m)

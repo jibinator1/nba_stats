@@ -31,7 +31,7 @@ TIER_MAP = {
     'C': 'Bigs'
 }
 
-METRICS = ['PTS', 'REB', 'AST', 'FG3M', 'PRA']
+METRICS = ['PTS', 'REB', 'AST', 'FG3M']
 POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C']
 TIERS = ['Guards', 'Wings', 'Bigs']
 
@@ -54,7 +54,7 @@ def load_position_map():
     pos_map.update(MANUAL_POSITIONS)
     return pos_map
 
-def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=None, end_date=None, save_json=None):
+def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=None, end_date=None, save_json=None):
     """
     Computes statistical correlation and performance deltas (vs player season avg & median)
     for each position against every opponent team. When start_date or end_date is provided,
@@ -73,7 +73,8 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
     
     clean_logs = logs_df.dropna(subset=['PLAYER_NAME', 'MATCHUP']).copy()
     clean_logs['MIN_NUM'] = pd.to_numeric(clean_logs['MIN'], errors='coerce')
-    clean_logs = clean_logs[clean_logs['MIN_NUM'] >= min_minutes].copy()
+    player_avg_min = clean_logs.groupby('PLAYER_NAME')['MIN_NUM'].transform('mean')
+    clean_logs = clean_logs[(player_avg_min >= float(min_minutes)) & (clean_logs['MIN_NUM'] > 0)].copy()
 
     # Filter strictly to selected date range before computing any averages or deltas
     if start_date and end_date and str(start_date) > str(end_date):
@@ -88,7 +89,7 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
     clean_logs['POS'] = clean_logs['PLAYER_NAME'].map(pos_map).fillna('SF')
     clean_logs['TIER'] = clean_logs['POS'].map(TIER_MAP).fillna('Wings')
     clean_logs['OPP_TEAM'] = clean_logs['MATCHUP'].apply(lambda x: str(x).split()[-1] if pd.notna(x) else None)
-    clean_logs['PRA'] = clean_logs['PTS'] + clean_logs['REB'] + clean_logs['AST']
+
 
     # Compute player baselines (mean & median) strictly across qualifying games in window
     for m in METRICS:

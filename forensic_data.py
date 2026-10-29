@@ -100,14 +100,14 @@ def load_injuries_by_team():
 # Statistically significant positional allowance metrics (ANOVA p < 0.05 across 30 opponents)
 SIGNIFICANT_POS_METRICS = [
     ('c_pts_allowed', 'C', 'PTS'), ('c_reb_allowed', 'C', 'REB'), ('c_ast_allowed', 'C', 'AST'),
-    ('c_fg3m_allowed', 'C', 'FG3M'), ('c_pra_allowed', 'C', 'PRA'),
+    ('c_fg3m_allowed', 'C', 'FG3M'),
     ('pf_pts_allowed', 'PF', 'PTS'), ('pf_reb_allowed', 'PF', 'REB'), ('pf_ast_allowed', 'PF', 'AST'),
-    ('pf_pra_allowed', 'PF', 'PRA'),
-    ('sf_reb_allowed', 'SF', 'REB'), ('sf_ast_allowed', 'SF', 'AST'), ('sf_pra_allowed', 'SF', 'PRA'),
+
+    ('sf_reb_allowed', 'SF', 'REB'), ('sf_ast_allowed', 'SF', 'AST'),
     ('sg_pts_allowed', 'SG', 'PTS'), ('sg_reb_allowed', 'SG', 'REB'), ('sg_ast_allowed', 'SG', 'AST'),
-    ('sg_fg3m_allowed', 'SG', 'FG3M'), ('sg_pra_allowed', 'SG', 'PRA'),
+    ('sg_fg3m_allowed', 'SG', 'FG3M'),
     ('pg_pts_allowed', 'PG', 'PTS'), ('pg_reb_allowed', 'PG', 'REB'), ('pg_ast_allowed', 'PG', 'AST'),
-    ('pg_fg3m_allowed', 'PG', 'FG3M'), ('pg_pra_allowed', 'PG', 'PRA')
+    ('pg_fg3m_allowed', 'PG', 'FG3M')
 ]
 
 def make_empty_team_profile(team):
@@ -161,12 +161,15 @@ def calculate_team_forensics(logs_df, paired_df):
     tier_map = {'PG': 'guards', 'SG': 'guards', 'SF': 'wings', 'PF': 'wings', 'C': 'bigs'}
     
     clean_opp_logs = logs_df.dropna(subset=['PLAYER_NAME', 'MATCHUP']).copy()
+    clean_opp_logs['MIN_NUM'] = pd.to_numeric(clean_opp_logs['MIN'], errors='coerce').fillna(0)
+    p_avg_min = clean_opp_logs.groupby('PLAYER_NAME')['MIN_NUM'].transform('mean')
+    clean_opp_logs = clean_opp_logs[(p_avg_min >= 20.0) & (clean_opp_logs['MIN_NUM'] > 0)].copy()
     clean_opp_logs['POS'] = clean_opp_logs['PLAYER_NAME'].map(pos_map).fillna('SF')
     clean_opp_logs['TIER'] = clean_opp_logs['POS'].map(tier_map).fillna('wings')
     clean_opp_logs['OPP_TEAM'] = clean_opp_logs['MATCHUP'].apply(lambda x: str(x).split()[-1])
-    clean_opp_logs['PRA'] = clean_opp_logs['PTS'] + clean_opp_logs['REB'] + clean_opp_logs['AST']
+
     opp_tier_agg = clean_opp_logs.groupby(['OPP_TEAM', 'TIER'])[['PTS', 'REB', 'FG3M']].sum()
-    opp_pos_agg = clean_opp_logs.groupby(['OPP_TEAM', 'POS'])[['PTS', 'REB', 'AST', 'FG3M', 'PRA']].sum()
+    opp_pos_agg = clean_opp_logs.groupby(['OPP_TEAM', 'POS'])[['PTS', 'REB', 'AST', 'FG3M']].sum()
     
     # Pre-calculated team totals
     for team in NBA_TEAMS:

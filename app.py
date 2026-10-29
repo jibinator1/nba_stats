@@ -126,18 +126,22 @@ def load_forensic_data():
 _POS_CORR_CACHE = {}
 
 
-def load_position_correlations(start_date=None, end_date=None):
+def load_position_correlations(start_date=None, end_date=None, min_minutes=20.0):
     """Loads positional matchup correlation dataset with fallback to calculation engine."""
     if start_date and end_date and str(start_date) > str(end_date):
         start_date, end_date = end_date, start_date
-    cache_key = (str(start_date) if start_date else None, str(end_date) if end_date else None)
+    try:
+        min_m = float(min_minutes)
+    except (ValueError, TypeError):
+        min_m = 20.0
+    cache_key = (str(start_date) if start_date else None, str(end_date) if end_date else None, min_m)
     if cache_key in _POS_CORR_CACHE:
         return _POS_CORR_CACHE[cache_key]
 
-    if start_date or end_date:
+    if start_date or end_date or min_m != 20.0:
         try:
             from position_correlations import calculate_position_correlations
-            res = calculate_position_correlations(start_date=start_date, end_date=end_date)
+            res = calculate_position_correlations(start_date=start_date, end_date=end_date, min_minutes=min_m)
             _POS_CORR_CACHE[cache_key] = res
             return res
         except Exception as e:
@@ -165,7 +169,7 @@ def load_position_correlations(start_date=None, end_date=None):
 
     try:
         from position_correlations import calculate_position_correlations
-        res = calculate_position_correlations()
+        res = calculate_position_correlations(min_minutes=min_m)
         _POS_CORR_CACHE[cache_key] = res
         return res
     except Exception as e:
@@ -431,7 +435,11 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
         s_date, e_date = e_date, s_date
     active_s = s_date or '2026-10-20'
     active_e = e_date or today_str
-    pos_data = load_position_correlations(start_date=active_s, end_date=active_e)
+    try:
+        min_minutes = float(request.args.get('min_minutes', 20.0))
+    except (ValueError, TypeError):
+        min_minutes = 20.0
+    pos_data = load_position_correlations(start_date=active_s, end_date=active_e, min_minutes=min_minutes)
     position_matchup_deltas = build_position_matchup_deltas(pos_data)
 
     return render_template('index.html',
@@ -443,6 +451,7 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
                            player_profiles=player_profiles,
                            team_game_logs=team_game_logs,
                            position_matchup_deltas=position_matchup_deltas,
+                           min_minutes=min_minutes,
                            all_teams=NBA_TEAMS,
                            team_names=NBA_TEAM_NAMES,
                            last_updated=last_updated,
@@ -618,6 +627,10 @@ def api_floor_streak():
     team_filter = request.args.get('team', 'ALL').upper()
     s_date = request.args.get('start_date')
     e_date = request.args.get('end_date')
+    try:
+        min_minutes_filter = float(request.args.get('min_minutes', 0.0))
+    except (ValueError, TypeError):
+        min_minutes_filter = 0.0
 
     _, _, player_profiles, _, _ = load_forensic_data()
 
@@ -627,6 +640,10 @@ def api_floor_streak():
             continue
         if team_filter != 'ALL' and p.get('team', '').upper() != team_filter:
             continue
+        if min_minutes_filter > 0:
+            p_avg_min = float(p.get('season_avg', {}).get('min') or 0.0)
+            if p_avg_min < min_minutes_filter:
+                continue
 
         logs = p.get('all_logs', [])
         if s_date and e_date:
@@ -751,7 +768,13 @@ def api_matchup(away, home):
 def api_positional_correlations():
     s_date = request.args.get('start_date')
     e_date = request.args.get('end_date')
-    data = load_position_correlations(start_date=s_date, end_date=e_date)
+    try:
+        min_minutes = float(request.args.get('min_minutes', 20.0))
+        if min_minutes < 0:
+            min_minutes = 0.0
+    except (ValueError, TypeError):
+        min_minutes = 20.0
+    data = load_position_correlations(start_date=s_date, end_date=e_date, min_minutes=min_minutes)
     position = request.args.get('position')
     metric = request.args.get('metric')
     opponent = request.args.get('opponent')

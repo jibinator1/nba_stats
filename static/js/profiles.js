@@ -252,11 +252,11 @@ function setFloorMarginFilter(val) {
 function setFloorStatFilter(stat) {
     let sNorm = (stat || 'PTS').toString().trim().toUpperCase();
     if (sNorm === 'THREES') sNorm = '3PM';
-    if (!['PTS', 'REB', 'AST', 'PA', 'PR', 'RA', '3PM'].includes(sNorm)) {
+    if (!['PTS', 'REB', 'AST', '3PM'].includes(sNorm)) {
         sNorm = 'PTS';
     }
     floorFilterStat = sNorm;
-    ['PTS', 'REB', 'AST', 'PA', 'PR', 'RA', '3PM'].forEach(s => {
+    ['PTS', 'REB', 'AST', '3PM'].forEach(s => {
         const btn = document.getElementById(`floor-filter-stat-${s}`) || document.getElementById(`profile-filter-stat-${s}`);
         if (btn) {
             const isActive = (s === floorFilterStat);
@@ -348,6 +348,15 @@ function renderFloorStreaks() {
                 p.next_date = slateMatchups[p.team].date;
                 p.next_opponent = slateMatchups[p.team].opponent;
             }
+        });
+    }
+
+    // Filter by Min Average Minutes per Player
+    const minMinutesAvg = (window.currentMinMinutes != null) ? window.currentMinMinutes : 20;
+    if (minMinutesAvg > 0) {
+        computed = computed.filter(p => {
+            const avgM = p.raw?.season_avg?.min != null ? parseFloat(p.raw.season_avg.min) : 0;
+            return avgM >= minMinutesAvg;
         });
     }
 

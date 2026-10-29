@@ -471,9 +471,11 @@ def run_audit():
     assert 'floor-margin-filter-select' in html, "Missing floor-margin-filter-select in index.html"
     assert 'floor-streak-table-body' in html, "Missing floor-streak-table-body in index.html"
     assert 'floor-kpi-longest' in html, "Missing floor-kpi-longest in index.html"
-    assert 'floor-filter-stat-PA' in html, "Missing floor-filter-stat-PA in index.html"
-    assert 'floor-filter-stat-PR' in html, "Missing floor-filter-stat-PR in index.html"
-    assert 'floor-filter-stat-RA' in html, "Missing floor-filter-stat-RA in index.html"
+    assert 'floor-filter-stat-PA' not in html, "Combo floor-filter-stat-PA should be removed from index.html"
+    assert 'floor-filter-stat-PR' not in html, "Combo floor-filter-stat-PR should be removed from index.html"
+    assert 'floor-filter-stat-RA' not in html, "Combo floor-filter-stat-RA should be removed from index.html"
+    assert 'input-min-minutes-avg' in html, "Missing input-min-minutes-avg in index.html"
+    assert 'metric-btn-PRA' not in html, "Combo metric-btn-PRA should be removed from index.html"
     assert 'floor-filter-stat-3PM' in html, "Missing floor-filter-stat-3PM in index.html"
     assert 'overflow-x-auto max-w-full' in html, "Missing mobile responsive scroll on stat chip container in index.html"
     assert 'touch-manipulation' in html, "Missing touch-manipulation optimization on stat buttons in index.html"
@@ -486,7 +488,7 @@ def run_audit():
     assert '3-Pointers Made (3PM)' in js_content, "Missing 3-Pointers Made (3PM) label in profiles.js"
 
     print(f"  Top Active Floor Streak: {top_p['player_name']} ({top_p['team']}) - {top_p['floor_streak']} games (PTS Med: {top_p['baseline_median']}, Thresh: {top_p['floor_threshold']})")
-    print("  [PASS] Player Floor Streaks verified across PTS, REB, AST, PA, PR, RA, 3PM/THREES with dynamic margins, KPI summaries, and visual game logs.")
+    print("  [PASS] Player Floor Streaks verified across PTS, REB, AST, 3PM/THREES with dynamic margins, KPI summaries, and visual game logs.")
 
     # 14. Verify Playoff Game Exclusion Across All Datasets
     print("\n[14/14] Testing Playoff and Postseason Game Exclusion Across All Datasets...")

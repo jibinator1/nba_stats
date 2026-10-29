@@ -135,6 +135,11 @@
                             <span class="text-cyan-300 text-xs font-bold font-mono">2026-27 Schedule ({{ all_games | length }} Games)</span>
                         </div>
 
+                        <!-- Min Minutes Avg Box -->
+                        <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5" title="Filter players by minimum average minutes per game to eliminate garbage time players">
+                            <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">Min Mins Avg:</span>
+                            <input type="number" id="input-min-minutes-avg" value="{{ min_minutes|default(20)|int }}" min="0" max="48" step="1" onchange="onMinMinutesChange(this.value)" class="w-12 bg-[#161b22] border border-[#30363d] text-cyan-300 text-xs font-bold font-mono rounded px-1.5 py-0.5 text-center outline-none focus:border-cyan-500 cursor-pointer">
+                        </div>
                         <!-- Team Selector -->
                         <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5">
                             <span class="text-[11px] text-slate-400 font-medium">Team:</span>
@@ -338,9 +343,6 @@
                         <button onclick="setFloorStatFilter('PTS')" id="floor-filter-stat-PTS" class="px-2.5 py-1 rounded bg-[#30363d] text-cyan-300 font-bold border border-cyan-800/60 shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="true" aria-label="Points (PTS)" title="Points">PTS</button>
                         <button onclick="setFloorStatFilter('REB')" id="floor-filter-stat-REB" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Rebounds (REB)" title="Rebounds">REB</button>
                         <button onclick="setFloorStatFilter('AST')" id="floor-filter-stat-AST" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Assists (AST)" title="Assists">AST</button>
-                        <button onclick="setFloorStatFilter('PA')" id="floor-filter-stat-PA" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Points + Assists (PA)" title="Points + Assists">PA</button>
-                        <button onclick="setFloorStatFilter('PR')" id="floor-filter-stat-PR" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Points + Rebounds (PR)" title="Points + Rebounds">PR</button>
-                        <button onclick="setFloorStatFilter('RA')" id="floor-filter-stat-RA" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="Rebounds + Assists (RA)" title="Rebounds + Assists">RA</button>
                         <button onclick="setFloorStatFilter('3PM')" id="floor-filter-stat-3PM" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium shrink-0 cursor-pointer touch-manipulation select-none" aria-pressed="false" aria-label="3-Pointers Made (3PM)" title="3-Pointers Made (Threes)">3PM</button>
                     </div>
 
@@ -553,7 +555,6 @@
                         <button id="metric-btn-REB" onclick="setMetricFilter('REB')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Rebounds (REB)</button>
                         <button id="metric-btn-AST" onclick="setMetricFilter('AST')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">Assists (AST)</button>
                         <button id="metric-btn-FG3M" onclick="setMetricFilter('FG3M')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">3-Pointers (3PM)</button>
-                        <button id="metric-btn-PRA" onclick="setMetricFilter('PRA')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] text-slate-300 hover:bg-[#30363d] border border-[#30363d] transition">PRA (PTS+REB+AST)</button>
                     </div>
 
                     <div class="flex items-center space-x-1">

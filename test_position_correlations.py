@@ -15,7 +15,7 @@ class TestPositionalCorrelations(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.data = calculate_position_correlations(min_minutes=12.0)
+        cls.data = calculate_position_correlations(min_minutes=20.0)
         cls.client = app.test_client()
 
     def test_metadata_structure(self):
@@ -25,6 +25,8 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertEqual(meta['teams_count'], 30)
         self.assertListEqual(meta['positions'], ['PG', 'SG', 'SF', 'PF', 'C'])
         self.assertListEqual(meta['tiers'], ['Guards', 'Wings', 'Bigs'])
+        self.assertListEqual(meta['metrics'], ['PTS', 'REB', 'AST', 'FG3M'])
+        self.assertNotIn('PRA', meta['metrics'])
 
     def test_anova_significance(self):
         anova = self.data.get('anova', {})
@@ -37,7 +39,7 @@ class TestPositionalCorrelations(unittest.TestCase):
 
     def test_matchup_effect_categorization(self):
         matchups = self.data.get('matchups', [])
-        self.assertGreater(len(matchups), 1000)
+        self.assertEqual(len(matchups), 960)
         
         categories = set(m['effect_category'] for m in matchups)
         self.assertTrue({'boosted', 'neutral', 'suppressed'}.issubset(categories))
