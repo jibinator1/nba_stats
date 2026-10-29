@@ -173,6 +173,24 @@ class TestPositionalCorrelations(unittest.TestCase):
         res2 = load_position_correlations(start_date='2026-10-21', end_date='2026-10-21')
         self.assertIs(res1, res2)
 
+    def test_zero_game_date_window_positional_deltas(self):
+        # Extremely narrow date range with zero games played
+        res = self.client.get('/api/positional-correlations?start_date=2027-07-01&end_date=2027-07-01')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data.get('count'), 0)
+        self.assertEqual(len(data.get('position_matchup_deltas', {})), 0)
+
+    def test_modal_defense_callout_formatting(self):
+        # Assert modal.js uses formatDefenseDiff in defense callout and eliminates '+--' false green
+        with open(os.path.join(BASE_DIR, 'static', 'js', 'modal.js'), 'r', encoding='utf-8') as f:
+            modal_js = f.read()
+        self.assertNotIn("'+' : ''}${rebDelta?.diff ?? '--'}", modal_js)
+        self.assertNotIn("(rebDelta?.diff || 0) >= 0 ? 'text-emerald-400'", modal_js)
+        self.assertIn("rFmt.className", modal_js)
+        self.assertIn("pFmt.className", modal_js)
+
 
 if __name__ == '__main__':
     unittest.main()
+

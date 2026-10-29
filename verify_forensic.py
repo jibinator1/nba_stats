@@ -541,6 +541,8 @@ def run_audit():
     assert 'text-rose-400' in modal_js, "Missing text-rose-400 red defense class in modal.js"
     assert 'text-slate-400' in modal_js, "Missing text-slate-400 gray defense class in modal.js"
     assert 'tab-content-insights' not in app_js, "Found invalid tab-content-insights ID in app.js"
+    assert "'+' : ''}${rebDelta?.diff ?? '--'}" not in modal_js, "Found invalid +-- fallback formatting in modal.js"
+    assert "(rebDelta?.diff || 0) >= 0 ? 'text-emerald-400'" not in modal_js, "Found invalid hardcoded positive defense green in modal.js"
 
     # Test date-filtered positional endpoint
     res_pos_date = client.get('/api/positional-correlations?start_date=2026-10-20&end_date=2026-10-29')

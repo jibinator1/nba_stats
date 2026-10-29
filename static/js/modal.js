@@ -399,22 +399,26 @@ function generateDeepDiveModalHtml(g) {
                         let astSub = '';
 
                         if (isDiffMode) {
+                            const getPillCls = (d) => (d >= 0.25 ? 'text-emerald-400 font-bold' : (d <= -0.25 ? 'text-rose-400 font-bold' : 'text-slate-400 font-bold'));
                             if (ptsDelta && sAvg.pts != null) {
                                 ptsDisplayVal = (parseFloat(sAvg.pts) + ptsDelta.diff).toFixed(1);
-                                const cls = ptsDelta.diff >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
-                                ptsPill = `<span class="${cls} text-[10px] font-mono">(${ptsDelta.diff >= 0 ? '+' : ''}${ptsDelta.diff})</span>`;
+                                const pDiff = Math.abs(ptsDelta.diff) < 0.005 ? 0.0 : ptsDelta.diff;
+                                const sign = pDiff > 0 ? '+' : '';
+                                ptsPill = `<span class="${getPillCls(pDiff)} text-[10px] font-mono">(${sign}${pDiff.toFixed(2)})</span>`;
                                 ptsSub = `<span class="text-cyan-400 text-[9px] block font-mono">${ptsDelta.pct}% over</span>`;
                             }
                             if (rebDelta && sAvg.reb != null) {
                                 rebDisplayVal = (parseFloat(sAvg.reb) + rebDelta.diff).toFixed(1);
-                                const cls = rebDelta.diff >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
-                                rebPill = `<span class="${cls} text-[10px] font-mono">(${rebDelta.diff >= 0 ? '+' : ''}${rebDelta.diff})</span>`;
+                                const rDiff = Math.abs(rebDelta.diff) < 0.005 ? 0.0 : rebDelta.diff;
+                                const sign = rDiff > 0 ? '+' : '';
+                                rebPill = `<span class="${getPillCls(rDiff)} text-[10px] font-mono">(${sign}${rDiff.toFixed(2)})</span>`;
                                 rebSub = `<span class="text-cyan-400 text-[9px] block font-mono">${rebDelta.pct}% over</span>`;
                             }
                             if (astDelta && sAvg.ast != null) {
                                 astDisplayVal = (parseFloat(sAvg.ast) + astDelta.diff).toFixed(1);
-                                const cls = astDelta.diff >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
-                                astPill = `<span class="${cls} text-[10px] font-mono">(${astDelta.diff >= 0 ? '+' : ''}${astDelta.diff})</span>`;
+                                const aDiff = Math.abs(astDelta.diff) < 0.005 ? 0.0 : astDelta.diff;
+                                const sign = aDiff > 0 ? '+' : '';
+                                astPill = `<span class="${getPillCls(aDiff)} text-[10px] font-mono">(${sign}${aDiff.toFixed(2)})</span>`;
                                 astSub = `<span class="text-cyan-400 text-[9px] block font-mono">${astDelta.pct}% over</span>`;
                             }
                         }
@@ -453,14 +457,19 @@ function generateDeepDiveModalHtml(g) {
                                     <div><span class="text-slate-400 block text-[9.5px]">${formatMetricLabelWithTooltip(isDiffMode ? 'Matchup REB' : 'REB')}</span><b class="text-slate-100">${rebDisplayVal}</b> ${rebPill}${rebSub}</div>
                                     <div><span class="text-slate-400 block text-[9.5px]">${formatMetricLabelWithTooltip(isDiffMode ? 'Matchup AST' : 'AST')}</span><b class="text-slate-100">${astDisplayVal}</b> ${astPill}${astSub}</div>
                                 </div>
-                                ${isDiffMode ? `
-                                <div class="text-[10px] bg-cyan-950/20 px-2.5 py-1.5 rounded-lg border border-cyan-800/40 text-slate-300 font-sans leading-tight space-y-0.5">
-                                    <div class="flex items-center justify-between text-cyan-300 font-mono font-semibold text-[10px]">
-                                        <span>⚡ vs ${oppTeam} Defense (${pos}s)</span>
-                                        <span class="text-slate-400 text-[9px]">n=${rebDelta?.n || ptsDelta?.n || 140} games</span>
-                                    </div>
-                                    <div>${oppTeam} allows <b class="${(rebDelta?.diff || 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'} font-mono">${(rebDelta?.diff || 0) >= 0 ? '+' : ''}${rebDelta?.diff ?? '--'} REB</b> (${rebDelta?.pct ?? '--'}% over avg) & <b class="${(ptsDelta?.diff || 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'} font-mono">${(ptsDelta?.diff || 0) >= 0 ? '+' : ''}${ptsDelta?.diff ?? '--'} PTS</b> (${ptsDelta?.pct ?? '--'}% over avg).</div>
-                                </div>` : ''}
+                                ${isDiffMode ? (() => {
+                                    const rFmt = formatDefenseDiff(rebDelta ? rebDelta.diff : null);
+                                    const pFmt = formatDefenseDiff(ptsDelta ? ptsDelta.diff : null);
+                                    const sampleN = rebDelta?.n ?? ptsDelta?.n ?? 0;
+                                    return `
+                                    <div class="text-[10px] bg-cyan-950/20 px-2.5 py-1.5 rounded-lg border border-cyan-800/40 text-slate-300 font-sans leading-tight space-y-0.5">
+                                        <div class="flex items-center justify-between text-cyan-300 font-mono font-semibold text-[10px]">
+                                            <span>⚡ vs ${oppTeam} Defense (${pos}s)</span>
+                                            <span class="text-slate-400 text-[9px]">n=${sampleN} games</span>
+                                        </div>
+                                        <div>${oppTeam} allows <b class="${rFmt.className}">${rFmt.text} REB</b> (${rebDelta?.pct != null ? rebDelta.pct + '%' : '--'} over avg) & <b class="${pFmt.className}">${pFmt.text} PTS</b> (${ptsDelta?.pct != null ? ptsDelta.pct + '%' : '--'} over avg).</div>
+                                    </div>`;
+                                })() : ''}
                                 <div class="space-y-1 bg-[#12161c]/60 p-2 rounded-lg border border-[#21262d]/60">
                                     <div class="flex items-center justify-between text-[10px] text-slate-400">
                                         <span class="font-sans font-medium text-slate-400">${isDiffMode ? 'Matchup Adjusted PTS Dist' : '10G PTS Distribution'}</span>
