@@ -361,6 +361,17 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     forensic_teams, _, player_profiles, team_game_logs, last_updated = load_forensic_data()
     all_games = load_all_schedule_games()
     today_str = datetime.now().strftime("%Y-%m-%d")
+    pos_data = load_position_correlations()
+    position_matchup_deltas = {}
+    for m in pos_data.get('matchups', []):
+        if not m.get('is_tier'):
+            k = f"{m['position']}_{m['opponent']}_{m['metric']}"
+            position_matchup_deltas[k] = {
+                'diff': round(float(m.get('mean_diff', 0)), 2),
+                'pct': round(float(m.get('pct_over_avg', 50)), 1),
+                'n': int(m.get('sample_size', 0)),
+                'cat': m.get('effect_category', 'neutral')
+            }
 
     return render_template('index.html',
                            page_type=page_type,
@@ -370,6 +381,7 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
                            forensic_teams=forensic_teams,
                            player_profiles=player_profiles,
                            team_game_logs=team_game_logs,
+                           position_matchup_deltas=position_matchup_deltas,
                            all_teams=NBA_TEAMS,
                            team_names=NBA_TEAM_NAMES,
                            last_updated=last_updated,

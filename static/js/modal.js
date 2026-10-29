@@ -342,11 +342,16 @@ function generateDeepDiveModalHtml(g) {
 
     const renderRotationTeamBlock = (teamCode, teamName, players, badgeColor) => {
         const top4 = (players || []).slice(0, 4);
+        const oppTeam = (teamCode === aTeam) ? hTeam : aTeam;
+        const isDiffMode = (window.matchupEvaluationMode === 'opponent_diff');
         return `
             <div class="space-y-2.5">
-                <div class="flex items-center space-x-2 text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5">
-                    <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
-                    <span class="${badgeColor}">${teamCode} Rotation (Top 4 Minutes)</span>
+                <div class="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5">
+                    <div class="flex items-center space-x-2">
+                        <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
+                        <span class="${badgeColor}">${teamCode} Rotation (Top 4 Minutes)</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono font-normal">Opponent: <b class="text-slate-200">${oppTeam}</b></span>
                 </div>
                 <div class="space-y-2.5">
                     ${top4.map(p => {
@@ -354,14 +359,53 @@ function generateDeepDiveModalHtml(g) {
                         const sAvg = p.season_avg || {};
                         const ctx = p.context_stats || {};
                         const sit = p.situational || {};
+                        const pos = p.position || 'PG';
 
                         const ptsRankStr = (sAvg.pts != null && sAvg.pts_rank != null && sAvg.pts_rank !== 'Small Sample') ? `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.pts_rank})</span>` : '';
                         const rebRankStr = (sAvg.reb != null && sAvg.reb_rank != null && sAvg.reb_rank !== 'Small Sample') ? `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.reb_rank})</span>` : '';
                         const astRankStr = (sAvg.ast != null && sAvg.ast_rank != null && sAvg.ast_rank !== 'Small Sample') ? `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.ast_rank})</span>` : '';
 
-                        const flr = parseFloat(dist.floor) || 0;
-                        const med = parseFloat(dist.median) || 0;
-                        const ceil = parseFloat(dist.ceiling) || 0;
+                        const ptsDelta = window.APP_DATA?.positionMatchupDeltas?.[`${pos}_${oppTeam}_PTS`];
+                        const rebDelta = window.APP_DATA?.positionMatchupDeltas?.[`${pos}_${oppTeam}_REB`];
+                        const astDelta = window.APP_DATA?.positionMatchupDeltas?.[`${pos}_${oppTeam}_AST`];
+
+                        let ptsDisplayVal = sAvg.pts != null ? sAvg.pts : '--';
+                        let rebDisplayVal = sAvg.reb != null ? sAvg.reb : '--';
+                        let astDisplayVal = sAvg.ast != null ? sAvg.ast : '--';
+
+                        let ptsPill = ptsRankStr;
+                        let rebPill = rebRankStr;
+                        let astPill = astRankStr;
+
+                        let ptsSub = '';
+                        let rebSub = '';
+                        let astSub = '';
+
+                        if (isDiffMode) {
+                            if (ptsDelta && sAvg.pts != null) {
+                                ptsDisplayVal = (parseFloat(sAvg.pts) + ptsDelta.diff).toFixed(1);
+                                const cls = ptsDelta.diff >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+                                ptsPill = `<span class="${cls} text-[10px] font-mono">(${ptsDelta.diff >= 0 ? '+' : ''}${ptsDelta.diff})</span>`;
+                                ptsSub = `<span class="text-cyan-400 text-[9px] block font-mono">${ptsDelta.pct}% over</span>`;
+                            }
+                            if (rebDelta && sAvg.reb != null) {
+                                rebDisplayVal = (parseFloat(sAvg.reb) + rebDelta.diff).toFixed(1);
+                                const cls = rebDelta.diff >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+                                rebPill = `<span class="${cls} text-[10px] font-mono">(${rebDelta.diff >= 0 ? '+' : ''}${rebDelta.diff})</span>`;
+                                rebSub = `<span class="text-cyan-400 text-[9px] block font-mono">${rebDelta.pct}% over</span>`;
+                            }
+                            if (astDelta && sAvg.ast != null) {
+                                astDisplayVal = (parseFloat(sAvg.ast) + astDelta.diff).toFixed(1);
+                                const cls = astDelta.diff >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+                                astPill = `<span class="${cls} text-[10px] font-mono">(${astDelta.diff >= 0 ? '+' : ''}${astDelta.diff})</span>`;
+                                astSub = `<span class="text-cyan-400 text-[9px] block font-mono">${astDelta.pct}% over</span>`;
+                            }
+                        }
+
+                        const pDiff = (isDiffMode && ptsDelta) ? ptsDelta.diff : 0;
+                        const flr = Math.max(0, (parseFloat(dist.floor) || 0) + pDiff);
+                        const med = Math.max(0, (parseFloat(dist.median) || 0) + pDiff);
+                        const ceil = Math.max(0, (parseFloat(dist.ceiling) || 0) + pDiff);
                         const maxDomain = Math.max(35, Math.ceil(ceil * 1.2));
                         const leftPct = Math.min(100, Math.max(0, (flr / maxDomain) * 100)).toFixed(1);
                         const rightPct = Math.min(100, Math.max(0, (ceil / maxDomain) * 100)).toFixed(1);
@@ -381,7 +425,6 @@ function generateDeepDiveModalHtml(g) {
                                             <span>${roleName} (${roleFreq}%)</span>
                                             <span class="stat-info-box">${FORENSIC_DEFINITIONS[roleName] || 'Functional offensive play type archetype.'}</span>
                                         </span>
-
                                     </div>
                                     <span class="text-[11px] text-slate-400 shrink-0 font-mono">${sAvg.min != null ? sAvg.min + ' MPG' : '--'}</span>
                                 </div>
@@ -389,19 +432,27 @@ function generateDeepDiveModalHtml(g) {
                                     Operates as the <b class="text-cyan-400">${roleName}</b> on <b>${roleFreq}%</b> of offensive possessions.
                                 </div>
                                 <div class="grid grid-cols-3 gap-1 bg-[#12161c] p-2 rounded-lg border border-[#21262d] text-center text-[10.5px]">
-                                    <div><span class="text-slate-500 block text-[9.5px]">${formatMetricLabelWithTooltip('Season PTS')}</span><b class="text-slate-100">${sAvg.pts != null ? sAvg.pts : '--'}</b> ${ptsRankStr}</div>
-                                    <div><span class="text-slate-500 block text-[9.5px]">${formatMetricLabelWithTooltip('REB')}</span><b class="text-slate-100">${sAvg.reb != null ? sAvg.reb : '--'}</b> ${rebRankStr}</div>
-                                    <div><span class="text-slate-500 block text-[9.5px]">${formatMetricLabelWithTooltip('AST')}</span><b class="text-slate-100">${sAvg.ast != null ? sAvg.ast : '--'}</b> ${astRankStr}</div>
+                                    <div><span class="text-slate-400 block text-[9.5px]">${formatMetricLabelWithTooltip(isDiffMode ? 'Matchup PTS' : 'Season PTS')}</span><b class="text-slate-100">${ptsDisplayVal}</b> ${ptsPill}${ptsSub}</div>
+                                    <div><span class="text-slate-400 block text-[9.5px]">${formatMetricLabelWithTooltip(isDiffMode ? 'Matchup REB' : 'REB')}</span><b class="text-slate-100">${rebDisplayVal}</b> ${rebPill}${rebSub}</div>
+                                    <div><span class="text-slate-400 block text-[9.5px]">${formatMetricLabelWithTooltip(isDiffMode ? 'Matchup AST' : 'AST')}</span><b class="text-slate-100">${astDisplayVal}</b> ${astPill}${astSub}</div>
                                 </div>
+                                ${isDiffMode ? `
+                                <div class="text-[10px] bg-cyan-950/20 px-2.5 py-1.5 rounded-lg border border-cyan-800/40 text-slate-300 font-sans leading-tight space-y-0.5">
+                                    <div class="flex items-center justify-between text-cyan-300 font-mono font-semibold text-[10px]">
+                                        <span>⚡ vs ${oppTeam} Defense (${pos}s)</span>
+                                        <span class="text-slate-400 text-[9px]">n=${rebDelta?.n || ptsDelta?.n || 140} games</span>
+                                    </div>
+                                    <div>${oppTeam} allows <b class="${(rebDelta?.diff || 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'} font-mono">${(rebDelta?.diff || 0) >= 0 ? '+' : ''}${rebDelta?.diff ?? '--'} REB</b> (${rebDelta?.pct ?? '--'}% over avg) & <b class="${(ptsDelta?.diff || 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'} font-mono">${(ptsDelta?.diff || 0) >= 0 ? '+' : ''}${ptsDelta?.diff ?? '--'} PTS</b> (${ptsDelta?.pct ?? '--'}% over avg).</div>
+                                </div>` : ''}
                                 <div class="space-y-1 bg-[#12161c]/60 p-2 rounded-lg border border-[#21262d]/60">
                                     <div class="flex items-center justify-between text-[10px] text-slate-400">
-                                        <span class="font-sans font-medium text-slate-400">10G PTS Distribution</span>
+                                        <span class="font-sans font-medium text-slate-400">${isDiffMode ? 'Matchup Adjusted PTS Dist' : '10G PTS Distribution'}</span>
                                         <span>
-                                            <span class="text-slate-500">${formatMetricLabelWithTooltip('Flr')}</span> <b class="text-slate-200">${dist.floor != null ? dist.floor : '--'}</b>
+                                            <span class="text-slate-500">${formatMetricLabelWithTooltip('Flr')}</span> <b class="text-slate-200">${flr.toFixed(1)}</b>
                                             <span class="text-slate-600 mx-1">|</span>
-                                            <span class="text-cyan-400 font-semibold">${formatMetricLabelWithTooltip('Med')}</span> <b class="text-cyan-300 font-bold">${dist.median != null ? dist.median : '--'}</b>
+                                            <span class="text-cyan-400 font-semibold">${formatMetricLabelWithTooltip('Med')}</span> <b class="text-cyan-300 font-bold">${med.toFixed(1)}</b>
                                             <span class="text-slate-600 mx-1">|</span>
-                                            <span class="text-slate-500">${formatMetricLabelWithTooltip('Ceil')}</span> <b class="text-slate-200">${dist.ceiling != null ? dist.ceiling : '--'}</b>
+                                            <span class="text-slate-500">${formatMetricLabelWithTooltip('Ceil')}</span> <b class="text-slate-200">${ceil.toFixed(1)}</b>
                                         </span>
                                     </div>
                                     <div class="w-full bg-[#0d1117] h-2.5 rounded-full relative overflow-hidden border border-[#21262d]">
@@ -580,7 +631,18 @@ function generateDeepDiveModalHtml(g) {
     };
 
     return `
-        <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] bg-gradient-to-r from-[#161b22] via-[#0d1117] to-[#161b22]">
+        <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] bg-gradient-to-r from-[#161b22] via-[#0d1117] to-[#161b22] space-y-3">
+            <div class="flex items-center justify-between border-b border-[#21262d] pb-2.5 flex-wrap gap-2 text-xs font-mono">
+                <div class="flex items-center space-x-2">
+                    <span class="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800 text-cyan-300 font-bold">2026-27 MATCHUP</span>
+                    <span class="text-slate-600">•</span>
+                    <span class="text-slate-400">${g.gameday || '2026-10-20'}</span>
+                </div>
+                <div class="flex items-center bg-[#161b22] border border-[#30363d] rounded-lg p-0.5 text-xs font-mono shadow-sm">
+                    <button id="modal-matchup-toggle-overall" onclick="setMatchupEvaluationMode('overall')" class="px-2.5 py-1 rounded text-[11px] font-semibold transition ${window.matchupEvaluationMode !== 'opponent_diff' ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 shadow-inner' : 'text-slate-400 hover:text-slate-200'}" title="Overall season averages & universal rank tiers">📊 Overall Avg</button>
+                    <button id="modal-matchup-toggle-opponent" onclick="setMatchupEvaluationMode('opponent_diff')" class="px-2.5 py-1 rounded text-[11px] font-semibold transition ${window.matchupEvaluationMode === 'opponent_diff' ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 shadow-inner' : 'text-slate-400 hover:text-slate-200'}" title="Opponent matchup +/- comparisons vs positional defense">⚡ Opponent Matchup +/-</button>
+                </div>
+            </div>
             <div class="grid grid-cols-12 items-center gap-3">
                 <div class="col-span-5 flex items-center space-x-3 min-w-0">
                     <div class="w-12 h-12 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-2 shadow-inner shrink-0 relative overflow-hidden">
@@ -718,9 +780,15 @@ function generateDeepDiveModalHtml(g) {
 
         <!-- 4. Pillar 4: Player Usage Profiles -->
         <div id="bucket-players" class="glass-panel rounded-xl p-4 border border-[#30363d] space-y-3 scroll-mt-20">
-            <div class="flex items-center space-x-2 border-b border-[#30363d] pb-2">
-                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
-                <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pillar 4: Player Usage Profiles (Top 4 Rotation Distributions)</h4>
+            <div class="flex items-center justify-between border-b border-[#30363d] pb-2 flex-wrap gap-2">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pillar 4: Player Usage Profiles (Top 4 Rotation Distributions)</h4>
+                </div>
+                <div class="flex items-center bg-[#161b22] border border-[#30363d] rounded-lg p-0.5 text-xs font-mono">
+                    <button onclick="setMatchupEvaluationMode('overall')" class="px-2 py-0.5 rounded text-[10px] font-semibold transition ${window.matchupEvaluationMode !== 'opponent_diff' ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-700/60' : 'text-slate-400 hover:text-slate-200'}">📊 Overall</button>
+                    <button onclick="setMatchupEvaluationMode('opponent_diff')" class="px-2 py-0.5 rounded text-[10px] font-semibold transition ${window.matchupEvaluationMode === 'opponent_diff' ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-700/60' : 'text-slate-400 hover:text-slate-200'}">⚡ Matchup +/-</button>
+                </div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 ${renderRotationTeamBlock(aTeam, g.away_team_name, aPlayers, 'text-cyan-400')}
@@ -797,7 +865,16 @@ function openMatchupByTeams(awayTeam, homeTeam) {
     renderDeepDiveModal(g);
 }
 
+window.currentOpenModalGame = null;
+window.refreshOpenInsightsModal = function() {
+    const modal = document.getElementById('deep-dive-modal');
+    if (modal && !modal.classList.contains('hidden') && window.currentOpenModalGame) {
+        renderDeepDiveModal(window.currentOpenModalGame);
+    }
+};
+
 function renderDeepDiveModal(g) {
+    window.currentOpenModalGame = g;
     const container = document.getElementById('deep-dive-modal-content');
     const modal = document.getElementById('deep-dive-modal');
     if (!container || !modal) return;

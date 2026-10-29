@@ -4,7 +4,6 @@
  * Strictly descriptive, play-by-play tracking and matchup alignment.
  * Zero predictive, betting, or judgmental terminology.
  */
-
 // Data injected from Flask backend via window.APP_DATA
 const APP_DATA = window.APP_DATA || {};
 const allScheduleGames = APP_DATA.allScheduleGames || [];
@@ -12,20 +11,21 @@ const allForensicTeams = APP_DATA.allForensicTeams || {};
 const allPlayerProfiles = APP_DATA.allPlayerProfiles || [];
 const allTeamGameLogs = APP_DATA.allTeamGameLogs || [];
 const teamNamesMap = APP_DATA.teamNamesMap || {};
-
 // Resilient ESPN Logo Map for 100% correct team assets
 const ESPN_LOGO_MAP = {
     'GSW': 'gs', 'NOP': 'no', 'NYK': 'ny', 'SAS': 'sa', 'UTA': 'utah', 'WAS': 'wsh'
 };
+
 function getTeamLogoUrl(team) {
     if (!team) return '';
     const upper = String(team).toUpperCase();
     const slug = ESPN_LOGO_MAP[upper] || upper.toLowerCase();
     return `https://a.espncdn.com/i/teamlogos/nba/500/${slug}.png`;
 }
-window.getTeamLogoUrl = getTeamLogoUrl;
 
+window.getTeamLogoUrl = getTeamLogoUrl;
 // Dynamic Date Helper (computes local today date string YYYY-MM-DD on page open)
+
 function getTodayDateStr() {
     const now = new Date();
     const y = now.getFullYear();
@@ -33,10 +33,8 @@ function getTodayDateStr() {
     const d = String(now.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
 }
-
 const clientTodayStr = getTodayDateStr();
 const defaultSeasonStart = APP_DATA.startDate || '2025-10-02';
-
 // State variables: Start at start of last season to current date (dynamic)
 let startDate = defaultSeasonStart;
 let endDate = APP_DATA.endDate || clientTodayStr;
@@ -44,12 +42,11 @@ let currentScheduleSeason = '2026';
 let selectedScheduleDate = 'all';
 let currentScheduleTeam = 'ALL';
 let scheduleSearchQuery = '';
-
 // Dynamic date-bound metric stores
 let currentForensicTeams = {};
 let currentPlayerProfiles = [];
-
 // Resilient Lucide Icon Helper
+
 function safeCreateIcons(targetRoot) {
     try {
         if (window.lucide && typeof window.lucide.createIcons === 'function') {
@@ -59,14 +56,12 @@ function safeCreateIcons(targetRoot) {
         console.warn('Lucide icon rendering warning:', err);
     }
 }
-
 let profileSelectedDate = '';
 let profileFilterPos = 'ALL';
 let profileFilterStat = 'PTS';
 let profileSearchQuery = '';
 let profileSortCol = 'median';
 let profileSortAsc = false;
-
 // Metric Explanations Dictionary for Hover Tooltips
 const STAT_EXPLANATIONS = {
     'Points / Game': 'Average points scored per game across completed contests in the selected date range.',
@@ -107,6 +102,7 @@ const STAT_EXPLANATIONS = {
 };
 
 // Statistically significant positional allowance metrics (ANOVA p < 0.05 across 30 teams)
+
 const SIGNIFICANT_POS_KEYS = [
     'c_pts_allowed', 'c_reb_allowed', 'c_ast_allowed', 'c_fg3m_allowed', 'c_pra_allowed',
     'pf_pts_allowed', 'pf_reb_allowed', 'pf_ast_allowed', 'pf_pra_allowed',
@@ -122,12 +118,44 @@ const POS_METRIC_LABELS = {
     'sg_pts_allowed': 'SG PTS Allowed', 'sg_reb_allowed': 'SG REB Allowed', 'sg_ast_allowed': 'SG AST Allowed', 'sg_fg3m_allowed': 'SG 3PM Allowed', 'sg_pra_allowed': 'SG PRA Allowed',
     'pg_pts_allowed': 'PG PTS Allowed', 'pg_reb_allowed': 'PG REB Allowed', 'pg_ast_allowed': 'PG AST Allowed', 'pg_fg3m_allowed': 'PG 3PM Allowed', 'pg_pra_allowed': 'PG PRA Allowed'
 };
-
 SIGNIFICANT_POS_KEYS.forEach(k => {
     STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
 });
 
+// Evaluation Mode State ('overall' vs 'opponent_diff')
+
+window.matchupEvaluationMode = window.matchupEvaluationMode || 'overall';
+
+function updateMatchupToggleButtons() {
+    const isDiff = window.matchupEvaluationMode === 'opponent_diff';
+    const activeCls = 'px-3 py-1 rounded text-[11px] font-bold transition flex items-center space-x-1.5 bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 shadow-inner';
+    const inactCls = 'px-3 py-1 rounded text-[11px] font-bold transition flex items-center space-x-1.5 text-slate-400 hover:text-slate-200';
+    const btnO = document.getElementById('toggle-matchup-mode-overall');
+    const btnD = document.getElementById('toggle-matchup-mode-diff');
+    if (btnO) btnO.className = isDiff ? inactCls : activeCls;
+    if (btnD) btnD.className = isDiff ? activeCls : inactCls;
+    const mO = document.getElementById('modal-matchup-toggle-overall');
+    const mD = document.getElementById('modal-matchup-toggle-opponent');
+    const mActive = 'px-2.5 py-1 rounded text-[11px] font-semibold transition bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 shadow-inner';
+    const mInact = 'px-2.5 py-1 rounded text-[11px] font-semibold transition text-slate-400 hover:text-slate-200';
+    if (mO) mO.className = isDiff ? mInact : mActive;
+    if (mD) mD.className = isDiff ? mActive : mInact;
+}
+
+window.setMatchupEvaluationMode = function(mode) {
+    window.matchupEvaluationMode = mode;
+    updateMatchupToggleButtons();
+    renderScheduleGames();
+    if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
+    if (currentInsightsMatchup && typeof loadMatchupInsights === 'function') {
+        const insightsTab = document.getElementById('tab-content-insights');
+        if (insightsTab && !insightsTab.classList.contains('hidden')) {
+            loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+        }
+    }
+};
 // Rank Badge Formatter with Hover Tooltip
+
 function formatRankBadge(rank) {
     if (rank == null || rank === '' || rank === 'Small Sample') return '';
     const r = parseInt(rank, 10);
@@ -138,19 +166,33 @@ function formatRankBadge(rank) {
 }
 
 // Canonical Unified Stat Row Formatter (replaces duplicate formatRow and formatPillarRow)
-function formatStatRow(label, aVal, aRank, hVal, hRank) {
+
+function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
     const exp = STAT_EXPLANATIONS[label] || '';
     const def = (window.FORENSIC_DEFINITIONS && window.FORENSIC_DEFINITIONS[label]) ? window.FORENSIC_DEFINITIONS[label] : null;
-    const aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
-    const hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
-
+    let aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
+    let hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
+    if (posKey && window.matchupEvaluationMode === 'opponent_diff' && window.APP_DATA?.positionMatchupDeltas) {
+        const parts = posKey.split('_');
+        const pos = parts[0].toUpperCase();
+        const stat = parts[1].toUpperCase();
+        const aD = window.APP_DATA.positionMatchupDeltas[`${pos}_${aTeam}_${stat}`];
+        const hD = window.APP_DATA.positionMatchupDeltas[`${pos}_${hTeam}_${stat}`];
+        if (aD) {
+            const cls = aD.diff >= 0 ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60' : 'bg-rose-950/60 text-rose-300 border-rose-800/60';
+            aBadge = `<span class="rank-badge inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded border ${cls}" title="${aTeam} defense allows ${aD.diff >= 0 ? '+' : ''}${aD.diff} vs player avg (${aD.pct}% over avg)"><span class="font-bold">${aD.diff >= 0 ? '+' : ''}${aD.diff}</span><span class="text-[9px] text-slate-400 ml-1">(${aD.pct}%)</span></span>`;
+        }
+        if (hD) {
+            const cls = hD.diff >= 0 ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60' : 'bg-rose-950/60 text-rose-300 border-rose-800/60';
+            hBadge = `<span class="rank-badge inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded border ${cls}" title="${hTeam} defense allows ${hD.diff >= 0 ? '+' : ''}${hD.diff} vs player avg (${hD.pct}% over avg)"><span class="font-bold">${hD.diff >= 0 ? '+' : ''}${hD.diff}</span><span class="text-[9px] text-slate-400 ml-1">(${hD.pct}%)</span></span>`;
+        }
+    }
     let tooltipBody = '';
     if (def && typeof def === 'object') {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block"><span class="text-cyan-400 font-mono">${label}</span><span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Scouting Context</span></span><span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block"><b class="text-slate-400 font-sans font-semibold">What it means:</b> ${def.meaning}</span><span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block"><b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${def.players}</span></span>`;
     } else if (exp) {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span><span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span></span>`;
     }
-
     return `
         <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
             <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="text-slate-200 font-bold">${aVal != null ? aVal : '--'}</span></div>
@@ -159,8 +201,8 @@ function formatStatRow(label, aVal, aRank, hVal, hRank) {
         </div>
     `;
 }
-
 // Injury / Inactive Tag Formatter
+
 function formatShortPlayerName(fullName) {
     if (!fullName) return '';
     const parts = fullName.trim().split(/\s+/);
@@ -197,29 +239,25 @@ function createEmptyTeamProfile(t) {
         fg3m_total: null, fg3m_allowed: null, fg3a_total: null, fg3a_allowed: null, fg_pct: null, fg_pct_opp: null
     };
 }
-
 // Dynamic In-Memory Recalculation Engine across Date Range
+
 function recalculateForensicsForDateRange(sDate, eDate) {
     if (!sDate) sDate = '2025-10-02';
     if (!eDate) eDate = clientTodayStr;
-
     const filteredTeamLogs = (allTeamGameLogs || []).filter(g => g.d >= sDate && g.d <= eDate);
     const logsByTeam = {};
     filteredTeamLogs.forEach(g => {
         if (!logsByTeam[g.t]) logsByTeam[g.t] = [];
         logsByTeam[g.t].push(g);
     });
-
     const allTeams = ['ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW',
                       'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK',
                       'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'];
-
     currentForensicTeams = {};
     allTeams.forEach(t => {
         const tGames = logsByTeam[t] || [];
         const gp = tGames.length;
         const baseProf = allForensicTeams[t] || {};
-
         if (gp === 0) {
             currentForensicTeams[t] = createEmptyTeamProfile(t);
         } else {
@@ -230,28 +268,23 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             const totFg3a = sumK('fg3a'), totFg3aOpp = sumK('opp_fg3a'), totFgm = sumK('fgm'), totFga = sumK('fga');
             const totFgmOpp = sumK('opp_fgm'), totFgaOpp = sumK('opp_fga'), totDreb = sumK('dreb'), totOreb = sumK('oreb');
             const totDrebOpp = sumK('opp_dreb'), totOrebOpp = sumK('opp_oreb'), totTov = sumK('tov'), totOppTov = sumK('opp_tov');
-
             const orebPct = (totOreb + totDrebOpp > 0) ? (totOreb / (totOreb + totDrebOpp) * 100).toFixed(1) : null;
             const drebPct = (totDreb + totOrebOpp > 0) ? (totDreb / (totDreb + totOrebOpp) * 100).toFixed(1) : null;
             const tovTotal = gp > 0 ? (totTov / gp).toFixed(1) : null;
             const tovAllowed = gp > 0 ? (totOppTov / gp).toFixed(1) : null;
-
             const fgPct = totFga > 0 ? (totFgm / totFga * 100).toFixed(1) : null;
             const fgPctOpp = totFgaOpp > 0 ? (totFgmOpp / totFgaOpp * 100).toFixed(1) : null;
             const offRtg = totPoss > 0 ? (totPts / totPoss * 100).toFixed(1) : null;
             const defRtg = totPoss > 0 ? (totPtsOpp / totPoss * 100).toFixed(1) : null;
             const fg3Rate = totFga > 0 ? (totFg3a / totFga * 100) : 38.0;
-
             const rimFreq = (((totFga - totFg3a) * 0.52 / (totFga || 1)) * 100);
             const rimDefFreq = (((totFgaOpp - totFg3aOpp) * 0.52 / (totFgaOpp || 1)) * 100);
             const midFreq = Math.max(5.0, (100.0 - rimFreq - fg3Rate));
             const midDefFreq = Math.max(5.0, (100.0 - rimDefFreq - (totFgaOpp > 0 ? totFg3aOpp / totFgaOpp * 100 : 38.0)));
             const drebSecured = (totDreb + totOrebOpp > 0) ? (totDreb / (totDreb + totOrebOpp) * 100) : 74.0;
             const orebAllowed = (totOrebOpp + totDreb > 0) ? (totOrebOpp / (totOrebOpp + totDreb) * 100) : 26.0;
-
             const defScale = defRtg ? (parseFloat(defRtg) / 114.0) : 1.0;
             const offScale = offRtg ? (parseFloat(offRtg) / 114.0) : 1.0;
-
             currentForensicTeams[t] = {
                 ...baseProf,
                 team: t,
@@ -327,7 +360,6 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             };
         }
     });
-
     const forensicRanksConfig = [
         { path: ['pace'], asc: false, rKey: 'rank_pace' }, { path: ['neutral_pace'], asc: false, rKey: 'rank_neutral_pace' }, { path: ['transition_freq'], asc: false, rKey: 'rank_transition_freq' },
         { path: ['def_rtg'], asc: true, rKey: 'rank_def_rtg' }, { path: ['off_rtg'], asc: false, rKey: 'rank_off_rtg' }, { path: ['pts_scored'], asc: false, rKey: 'rank_pts_scored' },
@@ -357,7 +389,6 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         { path: ['turnover_profile', 'points_generated_off_tov'], asc: false, rKey: 'rank_pts_generated_off_tov' }, { path: ['turnover_profile', 'points_surrendered_off_tov'], asc: true, rKey: 'rank_pts_surrendered_off_tov' }
     ];
     SIGNIFICANT_POS_KEYS.forEach(k => forensicRanksConfig.push({ path: [k], asc: true, rKey: 'rank_' + k }));
-
     forensicRanksConfig.forEach(({ path, asc, rKey }) => {
         const tuples = [];
         allTeams.forEach(t => {
@@ -367,7 +398,6 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             for (const p of path) val = val?.[p];
             if (val != null && !isNaN(parseFloat(val))) tuples.push({ team: t, val: parseFloat(val) });
         });
-
         tuples.sort((a, b) => asc ? (a.val - b.val) : (b.val - a.val));
         const rankedTeams = new Set();
         let r = 1;
@@ -376,10 +406,8 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             if (idx > 0 && item.val !== tuples[idx - 1].val) r = idx + 1;
             currentForensicTeams[item.team][rKey] = r;
         });
-
         allTeams.forEach(t => { if (!rankedTeams.has(t)) currentForensicTeams[t][rKey] = null; });
     });
-
     const zoneMap = {
         restricted_area: { off: 'rank_ra_off_freq', def: 'rank_ra_ppp_allowed' },
         paint_non_ra: { off: 'rank_paint_off_freq', def: 'rank_paint_ppp_allowed' },
@@ -410,12 +438,10 @@ function recalculateForensicsForDateRange(sDate, eDate) {
             });
         }
     });
-
     currentPlayerProfiles = (allPlayerProfiles || []).map(p => {
         const pCopy = { ...p };
         const logs = p.all_logs || [];
         const matchingLogs = logs.filter(lg => lg.d >= sDate && lg.d <= eDate);
-
         if (matchingLogs.length === 0) {
             pCopy.games_played = 0;
             pCopy.is_small_sample = false;
@@ -436,7 +462,6 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 fg3a: avg(matchingLogs.map(l => l.fg3a)), fg3m: avg(matchingLogs.map(l => l.fg3m)),
                 paint_pts: avg(matchingLogs.map(l => l.paint_pts || 0))
             };
-
             const last10 = matchingLogs.slice(0, 10);
             const calcPctile = (arr, q) => {
                 if (!arr.length) return null;
@@ -449,11 +474,9 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 }
                 return s[base].toFixed(1);
             };
-
             const l10Pts = last10.map(l => l.pts);
             const l10Reb = last10.map(l => l.reb);
             const l10Ast = last10.map(l => l.ast);
-
             pCopy.distribution_10g = {
                 pts: { floor: calcPctile(l10Pts, 0.25), median: calcPctile(l10Pts, 0.50), ceiling: calcPctile(l10Pts, 0.75), logs: l10Pts },
                 reb: { floor: calcPctile(l10Reb, 0.25), median: calcPctile(l10Reb, 0.50), ceiling: calcPctile(l10Reb, 0.75), logs: l10Reb },
@@ -482,7 +505,6 @@ function reloadAllData() {
     if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
     safeCreateIcons();
 }
-
 let currentInsightsMatchup = null;
 
 function switchTab(tabId) {
@@ -494,20 +516,16 @@ function switchTab(tabId) {
     const btnProfiles = document.getElementById('tab-btn-profiles');
     const btnInsights = document.getElementById('tab-btn-insights');
     const btnPositional = document.getElementById('tab-btn-positional');
-
     const activeClass = 'py-2.5 px-1 border-b-2 border-cyan-400 text-slate-100 font-semibold text-xs flex items-center space-x-2 transition whitespace-nowrap';
     const inactiveClass = 'py-2.5 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center space-x-2 transition whitespace-nowrap';
-
     if (schedSection) schedSection.classList.toggle('hidden', tabId !== 'schedule');
     if (profileSection) profileSection.classList.toggle('hidden', tabId !== 'profiles');
     if (insightsSection) insightsSection.classList.toggle('hidden', tabId !== 'insights');
     if (positionalSection) positionalSection.classList.toggle('hidden', tabId !== 'positional');
-
     if (btnSched) btnSched.className = (tabId === 'schedule') ? activeClass : inactiveClass;
     if (btnProfiles) btnProfiles.className = (tabId === 'profiles') ? activeClass : inactiveClass;
     if (btnInsights) btnInsights.className = (tabId === 'insights') ? activeClass : inactiveClass;
     if (btnPositional) btnPositional.className = (tabId === 'positional') ? activeClass : inactiveClass;
-
     if (tabId === 'insights' && !currentInsightsMatchup) {
         loadInsightsTab();
     }
@@ -527,7 +545,7 @@ const STAT_CARD_METRICS = [
     { label: 'Threes Attempted (3PA)', key: 'fg3a_total', rankKey: 'rank_fg3a_total' }, { label: '3PA Allowed / G', key: 'fg3a_allowed', rankKey: 'rank_fg3a_allowed' },
     { label: 'FG% (Field Goal %)', key: 'fg_pct', rankKey: 'rank_fg_pct', isPct: true }, { label: 'FG% Allowed', key: 'fg_pct_opp', rankKey: 'rank_fg_pct_opp', isPct: true },
     { label: 'Pace (Poss/48m)', key: 'pace', rankKey: 'rank_pace' }, { label: 'Offensive Rating', key: 'off_rtg', rankKey: 'rank_off_rtg' }, { label: 'Defensive Rating', key: 'def_rtg', rankKey: 'rank_def_rtg' },
-    ...SIGNIFICANT_POS_KEYS.map(k => ({ label: POS_METRIC_LABELS[k], key: k, rankKey: 'rank_' + k }))
+    ...SIGNIFICANT_POS_KEYS.map(k => ({ label: POS_METRIC_LABELS[k], key: k, rankKey: 'rank_' + k, posKey: k }))
 ];
 
 function renderFunnelZone(label, aGen, hAllow, aTeam, hTeam) {
@@ -562,20 +580,17 @@ function renderGameCardHtml(g) {
     const isFinal = g.is_final;
     const aTeam = g.away_team;
     const hTeam = g.home_team;
-
     const aSampleCount = a.gp || 0;
     const aSampleClass = 'text-slate-400';
     const aSampleLabel = `[n=${aSampleCount} games]`;
     const hSampleCount = h.gp || 0;
     const hSampleClass = 'text-slate-400';
     const hSampleLabel = `[n=${hSampleCount} games]`;
-
     const aInjuryBadge = renderInjuryBadge(a.injuries || allForensicTeams[aTeam]?.injuries || []);
     const hInjuryBadge = renderInjuryBadge(h.injuries || allForensicTeams[hTeam]?.injuries || []);
     const statusBadge = isFinal
         ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>FINAL</span></span>`
         : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#21262d] text-slate-400 border border-[#30363d]">SCHEDULED</span>`;
-
     const hasDataA = a.gp > 0 && a.pts_scored != null;
     const hasDataH = h.gp > 0 && h.pts_scored != null;
     const aRim = (hasDataA && a.shot_profile_offense?.restricted_area?.freq != null) ? a.shot_profile_offense.restricted_area.freq : null;
@@ -585,7 +600,6 @@ function renderGameCardHtml(g) {
     const a3pt = (hasDataA && a.three_point_rate != null) ? a.three_point_rate : null;
     const h3ptDef = (hasDataH && h.shot_profile_allowed?.above_break_3?.freq != null) ? ((h.shot_profile_allowed?.corner_3?.freq || 9.5) + (h.shot_profile_allowed?.above_break_3?.freq || 29.5)).toFixed(1) : null;
     const estPace = (hasDataA && hasDataH && a.pace && h.pace) ? ((parseFloat(a.pace) + parseFloat(h.pace)) / 2).toFixed(1) : '--';
-
     return `
         <div class="glass-panel rounded-xl p-4 sm:p-5 border border-[#30363d] space-y-3.5 hover:border-slate-500 transition shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#30363d] pb-2.5">
@@ -604,7 +618,6 @@ function renderGameCardHtml(g) {
                     </button>
                 </div>
             </div>
-
             <div onclick="openMatchupInsights('${aTeam}', '${hTeam}')" class="grid grid-cols-12 items-center py-1.5 gap-2 cursor-pointer hover:bg-[#21262d]/40 rounded-lg px-1 transition" title="Click to view Matchup Insights for ${aTeam} @ ${hTeam}">
                 <div class="col-span-5 flex items-center space-x-2.5 min-w-0">
                     <div class="w-10 h-10 rounded-xl bg-[#21262d] border border-[#30363d] flex items-center justify-center p-1.5 shadow-inner shrink-0 relative overflow-hidden">
@@ -621,7 +634,6 @@ function renderGameCardHtml(g) {
                         </div>
                     </div>
                 </div>
-
                 <div class="col-span-2 text-center flex flex-col items-center justify-center">
                     ${isFinal && g.away_score != null && g.home_score != null ? `
                         <div class="flex items-center justify-center space-x-1 font-mono font-extrabold text-base sm:text-lg text-slate-100">
@@ -636,7 +648,6 @@ function renderGameCardHtml(g) {
                         </div>
                     `}
                 </div>
-
                 <div class="col-span-5 flex items-center justify-end space-x-2.5 text-right min-w-0">
                     <div class="min-w-0 flex-1">
                         <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.home_team_name}</h4>
@@ -653,7 +664,6 @@ function renderGameCardHtml(g) {
                     </div>
                 </div>
             </div>
-
             <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-2.5 sm:p-3 space-y-0.5">
                 <div class="grid grid-cols-3 text-[10px] uppercase font-bold text-slate-500 border-b border-[#21262d] pb-1.5 px-2">
                     <div class="text-left font-mono">${aTeam} STAT & RANK</div>
@@ -673,14 +683,12 @@ function renderGameCardHtml(g) {
                     </div>
                     <div class="text-right font-mono">${hTeam} STAT & RANK</div>
                 </div>
-
                 ${STAT_CARD_METRICS.map(m => {
                     const aVal = a[m.key] != null ? (m.isPct ? a[m.key] + '%' : a[m.key]) : null;
                     const hVal = h[m.key] != null ? (m.isPct ? h[m.key] + '%' : h[m.key]) : null;
-                    return formatStatRow(m.label, aVal, a[m.rankKey], hVal, h[m.rankKey]);
+                    return formatStatRow(m.label, aVal, a[m.rankKey], hVal, h[m.rankKey], m.posKey, aTeam, hTeam);
                 }).join('')}
             </div>
-
             ${(!hasDataA || !hasDataH) ? `
             <div class="bg-[#12161c] rounded-xl border border-[#30363d] p-3 text-center space-y-1">
                 <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-[#21262d] pb-1.5 px-1">
@@ -717,18 +725,14 @@ function renderGameCardHtml(g) {
 function renderScheduleGames() {
     const container = document.getElementById('schedule-games-container');
     if (!container) return;
-
     // Strict 2026-27 Season Schedule Filter
     let games = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
-
     if (selectedScheduleDate && selectedScheduleDate !== 'all') {
         games = games.filter(g => g.gameday === selectedScheduleDate);
     }
-
     if (currentScheduleTeam && currentScheduleTeam !== 'ALL') {
         games = games.filter(g => g.away_team === currentScheduleTeam || g.home_team === currentScheduleTeam);
     }
-
     if (scheduleSearchQuery) {
         const q = scheduleSearchQuery.toLowerCase().trim();
         games = games.filter(g =>
@@ -738,13 +742,10 @@ function renderScheduleGames() {
             (g.home_team_name && g.home_team_name.toLowerCase().includes(q))
         );
     }
-
     const countEl = document.getElementById('sched-stat-total-games');
     if (countEl) countEl.textContent = games.length;
-
     const compEl = document.getElementById('sched-stat-completed-games');
     if (compEl) compEl.textContent = games.filter(g => g.is_final).length;
-
     if (games.length === 0) {
         container.innerHTML = `
             <div class="glass-panel rounded-xl p-12 text-center text-slate-400 space-y-2 border border-[#30363d]">
@@ -756,32 +757,26 @@ function renderScheduleGames() {
     } else {
         container.innerHTML = games.slice(0, 30).map(renderGameCardHtml).join('');
     }
-
     safeCreateIcons(container);
 }
 
 function renderScheduleDatePills() {
     const container = document.getElementById('schedule-date-pills');
     if (!container) return;
-
     const seasonGames = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
-
     const dateCounts = {};
     seasonGames.forEach(g => {
         const d = g.gameday;
         dateCounts[d] = (dateCounts[d] || 0) + 1;
     });
-
     // Chronological order: Opening Night 2026-10-20 first, then upcoming dates
     const sortedDates = Object.keys(dateCounts).sort();
     const isAll = selectedScheduleDate === 'all';
-
     let html = `
         <button onclick="filterScheduleDate('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
             All Dates (${sortedDates.length})
         </button>
     `;
-
     sortedDates.forEach(d => {
         const isActive = selectedScheduleDate === d;
         html += `
@@ -790,7 +785,6 @@ function renderScheduleDatePills() {
             </button>
         `;
     });
-
     container.innerHTML = html;
 }
 
@@ -830,7 +824,6 @@ function onScheduleSearch(query) {
     scheduleSearchQuery = query || '';
     renderScheduleGames();
 }
-
 async function compareCustomMatchup() {
     const away = document.getElementById('lab-away-select')?.value;
     const home = document.getElementById('lab-home-select')?.value;
@@ -869,17 +862,14 @@ function loadInsightsTab() {
 function populateInsightsMatchupDropdown(selectedAway = null, selectedHome = null) {
     const selectEl = document.getElementById('insights-matchup-select');
     if (!selectEl) return;
-
     let games = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
     if (selectedScheduleDate && selectedScheduleDate !== 'all') {
         const dateFiltered = games.filter(g => g.gameday === selectedScheduleDate);
         if (dateFiltered.length > 0) games = dateFiltered;
     }
-
     if (games.length === 0) {
         games = allScheduleGames.slice(0, 30);
     }
-
     if (selectedAway && selectedHome) {
         const aU = selectedAway.toUpperCase();
         const hU = selectedHome.toUpperCase();
@@ -893,18 +883,15 @@ function populateInsightsMatchupDropdown(selectedAway = null, selectedHome = nul
             });
         }
     }
-
     const currentVal = selectEl.value;
     let targetKey = (selectedAway && selectedHome) ? `${selectedAway.toUpperCase()}_${selectedHome.toUpperCase()}` : currentVal;
     let optionsHtml = '';
-
     games.forEach((g, idx) => {
         const key = `${g.away_team}_${g.home_team}`;
         const label = `${g.gameday ? g.gameday + ': ' : ''}${g.away_team} @ ${g.home_team}${g.gametime ? ' (' + g.gametime + ')' : ''}`;
         if (idx === 0 && !targetKey) targetKey = key;
         optionsHtml += `<option value="${key}">${label}</option>`;
     });
-
     selectEl.innerHTML = optionsHtml;
     if (targetKey) {
         selectEl.value = targetKey;
@@ -938,7 +925,6 @@ function loadMatchupInsights(awayTeam, homeTeam) {
     const h = currentForensicTeams[hTeam] || allForensicTeams[hTeam] || {};
     const aPlayers = (currentPlayerProfiles?.length ? currentPlayerProfiles : allPlayerProfiles).filter(p => p.team === aTeam);
     const hPlayers = (currentPlayerProfiles?.length ? currentPlayerProfiles : allPlayerProfiles).filter(p => p.team === hTeam);
-
     let g = allScheduleGames.find(x => (x.away_team === aTeam && x.home_team === hTeam) || (x.away_team === hTeam && x.home_team === aTeam));
     const baseG = g || {
         game_id: `NBA_${aTeam}_${hTeam}`, gameday: '2026-10-20', gametime: '7:30 PM ET',
@@ -949,21 +935,18 @@ function loadMatchupInsights(awayTeam, homeTeam) {
     container.innerHTML = generateDeepDiveModalHtml({ ...baseG, away_forensic: a, home_forensic: h, away_players: aPlayers, home_players: hPlayers });
     safeCreateIcons(container);
 }
-
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     const startInput = document.getElementById('input-start-date');
     const endInput = document.getElementById('input-end-date');
     if (startInput) startInput.value = startDate;
     if (endInput) endInput.value = endDate;
-
     recalculateForensicsForDateRange(startDate, endDate);
     renderScheduleDatePills();
     renderScheduleGames();
     if (typeof renderProfileDateChips === 'function') renderProfileDateChips();
     if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
     safeCreateIcons();
-
     const initAway = APP_DATA.initialAway;
     const initHome = APP_DATA.initialHome;
     if (initAway && initHome) {

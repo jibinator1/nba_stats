@@ -507,6 +507,29 @@ def run_audit():
     print(f"  Max Team Log Date: {max_d_team} | Max Player Log Date: {max_d_player}")
     print("  [PASS] Confirmed 100% exclusion of playoff and postseason games from team logs, player profiles, and streaks.")
 
+    # 15. Verify Opponent Matchup Differential Mode, Positional +/- Deltas & Script Cache Busting
+    print("\n[15/15] Testing Opponent Matchup Differential Toggle, Positional +/- Deltas & Cache Busting...")
+    with open(os.path.join(base_dir, 'templates', 'index.html'), 'r', encoding='utf-8') as f:
+        index_html = f.read()
+    assert 'positionMatchupDeltas:' in index_html, "Missing positionMatchupDeltas in index.html APP_DATA"
+    assert 'toggle-matchup-mode-overall' in index_html, "Missing toggle-matchup-mode-overall button in index.html"
+    assert 'toggle-matchup-mode-diff' in index_html, "Missing toggle-matchup-mode-diff button in index.html"
+    assert "filename='js/app.js') }}?v=" in index_html, "Missing cache-busting query param ?v= on app.js script tag"
+    assert "filename='js/modal.js') }}?v=" in index_html, "Missing cache-busting query param ?v= on modal.js script tag"
+
+    with open(os.path.join(base_dir, 'static', 'js', 'app.js'), 'r', encoding='utf-8') as f:
+        app_js = f.read()
+    assert 'setMatchupEvaluationMode' in app_js, "Missing setMatchupEvaluationMode in app.js"
+    assert 'opponent_diff' in app_js, "Missing opponent_diff mode handler in app.js"
+
+    with open(os.path.join(base_dir, 'static', 'js', 'modal.js'), 'r', encoding='utf-8') as f:
+        modal_js = f.read()
+    assert 'modal-matchup-toggle-opponent' in modal_js, "Missing modal-matchup-toggle-opponent in modal.js"
+    assert 'positionMatchupDeltas' in modal_js, "Missing positionMatchupDeltas lookup in modal.js"
+    assert 'Matchup PTS' in modal_js, "Missing Matchup PTS label in modal.js"
+    assert 'Matchup REB' in modal_js, "Missing Matchup REB label in modal.js"
+    print("  [PASS] Opponent Matchup Differential Mode toggle, positional +/- deltas, and cache-busting verified.")
+
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
     print("=" * 60)

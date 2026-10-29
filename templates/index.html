@@ -204,6 +204,17 @@
                         </span>
                     </div>
 
+                    <!-- Evaluation Mode Toggle Button Group -->
+                    <div class="flex items-center bg-[#161b22] border border-[#30363d] rounded-lg p-1 text-xs font-mono shadow-sm">
+                        <span class="text-slate-400 font-semibold px-2 text-[11px] hidden sm:inline">Evaluation View:</span>
+                        <button id="toggle-matchup-mode-overall" onclick="setMatchupEvaluationMode('overall')" class="px-3 py-1 rounded text-[11px] font-bold transition flex items-center space-x-1.5 bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 shadow-inner" title="View standard overall season per-game baselines and rankings">
+                            <span>📊 Overall Season Avg</span>
+                        </button>
+                        <button id="toggle-matchup-mode-diff" onclick="setMatchupEvaluationMode('opponent_diff')" class="px-3 py-1 rounded text-[11px] font-bold transition flex items-center space-x-1.5 text-slate-400 hover:text-slate-200" title="Compare player output to opponent defense allowances (+/- differential & consistency)">
+                            <span>⚡ Opponent Matchup +/-</span>
+                        </button>
+                    </div>
+
                     <div class="text-[11px] text-slate-400 flex items-center space-x-2">
                         <span>Rank tiers:</span>
                         <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-mono">#1-#10 (Lowest Allowed / Top Containment)</span>
@@ -628,6 +639,7 @@
             allForensicTeams: {{ forensic_teams | tojson }},
             allPlayerProfiles: {{ player_profiles | tojson }},
             allTeamGameLogs: {{ (team_game_logs if team_game_logs is defined else []) | tojson }},
+            positionMatchupDeltas: {{ (position_matchup_deltas if position_matchup_deltas is defined else {}) | tojson }},
             teamNamesMap: {{ team_names | tojson }},
             startDate: '{{ start_date }}' || '2025-10-02',
             endDate: '{{ end_date }}',
@@ -636,11 +648,11 @@
         };
         window.NBA_TEAM_NAMES = {{ team_names | tojson }};
     </script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/visuals.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/profiles.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/positional.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
+    <script src="{{ url_for('static', filename='js/visuals.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
+    <script src="{{ url_for('static', filename='js/profiles.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
+    <script src="{{ url_for('static', filename='js/positional.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
     {% if page_type == 'positional' %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
