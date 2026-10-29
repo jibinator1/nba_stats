@@ -10465,7 +10465,7 @@
       "frequency": 15.0
     },
     "games_played": 6,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 8.0,
       "reb": 5.2,
@@ -10474,9 +10474,9 @@
       "fg3a": 3.2,
       "fg3m": 1.0,
       "paint_pts": 2.9,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 118,
+      "reb_rank": 58,
+      "ast_rank": 110
     },
     "distribution_10g": {
       "pts": {
@@ -16105,7 +16105,7 @@
       "frequency": 27.4
     },
     "games_played": 5,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 20.8,
       "reb": 7.0,
@@ -16114,9 +16114,9 @@
       "fg3a": 7.2,
       "fg3m": 1.6,
       "paint_pts": 9.3,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 38,
+      "reb_rank": 28,
+      "ast_rank": 98
     },
     "distribution_10g": {
       "pts": {
@@ -36778,7 +36778,7 @@
       "frequency": 23.0
     },
     "games_played": 5,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 22.6,
       "reb": 9.2,
@@ -36787,9 +36787,9 @@
       "fg3a": 6.2,
       "fg3m": 2.2,
       "paint_pts": 9.3,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 25,
+      "reb_rank": 14,
+      "ast_rank": 52
     },
     "distribution_10g": {
       "pts": {
@@ -45493,7 +45493,7 @@
       "frequency": 37.8
     },
     "games_played": 4,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 21.8,
       "reb": 4.5,
@@ -45502,9 +45502,9 @@
       "fg3a": 6.8,
       "fg3m": 2.5,
       "paint_pts": 8.3,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 28,
+      "reb_rank": 78,
+      "ast_rank": 3
     },
     "distribution_10g": {
       "pts": {
@@ -55081,7 +55081,7 @@
       "frequency": 30.2
     },
     "games_played": 6,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 10.0,
       "reb": 3.5,
@@ -55090,9 +55090,9 @@
       "fg3a": 5.2,
       "fg3m": 1.5,
       "paint_pts": 3.2,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 113,
+      "reb_rank": 104,
+      "ast_rank": 118
     },
     "distribution_10g": {
       "pts": {
@@ -55241,7 +55241,7 @@
       "frequency": 31.2
     },
     "games_played": 4,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 14.8,
       "reb": 10.5,
@@ -55250,9 +55250,9 @@
       "fg3a": 6.8,
       "fg3m": 1.8,
       "paint_pts": 5.5,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 89,
+      "reb_rank": 6,
+      "ast_rank": 41
     },
     "distribution_10g": {
       "pts": {
@@ -55367,7 +55367,7 @@
       "frequency": 31.7
     },
     "games_played": 7,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 10.4,
       "reb": 5.4,
@@ -55376,9 +55376,9 @@
       "fg3a": 7.6,
       "fg3m": 2.1,
       "paint_pts": 2.3,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 112,
+      "reb_rank": 49,
+      "ast_rank": 87
     },
     "distribution_10g": {
       "pts": {
@@ -55544,7 +55544,7 @@
       "frequency": 45.2
     },
     "games_played": 6,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 16.3,
       "reb": 4.0,
@@ -55553,9 +55553,9 @@
       "fg3a": 10.0,
       "fg3m": 3.2,
       "paint_pts": 4.0,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 77,
+      "reb_rank": 90,
+      "ast_rank": 117
     },
     "distribution_10g": {
       "pts": {
@@ -62228,7 +62228,7 @@
       "frequency": 31.2
     },
     "games_played": 3,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 21.7,
       "reb": 4.3,
@@ -62237,9 +62237,9 @@
       "fg3a": 9.3,
       "fg3m": 4.0,
       "paint_pts": 5.6,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 29,
+      "reb_rank": 83,
+      "ast_rank": 52
     },
     "distribution_10g": {
       "pts": {
@@ -96821,7 +96821,7 @@
       "frequency": 36.3
     },
     "games_played": 4,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 21.5,
       "reb": 2.8,
@@ -96830,9 +96830,9 @@
       "fg3a": 8.5,
       "fg3m": 1.8,
       "paint_pts": 9.4,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 31,
+      "reb_rank": 114,
+      "ast_rank": 41
     },
     "distribution_10g": {
       "pts": {
@@ -107999,7 +107999,7 @@
       "frequency": 15.0
     },
     "games_played": 5,
-    "is_small_sample": true,
+    "is_small_sample": false,
     "season_avg": {
       "pts": 5.2,
       "reb": 8.4,
@@ -108008,9 +108008,9 @@
       "fg3a": 2.6,
       "fg3m": 0.2,
       "paint_pts": 2.7,
-      "pts_rank": "Small Sample",
-      "reb_rank": "Small Sample",
-      "ast_rank": "Small Sample"
+      "pts_rank": 120,
+      "reb_rank": 19,
+      "ast_rank": 83
     },
     "distribution_10g": {
       "pts": {

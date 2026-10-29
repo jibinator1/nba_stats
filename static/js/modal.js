@@ -156,15 +156,12 @@ window.FORENSIC_DEFINITIONS = FORENSIC_DEFINITIONS;
 window.formatMetricLabelWithTooltip = formatMetricLabelWithTooltip;
 window.formatInlinePpp = formatInlinePpp;
 
-// Canonical Pillar Row Formatter: outputs "Value (#Rank of 30)" or "Value [Small Sample]"
+// Canonical Pillar Row Formatter: outputs "Value (#Rank of 30)"
 function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
-    const formatTeamMetric = (val, rank, isSmall) => {
+    const formatTeamMetric = (val, rank) => {
         if (val == null || val === '' || val === '--') return '<span class="text-slate-500 font-normal">--</span>';
         const formattedVal = formatInlinePpp(val);
-        if (isSmall || rank === 'Small Sample') {
-            return `<span class="text-slate-200 font-bold">${formattedVal}</span> <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">[Small Sample]</span>`;
-        }
-        if (rank != null && rank !== '') {
+        if (rank != null && rank !== '' && rank !== 'Small Sample') {
             const r = parseInt(rank, 10);
             if (!isNaN(r)) {
                 let style = 'bg-[#21262d] text-slate-300 border border-[#30363d]';
@@ -176,8 +173,8 @@ function formatPillarRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
         return `<span class="text-slate-200 font-bold">${formattedVal}</span>`;
     };
 
-    const aFormatted = formatTeamMetric(aVal, aRank, isSmallA);
-    const hFormatted = formatTeamMetric(hVal, hRank, isSmallH);
+    const aFormatted = formatTeamMetric(aVal, aRank);
+    const hFormatted = formatTeamMetric(hVal, hRank);
 
     return `
         <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition font-mono">
@@ -210,9 +207,8 @@ function renderForensicExecutiveCallouts(a, h, aTeam, hTeam, aPlayers, hPlayers)
         `;
     }
 
-    const formatCalloutRank = (r, isSmall) => {
-        if (isSmall || r === 'Small Sample') return '[Small Sample]';
-        if (r != null && r !== '') return `#${r}`;
+    const formatCalloutRank = (r) => {
+        if (r != null && r !== '' && r !== 'Small Sample') return `#${r}`;
         return '--';
     };
 
@@ -359,9 +355,9 @@ function generateDeepDiveModalHtml(g) {
                         const ctx = p.context_stats || {};
                         const sit = p.situational || {};
 
-                        const ptsRankStr = (sAvg.pts != null && sAvg.pts_rank != null) ? (sAvg.pts_rank === 'Small Sample' ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.pts_rank})</span>`) : '';
-                        const rebRankStr = (sAvg.reb != null && sAvg.reb_rank != null) ? (sAvg.reb_rank === 'Small Sample' ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.reb_rank})</span>`) : '';
-                        const astRankStr = (sAvg.ast != null && sAvg.ast_rank != null) ? (sAvg.ast_rank === 'Small Sample' ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.ast_rank})</span>`) : '';
+                        const ptsRankStr = (sAvg.pts != null && sAvg.pts_rank != null && sAvg.pts_rank !== 'Small Sample') ? `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.pts_rank})</span>` : '';
+                        const rebRankStr = (sAvg.reb != null && sAvg.reb_rank != null && sAvg.reb_rank !== 'Small Sample') ? `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.reb_rank})</span>` : '';
+                        const astRankStr = (sAvg.ast != null && sAvg.ast_rank != null && sAvg.ast_rank !== 'Small Sample') ? `<span class="text-cyan-400 font-normal text-[9.5px]">(#${sAvg.ast_rank})</span>` : '';
 
                         const flr = parseFloat(dist.floor) || 0;
                         const med = parseFloat(dist.median) || 0;
@@ -385,7 +381,7 @@ function generateDeepDiveModalHtml(g) {
                                             <span>${roleName} (${roleFreq}%)</span>
                                             <span class="stat-info-box">${FORENSIC_DEFINITIONS[roleName] || 'Functional offensive play type archetype.'}</span>
                                         </span>
-                                        ${p.is_small_sample ? '<span class="text-[9px] text-amber-400">[Small Sample]</span>' : ''}
+
                                     </div>
                                     <span class="text-[11px] text-slate-400 shrink-0 font-mono">${sAvg.min != null ? sAvg.min + ' MPG' : '--'}</span>
                                 </div>
@@ -444,7 +440,7 @@ function generateDeepDiveModalHtml(g) {
                             <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
                             <span>${teamCode} Positional Allowances</span>
                         </div>
-                        ${isSmall ? '<span class="text-[9px] text-amber-400 font-normal">[Small Sample]</span>' : ''}
+
                     </div>
                     <div class="space-y-2.5 font-mono">
                         ${stats.map(s => {
@@ -458,8 +454,7 @@ function generateDeepDiveModalHtml(g) {
                             const bPct = row.bigs_pct != null ? row.bigs_pct : 33.4;
 
                             const formatRank = (r) => {
-                                if (isSmall || r === 'Small Sample') return '<span class="text-slate-500 font-normal">[Small Sample]</span>';
-                                if (r != null && r !== '') return `<span class="text-slate-400 font-normal">(#${r})</span>`;
+                                if (r != null && r !== '' && r !== 'Small Sample') return `<span class="text-slate-400 font-normal">(#${r})</span>`;
                                 return '';
                             };
 
@@ -524,9 +519,8 @@ function generateDeepDiveModalHtml(g) {
             { key: 'PnR_Roll_Man', label: 'Roll Man / Rim Runner', offKey: 'PnR_Roll_Man', offRank: null, defRank: 'rank_pnr_rm_allowed_ppp' }
         ];
 
-        const formatRank = (r, isSmall) => {
-            if (isSmall || r === 'Small Sample') return '[Small Sample]';
-            if (r != null && r !== '') return `#${r}`;
+        const formatRank = (r) => {
+            if (r != null && r !== '' && r !== 'Small Sample') return `#${r}`;
             return '--';
         };
 

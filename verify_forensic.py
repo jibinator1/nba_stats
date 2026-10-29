@@ -186,7 +186,7 @@ def run_audit():
     assert 'DREB%' in app_js_text, "Missing DREB% in app.js"
     assert 'rank-tooltip' in app_js_text, "Missing rank-tooltip in app.js"
     assert 'rank-badge' in app_js_text, "Missing rank-badge in app.js"
-    assert 'Small Sample: n=' in app_js_text, "Missing Small Sample label formatting in app.js"
+    assert '[n=' in app_js_text and 'games]' in app_js_text, "Missing games count label formatting in app.js"
     assert 'renderInjuryBadge' in app_js_text, "Missing renderInjuryBadge in app.js"
     
     print(f"  BOS Metrics: TOV/G={sample_t['tov_total']} (#{sample_t['rank_tov_total']}) | Opp TOV/G={sample_t['tov_allowed']} (#{sample_t['rank_tov_allowed']}) | OREB%={sample_t['oreb_pct']}% (#{sample_t['rank_oreb_pct']}) | DREB%={sample_t['dreb_pct']}% (#{sample_t['rank_dreb_pct']})")
@@ -348,9 +348,13 @@ def run_audit():
     # 12. Verify Universal League Baseline Rankings & Thermonuclear Code Compliance (<1,000 Lines)
     print("\n[12/13] Testing Universal League Baseline Rankings & Thermonuclear Line Count Compliance (<1,000 Lines)...")
     for tm, prof in f_teams.items():
-        if prof.get('gp', 0) > 0 and not prof.get('is_small_sample'):
+        if prof.get('gp', 0) > 0:
             for rk in ['rank_neutral_pace', 'rank_transition_freq', 'rank_early_0_8', 'rank_pnr_drop', 'rank_ra_ppp_allowed', 'rank_pnr_bh_freq', 'rank_live_tov']:
-                assert prof.get(rk) is not None, f"Team {tm} missing rank for {rk}"
+                assert prof.get(rk) is not None and prof.get(rk) != 'Small Sample', f"Team {tm} missing rank for {rk}"
+    for p in players:
+        if p.get('games_played', 0) > 0:
+            for rk in ['pts_rank', 'reb_rank', 'ast_rank']:
+                assert p.get('season_avg', {}).get(rk) is not None and p.get('season_avg', {}).get(rk) != 'Small Sample', f"Player {p.get('player_name')} missing numeric rank for {rk}"
 
     # Thermonuclear <1000 lines check across all codebase files
     base_dir = os.path.dirname(__file__)

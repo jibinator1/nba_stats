@@ -9,7 +9,7 @@ A strictly descriptive, play-by-play, and tracking-backed NBA matchup analytics 
 ## Forensic Philosophy
 
 * **No Predictions / No Betting Language:** The engine does not emit projections, subjective labels, or recommendations.
-* **Sample Size Gating:** Teams or players with under 10 games or under 200 possessions are explicitly flagged with `[Small Sample]` and excluded from categorical tier rankings.
+* **Universal Rankings:** All teams and players with recorded game data are explicitly ranked across all metrics, shot zones, and play types regardless of sample size.
 * **Date Range Gating:** All metrics and distributions dynamically adapt to selected date windows. Matches with zero completed games in a chosen window cleanly render unskewed blank states.
 * **Euclidean Analogs:** Similar-opponent defense matching uses normalized Euclidean feature distance ($\le 1.50\sigma$) across Pace, 3PT attempt rate, Paint attempt rate, and PnR Switch rate.
 

@@ -127,12 +127,9 @@ SIGNIFICANT_POS_KEYS.forEach(k => {
     STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
 });
 
-// Rank Badge Formatter with Sample Size Gating & Hover Tooltip
-function formatRankBadge(rank, isSmallSample) {
-    if (rank == null || rank === '') return '';
-    if (isSmallSample || rank === 'Small Sample') {
-        return `<span class="rank-badge inline-flex items-center" title="Small Sample (&lt;10 Games)"><span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-medium bg-[#21262d] text-slate-400 border border-[#30363d]">Small Sample</span><span class="rank-tooltip">Small Sample (&lt;10 Games)</span></span>`;
-    }
+// Rank Badge Formatter with Hover Tooltip
+function formatRankBadge(rank) {
+    if (rank == null || rank === '' || rank === 'Small Sample') return '';
     const r = parseInt(rank, 10);
     if (isNaN(r)) return '';
     const style = r <= 10 ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-semibold' : (r >= 21 ? 'bg-amber-950/40 text-amber-300 border border-amber-800/60 font-semibold' : 'bg-[#21262d] text-slate-300 border border-[#30363d]');
@@ -141,11 +138,11 @@ function formatRankBadge(rank, isSmallSample) {
 }
 
 // Canonical Unified Stat Row Formatter (replaces duplicate formatRow and formatPillarRow)
-function formatStatRow(label, aVal, aRank, hVal, hRank, isSmallA, isSmallH) {
+function formatStatRow(label, aVal, aRank, hVal, hRank) {
     const exp = STAT_EXPLANATIONS[label] || '';
     const def = (window.FORENSIC_DEFINITIONS && window.FORENSIC_DEFINITIONS[label]) ? window.FORENSIC_DEFINITIONS[label] : null;
-    const aBadge = (aVal != null) ? formatRankBadge(aRank, isSmallA) : '';
-    const hBadge = (hVal != null) ? formatRankBadge(hRank, isSmallH) : '';
+    const aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
+    const hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
 
     let tooltipBody = '';
     if (def && typeof def === 'object') {
@@ -183,7 +180,7 @@ function createEmptyTeamProfile(t) {
     const zObj = () => Object.fromEntries(zones.map(z => [z, { freq: null, ppp: null, rank: null }]));
     const emptyPos = { guards: null, wings: null, bigs: null, guards_pct: null, wings_pct: null, bigs_pct: null };
     return {
-        team: t, team_name: teamNamesMap[t] || t, gp: 0, is_small_sample: true,
+        team: t, team_name: teamNamesMap[t] || t, gp: 0, is_small_sample: false,
         injuries: (allForensicTeams[t]?.injuries) || [],
         pace: null, neutral_pace: null, transition_freq: null, transition_ppp_allowed: null,
         shot_clock: { early_0_8: null, mid_8_15: null, late_15_24: null },
@@ -260,7 +257,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 team: t,
                 team_name: teamNamesMap[t] || t,
                 gp: gp,
-                is_small_sample: (gp < 10) || (totPoss < 200),
+                is_small_sample: false,
                 injuries: (baseProf.injuries) || [],
                 pace: pace.toFixed(1),
                 neutral_pace: (pace - 1.2).toFixed(1),
@@ -377,7 +374,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         tuples.forEach((item, idx) => {
             rankedTeams.add(item.team);
             if (idx > 0 && item.val !== tuples[idx - 1].val) r = idx + 1;
-            currentForensicTeams[item.team][rKey] = currentForensicTeams[item.team].is_small_sample ? 'Small Sample' : r;
+            currentForensicTeams[item.team][rKey] = r;
         });
 
         allTeams.forEach(t => { if (!rankedTeams.has(t)) currentForensicTeams[t][rKey] = null; });
@@ -421,7 +418,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
 
         if (matchingLogs.length === 0) {
             pCopy.games_played = 0;
-            pCopy.is_small_sample = true;
+            pCopy.is_small_sample = false;
             pCopy.season_avg = { pts: null, reb: null, ast: null, min: null, fg3a: null, fg3m: null, paint_pts: null };
             pCopy.distribution_10g = {
                 pts: { floor: null, median: null, ceiling: null, logs: [] },
@@ -431,7 +428,7 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         } else {
             const pGp = matchingLogs.length;
             pCopy.games_played = pGp;
-            pCopy.is_small_sample = pGp < 10;
+            pCopy.is_small_sample = false;
             const avg = arr => (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
             pCopy.season_avg = {
                 pts: avg(matchingLogs.map(l => l.pts)), reb: avg(matchingLogs.map(l => l.reb)),
@@ -567,13 +564,11 @@ function renderGameCardHtml(g) {
     const hTeam = g.home_team;
 
     const aSampleCount = a.gp || 0;
-    const aIsSmall = aSampleCount < 10;
-    const aSampleClass = aIsSmall ? 'text-amber-400 font-semibold' : 'text-slate-400';
-    const aSampleLabel = aIsSmall ? `[Small Sample: n=${aSampleCount}]` : `[n=${aSampleCount} games]`;
+    const aSampleClass = 'text-slate-400';
+    const aSampleLabel = `[n=${aSampleCount} games]`;
     const hSampleCount = h.gp || 0;
-    const hIsSmall = hSampleCount < 10;
-    const hSampleClass = hIsSmall ? 'text-amber-400 font-semibold' : 'text-slate-400';
-    const hSampleLabel = hIsSmall ? `[Small Sample: n=${hSampleCount}]` : `[n=${hSampleCount} games]`;
+    const hSampleClass = 'text-slate-400';
+    const hSampleLabel = `[n=${hSampleCount} games]`;
 
     const aInjuryBadge = renderInjuryBadge(a.injuries || allForensicTeams[aTeam]?.injuries || []);
     const hInjuryBadge = renderInjuryBadge(h.injuries || allForensicTeams[hTeam]?.injuries || []);
@@ -622,7 +617,6 @@ function renderGameCardHtml(g) {
                             <span class="text-slate-300 font-semibold">${g.away_record || (a.gp > 0 ? `${a.gp} GP` : '--')}</span>
                             <span class="text-slate-600">•</span>
                             <span class="text-slate-500 font-medium">Away</span>
-                            <span class="${aSampleClass} text-[10px]">${aSampleLabel}</span>
                             ${aInjuryBadge}
                         </div>
                     </div>
@@ -648,7 +642,6 @@ function renderGameCardHtml(g) {
                         <h4 class="font-bold text-slate-100 text-xs sm:text-sm truncate">${g.home_team_name}</h4>
                         <div class="text-[11px] text-slate-400 flex items-center justify-end flex-wrap gap-x-1.5 mt-0.5 font-mono">
                             ${hInjuryBadge}
-                            <span class="${hSampleClass} text-[10px]">${hSampleLabel}</span>
                             <span class="text-slate-500 font-medium">Home</span>
                             <span class="text-slate-600">•</span>
                             <span class="text-slate-300 font-semibold">${g.home_record || (h.gp > 0 ? `${h.gp} GP` : '--')}</span>
@@ -684,7 +677,7 @@ function renderGameCardHtml(g) {
                 ${STAT_CARD_METRICS.map(m => {
                     const aVal = a[m.key] != null ? (m.isPct ? a[m.key] + '%' : a[m.key]) : null;
                     const hVal = h[m.key] != null ? (m.isPct ? h[m.key] + '%' : h[m.key]) : null;
-                    return formatStatRow(m.label, aVal, a[m.rankKey], hVal, h[m.rankKey], a.is_small_sample, h.is_small_sample);
+                    return formatStatRow(m.label, aVal, a[m.rankKey], hVal, h[m.rankKey]);
                 }).join('')}
             </div>
 

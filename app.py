@@ -254,7 +254,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
                 'team': t,
                 'team_name': NBA_TEAM_NAMES.get(t, t),
                 'gp': gp,
-                'is_small_sample': (gp < 10) or (tot_poss < 200),
+                'is_small_sample': False,
                 'injuries': injuries_by_team.get(t, []),
                 'pts_scored': round(tot_pts / gp, 1),
                 'pts_allowed': round(tot_pts_opp / gp, 1),
@@ -344,7 +344,7 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
             ranked.add(t)
             if idx > 0 and v != tuples[idx - 1][1]:
                 r = idx + 1
-            teams_dict[t][r_key] = 'Small Sample' if teams_dict[t].get('is_small_sample') else r
+            teams_dict[t][r_key] = r
         for t in NBA_TEAMS:
             if t not in ranked:
                 teams_dict[t][r_key] = None
@@ -443,7 +443,7 @@ def api_player_profiles():
             matching = [lg for lg in all_logs if s_date <= lg['d'] <= e_date]
             if not matching:
                 p_copy['games_played'] = 0
-                p_copy['is_small_sample'] = True
+                p_copy['is_small_sample'] = False
                 p_copy['season_avg'] = {'pts': None, 'reb': None, 'ast': None, 'min': None, 'fg3a': None, 'fg3m': None, 'paint_pts': None}
                 p_copy['distribution_10g'] = {
                     'pts': {'floor': None, 'median': None, 'ceiling': None, 'logs': []},
@@ -452,7 +452,7 @@ def api_player_profiles():
                 }
             else:
                 p_copy['games_played'] = len(matching)
-                p_copy['is_small_sample'] = len(matching) < 10
+                p_copy['is_small_sample'] = False
                 pts_list = [lg['pts'] for lg in matching]
                 reb_list = [lg['reb'] for lg in matching]
                 ast_list = [lg['ast'] for lg in matching]
@@ -496,10 +496,7 @@ def api_player_profiles():
                 if r_idx > 0 and v != tuples[r_idx - 1][1]:
                     rank = r_idx + 1
                 p = out_players[p_idx]
-                if p.get('is_small_sample'):
-                    p['season_avg'][r_key] = 'Small Sample'
-                else:
-                    p['season_avg'][r_key] = rank
+                p['season_avg'][r_key] = rank
 
         return jsonify({
             'total_players': len(out_players),

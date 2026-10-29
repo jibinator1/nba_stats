@@ -44,9 +44,8 @@ function renderShotZoneAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
     const aOff = awayForensic.shot_profile_offense || {};
     const hDef = homeForensic.shot_profile_allowed || {};
 
-    const formatRank = (r, isSmall) => {
-        if (isSmall || r === 'Small Sample') return '<span class="text-slate-500 font-mono text-[9px]">[Small Sample]</span>';
-        if (r != null && r !== '') return `<span class="text-slate-400 font-mono text-[9.5px]">(#${r} of 30)</span>`;
+    const formatRank = (r) => {
+        if (r != null && r !== '' && r !== 'Small Sample') return `<span class="text-slate-400 font-mono text-[9.5px]">(#${r} of 30)</span>`;
         return '';
     };
 
@@ -140,9 +139,8 @@ function renderPlayTypeAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTe
     const aPt = awayForensic.playtypes_offense || {};
     const hPt = homeForensic.playtypes_defense || {};
 
-    const formatRank = (r, isSmall) => {
-        if (isSmall || r === 'Small Sample') return '<span class="text-slate-500 font-mono text-[9px]">[Small Sample]</span>';
-        if (r != null && r !== '') return `<span class="text-slate-400 font-mono text-[9.5px]">(#${r} of 30)</span>`;
+    const formatRank = (r) => {
+        if (r != null && r !== '' && r !== 'Small Sample') return `<span class="text-slate-400 font-mono text-[9.5px]">(#${r} of 30)</span>`;
         return '';
     };
 
@@ -310,10 +308,10 @@ function renderPaceAlignmentSvg(awayForensic, homeForensic, awayTeam, homeTeam) 
             </div>
             <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${awayTeam} Pace: ${aPace}`) : `${awayTeam} Pace: ${aPace}`} ${awayForensic.is_small_sample ? '[Small Sample]' : (awayForensic.rank_pace ? `(#${awayForensic.rank_pace} of 30)` : '')}]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${awayTeam} Pace: ${aPace}`) : `${awayTeam} Pace: ${aPace}`} ${awayForensic.rank_pace ? `(#${awayForensic.rank_pace} of 30)` : ''}]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-[#21262d] border border-[#30363d] text-slate-300">
-                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${homeTeam} Pace: ${hPace}`) : `${homeTeam} Pace: ${hPace}`} ${homeForensic.is_small_sample ? '[Small Sample]' : (homeForensic.rank_pace ? `(#${homeForensic.rank_pace} of 30)` : '')}]
+                    [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Pace', `${homeTeam} Pace: ${hPace}`) : `${homeTeam} Pace: ${hPace}`} ${homeForensic.rank_pace ? `(#${homeForensic.rank_pace} of 30)` : ''}]
                 </span>
                 <span class="px-2 py-0.5 rounded bg-cyan-950/40 border border-cyan-800/60 text-cyan-300">
                     [${window.formatMetricLabelWithTooltip ? window.formatMetricLabelWithTooltip('Expected Game Tempo', `Expected Game Tempo: ${expPace} Poss/48m`) : `Expected Game Tempo: ${expPace} Poss/48m`}]

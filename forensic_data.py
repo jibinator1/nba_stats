@@ -118,7 +118,7 @@ def make_empty_team_profile(team):
         'team': team,
         'team_name': NBA_TEAM_NAMES.get(team, team),
         'gp': 0,
-        'is_small_sample': True,
+        'is_small_sample': False,
         'injuries': [],
         'pace': None, 'neutral_pace': None, 'transition_freq': None,
         'shot_clock': {'early_0_8': None, 'mid_8_15': None, 'late_15_24': None},
@@ -178,9 +178,9 @@ def calculate_team_forensics(logs_df, paired_df):
             team_profiles[team] = make_empty_team_profile(team)
             continue
 
-        # Sample size gating: < 10 games or < 200 possessions
+        # Sample size gating disabled: rank all teams directly
         total_poss = t_games['POSS'].sum()
-        is_small_sample = (gp < 10) or (total_poss < 200)
+        is_small_sample = False
         
         # Baseline pace
         base_pace = (total_poss / (gp * 48)) * 48 if gp > 0 else 100.0
@@ -533,10 +533,7 @@ def calculate_team_forensics(logs_df, paired_df):
             ranked_teams.add(t)
             if rank_idx > 0 and v != tuples[rank_idx - 1][1]:
                 rank = rank_idx + 1
-            if team_profiles[t].get('is_small_sample'):
-                team_profiles[t][rank_key] = 'Small Sample'
-            else:
-                team_profiles[t][rank_key] = rank
+            team_profiles[t][rank_key] = rank
         
         for t in NBA_TEAMS:
             if t not in ranked_teams:
@@ -735,7 +732,7 @@ def calculate_player_usage_profiles(logs_df):
             # Full logs across last 10 games for the player
             p_logs = logs_sorted[logs_sorted['PLAYER_NAME'] == p_name]
             gp = len(p_logs)
-            is_small_sample = gp < 10
+            is_small_sample = False
             
             # Last 10 games for distribution
             last10 = p_logs.head(10)
@@ -879,10 +876,7 @@ def calculate_player_usage_profiles(logs_df):
             if r_idx > 0 and v != tuples[r_idx - 1][1]:
                 rank = r_idx + 1
             p = player_profiles[p_idx]
-            if p.get('is_small_sample'):
-                p['season_avg'][r_key] = 'Small Sample'
-            else:
-                p['season_avg'][r_key] = rank
+            p['season_avg'][r_key] = rank
 
     return player_profiles
 
