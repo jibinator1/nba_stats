@@ -76,6 +76,8 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
     clean_logs = clean_logs[clean_logs['MIN_NUM'] >= min_minutes].copy()
 
     # Filter strictly to selected date range before computing any averages or deltas
+    if start_date and end_date and str(start_date) > str(end_date):
+        start_date, end_date = end_date, start_date
     if start_date or end_date:
         clean_logs['GAME_DATE_STR'] = clean_logs['GAME_DATE'].astype(str).str[:10]
         if start_date:

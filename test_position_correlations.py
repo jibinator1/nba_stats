@@ -190,6 +190,16 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertIn("rFmt.className", modal_js)
         self.assertIn("pFmt.className", modal_js)
 
+    def test_inverted_date_window_normalizes_cleanly(self):
+        # Inverted date window (end date earlier than start date)
+        res = self.client.get('/api/positional-correlations?start_date=2026-10-29&end_date=2026-10-20')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        meta = data.get('metadata', {})
+        self.assertEqual(meta.get('start_date'), '2026-10-20')
+        self.assertEqual(meta.get('end_date'), '2026-10-29')
+        self.assertGreater(len(data.get('position_matchup_deltas', {})), 0)
+
 
 if __name__ == '__main__':
     unittest.main()

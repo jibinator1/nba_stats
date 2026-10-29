@@ -533,6 +533,9 @@ function generateDeepDiveModalHtml(g) {
                             const gPct = row.guards_pct != null ? row.guards_pct : 33.3;
                             const wPct = row.wings_pct != null ? row.wings_pct : 33.3;
                             const bPct = row.bigs_pct != null ? row.bigs_pct : 33.4;
+                            const gRankStr = (row.guards_rank != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${row.guards_rank})</span> ` : '';
+                            const wRankStr = (row.wings_rank != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${row.wings_rank})</span> ` : '';
+                            const bRankStr = (row.bigs_rank != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${row.bigs_rank})</span> ` : '';
 
                             const gTitle = gD ? `${teamCode} allows ${gFmt.text} ${s.unit} vs Guards baseline average` : 'No data';
                             const wTitle = wD ? `${teamCode} allows ${wFmt.text} ${s.unit} vs Wings baseline average` : 'No data';
@@ -543,11 +546,11 @@ function generateDeepDiveModalHtml(g) {
                                     <div class="flex items-center justify-between text-[11px]">
                                         <span class="text-slate-300 font-bold uppercase tracking-tight">${formatMetricLabelWithTooltip(s.label)}</span>
                                         <div class="flex items-center gap-2 text-[10px]">
-                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Guards')}: <b class="${gFmt.className}" title="${gTitle}">${gFmt.text}</b></span>
+                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Guards')}: ${gRankStr}<b class="${gFmt.className}" title="${gTitle}">${gFmt.text}</b></span>
                                             <span class="text-slate-600">|</span>
-                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Wings')}: <b class="${wFmt.className}" title="${wTitle}">${wFmt.text}</b></span>
+                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Wings')}: ${wRankStr}<b class="${wFmt.className}" title="${wTitle}">${wFmt.text}</b></span>
                                             <span class="text-slate-600">|</span>
-                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Bigs')}: <b class="${bFmt.className}" title="${bTitle}">${bFmt.text}</b></span>
+                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Bigs')}: ${bRankStr}<b class="${bFmt.className}" title="${bTitle}">${bFmt.text}</b></span>
                                         </div>
                                     </div>
                                     <div class="w-full bg-[#0d1117] h-3 rounded-full flex overflow-hidden border border-[#21262d] text-[8.5px] font-bold text-center leading-3">

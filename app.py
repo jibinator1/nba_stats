@@ -128,6 +128,8 @@ _POS_CORR_CACHE = {}
 
 def load_position_correlations(start_date=None, end_date=None):
     """Loads positional matchup correlation dataset with fallback to calculation engine."""
+    if start_date and end_date and str(start_date) > str(end_date):
+        start_date, end_date = end_date, start_date
     cache_key = (str(start_date) if start_date else None, str(end_date) if end_date else None)
     if cache_key in _POS_CORR_CACHE:
         return _POS_CORR_CACHE[cache_key]
@@ -253,6 +255,8 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
     if not team_game_logs:
         return {}
 
+    if start_date and end_date and str(start_date) > str(end_date):
+        start_date, end_date = end_date, start_date
     filtered = [g for g in team_game_logs if start_date <= g['d'] <= end_date]
     by_team = {}
     for g in filtered:
@@ -400,7 +404,9 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     today_str = datetime.now().strftime("%Y-%m-%d")
     s_date = request.args.get('start_date')
     e_date = request.args.get('end_date')
-    if s_date and e_date:
+    if s_date and e_date and str(s_date) > str(e_date):
+        s_date, e_date = e_date, s_date
+    if s_date or e_date:
         pos_data = load_position_correlations(start_date=s_date, end_date=e_date)
     else:
         pos_data = load_position_correlations()

@@ -552,7 +552,21 @@ def run_audit():
     assert len(pos_filtered_data['position_matchup_deltas']) > 0, "Expected non-empty position_matchup_deltas"
     assert pos_filtered_data['metadata']['start_date'] == '2026-10-20', "start_date metadata mismatch"
     assert pos_filtered_data['metadata']['end_date'] == '2026-10-29', "end_date metadata mismatch"
+
+    # Test inverted date-window normalization
+    res_pos_inv = client.get('/api/positional-correlations?start_date=2026-10-29&end_date=2026-10-20')
+    assert res_pos_inv.status_code == 200, f"Expected 200, got {res_pos_inv.status_code}"
+    inv_data = res_pos_inv.json
+    assert inv_data['metadata']['start_date'] == '2026-10-20' and inv_data['metadata']['end_date'] == '2026-10-29'
+    assert len(inv_data['position_matchup_deltas']) > 0, "Expected non-empty position_matchup_deltas for inverted window"
     print("  [PASS] Positional defensive differentials, green/red/gray defense coloring, and date filtering verified.")
+
+    # 17. Verify Universal Rank Badges on Positional Allowance Rows
+    print("\n[17/17] Testing Universal Rank Badges on Positional Allowance Rows...")
+    assert "${aBadge}<span class=\"${aFmt.className}\"" in app_js, "Missing aBadge in posKey row in app.js"
+    assert "<span class=\"${hFmt.className}\" title=\"${hTitle}\">${hFmt.text}</span>${hBadge}" in app_js, "Missing hBadge in posKey row in app.js"
+    assert "guards_rank != null" in modal_js, "Missing guards_rank in renderGroupedPositionalAllowances in modal.js"
+    print("  [PASS] Universal rank badges on positional allowance rows verified.")
 
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")

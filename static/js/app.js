@@ -22,7 +22,6 @@ function getTeamLogoUrl(team) {
     const slug = ESPN_LOGO_MAP[upper] || upper.toLowerCase();
     return `https://a.espncdn.com/i/teamlogos/nba/500/${slug}.png`;
 }
-
 window.getTeamLogoUrl = getTeamLogoUrl;
 // Dynamic Date Helper (computes local today date string YYYY-MM-DD on page open)
 
@@ -100,7 +99,6 @@ const STAT_EXPLANATIONS = {
     'Live-Ball Turnovers': 'Turnovers resulting directly in opponent steals and transition runs.',
     'Dead-Ball Turnovers': 'Turnovers resulting in whistle stoppages (out-of-bounds, travel, offensive foul).'
 };
-
 // Statistically significant positional allowance metrics (ANOVA p < 0.05 across 30 teams)
 
 const SIGNIFICANT_POS_KEYS = [
@@ -110,7 +108,6 @@ const SIGNIFICANT_POS_KEYS = [
     'sg_pts_allowed', 'sg_reb_allowed', 'sg_ast_allowed', 'sg_fg3m_allowed', 'sg_pra_allowed',
     'pg_pts_allowed', 'pg_reb_allowed', 'pg_ast_allowed', 'pg_fg3m_allowed', 'pg_pra_allowed'
 ];
-
 const POS_METRIC_LABELS = {
     'c_pts_allowed': 'Center PTS Allowed', 'c_reb_allowed': 'Center REB Allowed', 'c_ast_allowed': 'Center AST Allowed', 'c_fg3m_allowed': 'Center 3PM Allowed', 'c_pra_allowed': 'Center PRA Allowed',
     'pf_pts_allowed': 'PF PTS Allowed', 'pf_reb_allowed': 'PF REB Allowed', 'pf_ast_allowed': 'PF AST Allowed', 'pf_pra_allowed': 'PF PRA Allowed',
@@ -121,9 +118,7 @@ const POS_METRIC_LABELS = {
 SIGNIFICANT_POS_KEYS.forEach(k => {
     STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
 });
-
 // Evaluation Mode State ('overall' vs 'opponent_diff')
-
 window.matchupEvaluationMode = window.matchupEvaluationMode || 'overall';
 
 function updateMatchupToggleButtons() {
@@ -181,20 +176,19 @@ function formatDefenseDiff(diff) {
     }
     return { text, className, val };
 }
-window.formatDefenseDiff = formatDefenseDiff;
 
+window.formatDefenseDiff = formatDefenseDiff;
 // Canonical Unified Stat Row Formatter (replaces duplicate formatRow and formatPillarRow)
+
 function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
     const exp = STAT_EXPLANATIONS[label] || '';
     const def = (window.FORENSIC_DEFINITIONS && window.FORENSIC_DEFINITIONS[label]) ? window.FORENSIC_DEFINITIONS[label] : null;
-
     let tooltipBody = '';
     if (def && typeof def === 'object') {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block"><span class="text-cyan-400 font-mono">${label}</span><span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Scouting Context</span></span><span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block"><b class="text-slate-400 font-sans font-semibold">What it means:</b> ${def.meaning}</span><span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block"><b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${def.players}</span></span>`;
     } else if (exp) {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span><span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span></span>`;
     }
-
     if (posKey) {
         const parts = posKey.split('_');
         const pos = parts[0].toUpperCase();
@@ -204,17 +198,18 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         const hD = deltas[`${pos}_${hTeam}_${stat}`];
         const aFmt = formatDefenseDiff(aD ? aD.diff : null);
         const hFmt = formatDefenseDiff(hD ? hD.diff : null);
+        const aBadge = formatRankBadge(aRank);
+        const hBadge = formatRankBadge(hRank);
         const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text} vs ${pos} baseline average` : 'No positional differential recorded';
         const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text} vs ${pos} baseline average` : 'No positional differential recorded';
         return `
             <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
-                <div class="flex items-center space-x-1.5 text-left font-mono"><span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
+                <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
                 <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label}</span>${tooltipBody}</span></div>
-                <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span></div>
+                <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span>${hBadge}</div>
             </div>
         `;
     }
-
     let aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
     let hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
     return `
@@ -268,6 +263,7 @@ function createEmptyTeamProfile(t) {
 function recalculateForensicsForDateRange(sDate, eDate) {
     if (!sDate) sDate = '2025-10-02';
     if (!eDate) eDate = clientTodayStr;
+    if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
     const filteredTeamLogs = (allTeamGameLogs || []).filter(g => g.d >= sDate && g.d <= eDate);
     const logsByTeam = {};
     filteredTeamLogs.forEach(g => {
@@ -483,23 +479,22 @@ function recalculateForensicsForDateRange(sDate, eDate) {
         return pCopy;
     });
 }
-
 async function updatePositionalDeltasForDateRange(sDate, eDate) {
     if (!sDate || !eDate) return;
+    if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
     try {
         const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`);
         if (res.ok) {
             const data = await res.json();
+            if (sDate !== startDate || eDate !== endDate) return;
             if (data.position_matchup_deltas) {
                 window.APP_DATA = window.APP_DATA || {};
                 window.APP_DATA.positionMatchupDeltas = data.position_matchup_deltas;
                 renderScheduleGames();
                 if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
-                if (currentInsightsMatchup && typeof loadMatchupInsights === 'function') {
-                    const insightsTab = document.getElementById('tab-insights');
-                    if (insightsTab && !insightsTab.classList.contains('hidden')) {
-                        loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
-                    }
+                const insTab = document.getElementById('tab-insights');
+                if (currentInsightsMatchup && insTab && !insTab.classList.contains('hidden') && typeof loadMatchupInsights === 'function') {
+                    loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
                 }
             }
         }
@@ -511,6 +506,11 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
 function onDateRangeChange() {
     startDate = document.getElementById('input-start-date').value;
     endDate = document.getElementById('input-end-date').value;
+    if (startDate && endDate && startDate > endDate) {
+        const tmp = startDate; startDate = endDate; endDate = tmp;
+        document.getElementById('input-start-date').value = startDate;
+        document.getElementById('input-end-date').value = endDate;
+    }
     recalculateForensicsForDateRange(startDate, endDate);
     updatePositionalDeltasForDateRange(startDate, endDate);
     renderScheduleDatePills();
@@ -524,16 +524,7 @@ function onDateRangeChange() {
 }
 
 function reloadAllData() {
-    recalculateForensicsForDateRange(startDate, endDate);
-    updatePositionalDeltasForDateRange(startDate, endDate);
-    renderScheduleDatePills();
-    renderScheduleGames();
-    if (typeof renderProfileDateChips === 'function') renderProfileDateChips();
-    if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
-    const insSec = document.getElementById('tab-insights');
-    if (currentInsightsMatchup && insSec && !insSec.classList.contains('hidden')) loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
-    if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
-    if (window.hasLoadedPositional && typeof loadPositionalTab === 'function') loadPositionalTab();
+    onDateRangeChange();
     safeCreateIcons();
 }
 let currentInsightsMatchup = null;
@@ -967,6 +958,7 @@ function loadMatchupInsights(awayTeam, homeTeam) {
     safeCreateIcons(container);
 }
 // Initialize on DOM load
+
 document.addEventListener('DOMContentLoaded', () => {
     const startInput = document.getElementById('input-start-date');
     const endInput = document.getElementById('input-end-date');
@@ -984,8 +976,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => openMatchupInsights(initAway, initHome), 150);
     }
 });
-
 // Global Escape key listener to close Deep Dive modal
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeDeepDiveModal();
