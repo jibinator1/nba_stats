@@ -148,7 +148,7 @@ window.setMatchupEvaluationMode = function(mode) {
     renderScheduleGames();
     if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
     if (currentInsightsMatchup && typeof loadMatchupInsights === 'function') {
-        const insightsTab = document.getElementById('tab-content-insights');
+        const insightsTab = document.getElementById('tab-insights');
         if (insightsTab && !insightsTab.classList.contains('hidden')) {
             loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
         }
@@ -169,7 +169,8 @@ function formatDefenseDiff(diff) {
     if (diff == null || isNaN(diff)) {
         return { text: '--', className: 'text-slate-500 font-mono', val: null };
     }
-    const val = parseFloat(diff);
+    const rawVal = parseFloat(diff);
+    const val = Math.abs(rawVal) < 0.005 ? 0.0 : rawVal;
     const sign = val > 0 ? '+' : '';
     const text = `${sign}${val.toFixed(2)}`;
     let className = 'text-slate-400 font-bold font-mono';
@@ -495,7 +496,7 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
                 renderScheduleGames();
                 if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
                 if (currentInsightsMatchup && typeof loadMatchupInsights === 'function') {
-                    const insightsTab = document.getElementById('tab-content-insights');
+                    const insightsTab = document.getElementById('tab-insights');
                     if (insightsTab && !insightsTab.classList.contains('hidden')) {
                         loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
                     }
@@ -516,6 +517,10 @@ function onDateRangeChange() {
     renderScheduleGames();
     if (typeof renderProfileDateChips === 'function') renderProfileDateChips();
     if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
+    const insSec = document.getElementById('tab-insights');
+    if (currentInsightsMatchup && insSec && !insSec.classList.contains('hidden')) loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+    if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
+    if (window.hasLoadedPositional && typeof loadPositionalTab === 'function') loadPositionalTab();
 }
 
 function reloadAllData() {
@@ -525,6 +530,10 @@ function reloadAllData() {
     renderScheduleGames();
     if (typeof renderProfileDateChips === 'function') renderProfileDateChips();
     if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
+    const insSec = document.getElementById('tab-insights');
+    if (currentInsightsMatchup && insSec && !insSec.classList.contains('hidden')) loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+    if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
+    if (window.hasLoadedPositional && typeof loadPositionalTab === 'function') loadPositionalTab();
     safeCreateIcons();
 }
 let currentInsightsMatchup = null;

@@ -540,6 +540,7 @@ def run_audit():
     assert 'text-emerald-400' in modal_js, "Missing text-emerald-400 green defense class in modal.js"
     assert 'text-rose-400' in modal_js, "Missing text-rose-400 red defense class in modal.js"
     assert 'text-slate-400' in modal_js, "Missing text-slate-400 gray defense class in modal.js"
+    assert 'tab-content-insights' not in app_js, "Found invalid tab-content-insights ID in app.js"
 
     # Test date-filtered positional endpoint
     res_pos_date = client.get('/api/positional-correlations?start_date=2026-10-20&end_date=2026-10-29')

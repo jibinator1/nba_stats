@@ -168,6 +168,11 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertEqual(get_defense_color(0.25), 'red')
         self.assertEqual(get_defense_color(1.50), 'red')
 
+    def test_position_correlation_cache(self):
+        res1 = load_position_correlations(start_date='2026-10-21', end_date='2026-10-21')
+        res2 = load_position_correlations(start_date='2026-10-21', end_date='2026-10-21')
+        self.assertIs(res1, res2)
+
 
 if __name__ == '__main__':
     unittest.main()

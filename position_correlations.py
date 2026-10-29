@@ -1,5 +1,6 @@
 import os
 import json
+import warnings
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -123,7 +124,9 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
             team_groups = [group[f'{m}_DIFF_AVG'].values for _, group in df_pos.groupby('OPP_TEAM') if len(group) >= min_anova_games]
             if len(team_groups) > 1:
                 try:
-                    f_stat, p_val = stats.f_oneway(*team_groups)
+                    with warnings.catch_warnings():
+                        warnings.simplefilter('ignore')
+                        f_stat, p_val = stats.f_oneway(*team_groups)
                     if np.isnan(f_stat) or np.isnan(p_val):
                         f_stat, p_val = 0.0, 1.0
                 except Exception:
@@ -166,7 +169,9 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
 
                 if len(diff_avg_vals) > 1:
                     try:
-                        t_res = stats.ttest_1samp(diff_avg_vals, 0.0)
+                        with warnings.catch_warnings():
+                            warnings.simplefilter('ignore')
+                            t_res = stats.ttest_1samp(diff_avg_vals, 0.0)
                         p_ttest = float(t_res.pvalue) if not np.isnan(t_res.pvalue) else 1.0
                     except Exception:
                         p_ttest = 1.0
@@ -177,7 +182,9 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
                 try:
                     non_zero = diff_avg_vals[diff_avg_vals != 0]
                     if len(non_zero) >= 6:
-                        w_res = stats.wilcoxon(non_zero)
+                        with warnings.catch_warnings():
+                            warnings.simplefilter('ignore')
+                            w_res = stats.wilcoxon(non_zero)
                         p_wilcoxon = float(w_res.pvalue) if not np.isnan(w_res.pvalue) else p_ttest
                     else:
                         p_wilcoxon = p_ttest

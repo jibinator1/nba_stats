@@ -28,7 +28,12 @@ async function loadPositionalTab() {
     `;
 
     try {
-        const res = await fetch('/api/positional-correlations');
+        const sDate = document.getElementById('input-start-date')?.value || window.startDate;
+        const eDate = document.getElementById('input-end-date')?.value || window.endDate;
+        const url = (sDate && eDate)
+            ? `/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`
+            : '/api/positional-correlations';
+        const res = await fetch(url);
         if (!res.ok) throw new Error('API request failed');
         positionalData = await res.json();
         renderPositionalDashboard();

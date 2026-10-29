@@ -123,12 +123,21 @@ def load_forensic_data():
         return {}, {}, [], [], "Sync Error"
 
 
+_POS_CORR_CACHE = {}
+
+
 def load_position_correlations(start_date=None, end_date=None):
     """Loads positional matchup correlation dataset with fallback to calculation engine."""
+    cache_key = (str(start_date) if start_date else None, str(end_date) if end_date else None)
+    if cache_key in _POS_CORR_CACHE:
+        return _POS_CORR_CACHE[cache_key]
+
     if start_date or end_date:
         try:
             from position_correlations import calculate_position_correlations
-            return calculate_position_correlations(start_date=start_date, end_date=end_date)
+            res = calculate_position_correlations(start_date=start_date, end_date=end_date)
+            _POS_CORR_CACHE[cache_key] = res
+            return res
         except Exception as e:
             print(f"Date-filtered calculation error for positional correlations: {e}")
 
@@ -136,7 +145,9 @@ def load_position_correlations(start_date=None, end_date=None):
     if os.path.exists(corr_path):
         try:
             with open(corr_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                res = json.load(f)
+                _POS_CORR_CACHE[cache_key] = res
+                return res
         except Exception as e:
             print(f"Error loading positional correlations: {e}")
 
@@ -144,13 +155,17 @@ def load_position_correlations(start_date=None, end_date=None):
         try:
             r = requests.get(f"{GITHUB_RAW_BASE}forensic_position_correlations.json", timeout=6)
             if r.status_code == 200:
-                return r.json()
+                res = r.json()
+                _POS_CORR_CACHE[cache_key] = res
+                return res
         except Exception as e:
             print(f"Error fetching remote positional correlations: {e}")
 
     try:
         from position_correlations import calculate_position_correlations
-        return calculate_position_correlations()
+        res = calculate_position_correlations()
+        _POS_CORR_CACHE[cache_key] = res
+        return res
     except Exception as e:
         print(f"Fallback generation error for positional correlations: {e}")
         return {'metadata': {}, 'anova': {}, 'cross_position_correlations': {}, 'matchups': []}

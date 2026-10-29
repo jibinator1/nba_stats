@@ -12,7 +12,8 @@ function formatDefenseDiff(diff) {
     if (diff == null || isNaN(diff)) {
         return { text: '--', className: 'text-slate-500 font-mono', val: null };
     }
-    const val = parseFloat(diff);
+    const rawVal = parseFloat(diff);
+    const val = Math.abs(rawVal) < 0.005 ? 0.0 : rawVal;
     const sign = val > 0 ? '+' : '';
     const text = `${sign}${val.toFixed(2)}`;
     let className = 'text-slate-400 font-bold font-mono';
