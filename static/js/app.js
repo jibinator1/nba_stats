@@ -198,10 +198,12 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         const hD = deltas[`${pos}_${hTeam}_${stat}`];
         const aFmt = formatDefenseDiff(aD ? aD.diff : null);
         const hFmt = formatDefenseDiff(hD ? hD.diff : null);
-        const aBadge = formatRankBadge(aRank);
-        const hBadge = formatRankBadge(hRank);
-        const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text} vs ${pos} baseline average` : 'No positional differential recorded';
-        const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text} vs ${pos} baseline average` : 'No positional differential recorded';
+        const aRankVal = (aD && aD.rank != null) ? aD.rank : aRank;
+        const hRankVal = (hD && hD.rank != null) ? hD.rank : hRank;
+        const aBadge = formatRankBadge(aRankVal);
+        const hBadge = formatRankBadge(hRankVal);
+        const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text} vs ${pos} baseline average (Rank #${aRankVal ?? '--'})` : 'No positional differential recorded';
+        const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text} vs ${pos} baseline average (Rank #${hRankVal ?? '--'})` : 'No positional differential recorded';
         return `
             <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
                 <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
@@ -490,6 +492,7 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
             if (data.position_matchup_deltas) {
                 window.APP_DATA = window.APP_DATA || {};
                 window.APP_DATA.positionMatchupDeltas = data.position_matchup_deltas;
+                window.positionMatchupDeltas = data.position_matchup_deltas;
                 renderScheduleGames();
                 if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
                 const insTab = document.getElementById('tab-insights');
@@ -965,6 +968,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (startInput) startInput.value = startDate;
     if (endInput) endInput.value = endDate;
     recalculateForensicsForDateRange(startDate, endDate);
+    updatePositionalDeltasForDateRange(startDate, endDate);
     renderScheduleDatePills();
     renderScheduleGames();
     if (typeof renderProfileDateChips === 'function') renderProfileDateChips();

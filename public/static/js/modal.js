@@ -533,9 +533,12 @@ function generateDeepDiveModalHtml(g) {
                             const gPct = row.guards_pct != null ? row.guards_pct : 33.3;
                             const wPct = row.wings_pct != null ? row.wings_pct : 33.3;
                             const bPct = row.bigs_pct != null ? row.bigs_pct : 33.4;
-                            const gRankStr = (row.guards_rank != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${row.guards_rank})</span> ` : '';
-                            const wRankStr = (row.wings_rank != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${row.wings_rank})</span> ` : '';
-                            const bRankStr = (row.bigs_rank != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${row.bigs_rank})</span> ` : '';
+                            const gRankVal = (gD && gD.rank != null) ? gD.rank : row.guards_rank;
+                            const wRankVal = (wD && wD.rank != null) ? wD.rank : row.wings_rank;
+                            const bRankVal = (bD && bD.rank != null) ? bD.rank : row.bigs_rank;
+                            const gRankStr = (gRankVal != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${gRankVal})</span> ` : '';
+                            const wRankStr = (wRankVal != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${wRankVal})</span> ` : '';
+                            const bRankStr = (bRankVal != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${bRankVal})</span> ` : '';
 
                             const gTitle = gD ? `${teamCode} allows ${gFmt.text} ${s.unit} vs Guards baseline average` : 'No data';
                             const wTitle = wD ? `${teamCode} allows ${wFmt.text} ${s.unit} vs Wings baseline average` : 'No data';

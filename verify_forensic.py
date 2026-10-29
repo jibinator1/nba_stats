@@ -565,7 +565,10 @@ def run_audit():
     print("\n[17/17] Testing Universal Rank Badges on Positional Allowance Rows...")
     assert "${aBadge}<span class=\"${aFmt.className}\"" in app_js, "Missing aBadge in posKey row in app.js"
     assert "<span class=\"${hFmt.className}\" title=\"${hTitle}\">${hFmt.text}</span>${hBadge}" in app_js, "Missing hBadge in posKey row in app.js"
-    assert "guards_rank != null" in modal_js, "Missing guards_rank in renderGroupedPositionalAllowances in modal.js"
+    assert "aRankVal" in app_js, "Missing aRankVal differential rank lookup in app.js"
+    assert "gRankVal" in modal_js, "Missing gRankVal in modal.js"
+    assert "updatePositionalDeltasForDateRange(startDate, endDate)" in app_js, "Missing init date range positional deltas update"
+    assert any('rank' in d for d in pos_filtered_data['position_matchup_deltas'].values()), "Expected rank in position_matchup_deltas"
     print("  [PASS] Universal rank badges on positional allowance rows verified.")
 
     print("\n" + "=" * 60)

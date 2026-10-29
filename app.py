@@ -174,15 +174,38 @@ def load_position_correlations(start_date=None, end_date=None):
 
 
 def build_position_matchup_deltas(pos_data):
-    """Builds fast lookup map for positional differentials across positions and tiers."""
+    """Builds fast lookup map for positional differentials across positions and tiers with universal rankings."""
+    matchups = pos_data.get('matchups', [])
+    has_ranks = any('rank' in m for m in matchups)
+    if not has_ranks and matchups:
+        groups = {}
+        for m in matchups:
+            k = (m.get('position'), m.get('metric'))
+            if k not in groups:
+                groups[k] = []
+            groups[k].append(m)
+        for grp in groups.values():
+            grp.sort(key=lambda x: float(x.get('mean_diff', 0)))
+            prev_val = None
+            prev_rank = 1
+            for i, item in enumerate(grp):
+                val = float(item.get('mean_diff', 0))
+                if prev_val is not None and val == prev_val:
+                    item['rank'] = prev_rank
+                else:
+                    item['rank'] = i + 1
+                    prev_rank = i + 1
+                    prev_val = val
+
     deltas = {}
-    for m in pos_data.get('matchups', []):
+    for m in matchups:
         k = f"{m['position']}_{m['opponent']}_{m['metric']}"
         deltas[k] = {
             'diff': round(float(m.get('mean_diff', 0)), 2),
             'pct': round(float(m.get('pct_over_avg', 50)), 1),
             'n': int(m.get('sample_size', 0)),
             'cat': m.get('effect_category', 'neutral'),
+            'rank': int(m['rank']) if m.get('rank') is not None else None,
             'is_tier': bool(m.get('is_tier', False))
         }
     return deltas
@@ -406,10 +429,9 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     e_date = request.args.get('end_date')
     if s_date and e_date and str(s_date) > str(e_date):
         s_date, e_date = e_date, s_date
-    if s_date or e_date:
-        pos_data = load_position_correlations(start_date=s_date, end_date=e_date)
-    else:
-        pos_data = load_position_correlations()
+    active_s = s_date or '2026-10-20'
+    active_e = e_date or today_str
+    pos_data = load_position_correlations(start_date=active_s, end_date=active_e)
     position_matchup_deltas = build_position_matchup_deltas(pos_data)
 
     return render_template('index.html',

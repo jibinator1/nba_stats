@@ -200,6 +200,40 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertEqual(meta.get('end_date'), '2026-10-29')
         self.assertGreater(len(data.get('position_matchup_deltas', {})), 0)
 
+    def test_positional_differential_ranks_and_ties(self):
+        # Universal ranks must be present on all deltas, and identical differentials must share the same rank
+        res = self.client.get('/api/positional-correlations')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        deltas = data.get('position_matchup_deltas', {})
+        self.assertGreater(len(deltas), 0)
+
+        atl_c_reb = deltas.get('C_ATL_REB')
+        sac_c_reb = deltas.get('C_SAC_REB')
+        self.assertIsNotNone(atl_c_reb)
+        self.assertIsNotNone(sac_c_reb)
+        self.assertIn('rank', atl_c_reb)
+        self.assertIn('rank', sac_c_reb)
+        # Both had diff = 0.47 in full season -> must share identical rank 25
+        if atl_c_reb['diff'] == sac_c_reb['diff']:
+            self.assertEqual(atl_c_reb['rank'], sac_c_reb['rank'])
+
+        for k, v in deltas.items():
+            if v.get('rank') is not None:
+                self.assertGreaterEqual(v['rank'], 1)
+                self.assertLessEqual(v['rank'], 30)
+
+    def test_frontend_renders_differential_rank_val(self):
+        # Assert app.js and modal.js use differential rank values
+        with open(os.path.join(BASE_DIR, 'static', 'js', 'app.js'), 'r', encoding='utf-8') as f:
+            app_js = f.read()
+        with open(os.path.join(BASE_DIR, 'static', 'js', 'modal.js'), 'r', encoding='utf-8') as f:
+            modal_js = f.read()
+        self.assertIn('aRankVal', app_js)
+        self.assertIn('hRankVal', app_js)
+        self.assertIn('gRankVal', modal_js)
+        self.assertIn('updatePositionalDeltasForDateRange(startDate, endDate)', app_js)
+
 
 if __name__ == '__main__':
     unittest.main()

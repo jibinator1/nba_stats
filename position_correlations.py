@@ -221,6 +221,28 @@ def calculate_position_correlations(logs_df=None, min_minutes=12.0, start_date=N
                     'effect_category': effect_category
                 })
 
+    # 2b. Compute universal ranks for each (position, metric) across all opponents
+    # Lower mean_diff = better defense (suppression) -> rank 1 is lowest mean_diff
+    matchup_groups = {}
+    for item in dataset['matchups']:
+        grp_key = (item['position'], item['metric'])
+        if grp_key not in matchup_groups:
+            matchup_groups[grp_key] = []
+        matchup_groups[grp_key].append(item)
+
+    for (pos, metric), group in matchup_groups.items():
+        group.sort(key=lambda x: x['mean_diff'])
+        prev_val = None
+        prev_rank = 1
+        for i, item in enumerate(group):
+            val = item['mean_diff']
+            if prev_val is not None and val == prev_val:
+                item['rank'] = prev_rank
+            else:
+                item['rank'] = i + 1
+                prev_rank = i + 1
+                prev_val = val
+
     # 3. Cross-Position Correlation Matrices
     matchup_df = pd.DataFrame(dataset['matchups'])
     if not matchup_df.empty:
