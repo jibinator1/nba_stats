@@ -21,7 +21,9 @@
       "Wings",
       "Bigs"
     ],
-    "teams_count": 30
+    "teams_count": 30,
+    "start_date": null,
+    "end_date": null
   },
   "anova": {
     "PG": {

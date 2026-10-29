@@ -8,6 +8,22 @@
 // Helper to resolve ESPN logo with correct team slugs
 const getLogoUrl = (t) => (window.getTeamLogoUrl ? window.getTeamLogoUrl(t) : `https://a.espncdn.com/i/teamlogos/nba/500/${String(t).toLowerCase()}.png`);
 
+function formatDefenseDiff(diff) {
+    if (diff == null || isNaN(diff)) {
+        return { text: '--', className: 'text-slate-500 font-mono', val: null };
+    }
+    const val = parseFloat(diff);
+    const sign = val > 0 ? '+' : '';
+    const text = `${sign}${val.toFixed(2)}`;
+    let className = 'text-slate-400 font-bold font-mono';
+    if (val <= -0.25) {
+        className = 'text-emerald-400 font-bold font-mono';
+    } else if (val >= 0.25) {
+        className = 'text-rose-400 font-bold font-mono';
+    }
+    return { text, className, val };
+}
+
 // Comprehensive Forensic Definitions & Player Archetype Scouting Dictionary
 const FORENSIC_DEFINITIONS = {
     'Rim (RA)': { meaning: 'Restricted Area (0-4 feet under the rim). Highest expected-value scoring zone in basketball with highest field goal percentage.', players: 'Downhill slashers, diving roll-man bigs, dunkers, drive-and-kick penetrators, and lob catchers.' },
@@ -479,9 +495,9 @@ function generateDeepDiveModalHtml(g) {
 
         const renderTeamPosBlock = (teamCode, pData, isSmall) => {
             const stats = [
-                { key: 'pts', label: 'Points Allowed', unit: 'PTS/G' },
-                { key: 'reb', label: 'Rebounds Allowed', unit: 'REB/G' },
-                { key: 'fg3m', label: '3PM Allowed', unit: '3PM/G' }
+                { key: 'pts', label: 'Points Allowed', unit: 'PTS/G', mKey: 'PTS' },
+                { key: 'reb', label: 'Rebounds Allowed', unit: 'REB/G', mKey: 'REB' },
+                { key: 'fg3m', label: '3PM Allowed', unit: '3PM/G', mKey: 'FG3M' }
             ];
 
             return `
@@ -489,46 +505,49 @@ function generateDeepDiveModalHtml(g) {
                     <div class="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-[#21262d] pb-1.5 font-mono">
                         <div class="flex items-center gap-1.5">
                             <img src="${getLogoUrl(teamCode)}" class="w-4 h-4 object-contain" onerror="this.style.display='none';"/>
-                            <span>${teamCode} Positional Allowances</span>
+                            <span>${teamCode} Positional Allowances (vs Baseline)</span>
                         </div>
-
                     </div>
                     <div class="space-y-2.5 font-mono">
                         ${stats.map(s => {
-                            const row = pData?.[s.key] || {};
-                            const gVal = row.guards != null ? row.guards : '--';
-                            const wVal = row.wings != null ? row.wings : '--';
-                            const bVal = row.bigs != null ? row.bigs : '--';
+                            const deltas = window.APP_DATA?.positionMatchupDeltas || {};
+                            const gD = deltas[`Guards_${teamCode}_${s.mKey}`];
+                            const wD = deltas[`Wings_${teamCode}_${s.mKey}`];
+                            const bD = deltas[`Bigs_${teamCode}_${s.mKey}`];
 
+                            const gFmt = formatDefenseDiff(gD ? gD.diff : null);
+                            const wFmt = formatDefenseDiff(wD ? wD.diff : null);
+                            const bFmt = formatDefenseDiff(bD ? bD.diff : null);
+
+                            const row = pData?.[s.key] || {};
                             const gPct = row.guards_pct != null ? row.guards_pct : 33.3;
                             const wPct = row.wings_pct != null ? row.wings_pct : 33.3;
                             const bPct = row.bigs_pct != null ? row.bigs_pct : 33.4;
 
-                            const formatRank = (r) => {
-                                if (r != null && r !== '' && r !== 'Small Sample') return `<span class="text-slate-400 font-normal">(#${r})</span>`;
-                                return '';
-                            };
+                            const gTitle = gD ? `${teamCode} allows ${gFmt.text} ${s.unit} vs Guards baseline average` : 'No data';
+                            const wTitle = wD ? `${teamCode} allows ${wFmt.text} ${s.unit} vs Wings baseline average` : 'No data';
+                            const bTitle = bD ? `${teamCode} allows ${bFmt.text} ${s.unit} vs Bigs baseline average` : 'No data';
 
                             return `
                                 <div class="space-y-1">
                                     <div class="flex items-center justify-between text-[11px]">
                                         <span class="text-slate-300 font-bold uppercase tracking-tight">${formatMetricLabelWithTooltip(s.label)}</span>
                                         <div class="flex items-center gap-2 text-[10px]">
-                                            <span class="text-cyan-400 font-medium">${formatMetricLabelWithTooltip('Guards')}: <b>${gVal}</b> ${formatRank(row.guards_rank)}</span>
+                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Guards')}: <b class="${gFmt.className}" title="${gTitle}">${gFmt.text}</b></span>
                                             <span class="text-slate-600">|</span>
-                                            <span class="text-indigo-400 font-medium">${formatMetricLabelWithTooltip('Wings')}: <b>${wVal}</b> ${formatRank(row.wings_rank)}</span>
+                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Wings')}: <b class="${wFmt.className}" title="${wTitle}">${wFmt.text}</b></span>
                                             <span class="text-slate-600">|</span>
-                                            <span class="text-amber-400 font-medium">${formatMetricLabelWithTooltip('Bigs')}: <b>${bVal}</b> ${formatRank(row.bigs_rank)}</span>
+                                            <span class="text-slate-400 font-medium">${formatMetricLabelWithTooltip('Bigs')}: <b class="${bFmt.className}" title="${bTitle}">${bFmt.text}</b></span>
                                         </div>
                                     </div>
                                     <div class="w-full bg-[#0d1117] h-3 rounded-full flex overflow-hidden border border-[#21262d] text-[8.5px] font-bold text-center leading-3">
-                                        <div class="bg-cyan-500/80 text-cyan-100 truncate transition-all" style="width: ${gPct}%;" title="Guards: ${gPct}% (${gVal} ${s.unit})">
+                                        <div class="bg-cyan-500/80 text-cyan-100 truncate transition-all" style="width: ${gPct}%;" title="Guards: ${gPct}% (${gFmt.text} ${s.unit})">
                                             ${gPct >= 12 ? gPct + '%' : ''}
                                         </div>
-                                        <div class="bg-indigo-500/80 text-indigo-100 truncate transition-all" style="width: ${wPct}%;" title="Wings: ${wPct}% (${wVal} ${s.unit})">
+                                        <div class="bg-indigo-500/80 text-indigo-100 truncate transition-all" style="width: ${wPct}%;" title="Wings: ${wPct}% (${wFmt.text} ${s.unit})">
                                             ${wPct >= 12 ? wPct + '%' : ''}
                                         </div>
-                                        <div class="bg-amber-500/80 text-amber-100 truncate transition-all" style="width: ${bPct}%;" title="Bigs: ${bPct}% (${bVal} ${s.unit})">
+                                        <div class="bg-amber-500/80 text-amber-100 truncate transition-all" style="width: ${bPct}%;" title="Bigs: ${bPct}% (${bFmt.text} ${s.unit})">
                                             ${bPct >= 12 ? bPct + '%' : ''}
                                         </div>
                                     </div>

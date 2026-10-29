@@ -530,6 +530,27 @@ def run_audit():
     assert 'Matchup REB' in modal_js, "Missing Matchup REB label in modal.js"
     print("  [PASS] Opponent Matchup Differential Mode toggle, positional +/- deltas, and cache-busting verified.")
 
+    # 16. Verify Defensive Differential Display, Color Coding & Date Range Filtering
+    print("\n[16/16] Testing Defensive Differential Display, Color Coding & Date Filtering...")
+    assert 'formatDefenseDiff' in app_js, "Missing formatDefenseDiff in app.js"
+    assert 'formatDefenseDiff' in modal_js, "Missing formatDefenseDiff in modal.js"
+    assert 'text-emerald-400' in app_js, "Missing text-emerald-400 green defense class in app.js"
+    assert 'text-rose-400' in app_js, "Missing text-rose-400 red defense class in app.js"
+    assert 'text-slate-400' in app_js, "Missing text-slate-400 gray defense class in app.js"
+    assert 'text-emerald-400' in modal_js, "Missing text-emerald-400 green defense class in modal.js"
+    assert 'text-rose-400' in modal_js, "Missing text-rose-400 red defense class in modal.js"
+    assert 'text-slate-400' in modal_js, "Missing text-slate-400 gray defense class in modal.js"
+
+    # Test date-filtered positional endpoint
+    res_pos_date = client.get('/api/positional-correlations?start_date=2026-10-20&end_date=2026-10-29')
+    assert res_pos_date.status_code == 200, f"Expected 200, got {res_pos_date.status_code}"
+    pos_filtered_data = res_pos_date.json
+    assert 'position_matchup_deltas' in pos_filtered_data, "Missing position_matchup_deltas in date-filtered response"
+    assert len(pos_filtered_data['position_matchup_deltas']) > 0, "Expected non-empty position_matchup_deltas"
+    assert pos_filtered_data['metadata']['start_date'] == '2026-10-20', "start_date metadata mismatch"
+    assert pos_filtered_data['metadata']['end_date'] == '2026-10-29', "end_date metadata mismatch"
+    print("  [PASS] Positional defensive differentials, green/red/gray defense coloring, and date filtering verified.")
+
     print("\n" + "=" * 60)
     print("ALL FORENSIC AUDIT CHECKS PASSED WITH 100% COMPLIANCE!")
     print("=" * 60)

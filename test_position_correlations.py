@@ -118,5 +118,56 @@ class TestPositionalCorrelations(unittest.TestCase):
             self.assertIsNone(prof.get('sf_fg3m_allowed'))
             self.assertIsNone(prof.get('pf_fg3m_allowed'))
 
+    def test_date_filtered_position_correlations(self):
+        # Strictly test date-range window (Oct 20 2026 to Oct 29 2026)
+        filtered = calculate_position_correlations(start_date='2026-10-20', end_date='2026-10-29')
+        meta = filtered.get('metadata', {})
+        self.assertEqual(meta.get('start_date'), '2026-10-20')
+        self.assertEqual(meta.get('end_date'), '2026-10-29')
+        # All qualifying logs must be strictly from the selected window
+        self.assertGreater(meta.get('qualifying_logs_count', 0), 1000)
+        self.assertLess(meta.get('qualifying_logs_count', 0), 2000)
+        
+        # Verify matchups exist for positions and tiers
+        matchups = filtered.get('matchups', [])
+        self.assertGreater(len(matchups), 100)
+        tiers_found = set(m['position'] for m in matchups if m.get('is_tier'))
+        self.assertTrue({'Guards', 'Wings', 'Bigs'}.issubset(tiers_found))
+
+    def test_api_date_filtered_endpoint(self):
+        res = self.client.get('/api/positional-correlations?start_date=2026-10-20&end_date=2026-10-29')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertIn('position_matchup_deltas', data)
+        deltas = data['position_matchup_deltas']
+        self.assertGreater(len(deltas), 50)
+        # Verify both individual positions and tiers are present in deltas
+        self.assertTrue(any(k.startswith('Guards_') for k in deltas.keys()))
+        self.assertTrue(any(k.startswith('Wings_') for k in deltas.keys()))
+        self.assertTrue(any(k.startswith('Bigs_') for k in deltas.keys()))
+        self.assertTrue(any(k.startswith('C_') for k in deltas.keys()))
+        self.assertTrue(any(k.startswith('PG_') for k in deltas.keys()))
+
+    def test_defensive_differential_color_coding_rules(self):
+        # Color coding rule:
+        # Negative diff (good defense) -> green
+        # Positive diff (bad defense) -> red
+        # Near-zero (|diff| < 0.25) -> gray
+        def get_defense_color(diff):
+            if diff <= -0.25:
+                return 'green'
+            elif diff >= 0.25:
+                return 'red'
+            return 'gray'
+
+        self.assertEqual(get_defense_color(-1.14), 'green')
+        self.assertEqual(get_defense_color(-0.25), 'green')
+        self.assertEqual(get_defense_color(-0.08), 'gray')
+        self.assertEqual(get_defense_color(0.0), 'gray')
+        self.assertEqual(get_defense_color(0.24), 'gray')
+        self.assertEqual(get_defense_color(0.25), 'red')
+        self.assertEqual(get_defense_color(1.50), 'red')
+
+
 if __name__ == '__main__':
     unittest.main()

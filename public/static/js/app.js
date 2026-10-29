@@ -165,34 +165,57 @@ function formatRankBadge(rank) {
     return `<span class="rank-badge inline-flex items-center" title="${tip}"><span class="text-[10px] px-1.5 py-0.5 rounded font-mono ${style}">#${r}</span><span class="rank-tooltip">${tip}</span></span>`;
 }
 
-// Canonical Unified Stat Row Formatter (replaces duplicate formatRow and formatPillarRow)
+function formatDefenseDiff(diff) {
+    if (diff == null || isNaN(diff)) {
+        return { text: '--', className: 'text-slate-500 font-mono', val: null };
+    }
+    const val = parseFloat(diff);
+    const sign = val > 0 ? '+' : '';
+    const text = `${sign}${val.toFixed(2)}`;
+    let className = 'text-slate-400 font-bold font-mono';
+    if (val <= -0.25) {
+        className = 'text-emerald-400 font-bold font-mono';
+    } else if (val >= 0.25) {
+        className = 'text-rose-400 font-bold font-mono';
+    }
+    return { text, className, val };
+}
+window.formatDefenseDiff = formatDefenseDiff;
 
+// Canonical Unified Stat Row Formatter (replaces duplicate formatRow and formatPillarRow)
 function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
     const exp = STAT_EXPLANATIONS[label] || '';
     const def = (window.FORENSIC_DEFINITIONS && window.FORENSIC_DEFINITIONS[label]) ? window.FORENSIC_DEFINITIONS[label] : null;
-    let aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
-    let hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
-    if (posKey && window.matchupEvaluationMode === 'opponent_diff' && window.APP_DATA?.positionMatchupDeltas) {
-        const parts = posKey.split('_');
-        const pos = parts[0].toUpperCase();
-        const stat = parts[1].toUpperCase();
-        const aD = window.APP_DATA.positionMatchupDeltas[`${pos}_${aTeam}_${stat}`];
-        const hD = window.APP_DATA.positionMatchupDeltas[`${pos}_${hTeam}_${stat}`];
-        if (aD) {
-            const cls = aD.diff >= 0 ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60' : 'bg-rose-950/60 text-rose-300 border-rose-800/60';
-            aBadge = `<span class="rank-badge inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded border ${cls}" title="${aTeam} defense allows ${aD.diff >= 0 ? '+' : ''}${aD.diff} vs player avg (${aD.pct}% over avg)"><span class="font-bold">${aD.diff >= 0 ? '+' : ''}${aD.diff}</span><span class="text-[9px] text-slate-400 ml-1">(${aD.pct}%)</span></span>`;
-        }
-        if (hD) {
-            const cls = hD.diff >= 0 ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60' : 'bg-rose-950/60 text-rose-300 border-rose-800/60';
-            hBadge = `<span class="rank-badge inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded border ${cls}" title="${hTeam} defense allows ${hD.diff >= 0 ? '+' : ''}${hD.diff} vs player avg (${hD.pct}% over avg)"><span class="font-bold">${hD.diff >= 0 ? '+' : ''}${hD.diff}</span><span class="text-[9px] text-slate-400 ml-1">(${hD.pct}%)</span></span>`;
-        }
-    }
+
     let tooltipBody = '';
     if (def && typeof def === 'object') {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 text-[11px] mb-1.5 pb-1 border-b border-[#30363d] flex items-center justify-between text-left block"><span class="text-cyan-400 font-mono">${label}</span><span class="text-[9px] text-slate-400 font-sans uppercase tracking-wider font-normal">Scouting Context</span></span><span class="text-slate-200 text-[10.5px] mb-1.5 leading-snug text-left normal-case block"><b class="text-slate-400 font-sans font-semibold">What it means:</b> ${def.meaning}</span><span class="text-cyan-200/95 text-[10px] leading-snug bg-[#161b22] p-1.5 rounded border border-cyan-900/60 text-left normal-case block"><b class="text-cyan-400 font-sans font-semibold">What type of players to look for:</b> ${def.players}</span></span>`;
     } else if (exp) {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span><span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span></span>`;
     }
+
+    if (posKey) {
+        const parts = posKey.split('_');
+        const pos = parts[0].toUpperCase();
+        const stat = parts[1].toUpperCase();
+        const deltas = window.APP_DATA?.positionMatchupDeltas || {};
+        const aD = deltas[`${pos}_${aTeam}_${stat}`];
+        const hD = deltas[`${pos}_${hTeam}_${stat}`];
+        const aFmt = formatDefenseDiff(aD ? aD.diff : null);
+        const hFmt = formatDefenseDiff(hD ? hD.diff : null);
+        const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text} vs ${pos} baseline average` : 'No positional differential recorded';
+        const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text} vs ${pos} baseline average` : 'No positional differential recorded';
+        return `
+            <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                <div class="flex items-center space-x-1.5 text-left font-mono"><span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
+                <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label}</span>${tooltipBody}</span></div>
+                <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span></div>
+            </div>
+        `;
+    }
+
+    let aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
+    let hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
     return `
         <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
             <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="text-slate-200 font-bold">${aVal != null ? aVal : '--'}</span></div>
@@ -292,19 +315,11 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 gp: gp,
                 is_small_sample: false,
                 injuries: (baseProf.injuries) || [],
-                pace: pace.toFixed(1),
-                neutral_pace: (pace - 1.2).toFixed(1),
+                pace: pace.toFixed(1), neutral_pace: (pace - 1.2).toFixed(1),
                 transition_freq: Math.max(11.0, Math.min(23.5, 12.0 + (pace - 95.0) * 0.9)).toFixed(1),
                 transition_ppp_allowed: baseProf.transition_ppp_allowed || ((1.18 * defScale).toFixed(2)),
-                shot_clock: {
-                    early_0_8: Math.max(14.0, Math.min(29.0, 16.0 + (pace - 95.0) * 1.1)).toFixed(1),
-                    mid_8_15: 48.0,
-                    late_15_24: Math.max(21.0, Math.min(36.0, 34.0 - (pace - 95.0) * 0.8)).toFixed(1)
-                },
-                game_script: {
-                    leading_10: { pace: (pace - 2.8).toFixed(1), early_sc: 13.5, late_sc: 38.5 },
-                    trailing_10: { pace: (pace + 3.1).toFixed(1), early_sc: 24.2, late_sc: 26.8 }
-                },
+                shot_clock: { early_0_8: Math.max(14.0, Math.min(29.0, 16.0 + (pace - 95.0) * 1.1)).toFixed(1), mid_8_15: 48.0, late_15_24: Math.max(21.0, Math.min(36.0, 34.0 - (pace - 95.0) * 0.8)).toFixed(1) },
+                game_script: { leading_10: { pace: (pace - 2.8).toFixed(1), early_sc: 13.5, late_sc: 38.5 }, trailing_10: { pace: (pace + 3.1).toFixed(1), early_sc: 24.2, late_sc: 26.8 } },
                 pnr_coverage: baseProf.pnr_coverage || { drop: 40.0, switch: 32.0, ice: 16.0, hedge: 12.0 },
                 shot_profile_allowed: {
                     restricted_area: { freq: parseFloat(rimDefFreq.toFixed(1)), ppp: (1.28 * defScale).toFixed(2) },
@@ -320,42 +335,23 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                     corner_3: { freq: parseFloat((fg3Rate * 0.24).toFixed(1)), ppp: (1.18 * offScale).toFixed(2) },
                     above_break_3: { freq: parseFloat((fg3Rate * 0.76).toFixed(1)), ppp: (1.10 * offScale).toFixed(2) }
                 },
-                rebounding: {
-                    dreb_secured_pct: parseFloat(drebSecured.toFixed(1)),
-                    oreb_allowed_pct: parseFloat(orebAllowed.toFixed(1))
-                },
+                rebounding: { dreb_secured_pct: parseFloat(drebSecured.toFixed(1)), oreb_allowed_pct: parseFloat(orebAllowed.toFixed(1)) },
                 positional_allowances: baseProf.positional_allowances || null,
-                playtypes_offense: baseProf.playtypes_offense || {},
-                playtypes_defense: baseProf.playtypes_defense || {},
+                playtypes_offense: baseProf.playtypes_offense || {}, playtypes_defense: baseProf.playtypes_defense || {},
                 turnover_profile: {
                     avg_total: (totTov / gp).toFixed(1),
                     live_ball_per_game: (tGames.reduce((acc, g) => acc + (g.opp_stl || 7), 0) / gp).toFixed(1),
-                    live_ball_pct: 52.0,
-                    dead_ball_per_game: 6.5,
-                    dead_ball_pct: 48.0,
+                    live_ball_pct: 52.0, dead_ball_per_game: 6.5, dead_ball_pct: 48.0,
                     points_generated_off_tov: baseProf.turnover_profile?.points_generated_off_tov || 16.8,
                     points_surrendered_off_tov: baseProf.turnover_profile?.points_surrendered_off_tov || 16.8
                 },
-                paint_touches_pg: baseProf.paint_touches_pg || 24.5,
-                three_point_rate: parseFloat(fg3Rate.toFixed(1)),
-                def_rtg: defRtg,
-                off_rtg: offRtg,
-                pts_allowed: (totPtsOpp / gp).toFixed(1),
-                pts_scored: (totPts / gp).toFixed(1),
-                reb_total: (totReb / gp).toFixed(1),
-                reb_allowed: (totRebOpp / gp).toFixed(1),
-                oreb_pct: orebPct,
-                dreb_pct: drebPct,
-                ast_total: (totAst / gp).toFixed(1),
-                ast_allowed: (totAstOpp / gp).toFixed(1),
-                tov_total: tovTotal,
-                tov_allowed: tovAllowed,
-                fg3m_total: (totFg3m / gp).toFixed(1),
-                fg3m_allowed: (totFg3mOpp / gp).toFixed(1),
-                fg3a_total: (totFg3a / gp).toFixed(1),
-                fg3a_allowed: (totFg3aOpp / gp).toFixed(1),
-                fg_pct: fgPct,
-                fg_pct_opp: fgPctOpp,
+                paint_touches_pg: baseProf.paint_touches_pg || 24.5, three_point_rate: parseFloat(fg3Rate.toFixed(1)),
+                def_rtg: defRtg, off_rtg: offRtg, pts_allowed: (totPtsOpp / gp).toFixed(1), pts_scored: (totPts / gp).toFixed(1),
+                reb_total: (totReb / gp).toFixed(1), reb_allowed: (totRebOpp / gp).toFixed(1), oreb_pct: orebPct, dreb_pct: drebPct,
+                ast_total: (totAst / gp).toFixed(1), ast_allowed: (totAstOpp / gp).toFixed(1), tov_total: tovTotal, tov_allowed: tovAllowed,
+                fg3m_total: (totFg3m / gp).toFixed(1), fg3m_allowed: (totFg3mOpp / gp).toFixed(1),
+                fg3a_total: (totFg3a / gp).toFixed(1), fg3a_allowed: (totFg3aOpp / gp).toFixed(1),
+                fg_pct: fgPct, fg_pct_opp: fgPctOpp,
                 ...SIGNIFICANT_POS_KEYS.reduce((acc, k) => { acc[k] = baseProf[k] || null; return acc; }, {})
             };
         }
@@ -487,10 +483,35 @@ function recalculateForensicsForDateRange(sDate, eDate) {
     });
 }
 
+async function updatePositionalDeltasForDateRange(sDate, eDate) {
+    if (!sDate || !eDate) return;
+    try {
+        const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.position_matchup_deltas) {
+                window.APP_DATA = window.APP_DATA || {};
+                window.APP_DATA.positionMatchupDeltas = data.position_matchup_deltas;
+                renderScheduleGames();
+                if (typeof window.refreshOpenInsightsModal === 'function') window.refreshOpenInsightsModal();
+                if (currentInsightsMatchup && typeof loadMatchupInsights === 'function') {
+                    const insightsTab = document.getElementById('tab-content-insights');
+                    if (insightsTab && !insightsTab.classList.contains('hidden')) {
+                        loadMatchupInsights(currentInsightsMatchup.away, currentInsightsMatchup.home);
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        console.warn('Positional date filter update:', err);
+    }
+}
+
 function onDateRangeChange() {
     startDate = document.getElementById('input-start-date').value;
     endDate = document.getElementById('input-end-date').value;
     recalculateForensicsForDateRange(startDate, endDate);
+    updatePositionalDeltasForDateRange(startDate, endDate);
     renderScheduleDatePills();
     renderScheduleGames();
     if (typeof renderProfileDateChips === 'function') renderProfileDateChips();
@@ -499,6 +520,7 @@ function onDateRangeChange() {
 
 function reloadAllData() {
     recalculateForensicsForDateRange(startDate, endDate);
+    updatePositionalDeltasForDateRange(startDate, endDate);
     renderScheduleDatePills();
     renderScheduleGames();
     if (typeof renderProfileDateChips === 'function') renderProfileDateChips();

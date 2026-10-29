@@ -123,8 +123,15 @@ def load_forensic_data():
         return {}, {}, [], [], "Sync Error"
 
 
-def load_position_correlations():
+def load_position_correlations(start_date=None, end_date=None):
     """Loads positional matchup correlation dataset with fallback to calculation engine."""
+    if start_date or end_date:
+        try:
+            from position_correlations import calculate_position_correlations
+            return calculate_position_correlations(start_date=start_date, end_date=end_date)
+        except Exception as e:
+            print(f"Date-filtered calculation error for positional correlations: {e}")
+
     corr_path = os.path.join(BASE_DIR, 'forensic_position_correlations.json')
     if os.path.exists(corr_path):
         try:
@@ -147,6 +154,21 @@ def load_position_correlations():
     except Exception as e:
         print(f"Fallback generation error for positional correlations: {e}")
         return {'metadata': {}, 'anova': {}, 'cross_position_correlations': {}, 'matchups': []}
+
+
+def build_position_matchup_deltas(pos_data):
+    """Builds fast lookup map for positional differentials across positions and tiers."""
+    deltas = {}
+    for m in pos_data.get('matchups', []):
+        k = f"{m['position']}_{m['opponent']}_{m['metric']}"
+        deltas[k] = {
+            'diff': round(float(m.get('mean_diff', 0)), 2),
+            'pct': round(float(m.get('pct_over_avg', 50)), 1),
+            'n': int(m.get('sample_size', 0)),
+            'cat': m.get('effect_category', 'neutral'),
+            'is_tier': bool(m.get('is_tier', False))
+        }
+    return deltas
 
 
 def load_all_schedule_games():
@@ -361,23 +383,19 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     forensic_teams, _, player_profiles, team_game_logs, last_updated = load_forensic_data()
     all_games = load_all_schedule_games()
     today_str = datetime.now().strftime("%Y-%m-%d")
-    pos_data = load_position_correlations()
-    position_matchup_deltas = {}
-    for m in pos_data.get('matchups', []):
-        if not m.get('is_tier'):
-            k = f"{m['position']}_{m['opponent']}_{m['metric']}"
-            position_matchup_deltas[k] = {
-                'diff': round(float(m.get('mean_diff', 0)), 2),
-                'pct': round(float(m.get('pct_over_avg', 50)), 1),
-                'n': int(m.get('sample_size', 0)),
-                'cat': m.get('effect_category', 'neutral')
-            }
+    s_date = request.args.get('start_date')
+    e_date = request.args.get('end_date')
+    if s_date and e_date:
+        pos_data = load_position_correlations(start_date=s_date, end_date=e_date)
+    else:
+        pos_data = load_position_correlations()
+    position_matchup_deltas = build_position_matchup_deltas(pos_data)
 
     return render_template('index.html',
                            page_type=page_type,
                            all_games=all_games,
-                           start_date='2026-10-20',
-                           end_date=today_str,
+                           start_date=s_date or '2026-10-20',
+                           end_date=e_date or today_str,
                            forensic_teams=forensic_teams,
                            player_profiles=player_profiles,
                            team_game_logs=team_game_logs,
@@ -688,7 +706,9 @@ def api_matchup(away, home):
 
 @app.route('/api/positional-correlations')
 def api_positional_correlations():
-    data = load_position_correlations()
+    s_date = request.args.get('start_date')
+    e_date = request.args.get('end_date')
+    data = load_position_correlations(start_date=s_date, end_date=e_date)
     position = request.args.get('position')
     metric = request.args.get('metric')
     opponent = request.args.get('opponent')
@@ -720,6 +740,7 @@ def api_positional_correlations():
         'anova': anova_slice,
         'cross_position_correlations': cross_corr_slice,
         'matchups': matchups,
+        'position_matchup_deltas': build_position_matchup_deltas(data),
         'count': len(matchups)
     })
 
