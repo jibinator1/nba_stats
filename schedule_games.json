@@ -484,7 +484,7 @@
     "gameday": "2026-10-26",
     "away_team": "PHX",
     "home_team": "OKC",
-    "away_score": 111,
+    "away_score": 114,
     "home_score": 125,
     "is_final": true,
     "gametime": "8:00 PM ET"
@@ -680,33 +680,33 @@
     "gametime": "10:30 PM ET"
   },
   {
-    "game_id": "401909893",
+    "game_id": "22600144",
     "gameday": "2026-10-29",
     "away_team": "CLE",
     "home_team": "ATL",
-    "away_score": 0,
-    "home_score": 0,
-    "is_final": false,
+    "away_score": 111,
+    "home_score": 113,
+    "is_final": true,
     "gametime": "7:00 PM ET"
   },
   {
-    "game_id": "401909894",
+    "game_id": "22600145",
     "gameday": "2026-10-29",
     "away_team": "SAC",
     "home_team": "NOP",
-    "away_score": 0,
-    "home_score": 0,
-    "is_final": false,
+    "away_score": 120,
+    "home_score": 132,
+    "is_final": true,
     "gametime": "8:00 PM ET"
   },
   {
-    "game_id": "401909895",
+    "game_id": "22600146",
     "gameday": "2026-10-29",
     "away_team": "MEM",
     "home_team": "POR",
-    "away_score": 0,
-    "home_score": 0,
-    "is_final": false,
+    "away_score": 124,
+    "home_score": 103,
+    "is_final": true,
     "gametime": "10:00 PM ET"
   },
   {
