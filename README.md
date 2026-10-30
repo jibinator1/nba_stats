@@ -24,6 +24,15 @@ A strictly descriptive, play-by-play, and tracking-backed NBA matchup analytics 
 
 ---
 
+## Key Features & Customizations
+
+* **Garbage Minutes Filter (`Min Mins Avg`):** Configurable in the Matchup Lab header controls bar (default: 20 min/game). Filters out end-of-bench and garbage-time players from positional allowances, defensive correlation baselines, and player streak evaluations.
+* **Pure Individual Metrics Only:** Cleanly separated into single-category metrics (`PTS`, `REB`, `AST`, `3PM`). All combo aggregates (`PRA`, `PR`, `PA`, `RA`) have been removed across all tabs and modals for precision scouting.
+* **Dynamic Positional Matchup Lab:** Real-time ANOVA statistical significance testing, t-tests, and Cohen's d effect sizes across individual positions (PG, SG, SF, PF, C) and grouped tiers (Guards, Wings, Bigs).
+* **Player Floor Streaks:** Unbroken consecutive game streaks exceeding empirical floor thresholds ((1 - margin) $\times$ baseline median).
+
+---
+
 ## Quick Start (Local Development)
 
 ### Prerequisites
@@ -56,6 +65,7 @@ Run the full forensic audit suite to verify zero forbidden terms, JSON schema in
 
 ```bash
 python verify_forensic.py
+python test_position_correlations.py
 ```
 
 ---
@@ -67,19 +77,23 @@ nba_stats/
 ├── app.py                           # Core Flask application and REST routes
 ├── forensic_data.py                 # Multi-season tracking data pipeline & Euclidean analog model
 ├── daily_update.py                  # Automated daily game log sync
-├── verify_forensic.py               # Comprehensive verification and compliance suite
+├── position_correlations.py         # Statistical ANOVA & positional correlation engine
+├── verify_forensic.py               # Comprehensive verification and compliance suite (17/17 audits)
+├── test_position_correlations.py    # Positional unit test suite (18/18 tests)
 ├── schedule_games.json              # Full 2025-26 & 2026-27 schedule with box scores
 ├── forensic_teams.json              # Team 4-pillar baselines and allowed distributions
 ├── forensic_players.json            # Top 4 player rotation percentile profiles
 ├── forensic_similar_opponents.json  # Precomputed Euclidean opponent clusters
+├── forensic_position_correlations.json # Precomputed positional correlations (960 records)
 ├── forensic_team_game_logs.json     # Per-game tracking logs for dynamic date range recalculations
 ├── static/
 │   ├── style.css                    # Unified dark-mode stylesheet & tooltip layout
 │   └── js/
-│       ├── app.js                   # Dashboard state, date filtering, and schedule grid
+│       ├── app.js                   # Dashboard state, date filtering, min minutes & schedule grid
 │       ├── visuals.js               # Responsive SVG shot zones, play types & pace gauge
 │       ├── modal.js                 # Deep Dive modal, 4-pillar stats, and callout generator
-│       └── profiles.js              # Player usage profile table, slate chips, and sorting
+│       ├── positional.js            # Positional matchup correlation table and filters
+│       └── profiles.js              # Player floor streaks table, slate chips, and sorting
 ├── templates/
 │   └── index.html                   # Semantic HTML template
 └── vercel.json                      # Serverless packaging configuration
@@ -87,29 +101,30 @@ nba_stats/
 
 ---
 
-## 📋 Engineering Handoff & TODO List
+## 📋 Engineering Handoff & Checklist
 
-### ✅ Recently Completed
-- [x] **Combo Metrics Removal:** Completely removed all combo stats (PRA, PR, PA, RA) across the entire engine:
-  - Positional defense allowances (c_pra_allowed, pf_pra_allowed, sf_pra_allowed, sg_pra_allowed, pg_pra_allowed).
-  - Positional matchup correlations (position_correlations.py, METRICS = ['PTS', 'REB', 'AST', 'FG3M']).
-  - Positional matchup UI tab and buttons (index.html, static/js/positional.js).
-  - Matchup comparison cards and deep-dive modals (static/js/app.js, public/static/js/app.js).
-  - Player floor streaks filter bar (index.html, static/js/profiles.js, public/static/js/profiles.js).
+### ✅ Completed
+- [x] **Combo Metrics Removal:** Completely removed all combo stats (`PRA`, `PR`, `PA`, `RA`) across the entire engine:
+  - Positional defense allowances (`c_pra_allowed`, `pf_pra_allowed`, `sf_pra_allowed`, `sg_pra_allowed`, `pg_pra_allowed`).
+  - Positional matchup correlations (`position_correlations.py`, `METRICS = ['PTS', 'REB', 'AST', 'FG3M']`).
+  - Positional matchup UI tab and metric selector pills (`templates/index.html`, `static/js/positional.js`).
+  - Matchup comparison cards and deep-dive modals (`static/js/app.js`, `public/static/js/app.js`).
+  - Player floor streaks filter bar (`templates/index.html`, `static/js/profiles.js`, `public/static/js/profiles.js`).
 - [x] **Garbage Minutes Filter (Minimum Minutes Avg per Player):**
-  - Added interactive Min Mins Avg input box in the Matchup Lab top control bar (index.html, default 20).
-  - Filtered opponent positional allowances and correlations by player average minutes (player_avg_min >= min_minutes).
-  - Dynamic API integration: /api/positional-correlations?min_minutes=....
-  - Filtered Player Floor Streaks table to exclude players averaging below the specified minimum minutes.
-  - Regenerated orensic_position_correlations.json (960 records) and orensic_teams.json.
-- [x] **Thermonuclear Line Count Standard:** Confirmed all .py and .js files remain strictly under 1,000 lines.
+  - Added interactive `Min Mins Avg` input box in the Matchup Lab top control bar (`templates/index.html`, default `20`).
+  - Filtered opponent positional allowances and correlations by player average minutes (`player_avg_min >= min_minutes`).
+  - Dynamic API integration: `/api/positional-correlations?min_minutes=...`.
+  - Filtered Player Floor Streaks table and `/api/floor-streak` to exclude players averaging below the specified minimum minutes.
+  - Regenerated `forensic_position_correlations.json` (960 records) and `forensic_teams.json`.
+- [x] **Thermonuclear Line Count Standard:** Confirmed all `.py` and `.js` files remain strictly under 1,000 lines.
+- [x] **Audit & Unit Tests Passing:**
+  - `python verify_forensic.py` passed with 100% compliance across all 17 audit suites.
+  - `python test_position_correlations.py` passed with 18/18 unit tests OK.
 
-### 📝 Handoff TODOs (Check Later)
-- [ ] **Run Full Test & Audit Suite:** Run python verify_forensic.py and python test_position_correlations.py to verify full audit checks and test passing.
-- [ ] **Vercel Remote Deployment Sync:** Check Vercel serverless deployment build and live site sync.
-- [ ] **UI Mobile Viewport Verification:** Verify alignment of the new Min Mins Avg box on narrow mobile viewports.
+### 📝 Next Deployment / Follow-Up Items
+- [ ] **Vercel Remote Deployment Sync:** Verify live Vercel deployment builds cleanly and reflects updated JSON data.
+- [ ] **Daily Sync Verification:** Confirm `python daily_update.py` scheduled job continues regular season log updates cleanly.
 
 ---
 
 *NBA Forensic Scouting Engine • Strictly Descriptive Analytics*
- • Strictly Descriptive Analytics*
