@@ -110,7 +110,7 @@ const POS_METRIC_LABELS = {
     'pg_pts_allowed': 'PG PTS Allowed', 'pg_reb_allowed': 'PG REB Allowed', 'pg_ast_allowed': 'PG AST Allowed', 'pg_fg3m_allowed': 'PG 3PM Allowed'
 };
 SIGNIFICANT_POS_KEYS.forEach(k => {
-    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
+    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position (Volume, Rank #1-#30), alongside the relative differential in parentheses vs opposing players' season baselines (+/-). Negative differentials indicate the defense suppresses players below their normal scoring.`;
 });
 // Evaluation Mode State ('overall' vs 'opponent_diff')
 window.matchupEvaluationMode = window.matchupEvaluationMode || 'overall';
@@ -200,13 +200,30 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         const hW = (hD && hD.weighted_diff != null) ? ` (weighted: ${hD.weighted_diff > 0 ? '+' : ''}${hD.weighted_diff})` : '';
         const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text}${aW} vs ${pos} baseline average (Rank #${aRankVal ?? '--'})` : 'No positional differential recorded';
         const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text}${hW} vs ${pos} baseline average (Rank #${hRankVal ?? '--'})` : 'No positional differential recorded';
-        return `
-            <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
-                <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
-                <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label}</span>${tooltipBody}</span></div>
-                <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span>${hBadge}</div>
-            </div>
-        `;
+        
+        const isDiffMode = (window.matchupEvaluationMode === 'opponent_diff');
+        if (isDiffMode) {
+            return `
+                <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                    <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
+                    <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label} (Diff)</span>${tooltipBody}</span></div>
+                    <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span>${hBadge}</div>
+                </div>
+            `;
+        } else {
+            // Overall per-game volume mode: show actual allowed stat with differential in parentheses
+            const aDiffTag = aD ? `<span class="${aFmt.className} text-[10px] ml-1 font-mono font-normal">(${aFmt.text})</span>` : '';
+            const hDiffTag = hD ? `<span class="${hFmt.className} text-[10px] mr-1 font-mono font-normal">(${hFmt.text})</span>` : '';
+            const aVolBadge = formatRankBadge(aRank);
+            const hVolBadge = formatRankBadge(hRank);
+            return `
+                <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                    <div class="flex items-center space-x-1.5 text-left font-mono">${aVolBadge}<span class="text-slate-200 font-bold" title="${aTitle}">${aVal != null ? aVal : '--'}${aDiffTag}</span></div>
+                    <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label}</span>${tooltipBody}</span></div>
+                    <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="text-slate-200 font-bold" title="${hTitle}">${hDiffTag}${hVal != null ? hVal : '--'}</span>${hVolBadge}</div>
+                </div>
+            `;
+        }
     }
     let aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
     let hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
