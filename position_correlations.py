@@ -66,6 +66,16 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
     if logs_df is None:
         logs_path = os.path.join(BASE_DIR, 'logs.csv')
         if not os.path.exists(logs_path):
+            for candidate in [os.path.join(os.getcwd(), 'logs.csv'), os.path.join(os.path.dirname(BASE_DIR), 'logs.csv')]:
+                if os.path.exists(candidate):
+                    logs_path = candidate
+                    break
+        if not os.path.exists(logs_path):
+            for c in [BASE_DIR, os.getcwd(), os.path.dirname(BASE_DIR)]:
+                cp = os.path.join(c, 'forensic_position_correlations.json')
+                if os.path.exists(cp):
+                    with open(cp, 'r', encoding='utf-8') as f:
+                        return json.load(f)
             raise FileNotFoundError(f"logs.csv not found at {logs_path}")
         logs_df = pd.read_csv(logs_path)
 
@@ -187,7 +197,7 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
                     if len(non_zero) >= 6:
                         with warnings.catch_warnings():
                             warnings.simplefilter('ignore')
-                            w_res = stats.wilcoxon(non_zero)
+                            w_res = stats.wilcoxon(non_zero, method='approx')
                         p_wilcoxon = float(w_res.pvalue) if not np.isnan(w_res.pvalue) else p_ttest
                     else:
                         p_wilcoxon = p_ttest
@@ -257,12 +267,16 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
                 except Exception:
                     dataset['cross_position_correlations'][m] = {}
 
-    # Save to JSON only if requested
-    if save_json:
+    # Save to JSON only if requested and not running on Vercel
+    is_vercel = os.environ.get('VERCEL') == '1'
+    if save_json and not is_vercel:
         out_json = os.path.join(BASE_DIR, 'forensic_position_correlations.json')
-        with open(out_json, 'w', encoding='utf-8') as f:
-            json.dump(dataset, f, indent=2, cls=NumpyEncoder)
-        print(f"[Positional Engine] Successfully generated {len(dataset['matchups'])} records -> {out_json}")
+        try:
+            with open(out_json, 'w', encoding='utf-8') as f:
+                json.dump(dataset, f, indent=2, cls=NumpyEncoder)
+            print(f"[Positional Engine] Successfully generated {len(dataset['matchups'])} records -> {out_json}")
+        except OSError as e:
+            print(f"[Positional Engine Warning] Could not save json: {e}")
 
     return dataset
 

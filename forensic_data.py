@@ -71,6 +71,11 @@ def load_injuries_by_team():
     """Loads injuries.csv and maps players to NBA teams."""
     inj_file = os.path.join(BASE_DIR, 'injuries.csv')
     if not os.path.exists(inj_file):
+        for c in [os.path.join(os.getcwd(), 'injuries.csv'), os.path.join(os.path.dirname(BASE_DIR), 'injuries.csv')]:
+            if os.path.exists(c):
+                inj_file = c
+                break
+    if not os.path.exists(inj_file):
         return {}
     try:
         inj_df = pd.read_csv(inj_file)

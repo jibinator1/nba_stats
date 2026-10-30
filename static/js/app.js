@@ -37,6 +37,7 @@ const defaultSeasonStart = APP_DATA.startDate || '2025-10-02';
 // State variables: Start at start of last season to current date (dynamic)
 let startDate = defaultSeasonStart;
 let endDate = APP_DATA.endDate || clientTodayStr;
+window.startDate = startDate; window.endDate = endDate;
 let currentScheduleSeason = '2026';
 let selectedScheduleDate = 'all';
 let currentScheduleTeam = 'ALL';
@@ -477,8 +478,11 @@ function recalculateForensicsForDateRange(sDate, eDate) {
 async function updatePositionalDeltasForDateRange(sDate, eDate) {
     if (!sDate || !eDate) return;
     if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
+    const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
+    const baseStart = (window.APP_DATA && window.APP_DATA.startDate) || window.startDate || startDate;
+    const baseEnd = (window.APP_DATA && window.APP_DATA.endDate) || window.endDate || endDate;
+    if (sDate === baseStart && eDate === baseEnd && minM === 20 && window.APP_DATA && window.APP_DATA.positionMatchupDeltas && Object.keys(window.APP_DATA.positionMatchupDeltas).length > 0) return;
     try {
-        const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
         const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}&min_minutes=${encodeURIComponent(minM)}`);
         if (res.ok) {
             const data = await res.json();
@@ -518,6 +522,7 @@ function onDateRangeChange() {
         document.getElementById('input-start-date').value = startDate;
         document.getElementById('input-end-date').value = endDate;
     }
+    window.startDate = startDate; window.endDate = endDate;
     recalculateForensicsForDateRange(startDate, endDate);
     updatePositionalDeltasForDateRange(startDate, endDate);
     renderScheduleDatePills();

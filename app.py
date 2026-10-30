@@ -20,6 +20,14 @@ GITHUB_RAW_BASE = "https://raw.githubusercontent.com/jibinator1/nba_stats/main/"
 IS_VERCEL = os.environ.get('VERCEL') == '1'
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+def resolve_file_path(filename):
+    """Locates a local file across local dev, test runners, and Vercel serverless."""
+    for root in [BASE_DIR, os.getcwd(), os.path.dirname(BASE_DIR)]:
+        candidate = os.path.join(root, filename)
+        if os.path.exists(candidate):
+            return candidate
+    return os.path.join(BASE_DIR, filename)
+
 app = Flask(__name__)
 
 DEFAULT_PAIRINGS = [
@@ -69,12 +77,18 @@ handler = app
 # DATA LOADERS & ENGINES
 # =========================================================================
 
+_FORENSIC_CACHE = None
+
 def load_forensic_data():
-    """Loads team profiles, similarity models, player distributions, and game logs."""
-    teams_path = os.path.join(BASE_DIR, 'forensic_teams.json')
-    sim_path = os.path.join(BASE_DIR, 'forensic_similar_opponents.json')
-    players_path = os.path.join(BASE_DIR, 'forensic_players.json')
-    logs_path = os.path.join(BASE_DIR, 'forensic_team_game_logs.json')
+    """Loads team profiles, similarity models, player distributions, and game logs with memory caching."""
+    global _FORENSIC_CACHE
+    if _FORENSIC_CACHE is not None:
+        return _FORENSIC_CACHE
+
+    teams_path = resolve_file_path('forensic_teams.json')
+    sim_path = resolve_file_path('forensic_similar_opponents.json')
+    players_path = resolve_file_path('forensic_players.json')
+    logs_path = resolve_file_path('forensic_team_game_logs.json')
 
     if os.path.exists(teams_path) and os.path.exists(sim_path) and os.path.exists(players_path):
         try:
@@ -89,38 +103,31 @@ def load_forensic_data():
                 with open(logs_path, 'r', encoding='utf-8') as f:
                     team_game_logs = json.load(f)
             last_updated = datetime.fromtimestamp(os.path.getmtime(teams_path)).strftime('%Y-%m-%d %I:%M %p')
-            return forensic_teams, similarity_lookups, player_profiles, team_game_logs, last_updated
+            _FORENSIC_CACHE = (forensic_teams, similarity_lookups, player_profiles, team_game_logs, last_updated)
+            return _FORENSIC_CACHE
         except Exception as e:
             print(f"Error reading local forensic data: {e}")
 
-    if IS_VERCEL:
+    if not IS_VERCEL:
         try:
-            r1 = requests.get(f"{GITHUB_RAW_BASE}forensic_teams.json", timeout=6)
-            r2 = requests.get(f"{GITHUB_RAW_BASE}forensic_similar_opponents.json", timeout=6)
-            r3 = requests.get(f"{GITHUB_RAW_BASE}forensic_players.json", timeout=6)
-            r4 = requests.get(f"{GITHUB_RAW_BASE}forensic_team_game_logs.json", timeout=6)
-            if r1.status_code == 200 and r2.status_code == 200 and r3.status_code == 200:
-                t_logs = r4.json() if r4.status_code == 200 else []
-                return r1.json(), r2.json(), r3.json(), t_logs, "Remote Sync"
+            run_forensic_pipeline()
+            if os.path.exists(teams_path) and os.path.exists(sim_path) and os.path.exists(players_path):
+                with open(teams_path, 'r', encoding='utf-8') as f:
+                    forensic_teams = json.load(f)
+                with open(sim_path, 'r', encoding='utf-8') as f:
+                    similarity_lookups = json.load(f)
+                with open(players_path, 'r', encoding='utf-8') as f:
+                    player_profiles = json.load(f)
+                team_game_logs = []
+                if os.path.exists(logs_path):
+                    with open(logs_path, 'r', encoding='utf-8') as f:
+                        team_game_logs = json.load(f)
+                _FORENSIC_CACHE = (forensic_teams, similarity_lookups, player_profiles, team_game_logs, "Local Engine")
+                return _FORENSIC_CACHE
         except Exception as e:
-            print(f"Error fetching remote forensic data: {e}")
+            print(f"Pipeline generation error: {e}")
 
-    try:
-        run_forensic_pipeline()
-        with open(teams_path, 'r', encoding='utf-8') as f:
-            forensic_teams = json.load(f)
-        with open(sim_path, 'r', encoding='utf-8') as f:
-            similarity_lookups = json.load(f)
-        with open(players_path, 'r', encoding='utf-8') as f:
-            player_profiles = json.load(f)
-        team_game_logs = []
-        if os.path.exists(logs_path):
-            with open(logs_path, 'r', encoding='utf-8') as f:
-                team_game_logs = json.load(f)
-        return forensic_teams, similarity_lookups, player_profiles, team_game_logs, "Local Engine"
-    except Exception as e:
-        print(f"Pipeline generation error: {e}")
-        return {}, {}, [], [], "Sync Error"
+    return {}, {}, [], [], "Sync Error"
 
 
 _POS_CORR_CACHE = {}
@@ -134,20 +141,35 @@ def load_position_correlations(start_date=None, end_date=None, min_minutes=20.0)
         min_m = float(min_minutes)
     except (ValueError, TypeError):
         min_m = 20.0
-    cache_key = (str(start_date) if start_date else None, str(end_date) if end_date else None, min_m)
+
+    is_default_range = (start_date is None and end_date is None and min_m == 20.0)
+
+    cache_key = (None if is_default_range else str(start_date),
+                 None if is_default_range else str(end_date),
+                 min_m)
     if cache_key in _POS_CORR_CACHE:
         return _POS_CORR_CACHE[cache_key]
 
-    if start_date or end_date or min_m != 20.0:
-        try:
-            from position_correlations import calculate_position_correlations
-            res = calculate_position_correlations(start_date=start_date, end_date=end_date, min_minutes=min_m)
-            _POS_CORR_CACHE[cache_key] = res
-            return res
-        except Exception as e:
-            print(f"Date-filtered calculation error for positional correlations: {e}")
+    if is_default_range:
+        corr_path = resolve_file_path('forensic_position_correlations.json')
+        if os.path.exists(corr_path):
+            try:
+                with open(corr_path, 'r', encoding='utf-8') as f:
+                    res = json.load(f)
+                    _POS_CORR_CACHE[cache_key] = res
+                    return res
+            except Exception as e:
+                print(f"Error loading positional correlations: {e}")
 
-    corr_path = os.path.join(BASE_DIR, 'forensic_position_correlations.json')
+    try:
+        from position_correlations import calculate_position_correlations
+        res = calculate_position_correlations(start_date=start_date, end_date=end_date, min_minutes=min_m, save_json=False)
+        _POS_CORR_CACHE[cache_key] = res
+        return res
+    except Exception as e:
+        print(f"Calculation error for positional correlations: {e}")
+
+    corr_path = resolve_file_path('forensic_position_correlations.json')
     if os.path.exists(corr_path):
         try:
             with open(corr_path, 'r', encoding='utf-8') as f:
@@ -155,26 +177,9 @@ def load_position_correlations(start_date=None, end_date=None, min_minutes=20.0)
                 _POS_CORR_CACHE[cache_key] = res
                 return res
         except Exception as e:
-            print(f"Error loading positional correlations: {e}")
+            print(f"Error loading positional correlations fallback: {e}")
 
-    if IS_VERCEL:
-        try:
-            r = requests.get(f"{GITHUB_RAW_BASE}forensic_position_correlations.json", timeout=6)
-            if r.status_code == 200:
-                res = r.json()
-                _POS_CORR_CACHE[cache_key] = res
-                return res
-        except Exception as e:
-            print(f"Error fetching remote positional correlations: {e}")
-
-    try:
-        from position_correlations import calculate_position_correlations
-        res = calculate_position_correlations(min_minutes=min_m)
-        _POS_CORR_CACHE[cache_key] = res
-        return res
-    except Exception as e:
-        print(f"Fallback generation error for positional correlations: {e}")
-        return {'metadata': {}, 'anova': {}, 'cross_position_correlations': {}, 'matchups': []}
+    return {'metadata': {}, 'anova': {}, 'cross_position_correlations': {}, 'matchups': []}
 
 
 def build_position_matchup_deltas(pos_data):
@@ -215,9 +220,16 @@ def build_position_matchup_deltas(pos_data):
     return deltas
 
 
+_SCHEDULE_CACHE = None
+
+
 def load_all_schedule_games():
-    """Loads all schedule games with normalized metadata."""
-    json_path = os.path.join(BASE_DIR, 'schedule_games.json')
+    """Loads all schedule games with normalized metadata and in-memory caching."""
+    global _SCHEDULE_CACHE
+    if _SCHEDULE_CACHE is not None:
+        return _SCHEDULE_CACHE
+
+    json_path = resolve_file_path('schedule_games.json')
     raw_games = []
 
     if os.path.exists(json_path):
@@ -226,15 +238,6 @@ def load_all_schedule_games():
                 raw_games = json.load(f)
         except Exception as e:
             print(f"Error loading schedule_games.json: {e}")
-
-    if not raw_games and IS_VERCEL:
-        try:
-            url = f"{GITHUB_RAW_BASE}schedule_games.json"
-            r = requests.get(url, timeout=5)
-            if r.status_code == 200:
-                raw_games = r.json()
-        except Exception as e:
-            print(f"Error fetching remote schedule_games.json: {e}")
 
     if not raw_games:
         for a, h in DEFAULT_PAIRINGS:
@@ -274,6 +277,7 @@ def load_all_schedule_games():
             'is_final': is_fin
         })
 
+    _SCHEDULE_CACHE = enriched
     return enriched
 
 
@@ -439,7 +443,7 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
         min_minutes = float(request.args.get('min_minutes', 20.0))
     except (ValueError, TypeError):
         min_minutes = 20.0
-    pos_data = load_position_correlations(start_date=active_s, end_date=active_e, min_minutes=min_minutes)
+    pos_data = load_position_correlations(start_date=s_date, end_date=e_date, min_minutes=min_minutes)
     position_matchup_deltas = build_position_matchup_deltas(pos_data)
 
     return render_template('index.html',
