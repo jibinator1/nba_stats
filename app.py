@@ -211,6 +211,7 @@ def build_position_matchup_deltas(pos_data):
         k = f"{m['position']}_{m['opponent']}_{m['metric']}"
         deltas[k] = {
             'diff': round(float(m.get('mean_diff', 0)), 2),
+            'weighted_diff': round(float(m.get('weighted_mean_diff', m.get('mean_diff', 0))), 2),
             'pct': round(float(m.get('pct_over_avg', 50)), 1),
             'n': int(m.get('sample_size', 0)),
             'cat': m.get('effect_category', 'neutral'),

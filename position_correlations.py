@@ -101,11 +101,16 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
     clean_logs['OPP_TEAM'] = clean_logs['MATCHUP'].apply(lambda x: str(x).split()[-1] if pd.notna(x) else None)
 
 
-    # Compute player baselines (mean & median) strictly across qualifying games in window
+    # Compute player baselines (mean & median) strictly across qualifying games in window.
+    # Leave-One-Out (LOO) mean avoids target leakage/dampening when evaluating game i:
+    # LOO_AVG = (sum(m) - m_i) / (N - 1) if N > 1 else m_i.
     for m in METRICS:
-        clean_logs[f'{m}_SEASON_AVG'] = clean_logs.groupby('PLAYER_NAME')[m].transform('mean')
+        p_counts = clean_logs.groupby('PLAYER_NAME')[m].transform('count')
+        p_sums = clean_logs.groupby('PLAYER_NAME')[m].transform('sum')
+        clean_logs[f'{m}_SEASON_AVG'] = p_sums / p_counts
+        clean_logs[f'{m}_LOO_AVG'] = np.where(p_counts > 1, (p_sums - clean_logs[m]) / (p_counts - 1), clean_logs[m])
         clean_logs[f'{m}_SEASON_MED'] = clean_logs.groupby('PLAYER_NAME')[m].transform('median')
-        clean_logs[f'{m}_DIFF_AVG'] = clean_logs[m] - clean_logs[f'{m}_SEASON_AVG']
+        clean_logs[f'{m}_DIFF_AVG'] = clean_logs[m] - clean_logs[f'{m}_LOO_AVG']
         clean_logs[f'{m}_DIFF_MED'] = clean_logs[m] - clean_logs[f'{m}_SEASON_MED']
 
     all_positions = POSITIONS + TIERS
@@ -174,8 +179,11 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
             for m in METRICS:
                 diff_avg_vals = sub[f'{m}_DIFF_AVG'].values
                 diff_med_vals = sub[f'{m}_DIFF_MED'].values
+                min_vals = sub['MIN_NUM'].values
                 
                 mean_diff = float(np.mean(diff_avg_vals)) if len(diff_avg_vals) > 0 else 0.0
+                tot_minutes = float(np.sum(min_vals))
+                weighted_mean_diff = float(np.sum(diff_avg_vals * min_vals) / tot_minutes) if tot_minutes > 0 else mean_diff
                 median_diff = float(np.median(diff_med_vals)) if len(diff_med_vals) > 0 else 0.0
                 std_diff = float(np.std(diff_avg_vals, ddof=1)) if len(diff_avg_vals) > 1 else 0.0
                 cohens_d = mean_diff / (std_diff + 1e-9)
@@ -222,6 +230,7 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
                     'metric': m,
                     'sample_size': n_games,
                     'mean_diff': round(mean_diff, 2),
+                    'weighted_mean_diff': round(weighted_mean_diff, 2),
                     'median_diff': round(median_diff, 2),
                     'std_diff': round(std_diff, 2),
                     'cohens_d': round(cohens_d, 3),

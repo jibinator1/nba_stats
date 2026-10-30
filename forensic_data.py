@@ -586,10 +586,10 @@ def calculate_team_forensics(logs_df, paired_df):
 def build_similar_opponents_model(team_profiles, paired_df):
     """
     Constructs multi-dimensional Euclidean similarity model across
-    normalized [Pace, 3PT Rate, Paint Touch Rate, Switch Rate].
+    normalized offensive style features [Pace, 3PT Rate, Paint Touch Rate, Transition Freq].
     Pre-computes pairwise lookups for all (defending_team, attacking_team).
     """
-    features = ['PACE', 'FG3_RATE', 'PAINT_RATE', 'SWITCH_RATE']
+    features = ['PACE', 'FG3_RATE', 'PAINT_RATE', 'TRANS_FREQ']
     matrix = []
     teams = []
     
@@ -599,7 +599,7 @@ def build_similar_opponents_model(team_profiles, paired_df):
             p['pace'] if p.get('pace') is not None else 100.0,
             p['three_point_rate'] if p.get('three_point_rate') is not None else 38.0,
             p['paint_touches_pg'] if p.get('paint_touches_pg') is not None else 24.0,
-            p.get('pnr_coverage', {}).get('switch') if p.get('pnr_coverage', {}).get('switch') is not None else 32.0
+            p['transition_freq'] if p.get('transition_freq') is not None else 15.0
         ])
         teams.append(t)
         
@@ -643,12 +643,15 @@ def build_similar_opponents_model(team_profiles, paired_df):
                         
             distances.sort(key=lambda x: x[1])
             dist_vals = [d[1] for d in distances]
-            std_d = np.std(dist_vals) if len(dist_vals) > 1 else 1.0
-            threshold = 1.50 * std_d
+            mean_d = float(np.mean(dist_vals)) if dist_vals else 0.0
+            std_d = float(np.std(dist_vals)) if len(dist_vals) > 1 else 1.0
+            threshold = mean_d + 1.50 * std_d
             
+            # Select up to k=5 nearest neighbors within distance threshold,
+            # with guaranteed k=5 nearest-neighbor fallback so outlier styles never produce empty clusters
             similar_cluster = [opp for opp, d in distances if d <= threshold][:5]
-            if not similar_cluster and distances:
-                similar_cluster = [distances[0][0]]
+            if len(similar_cluster) < min(5, len(distances)):
+                similar_cluster = [opp for opp, d in distances[:5]]
                 
             # Filter defending team's games against these similar opponents
             matched_games = t_games[t_games['TEAM_ABBREVIATION_OPP'].isin(similar_cluster)]
@@ -949,36 +952,16 @@ def run_forensic_pipeline():
 
     print("Exporting compact team game logs for dynamic date range calculation...")
     paired_df['GAME_DATE_STR'] = paired_df['GAME_DATE'].dt.strftime('%Y-%m-%d')
-    team_game_logs = []
-    for _, r in paired_df.iterrows():
-        team_game_logs.append({
-            'd': r['GAME_DATE_STR'],
-            't': r['TEAM_ABBREVIATION'],
-            'opp': r['TEAM_ABBREVIATION_OPP'],
-            'pts': int(r['PTS']),
-            'opp_pts': int(r['PTS_OPP']),
-            'reb': int(r['REB']),
-            'opp_reb': int(r['REB_OPP']),
-            'ast': int(r['AST']),
-            'opp_ast': int(r['AST_OPP']),
-            'fg3m': int(r['FG3M']),
-            'opp_fg3m': int(r['FG3M_OPP']),
-            'fg3a': int(r['FG3A']),
-            'opp_fg3a': int(r['FG3A_OPP']),
-            'fgm': int(r['FGM']),
-            'fga': int(r['FGA']),
-            'opp_fgm': int(r['FGM_OPP']),
-            'opp_fga': int(r['FGA_OPP']),
-            'poss': round(float(r['POSS']), 1),
-            'dreb': int(r['DREB']),
-            'oreb': int(r['OREB']),
-            'opp_dreb': int(r['DREB_OPP']),
-            'opp_oreb': int(r['OREB_OPP']),
-            'stl': int(r['STL']),
-            'blk': int(r['BLK']),
-            'tov': int(r['TOV']),
-            'opp_tov': int(r['TOV_OPP'])
-        })
+    team_game_logs = [
+        {'d': r['GAME_DATE_STR'], 't': r['TEAM_ABBREVIATION'], 'opp': r['TEAM_ABBREVIATION_OPP'],
+         'pts': int(r['PTS']), 'opp_pts': int(r['PTS_OPP']), 'reb': int(r['REB']), 'opp_reb': int(r['REB_OPP']),
+         'ast': int(r['AST']), 'opp_ast': int(r['AST_OPP']), 'fg3m': int(r['FG3M']), 'opp_fg3m': int(r['FG3M_OPP']),
+         'fg3a': int(r['FG3A']), 'opp_fg3a': int(r['FG3A_OPP']), 'fgm': int(r['FGM']), 'fga': int(r['FGA']),
+         'opp_fgm': int(r['FGM_OPP']), 'opp_fga': int(r['FGA_OPP']), 'poss': round(float(r['POSS']), 1),
+         'dreb': int(r['DREB']), 'oreb': int(r['OREB']), 'opp_dreb': int(r['DREB_OPP']), 'opp_oreb': int(r['OREB_OPP']),
+         'stl': int(r['STL']), 'blk': int(r['BLK']), 'tov': int(r['TOV']), 'opp_tov': int(r['TOV_OPP'])}
+        for _, r in paired_df.iterrows()
+    ]
     with open(out_team_logs_file, 'w', encoding='utf-8') as f:
         json.dump(team_game_logs, f, separators=(',', ':'), cls=NumpyEncoder)
     print(f"Saved {len(team_game_logs)} team game logs to {out_team_logs_file}")

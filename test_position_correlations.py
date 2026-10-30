@@ -236,7 +236,68 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertIn('gRankVal', modal_js)
         self.assertIn('updatePositionalDeltasForDateRange(startDate, endDate)', app_js)
 
+    def test_leave_one_out_baseline_delta_math(self):
+        # Verify Leave-One-Out (LOO) delta formulation avoids target leakage:
+        # For player with games [10, 20, 30], sum=60, N=3.
+        # Season avg is 20. Raw delta for 10 is -10.
+        # LOO avg excluding 10 is (60 - 10) / (3 - 1) = 25.
+        # LOO delta for 10 is 10 - 25 = -15.
+        df_synthetic = pd.DataFrame({
+            'PLAYER_NAME': ['Player A'] * 3 + ['Player B'],
+            'MATCHUP': ['BOS vs NYK', 'BOS vs MIA', 'BOS vs TOR', 'BOS vs PHI'],
+            'MIN': [30.0, 32.0, 28.0, 25.0],
+            'PTS': [10, 20, 30, 15],
+            'REB': [5, 5, 5, 5],
+            'AST': [5, 5, 5, 5],
+            'FG3M': [2, 2, 2, 2],
+            'GAME_DATE': ['2026-10-21'] * 4
+        })
+        res = calculate_position_correlations(logs_df=df_synthetic, min_minutes=20.0, start_date='2026-10-20', end_date='2026-10-25', save_json=False)
+        matchups = res.get('matchups', [])
+        # Find matchup for Player A vs NYK
+        nyk_pts = next((m for m in matchups if m['opponent'] == 'NYK' and m['metric'] == 'PTS'), None)
+        self.assertIsNotNone(nyk_pts)
+        # LOO delta must be -15.0, not dampening to -10.0
+        self.assertEqual(nyk_pts['mean_diff'], -15.0)
+
+    def test_minutes_weighted_aggregation_metrics(self):
+        matchups = self.data.get('matchups', [])
+        self.assertGreater(len(matchups), 0)
+        for m in matchups[:50]:
+            self.assertIn('weighted_mean_diff', m)
+            self.assertIsInstance(m['weighted_mean_diff'], (float, int))
+        
+        # Verify in endpoint position_matchup_deltas
+        res = self.client.get('/api/positional-correlations')
+        self.assertEqual(res.status_code, 200)
+        deltas = res.get_json().get('position_matchup_deltas', {})
+        sample_delta = next(iter(deltas.values()))
+        self.assertIn('weighted_diff', sample_delta)
+        self.assertIsInstance(sample_delta['weighted_diff'], (float, int))
+
+    def test_similar_opponents_pure_offensive_features(self):
+        from forensic_data import build_similar_opponents_model
+        import inspect
+        src = inspect.getsource(build_similar_opponents_model)
+        # SWITCH_RATE must not be in features; pure offensive features only
+        self.assertNotIn("'SWITCH_RATE'", src)
+        self.assertIn("'TRANS_FREQ'", src)
+        self.assertIn("'PACE'", src)
+        self.assertIn("'FG3_RATE'", src)
+        self.assertIn("'PAINT_RATE'", src)
+
+    def test_similar_opponents_knn_fallback_outlier_safety(self):
+        # Outlier offensive style should never return an empty cluster
+        with open(os.path.join(BASE_DIR, 'forensic_similar_opponents.json'), 'r') as f:
+            sim_data = json.load(f)
+        for def_tm, atk_map in sim_data.items():
+            for atk_tm, details in atk_map.items():
+                cluster = details.get('cluster_opponents', [])
+                self.assertGreater(len(cluster), 0, f"Empty cluster for {def_tm} vs {atk_tm}")
+                self.assertLessEqual(len(cluster), 5)
+
 
 if __name__ == '__main__':
     unittest.main()
+
 

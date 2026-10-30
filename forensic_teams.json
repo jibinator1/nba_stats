@@ -1143,9 +1143,9 @@
     "fg_pct": 45.8,
     "fg_pct_opp": 46.7,
     "injuries": [
-      "Kon Knueppel",
+      "Grant Williams",
       "Coby White",
-      "Grant Williams"
+      "Kon Knueppel"
     ],
     "c_pts_allowed": 14.9,
     "c_reb_allowed": 7.5,
@@ -2079,10 +2079,10 @@
     "fg_pct": 46.7,
     "fg_pct_opp": 47.7,
     "injuries": [
-      "Sergio de Larrea",
-      "Dereck Lively II",
-      "Tarik Biberovic",
       "Santi Aldama",
+      "Sergio de Larrea",
+      "Tarik Biberovic",
+      "Dereck Lively II",
       "Naji Marshall"
     ],
     "c_pts_allowed": 17.2,
@@ -2394,9 +2394,9 @@
     "fg_pct": 49.4,
     "fg_pct_opp": 46.8,
     "injuries": [
-      "Spencer Jones",
-      "Cameron Johnson",
       "Julian Strawther",
+      "Cameron Johnson",
+      "Spencer Jones",
       "Alpha Diallo"
     ],
     "c_pts_allowed": 13.7,
@@ -3020,8 +3020,8 @@
     "fg_pct": 46.0,
     "fg_pct_opp": 48.2,
     "injuries": [
-      "Jimmy Butler",
       "Gui Santos",
+      "Jimmy Butler",
       "Moses Moody"
     ],
     "c_pts_allowed": 14.5,
@@ -3333,10 +3333,10 @@
     "fg_pct": 48.1,
     "fg_pct_opp": 45.9,
     "injuries": [
+      "Alperen Sengun",
       "Steven Adams",
       "Reed Sheppard",
-      "Marcus Smart",
-      "Alperen Sengun"
+      "Marcus Smart"
     ],
     "c_pts_allowed": 14.8,
     "c_reb_allowed": 8.5,
@@ -3647,13 +3647,13 @@
     "fg_pct": 45.9,
     "fg_pct_opp": 48.6,
     "injuries": [
-      "T.J. McConnell",
+      "Ben Sheppard",
       "Johnny Furphy",
+      "T.J. McConnell",
       "Andrew Nembhard",
       "Aaron Nesmith",
       "Ivica Zubac",
-      "Tyrese Haliburton",
-      "Ben Sheppard"
+      "Tyrese Haliburton"
     ],
     "c_pts_allowed": 13.8,
     "c_reb_allowed": 8.1,
@@ -3964,10 +3964,10 @@
     "fg_pct": 48.3,
     "fg_pct_opp": 46.9,
     "injuries": [
-      "Jordan Miller",
       "Max Strus",
-      "Rui Hachimura",
-      "Brandon Ingram"
+      "Jordan Miller",
+      "Brandon Ingram",
+      "Rui Hachimura"
     ],
     "c_pts_allowed": 16.0,
     "c_reb_allowed": 9.5,
@@ -4278,8 +4278,8 @@
     "fg_pct": 50.4,
     "fg_pct_opp": 48.2,
     "injuries": [
-      "Cameron Carr",
       "Ziaire Williams",
+      "Cameron Carr",
       "Adou Thiero"
     ],
     "c_pts_allowed": 14.9,
@@ -5522,8 +5522,8 @@
     "fg_pct": 48.1,
     "fg_pct_opp": 46.0,
     "injuries": [
-      "Anthony Edwards",
-      "Donte DiVincenzo"
+      "Donte DiVincenzo",
+      "Anthony Edwards"
     ],
     "c_pts_allowed": 16.4,
     "c_reb_allowed": 9.3,
@@ -5834,10 +5834,10 @@
     "fg_pct": 46.7,
     "fg_pct_opp": 47.8,
     "injuries": [
-      "Yves Missi",
-      "Dejounte Murray",
       "Trey Alexander",
-      "Jordan Poole"
+      "Jordan Poole",
+      "Yves Missi",
+      "Dejounte Murray"
     ],
     "c_pts_allowed": 18.0,
     "c_reb_allowed": 10.7,
@@ -6459,11 +6459,11 @@
     "fg_pct": 48.1,
     "fg_pct_opp": 43.7,
     "injuries": [
+      "Jalen Williams",
+      "Thomas Sorber",
       "Chet Holmgren",
       "Cason Wallace",
-      "Thomas Sorber",
-      "Alex Caruso",
-      "Jalen Williams"
+      "Alex Caruso"
     ],
     "c_pts_allowed": 12.7,
     "c_reb_allowed": 9.1,
@@ -6774,10 +6774,10 @@
     "fg_pct": 46.3,
     "fg_pct_opp": 47.5,
     "injuries": [
-      "Paolo Banchero",
       "Jalen Suggs",
-      "Noah Penda",
-      "Jonathan Isaac"
+      "Paolo Banchero",
+      "Jonathan Isaac",
+      "Noah Penda"
     ],
     "c_pts_allowed": 15.1,
     "c_reb_allowed": 8.9,
@@ -7402,8 +7402,8 @@
     "fg_pct_opp": 47.0,
     "injuries": [
       "Mark Williams",
-      "Bradley Beal",
-      "Oso Ighodaro"
+      "Oso Ighodaro",
+      "Bradley Beal"
     ],
     "c_pts_allowed": 14.0,
     "c_reb_allowed": 9.1,
@@ -7714,10 +7714,10 @@
     "fg_pct": 45.5,
     "fg_pct_opp": 47.0,
     "injuries": [
-      "Shaedon Sharpe",
-      "Robert Williams III",
+      "Chris Youngblood",
       "Ja Morant",
-      "Chris Youngblood"
+      "Shaedon Sharpe",
+      "Robert Williams III"
     ],
     "c_pts_allowed": 17.3,
     "c_reb_allowed": 9.3,
@@ -9277,10 +9277,10 @@
     "fg_pct": 46.4,
     "fg_pct_opp": 48.6,
     "injuries": [
-      "Justin Champagnie",
       "Jamir Watkins",
+      "Tre Johnson",
       "Tristan Vukcevic",
-      "Tre Johnson"
+      "Justin Champagnie"
     ],
     "c_pts_allowed": 17.9,
     "c_reb_allowed": 10.1,

@@ -11,7 +11,10 @@ A strictly descriptive, play-by-play, and tracking-backed NBA matchup analytics 
 * **No Predictions / No Betting Language:** The engine does not emit projections, subjective labels, or recommendations.
 * **Universal Rankings:** All teams and players with recorded game data are explicitly ranked across all metrics, shot zones, and play types regardless of sample size.
 * **Date Range Gating:** All metrics and distributions dynamically adapt to selected date windows. Matches with zero completed games in a chosen window cleanly render unskewed blank states.
-* **Euclidean Analogs:** Similar-opponent defense matching uses normalized Euclidean feature distance ($\le 1.50\sigma$) across Pace, 3PT attempt rate, Paint attempt rate, and PnR Switch rate.
+* **Euclidean Analogs ($k$-NN):** Similar-opponent defense matching uses $k$-Nearest Neighbors ($k=5$) with an adaptive distance threshold over pure offensive style features (Pace, 3PT attempt rate, Paint touch rate, Transition frequency).
+* **Leave-One-Out (LOO) Deltas:** Player baselines strictly exclude the game being evaluated to eliminate target leakage and delta dampening.
+* **Minutes-Weighted Scheme Fidelity:** Matchup aggregations report both unweighted and minutes-weighted metrics to prevent reserve minutes from masking scheme impact against primary stars.
+* **Detailed Mathematical Specification:** See [DOCUMENTATION.md](./DOCUMENTATION.md) for full statistical formulations, LaTeX math, and code variable mapping.
 
 ---
 
@@ -20,12 +23,14 @@ A strictly descriptive, play-by-play, and tracking-backed NBA matchup analytics 
 1. **Pace, Game Flow & Transition:** Neutral pace (differential $\le 5$ pts), early shot-clock frequency (0–8s), mid shot-clock frequency (8–15s), late shot-clock pressure (15–24s), and game script tempo under 10+ point leads or deficits.
 2. **Perimeter & Paint Defense:** Pick & Roll coverage frequencies (Drop, Switch, Ice, Hedge), Restricted Area allowed PPP, Paint non-RA allowed PPP, Corner 3 allowed PPP, Wide-Open 3PT rate allowed, and Defensive Rebounding percentage (DREB%).
 3. **Offensive Play Type & Scheme:** Frequency and points per possession across PnR Ball Handler, Spot-Up, and Isolation play types, plus live-ball vs. dead-ball turnover splits.
-4. **Player Usage Profiles:** Top 4 rotation players with empirical 10-game distributions (25th percentile Floor, 50th percentile Median, 75th percentile Ceiling) alongside USG%, AST%, and situational clutch volume.
+4. **Similar-Opponent Analogs & Player Profiles:** $k$-Nearest Neighbors ($k=5$) Euclidean clustering over offensive style vectors, alongside top 4 rotation player empirical 10-game distributions (25th percentile Floor, 50th percentile Median, 75th percentile Ceiling) with USG%, AST%, and situational clutch volume.
 
 ---
 
 ## Key Features & Customizations
 
+* **Leave-One-Out (LOO) Baseline Math:** $\Delta_{p,i}^{\text{LOO}} = m_{p,i} - \overline{m}_{p,-i}$ guarantees that early-season small samples and evaluated games never dampen defensive deltas.
+* **Minutes-Weighted vs. Unweighted Aggregation:** High-minute stars (e.g. 38 mins) are weighted appropriately alongside 20-minute rotation players (`mean_diff` and `weighted_mean_diff`).
 * **Garbage Minutes Filter (`Min Mins Avg`):** Configurable in the Matchup Lab header controls bar (default: 20 min/game). Filters out end-of-bench and garbage-time players from positional allowances, defensive correlation baselines, and player streak evaluations.
 * **Pure Individual Metrics Only:** Cleanly separated into single-category metrics (`PTS`, `REB`, `AST`, `3PM`). All combo aggregates (`PRA`, `PR`, `PA`, `RA`) have been removed across all tabs and modals for precision scouting.
 * **Dynamic Positional Matchup Lab:** Real-time ANOVA statistical significance testing, t-tests, and Cohen's d effect sizes across individual positions (PG, SG, SF, PF, C) and grouped tiers (Guards, Wings, Bigs).
@@ -116,10 +121,15 @@ nba_stats/
   - Dynamic API integration: `/api/positional-correlations?min_minutes=...`.
   - Filtered Player Floor Streaks table and `/api/floor-streak` to exclude players averaging below the specified minimum minutes.
   - Regenerated `forensic_position_correlations.json` (960 records) and `forensic_teams.json`.
+- [x] **Leave-One-Out (LOO) Player Baseline Calculation:** Eliminated target leakage and dampening in player deltas ($m_{p,i} - \overline{m}_{p,-i}$).
+- [x] **Minutes-Weighted Aggregation:** Added minutes-weighted positional deltas (`weighted_mean_diff` / `weighted_diff`) alongside unweighted metrics.
+- [x] **Pure Offensive Style Vectors:** Separated offensive identity (`[Pace, 3PT Rate, Paint Touch Rate, Transition Freq]`) from defensive schemes (PnR Switch Rate).
+- [x] **k-NN (k=5) Outlier Fallback:** Refined stylistic clustering with adaptive thresholds ($\overline{d} + 1.50\sigma_d$) and guaranteed $k=5$ nearest-neighbor fallback.
+- [x] **Comprehensive Technical Documentation:** Authored [DOCUMENTATION.md](./DOCUMENTATION.md) detailing 4 pillars, LaTeX formulas, and variable mappings.
 - [x] **Thermonuclear Line Count Standard:** Confirmed all `.py` and `.js` files remain strictly under 1,000 lines.
 - [x] **Audit & Unit Tests Passing:**
   - `python verify_forensic.py` passed with 100% compliance across all 17 audit suites.
-  - `python test_position_correlations.py` passed with 18/18 unit tests OK.
+  - `python test_position_correlations.py` passed with 22/22 unit tests OK.
 
 ### 📝 Next Deployment / Follow-Up Items
 - [ ] **Vercel Remote Deployment Sync:** Verify live Vercel deployment builds cleanly and reflects updated JSON data.
