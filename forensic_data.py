@@ -32,8 +32,9 @@ NBA_TEAM_NAMES = {
     'TOR': 'Toronto Raptors', 'UTA': 'Utah Jazz', 'WAS': 'Washington Wizards'
 }
 
-def load_clean_logs():
-    """Loads logs.csv, filters to active 30 NBA teams, and excludes playoff/play-in games."""
+def load_clean_logs(start_date=None, end_date=None):
+    """Loads logs.csv, filters to active 30 NBA teams, and excludes playoff/play-in games.
+    Strictly filters to [start_date, end_date] when provided."""
     logs_path = os.path.join(BASE_DIR, 'logs.csv')
     if not os.path.exists(logs_path):
         return pd.DataFrame()
@@ -45,6 +46,10 @@ def load_clean_logs():
     clean_gid = df['GAME_ID'].astype(str).str.lstrip('0')
     df = df.loc[~clean_gid.str.cat(df['PLAYER_ID'].astype(str), sep='_').duplicated(keep='last')].copy()
     df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
+    if start_date:
+        df = df[df['GAME_DATE'] >= pd.to_datetime(start_date)]
+    if end_date:
+        df = df[df['GAME_DATE'] <= pd.to_datetime(end_date)]
     return df
 
 def build_paired_games(logs_df):
@@ -167,7 +172,7 @@ def calculate_team_forensics(logs_df, paired_df):
     
     clean_opp_logs = logs_df.dropna(subset=['PLAYER_NAME', 'MATCHUP']).copy()
     clean_opp_logs['MIN_NUM'] = pd.to_numeric(clean_opp_logs['MIN'], errors='coerce').fillna(0)
-    p_avg_min = clean_opp_logs.groupby('PLAYER_NAME')['MIN_NUM'].transform('mean')
+    p_avg_min = clean_opp_logs.groupby('PLAYER_ID')['MIN_NUM'].transform('mean')
     clean_opp_logs = clean_opp_logs[(p_avg_min >= 20.0) & (clean_opp_logs['MIN_NUM'] > 0)].copy()
     clean_opp_logs['POS'] = clean_opp_logs['PLAYER_NAME'].map(pos_map).fillna('SF')
     clean_opp_logs['TIER'] = clean_opp_logs['POS'].map(tier_map).fillna('wings')
@@ -903,10 +908,11 @@ class NumpyEncoder(json.JSONEncoder):
             return bool(obj)
         return super().default(obj)
 
-def run_forensic_pipeline():
-    """Executes the complete forensic data generation pipeline."""
-    print("Loading game logs...")
-    logs_df = load_clean_logs()
+def run_forensic_pipeline(start_date='2026-10-20', end_date='2026-10-30'):
+    """Executes the complete forensic data generation pipeline.
+    Default date range strictly covers the active 2026-27 season (2026-10-20 to 2026-10-30)."""
+    print(f"Loading game logs (filtered strictly to {start_date} to {end_date})...")
+    logs_df = load_clean_logs(start_date=start_date, end_date=end_date)
     if logs_df.empty:
         print("Error: logs.csv not found or empty.")
         return False
@@ -946,22 +952,87 @@ def run_forensic_pipeline():
     print("Computing Positional Matchup Correlations & Allowances...")
     try:
         from position_correlations import calculate_position_correlations
-        calculate_position_correlations(logs_df)
+        calculate_position_correlations(logs_df, start_date=start_date, end_date=end_date)
     except Exception as e:
         print(f"Warning: Positional correlations computation failed: {e}")
 
-    print("Exporting compact team game logs for dynamic date range calculation...")
+    print("Exporting compact team game logs with per-game positional allowances...")
+    from position_correlations import load_position_map
+    pos_map = load_position_map()
+    tier_map = {'PG': 'guards', 'SG': 'guards', 'SF': 'wings', 'PF': 'wings', 'C': 'bigs'}
+    
+    clean_opp_logs = logs_df.dropna(subset=['PLAYER_NAME', 'MATCHUP']).copy()
+    clean_opp_logs['MIN_NUM'] = pd.to_numeric(clean_opp_logs['MIN'], errors='coerce').fillna(0)
+    p_avg = clean_opp_logs.groupby('PLAYER_ID')['MIN_NUM'].transform('mean')
+    clean_opp_logs = clean_opp_logs[(p_avg >= 20.0) & (clean_opp_logs['MIN_NUM'] > 0)].copy()
+    clean_opp_logs['POS'] = clean_opp_logs['PLAYER_NAME'].map(pos_map).fillna('SF')
+    clean_opp_logs['TIER'] = clean_opp_logs['POS'].map(tier_map).fillna('wings')
+    clean_opp_logs['OPP_TEAM'] = clean_opp_logs['MATCHUP'].apply(lambda x: str(x).split()[-1])
+    clean_opp_logs['GID_CLEAN'] = clean_opp_logs['GAME_ID'].astype(str).str.lstrip('0')
+
+    pos_game_agg = clean_opp_logs.groupby(['GID_CLEAN', 'OPP_TEAM', 'POS'])[['PTS', 'REB', 'AST', 'FG3M']].sum()
+    tier_game_agg = clean_opp_logs.groupby(['GID_CLEAN', 'OPP_TEAM', 'TIER'])[['PTS', 'REB', 'FG3M']].sum()
+
     paired_df['GAME_DATE_STR'] = paired_df['GAME_DATE'].dt.strftime('%Y-%m-%d')
-    team_game_logs = [
-        {'d': r['GAME_DATE_STR'], 't': r['TEAM_ABBREVIATION'], 'opp': r['TEAM_ABBREVIATION_OPP'],
-         'pts': int(r['PTS']), 'opp_pts': int(r['PTS_OPP']), 'reb': int(r['REB']), 'opp_reb': int(r['REB_OPP']),
-         'ast': int(r['AST']), 'opp_ast': int(r['AST_OPP']), 'fg3m': int(r['FG3M']), 'opp_fg3m': int(r['FG3M_OPP']),
-         'fg3a': int(r['FG3A']), 'opp_fg3a': int(r['FG3A_OPP']), 'fgm': int(r['FGM']), 'fga': int(r['FGA']),
-         'opp_fgm': int(r['FGM_OPP']), 'opp_fga': int(r['FGA_OPP']), 'poss': round(float(r['POSS']), 1),
-         'dreb': int(r['DREB']), 'oreb': int(r['OREB']), 'opp_dreb': int(r['DREB_OPP']), 'opp_oreb': int(r['OREB_OPP']),
-         'stl': int(r['STL']), 'blk': int(r['BLK']), 'tov': int(r['TOV']), 'opp_tov': int(r['TOV_OPP'])}
-        for _, r in paired_df.iterrows()
-    ]
+    paired_df['GID_CLEAN'] = paired_df['GAME_ID'].astype(str).str.lstrip('0')
+
+    team_game_logs = []
+    for _, r in paired_df.iterrows():
+        gid = r['GID_CLEAN']
+        tm = r['TEAM_ABBREVIATION']
+        
+        c_pts = int(pos_game_agg.loc[(gid, tm, 'C'), 'PTS']) if (gid, tm, 'C') in pos_game_agg.index else 0
+        c_reb = int(pos_game_agg.loc[(gid, tm, 'C'), 'REB']) if (gid, tm, 'C') in pos_game_agg.index else 0
+        c_ast = int(pos_game_agg.loc[(gid, tm, 'C'), 'AST']) if (gid, tm, 'C') in pos_game_agg.index else 0
+        c_fg3m = int(pos_game_agg.loc[(gid, tm, 'C'), 'FG3M']) if (gid, tm, 'C') in pos_game_agg.index else 0
+
+        g_pts = int(tier_game_agg.loc[(gid, tm, 'guards'), 'PTS']) if (gid, tm, 'guards') in tier_game_agg.index else 0
+        w_pts = int(tier_game_agg.loc[(gid, tm, 'wings'), 'PTS']) if (gid, tm, 'wings') in tier_game_agg.index else 0
+        b_pts = int(tier_game_agg.loc[(gid, tm, 'bigs'), 'PTS']) if (gid, tm, 'bigs') in tier_game_agg.index else 0
+
+        g_reb = int(tier_game_agg.loc[(gid, tm, 'guards'), 'REB']) if (gid, tm, 'guards') in tier_game_agg.index else 0
+        w_reb = int(tier_game_agg.loc[(gid, tm, 'wings'), 'REB']) if (gid, tm, 'wings') in tier_game_agg.index else 0
+        b_reb = int(tier_game_agg.loc[(gid, tm, 'bigs'), 'REB']) if (gid, tm, 'bigs') in tier_game_agg.index else 0
+
+        g_fg3m = int(tier_game_agg.loc[(gid, tm, 'guards'), 'FG3M']) if (gid, tm, 'guards') in tier_game_agg.index else 0
+        w_fg3m = int(tier_game_agg.loc[(gid, tm, 'wings'), 'FG3M']) if (gid, tm, 'wings') in tier_game_agg.index else 0
+        b_fg3m = int(tier_game_agg.loc[(gid, tm, 'bigs'), 'FG3M']) if (gid, tm, 'bigs') in tier_game_agg.index else 0
+
+        pg_pts = int(pos_game_agg.loc[(gid, tm, 'PG'), 'PTS']) if (gid, tm, 'PG') in pos_game_agg.index else 0
+        pg_reb = int(pos_game_agg.loc[(gid, tm, 'PG'), 'REB']) if (gid, tm, 'PG') in pos_game_agg.index else 0
+        pg_ast = int(pos_game_agg.loc[(gid, tm, 'PG'), 'AST']) if (gid, tm, 'PG') in pos_game_agg.index else 0
+        pg_fg3m = int(pos_game_agg.loc[(gid, tm, 'PG'), 'FG3M']) if (gid, tm, 'PG') in pos_game_agg.index else 0
+
+        sg_pts = int(pos_game_agg.loc[(gid, tm, 'SG'), 'PTS']) if (gid, tm, 'SG') in pos_game_agg.index else 0
+        sg_reb = int(pos_game_agg.loc[(gid, tm, 'SG'), 'REB']) if (gid, tm, 'SG') in pos_game_agg.index else 0
+        sg_ast = int(pos_game_agg.loc[(gid, tm, 'SG'), 'AST']) if (gid, tm, 'SG') in pos_game_agg.index else 0
+        sg_fg3m = int(pos_game_agg.loc[(gid, tm, 'SG'), 'FG3M']) if (gid, tm, 'SG') in pos_game_agg.index else 0
+
+        sf_reb = int(pos_game_agg.loc[(gid, tm, 'SF'), 'REB']) if (gid, tm, 'SF') in pos_game_agg.index else 0
+        sf_ast = int(pos_game_agg.loc[(gid, tm, 'SF'), 'AST']) if (gid, tm, 'SF') in pos_game_agg.index else 0
+
+        pf_pts = int(pos_game_agg.loc[(gid, tm, 'PF'), 'PTS']) if (gid, tm, 'PF') in pos_game_agg.index else 0
+        pf_reb = int(pos_game_agg.loc[(gid, tm, 'PF'), 'REB']) if (gid, tm, 'PF') in pos_game_agg.index else 0
+        pf_ast = int(pos_game_agg.loc[(gid, tm, 'PF'), 'AST']) if (gid, tm, 'PF') in pos_game_agg.index else 0
+
+        team_game_logs.append({
+            'd': r['GAME_DATE_STR'], 't': tm, 'opp': r['TEAM_ABBREVIATION_OPP'],
+            'pts': int(r['PTS']), 'opp_pts': int(r['PTS_OPP']), 'reb': int(r['REB']), 'opp_reb': int(r['REB_OPP']),
+            'ast': int(r['AST']), 'opp_ast': int(r['AST_OPP']), 'fg3m': int(r['FG3M']), 'opp_fg3m': int(r['FG3M_OPP']),
+            'fg3a': int(r['FG3A']), 'opp_fg3a': int(r['FG3A_OPP']), 'fgm': int(r['FGM']), 'fga': int(r['FGA']),
+            'opp_fgm': int(r['FGM_OPP']), 'opp_fga': int(r['FGA_OPP']), 'poss': round(float(r['POSS']), 1),
+            'dreb': int(r['DREB']), 'oreb': int(r['OREB']), 'opp_dreb': int(r['DREB_OPP']), 'opp_oreb': int(r['OREB_OPP']),
+            'stl': int(r['STL']), 'blk': int(r['BLK']), 'tov': int(r['TOV']), 'opp_tov': int(r['TOV_OPP']),
+            # Positional allowances surrendered to opponents
+            'opp_c_pts': c_pts, 'opp_c_reb': c_reb, 'opp_c_ast': c_ast, 'opp_c_fg3m': c_fg3m,
+            'opp_g_pts': g_pts, 'opp_w_pts': w_pts, 'opp_b_pts': b_pts,
+            'opp_g_reb': g_reb, 'opp_w_reb': w_reb, 'opp_b_reb': b_reb,
+            'opp_g_fg3m': g_fg3m, 'opp_w_fg3m': w_fg3m, 'opp_b_fg3m': b_fg3m,
+            'opp_pg_pts': pg_pts, 'opp_pg_reb': pg_reb, 'opp_pg_ast': pg_ast, 'opp_pg_fg3m': pg_fg3m,
+            'opp_sg_pts': sg_pts, 'opp_sg_reb': sg_reb, 'opp_sg_ast': sg_ast, 'opp_sg_fg3m': sg_fg3m,
+            'opp_sf_reb': sf_reb, 'opp_sf_ast': sf_ast,
+            'opp_pf_pts': pf_pts, 'opp_pf_reb': pf_reb, 'opp_pf_ast': pf_ast
+        })
     with open(out_team_logs_file, 'w', encoding='utf-8') as f:
         json.dump(team_game_logs, f, separators=(',', ':'), cls=NumpyEncoder)
     print(f"Saved {len(team_game_logs)} team game logs to {out_team_logs_file}")

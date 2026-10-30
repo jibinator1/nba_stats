@@ -645,7 +645,7 @@
             allTeamGameLogs: {{ (team_game_logs if team_game_logs is defined else []) | tojson }},
             positionMatchupDeltas: {{ (position_matchup_deltas if position_matchup_deltas is defined else {}) | tojson }},
             teamNamesMap: {{ team_names | tojson }},
-            startDate: '{{ start_date }}' || '2025-10-02',
+            startDate: '{{ start_date }}' || '2026-10-20',
             endDate: '{{ end_date }}',
             initialAway: {{ (initial_away if initial_away is defined else None) | tojson }},
             initialHome: {{ (initial_home if initial_home is defined else None) | tojson }}

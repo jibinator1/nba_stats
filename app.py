@@ -335,6 +335,43 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
 
             base_p = base_forensic_teams.get(t, make_empty_team_profile(t))
             entry = dict(base_p)
+            # Dynamic positional allowances
+            g_pts = sum(g.get('opp_g_pts', 0) for g in t_games)
+            w_pts = sum(g.get('opp_w_pts', 0) for g in t_games)
+            b_pts = sum(g.get('opp_b_pts', 0) for g in t_games)
+            tot_pos_pts = g_pts + w_pts + b_pts
+
+            g_reb = sum(g.get('opp_g_reb', 0) for g in t_games)
+            w_reb = sum(g.get('opp_w_reb', 0) for g in t_games)
+            b_reb = sum(g.get('opp_b_reb', 0) for g in t_games)
+            tot_pos_reb = g_reb + w_reb + b_reb
+
+            g_fg3m = sum(g.get('opp_g_fg3m', 0) for g in t_games)
+            w_fg3m = sum(g.get('opp_w_fg3m', 0) for g in t_games)
+            b_fg3m = sum(g.get('opp_b_fg3m', 0) for g in t_games)
+            tot_pos_fg3m = g_fg3m + w_fg3m + b_fg3m
+
+            pos_allow = {
+                'pts': {
+                    'guards': round(g_pts / gp, 1), 'wings': round(w_pts / gp, 1), 'bigs': round(b_pts / gp, 1),
+                    'guards_pct': round((g_pts / tot_pos_pts) * 100, 1) if tot_pos_pts > 0 else 33.3,
+                    'wings_pct': round((w_pts / tot_pos_pts) * 100, 1) if tot_pos_pts > 0 else 33.3,
+                    'bigs_pct': round((b_pts / tot_pos_pts) * 100, 1) if tot_pos_pts > 0 else 33.4,
+                },
+                'reb': {
+                    'guards': round(g_reb / gp, 1), 'wings': round(w_reb / gp, 1), 'bigs': round(b_reb / gp, 1),
+                    'guards_pct': round((g_reb / tot_pos_reb) * 100, 1) if tot_pos_reb > 0 else 33.3,
+                    'wings_pct': round((w_reb / tot_pos_reb) * 100, 1) if tot_pos_reb > 0 else 33.3,
+                    'bigs_pct': round((b_reb / tot_pos_reb) * 100, 1) if tot_pos_reb > 0 else 33.4,
+                },
+                'fg3m': {
+                    'guards': round(g_fg3m / gp, 1), 'wings': round(w_fg3m / gp, 1), 'bigs': round(b_fg3m / gp, 1),
+                    'guards_pct': round((g_fg3m / tot_pos_fg3m) * 100, 1) if tot_pos_fg3m > 0 else 33.3,
+                    'wings_pct': round((w_fg3m / tot_pos_fg3m) * 100, 1) if tot_pos_fg3m > 0 else 33.3,
+                    'bigs_pct': round((b_fg3m / tot_pos_fg3m) * 100, 1) if tot_pos_fg3m > 0 else 33.4,
+                }
+            }
+
             entry.update({
                 'team': t,
                 'team_name': NBA_TEAM_NAMES.get(t, t),
@@ -359,7 +396,25 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
                 'fg_pct_opp': round((tot_fgm_opp / tot_fga_opp * 100), 1) if tot_fga_opp > 0 else None,
                 'pace': pace,
                 'off_rtg': round((tot_pts / tot_poss * 100), 1) if tot_poss > 0 else None,
-                'def_rtg': round((tot_pts_opp / tot_poss * 100), 1) if tot_poss > 0 else None
+                'def_rtg': round((tot_pts_opp / tot_poss * 100), 1) if tot_poss > 0 else None,
+                'positional_allowances': pos_allow,
+                'c_pts_allowed': round(sum(g.get('opp_c_pts', 0) for g in t_games) / gp, 1),
+                'c_reb_allowed': round(sum(g.get('opp_c_reb', 0) for g in t_games) / gp, 1),
+                'c_ast_allowed': round(sum(g.get('opp_c_ast', 0) for g in t_games) / gp, 1),
+                'c_fg3m_allowed': round(sum(g.get('opp_c_fg3m', 0) for g in t_games) / gp, 1),
+                'pf_pts_allowed': round(sum(g.get('opp_pf_pts', 0) for g in t_games) / gp, 1),
+                'pf_reb_allowed': round(sum(g.get('opp_pf_reb', 0) for g in t_games) / gp, 1),
+                'pf_ast_allowed': round(sum(g.get('opp_pf_ast', 0) for g in t_games) / gp, 1),
+                'sf_reb_allowed': round(sum(g.get('opp_sf_reb', 0) for g in t_games) / gp, 1),
+                'sf_ast_allowed': round(sum(g.get('opp_sf_ast', 0) for g in t_games) / gp, 1),
+                'sg_pts_allowed': round(sum(g.get('opp_sg_pts', 0) for g in t_games) / gp, 1),
+                'sg_reb_allowed': round(sum(g.get('opp_sg_reb', 0) for g in t_games) / gp, 1),
+                'sg_ast_allowed': round(sum(g.get('opp_sg_ast', 0) for g in t_games) / gp, 1),
+                'sg_fg3m_allowed': round(sum(g.get('opp_sg_fg3m', 0) for g in t_games) / gp, 1),
+                'pg_pts_allowed': round(sum(g.get('opp_pg_pts', 0) for g in t_games) / gp, 1),
+                'pg_reb_allowed': round(sum(g.get('opp_pg_reb', 0) for g in t_games) / gp, 1),
+                'pg_ast_allowed': round(sum(g.get('opp_pg_ast', 0) for g in t_games) / gp, 1),
+                'pg_fg3m_allowed': round(sum(g.get('opp_pg_fg3m', 0) for g in t_games) / gp, 1)
             })
             teams_dict[t] = entry
 
@@ -406,7 +461,33 @@ def calculate_dynamic_teams_for_range(team_game_logs, start_date, end_date):
         (('turnover_profile', 'live_ball_per_game'), True, 'rank_live_tov'),
         (('turnover_profile', 'dead_ball_per_game'), True, 'rank_dead_tov'),
         (('turnover_profile', 'points_generated_off_tov'), False, 'rank_pts_generated_off_tov'),
-        (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov')
+        (('turnover_profile', 'points_surrendered_off_tov'), True, 'rank_pts_surrendered_off_tov'),
+        (('c_pts_allowed',), True, 'rank_c_pts_allowed'),
+        (('c_reb_allowed',), True, 'rank_c_reb_allowed'),
+        (('c_ast_allowed',), True, 'rank_c_ast_allowed'),
+        (('c_fg3m_allowed',), True, 'rank_c_fg3m_allowed'),
+        (('pf_pts_allowed',), True, 'rank_pf_pts_allowed'),
+        (('pf_reb_allowed',), True, 'rank_pf_reb_allowed'),
+        (('pf_ast_allowed',), True, 'rank_pf_ast_allowed'),
+        (('sf_reb_allowed',), True, 'rank_sf_reb_allowed'),
+        (('sf_ast_allowed',), True, 'rank_sf_ast_allowed'),
+        (('sg_pts_allowed',), True, 'rank_sg_pts_allowed'),
+        (('sg_reb_allowed',), True, 'rank_sg_reb_allowed'),
+        (('sg_ast_allowed',), True, 'rank_sg_ast_allowed'),
+        (('sg_fg3m_allowed',), True, 'rank_sg_fg3m_allowed'),
+        (('pg_pts_allowed',), True, 'rank_pg_pts_allowed'),
+        (('pg_reb_allowed',), True, 'rank_pg_reb_allowed'),
+        (('pg_ast_allowed',), True, 'rank_pg_ast_allowed'),
+        (('pg_fg3m_allowed',), True, 'rank_pg_fg3m_allowed'),
+        (('positional_allowances', 'pts', 'guards'), True, 'rank_pts_allowed_guards'),
+        (('positional_allowances', 'pts', 'wings'), True, 'rank_pts_allowed_wings'),
+        (('positional_allowances', 'pts', 'bigs'), True, 'rank_pts_allowed_bigs'),
+        (('positional_allowances', 'reb', 'guards'), True, 'rank_reb_allowed_guards'),
+        (('positional_allowances', 'reb', 'wings'), True, 'rank_reb_allowed_wings'),
+        (('positional_allowances', 'reb', 'bigs'), True, 'rank_reb_allowed_bigs'),
+        (('positional_allowances', 'fg3m', 'guards'), True, 'rank_fg3m_allowed_guards'),
+        (('positional_allowances', 'fg3m', 'wings'), True, 'rank_fg3m_allowed_wings'),
+        (('positional_allowances', 'fg3m', 'bigs'), True, 'rank_fg3m_allowed_bigs')
     ]
     for path, ascending, r_key in metrics_to_rank:
         tuples = []
@@ -459,12 +540,16 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     pos_data = load_position_correlations(start_date=s_date, end_date=e_date, min_minutes=min_minutes)
     position_matchup_deltas = build_position_matchup_deltas(pos_data)
 
+    active_forensic_teams = forensic_teams
+    if s_date or e_date:
+        active_forensic_teams = calculate_dynamic_teams_for_range(team_game_logs, active_s, active_e)
+
     return render_template('index.html',
                            page_type=page_type,
                            all_games=all_games,
                            start_date=s_date or '2026-10-20',
                            end_date=e_date or today_str,
-                           forensic_teams=forensic_teams,
+                           forensic_teams=active_forensic_teams,
                            player_profiles=player_profiles,
                            team_game_logs=team_game_logs,
                            position_matchup_deltas=position_matchup_deltas,

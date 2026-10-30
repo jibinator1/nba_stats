@@ -33,7 +33,7 @@ function getTodayDateStr() {
     return `${y}-${m}-${d}`;
 }
 const clientTodayStr = getTodayDateStr();
-const defaultSeasonStart = APP_DATA.startDate || '2025-10-02';
+const defaultSeasonStart = APP_DATA.startDate || '2026-10-20';
 // State variables: Start at start of last season to current date (dynamic)
 let startDate = defaultSeasonStart;
 let endDate = APP_DATA.endDate || clientTodayStr;
@@ -255,7 +255,7 @@ function createEmptyTeamProfile(t) {
 // Dynamic In-Memory Recalculation Engine across Date Range
 
 function recalculateForensicsForDateRange(sDate, eDate) {
-    if (!sDate) sDate = '2025-10-02';
+    if (!sDate) sDate = '2026-10-20';
     if (!eDate) eDate = clientTodayStr;
     if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
     const filteredTeamLogs = (allTeamGameLogs || []).filter(g => g.d >= sDate && g.d <= eDate);
@@ -327,7 +327,33 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                     above_break_3: { freq: parseFloat((fg3Rate * 0.76).toFixed(1)), ppp: (1.10 * offScale).toFixed(2) }
                 },
                 rebounding: { dreb_secured_pct: parseFloat(drebSecured.toFixed(1)), oreb_allowed_pct: parseFloat(orebAllowed.toFixed(1)) },
-                positional_allowances: baseProf.positional_allowances || null,
+                positional_allowances: (() => {
+                    const sumG = (k) => tGames.reduce((acc, g) => acc + (g[k] || 0), 0);
+                    const gP = sumG('opp_g_pts'), wP = sumG('opp_w_pts'), bP = sumG('opp_b_pts'), totP = gP + wP + bP;
+                    const gR = sumG('opp_g_reb'), wR = sumG('opp_w_reb'), bR = sumG('opp_b_reb'), totR = gR + wR + bR;
+                    const gF = sumG('opp_g_fg3m'), wF = sumG('opp_w_fg3m'), bF = sumG('opp_b_fg3m'), totF = gF + wF + bF;
+                    if (gp === 0) return null;
+                    return {
+                        pts: {
+                            guards: parseFloat((gP / gp).toFixed(1)), wings: parseFloat((wP / gp).toFixed(1)), bigs: parseFloat((bP / gp).toFixed(1)),
+                            guards_pct: totP > 0 ? parseFloat((gP / totP * 100).toFixed(1)) : 33.3,
+                            wings_pct: totP > 0 ? parseFloat((wP / totP * 100).toFixed(1)) : 33.3,
+                            bigs_pct: totP > 0 ? parseFloat((bP / totP * 100).toFixed(1)) : 33.4
+                        },
+                        reb: {
+                            guards: parseFloat((gR / gp).toFixed(1)), wings: parseFloat((wR / gp).toFixed(1)), bigs: parseFloat((bR / gp).toFixed(1)),
+                            guards_pct: totR > 0 ? parseFloat((gR / totR * 100).toFixed(1)) : 33.3,
+                            wings_pct: totR > 0 ? parseFloat((wR / totR * 100).toFixed(1)) : 33.3,
+                            bigs_pct: totR > 0 ? parseFloat((bR / totR * 100).toFixed(1)) : 33.4
+                        },
+                        fg3m: {
+                            guards: parseFloat((gF / gp).toFixed(1)), wings: parseFloat((wF / gp).toFixed(1)), bigs: parseFloat((bF / gp).toFixed(1)),
+                            guards_pct: totF > 0 ? parseFloat((gF / totF * 100).toFixed(1)) : 33.3,
+                            wings_pct: totF > 0 ? parseFloat((wF / totF * 100).toFixed(1)) : 33.3,
+                            bigs_pct: totF > 0 ? parseFloat((bF / totF * 100).toFixed(1)) : 33.4
+                        }
+                    };
+                })(),
                 playtypes_offense: baseProf.playtypes_offense || {}, playtypes_defense: baseProf.playtypes_defense || {},
                 turnover_profile: {
                     avg_total: (totTov / gp).toFixed(1),
@@ -343,7 +369,23 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 fg3m_total: (totFg3m / gp).toFixed(1), fg3m_allowed: (totFg3mOpp / gp).toFixed(1),
                 fg3a_total: (totFg3a / gp).toFixed(1), fg3a_allowed: (totFg3aOpp / gp).toFixed(1),
                 fg_pct: fgPct, fg_pct_opp: fgPctOpp,
-                ...SIGNIFICANT_POS_KEYS.reduce((acc, k) => { acc[k] = baseProf[k] || null; return acc; }, {})
+                c_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_pts || 0), 0) / gp).toFixed(1)) : null,
+                c_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_reb || 0), 0) / gp).toFixed(1)) : null,
+                c_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_ast || 0), 0) / gp).toFixed(1)) : null,
+                c_fg3m_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_fg3m || 0), 0) / gp).toFixed(1)) : null,
+                pf_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pf_pts || 0), 0) / gp).toFixed(1)) : null,
+                pf_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pf_reb || 0), 0) / gp).toFixed(1)) : null,
+                pf_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pf_ast || 0), 0) / gp).toFixed(1)) : null,
+                sf_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sf_reb || 0), 0) / gp).toFixed(1)) : null,
+                sf_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sf_ast || 0), 0) / gp).toFixed(1)) : null,
+                sg_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_pts || 0), 0) / gp).toFixed(1)) : null,
+                sg_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_reb || 0), 0) / gp).toFixed(1)) : null,
+                sg_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_ast || 0), 0) / gp).toFixed(1)) : null,
+                sg_fg3m_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_fg3m || 0), 0) / gp).toFixed(1)) : null,
+                pg_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_pts || 0), 0) / gp).toFixed(1)) : null,
+                pg_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_reb || 0), 0) / gp).toFixed(1)) : null,
+                pg_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_ast || 0), 0) / gp).toFixed(1)) : null,
+                pg_fg3m_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_fg3m || 0), 0) / gp).toFixed(1)) : null
             };
         }
     });
