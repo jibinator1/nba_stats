@@ -18,7 +18,7 @@ async function loadPositionalTab() {
 
     container.innerHTML = `
         <tr>
-            <td colspan="8" class="text-center py-8 text-slate-400">
+            <td colspan="10" class="text-center py-8 text-slate-400">
                 <div class="flex items-center justify-center space-x-2">
                     <div class="w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
                     <span>Loading positional matchup dataset...</span>
@@ -43,7 +43,7 @@ async function loadPositionalTab() {
         console.error('Failed to load positional correlations:', err);
         container.innerHTML = `
             <tr>
-                <td colspan="8" class="text-center py-8 text-rose-400">
+                <td colspan="10" class="text-center py-8 text-rose-400">
                     Failed to load positional correlations. Please refresh or run python position_correlations.py.
                 </td>
             </tr>
@@ -207,7 +207,7 @@ function renderPositionalTable() {
     if (rows.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="text-center py-8 text-slate-400">
+                <td colspan="10" class="text-center py-8 text-slate-400">
                     No matchup data found matching current filters.
                 </td>
             </tr>
@@ -229,6 +229,10 @@ function renderPositionalTable() {
         const medSign = r.median_diff > 0 ? '+' : '';
         const meanClass = r.mean_diff > 0.3 ? 'text-emerald-400 font-bold' : r.mean_diff < -0.3 ? 'text-rose-400 font-bold' : 'text-slate-300';
         const medClass = r.median_diff > 0.3 ? 'text-emerald-400 font-bold' : r.median_diff < -0.3 ? 'text-rose-400 font-bold' : 'text-slate-300';
+
+        const weightedVal = r.weighted_mean_diff != null ? r.weighted_mean_diff : r.mean_diff;
+        const weightedSign = weightedVal > 0 ? '+' : '';
+        const weightedClass = weightedVal > 0.3 ? 'text-emerald-400 font-bold' : weightedVal < -0.3 ? 'text-rose-400 font-bold' : 'text-slate-300';
 
         // Stars for p-value significance
         let stars = '';
@@ -257,6 +261,9 @@ function renderPositionalTable() {
                 </td>
                 <td class="py-2.5 px-3 text-right font-mono ${meanClass}">
                     ${meanSign}${r.mean_diff.toFixed(2)}
+                </td>
+                <td class="py-2.5 px-3 text-right font-mono ${weightedClass}" title="Minutes-Weighted Delta (Rank #${r.weighted_rank ?? '--'})">
+                    ${weightedSign}${weightedVal.toFixed(2)}
                 </td>
                 <td class="py-2.5 px-3 text-right font-mono ${medClass}">
                     ${medSign}${r.median_diff.toFixed(1)}

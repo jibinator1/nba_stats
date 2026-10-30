@@ -196,8 +196,10 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         const hRankVal = (hD && hD.rank != null) ? hD.rank : hRank;
         const aBadge = formatRankBadge(aRankVal);
         const hBadge = formatRankBadge(hRankVal);
-        const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text} vs ${pos} baseline average (Rank #${aRankVal ?? '--'})` : 'No positional differential recorded';
-        const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text} vs ${pos} baseline average (Rank #${hRankVal ?? '--'})` : 'No positional differential recorded';
+        const aW = (aD && aD.weighted_diff != null) ? ` (weighted: ${aD.weighted_diff > 0 ? '+' : ''}${aD.weighted_diff})` : '';
+        const hW = (hD && hD.weighted_diff != null) ? ` (weighted: ${hD.weighted_diff > 0 ? '+' : ''}${hD.weighted_diff})` : '';
+        const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text}${aW} vs ${pos} baseline average (Rank #${aRankVal ?? '--'})` : 'No positional differential recorded';
+        const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text}${hW} vs ${pos} baseline average (Rank #${hRankVal ?? '--'})` : 'No positional differential recorded';
         return `
             <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
                 <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
@@ -216,19 +218,15 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         </div>
     `;
 }
-// Injury / Inactive Tag Formatter
-
 function formatShortPlayerName(fullName) {
     if (!fullName) return '';
     const parts = fullName.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0];
-    return `${parts[0][0]}. ${parts.slice(1).join(' ')}`;
+    return parts.length === 1 ? parts[0] : `${parts[0][0]}. ${parts.slice(1).join(' ')}`;
 }
-
 function renderInjuryBadge(injuries) {
     if (!injuries || !Array.isArray(injuries) || injuries.length === 0) return '';
     const count = injuries.length;
-    let displayStr = count === 1 ? `OUT: ${formatShortPlayerName(injuries[0])}` : (count === 2 ? `OUT: ${formatShortPlayerName(injuries[0])}, ${formatShortPlayerName(injuries[1])}` : `OUT: ${formatShortPlayerName(injuries[0])}, ${formatShortPlayerName(injuries[1])}, +${count - 2}`);
+    const displayStr = count === 1 ? `OUT: ${formatShortPlayerName(injuries[0])}` : (count === 2 ? `OUT: ${formatShortPlayerName(injuries[0])}, ${formatShortPlayerName(injuries[1])}` : `OUT: ${formatShortPlayerName(injuries[0])}, ${formatShortPlayerName(injuries[1])}, +${count - 2}`);
     return `<span class="inline-flex items-center space-x-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono bg-rose-950/40 text-rose-300 border border-rose-800/50" title="Out/Inactive: ${injuries.join(', ')}"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span><span>${displayStr}</span></span>`;
 }
 

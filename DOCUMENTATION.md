@@ -158,6 +158,8 @@ This ensures every matchup lookup delivers a statistically valid sample of up to
 | **Sample Standard Dev** | $s \ (ddof=1)$ | `std_diff` (`np.std(..., ddof=1)`) | [./position_correlations.py](./position_correlations.py) |
 | **Unweighted Mean Delta**| $\overline{\Delta}$ | `mean_diff` / `diff` | [./position_correlations.py](./position_correlations.py), [./app.py](./app.py) |
 | **Minutes-Weighted Delta**| $\overline{\Delta}_{\text{weighted}}$ | `weighted_mean_diff` / `weighted_diff` | [./position_correlations.py](./position_correlations.py), [./app.py](./app.py) |
+| **Universal Rank** | Rank $1\dots 30$ | `rank` | [./position_correlations.py](./position_correlations.py), [./app.py](./app.py) |
+| **Weighted Universal Rank**| Rank $1\dots 30$ | `weighted_rank` | [./position_correlations.py](./position_correlations.py), [./app.py](./app.py) |
 | **Cohen's $d$** | $d = \overline{\Delta} / s$ | `cohens_d` | [./position_correlations.py](./position_correlations.py) |
 | **Effect Categorization** | Classification | `effect_category` (`boosted`/`suppressed`/`neutral`) | [./position_correlations.py](./position_correlations.py) |
 | **Offensive Style Vector**| $\mathbf{v} \in \mathbb{R}^4$ | `['PACE', 'FG3_RATE', 'PAINT_RATE', 'TRANS_FREQ']` | [./forensic_data.py](./forensic_data.py) |

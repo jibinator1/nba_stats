@@ -212,7 +212,7 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
                 except Exception:
                     p_wilcoxon = p_ttest
 
-                pct_over_avg = float(np.mean(sub[m] > sub[f'{m}_SEASON_AVG']) * 100.0) if len(sub) > 0 else 50.0
+                pct_over_avg = float(np.mean(sub[f'{m}_DIFF_AVG'] > 0) * 100.0) if len(sub) > 0 else 50.0
                 pct_over_med = float(np.mean(sub[m] > sub[f'{m}_SEASON_MED']) * 100.0) if len(sub) > 0 else 50.0
 
                 # Categorize effect
@@ -242,7 +242,7 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
                 })
 
     # 2b. Compute universal ranks for each (position, metric) across all opponents
-    # Lower mean_diff = better defense (suppression) -> rank 1 is lowest mean_diff
+    # Lower differential = better defense (suppression) -> rank 1 is lowest differential
     matchup_groups = {}
     for item in dataset['matchups']:
         grp_key = (item['position'], item['metric'])
@@ -251,6 +251,7 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
         matchup_groups[grp_key].append(item)
 
     for (pos, metric), group in matchup_groups.items():
+        # Unweighted rank based on mean_diff
         group.sort(key=lambda x: x['mean_diff'])
         prev_val = None
         prev_rank = 1
@@ -260,6 +261,19 @@ def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=N
                 item['rank'] = prev_rank
             else:
                 item['rank'] = i + 1
+                prev_rank = i + 1
+                prev_val = val
+
+        # Minutes-weighted rank based on weighted_mean_diff
+        group.sort(key=lambda x: x['weighted_mean_diff'])
+        prev_val = None
+        prev_rank = 1
+        for i, item in enumerate(group):
+            val = item['weighted_mean_diff']
+            if prev_val is not None and val == prev_val:
+                item['weighted_rank'] = prev_rank
+            else:
+                item['weighted_rank'] = i + 1
                 prev_rank = i + 1
                 prev_val = val
 

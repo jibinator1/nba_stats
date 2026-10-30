@@ -205,6 +205,17 @@ def build_position_matchup_deltas(pos_data):
                     item['rank'] = i + 1
                     prev_rank = i + 1
                     prev_val = val
+            grp.sort(key=lambda x: float(x.get('weighted_mean_diff', x.get('mean_diff', 0))))
+            prev_val = None
+            prev_rank = 1
+            for i, item in enumerate(grp):
+                val = float(item.get('weighted_mean_diff', item.get('mean_diff', 0)))
+                if prev_val is not None and val == prev_val:
+                    item['weighted_rank'] = prev_rank
+                else:
+                    item['weighted_rank'] = i + 1
+                    prev_rank = i + 1
+                    prev_val = val
 
     deltas = {}
     for m in matchups:
@@ -216,6 +227,7 @@ def build_position_matchup_deltas(pos_data):
             'n': int(m.get('sample_size', 0)),
             'cat': m.get('effect_category', 'neutral'),
             'rank': int(m['rank']) if m.get('rank') is not None else None,
+            'weighted_rank': int(m['weighted_rank']) if m.get('weighted_rank') is not None else None,
             'is_tier': bool(m.get('is_tier', False))
         }
     return deltas

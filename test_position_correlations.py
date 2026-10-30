@@ -261,19 +261,57 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertEqual(nyk_pts['mean_diff'], -15.0)
 
     def test_minutes_weighted_aggregation_metrics(self):
+        # 1. Rigorous mathematical verification on synthetic disparate minutes scenario:
+        # Star (38 mins vs NYK, 20 pts with LOO baseline 30 -> delta -10)
+        # Bench (20 mins vs NYK, 14 pts with LOO baseline 6 -> delta +8)
+        # Unweighted mean delta = (-10 + 8) / 2 = -1.0
+        # Weighted mean delta = (-10 * 38 + 8 * 20) / (38 + 20) = -220 / 58 = -3.79
+        df_disparate = pd.DataFrame({
+            'PLAYER_NAME': ['Star PG', 'Star PG', 'Bench PG', 'Bench PG'],
+            'MATCHUP': ['BOS vs NYK', 'BOS vs MIA', 'BOS vs NYK', 'BOS vs MIA'],
+            'MIN': [38.0, 38.0, 20.0, 20.0],
+            'PTS': [20, 30, 14, 6],
+            'REB': [5, 5, 5, 5],
+            'AST': [5, 5, 5, 5],
+            'FG3M': [2, 2, 2, 2],
+            'GAME_DATE': ['2026-10-21', '2026-10-22', '2026-10-21', '2026-10-22']
+        })
+        res = calculate_position_correlations(logs_df=df_disparate, min_minutes=20.0, start_date='2026-10-20', end_date='2026-10-25', save_json=False)
+        nyk_pts = next((m for m in res['matchups'] if m['opponent'] == 'NYK' and m['metric'] == 'PTS'), None)
+        self.assertIsNotNone(nyk_pts)
+        self.assertEqual(nyk_pts['mean_diff'], -1.0)
+        self.assertEqual(nyk_pts['weighted_mean_diff'], -3.79)
+        self.assertIn('weighted_rank', nyk_pts)
+
+        # 2. Verify all regular matchups have weighted_mean_diff and weighted_rank
         matchups = self.data.get('matchups', [])
         self.assertGreater(len(matchups), 0)
         for m in matchups[:50]:
             self.assertIn('weighted_mean_diff', m)
             self.assertIsInstance(m['weighted_mean_diff'], (float, int))
+            self.assertIn('weighted_rank', m)
+            self.assertGreaterEqual(m['weighted_rank'], 1)
+            self.assertLessEqual(m['weighted_rank'], 30)
         
-        # Verify in endpoint position_matchup_deltas
-        res = self.client.get('/api/positional-correlations')
-        self.assertEqual(res.status_code, 200)
-        deltas = res.get_json().get('position_matchup_deltas', {})
+        # 3. Verify in endpoint position_matchup_deltas
+        res_api = self.client.get('/api/positional-correlations')
+        self.assertEqual(res_api.status_code, 200)
+        deltas = res_api.get_json().get('position_matchup_deltas', {})
         sample_delta = next(iter(deltas.values()))
         self.assertIn('weighted_diff', sample_delta)
         self.assertIsInstance(sample_delta['weighted_diff'], (float, int))
+        self.assertIn('weighted_rank', sample_delta)
+        self.assertIsInstance(sample_delta['weighted_rank'], int)
+
+    def test_frontend_renders_weighted_delta(self):
+        # Verify index.html and positional.js include Weighted Delta column and sorting
+        with open(os.path.join(BASE_DIR, 'templates', 'index.html'), 'r', encoding='utf-8') as f:
+            index_html = f.read()
+        with open(os.path.join(BASE_DIR, 'static', 'js', 'positional.js'), 'r', encoding='utf-8') as f:
+            pos_js = f.read()
+        self.assertIn("sortPositionalTable('weighted_mean_diff')", index_html)
+        self.assertIn("Weighted Delta", index_html)
+        self.assertIn("r.weighted_mean_diff", pos_js)
 
     def test_similar_opponents_pure_offensive_features(self):
         from forensic_data import build_similar_opponents_model

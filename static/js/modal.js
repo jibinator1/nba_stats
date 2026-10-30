@@ -540,9 +540,9 @@ function generateDeepDiveModalHtml(g) {
                             const wRankStr = (wRankVal != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${wRankVal})</span> ` : '';
                             const bRankStr = (bRankVal != null) ? `<span class="text-cyan-400 font-normal text-[9px]">(#${bRankVal})</span> ` : '';
 
-                            const gTitle = gD ? `${teamCode} allows ${gFmt.text} ${s.unit} vs Guards baseline average` : 'No data';
-                            const wTitle = wD ? `${teamCode} allows ${wFmt.text} ${s.unit} vs Wings baseline average` : 'No data';
-                            const bTitle = bD ? `${teamCode} allows ${bFmt.text} ${s.unit} vs Bigs baseline average` : 'No data';
+                            const gTitle = gD ? `${teamCode} allows ${gFmt.text} (weighted: ${gD.weighted_diff != null ? (gD.weighted_diff > 0 ? '+' : '') + gD.weighted_diff : '--'}, #${gD.weighted_rank ?? '--'}) ${s.unit} vs Guards baseline` : 'No data';
+                            const wTitle = wD ? `${teamCode} allows ${wFmt.text} (weighted: ${wD.weighted_diff != null ? (wD.weighted_diff > 0 ? '+' : '') + wD.weighted_diff : '--'}, #${wD.weighted_rank ?? '--'}) ${s.unit} vs Wings baseline` : 'No data';
+                            const bTitle = bD ? `${teamCode} allows ${bFmt.text} (weighted: ${bD.weighted_diff != null ? (bD.weighted_diff > 0 ? '+' : '') + bD.weighted_diff : '--'}, #${bD.weighted_rank ?? '--'}) ${s.unit} vs Bigs baseline` : 'No data';
 
                             return `
                                 <div class="space-y-1">
