@@ -2,13 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.py": {
-      "includeFiles": [
-        "*.json",
-        "*.csv",
-        "static/**",
-        "public/**",
-        "templates/**"
-      ],
+      "includeFiles": "{*.json,*.csv,static/**,public/**,templates/**}",
       "maxDuration": 15
     }
   },
