@@ -227,13 +227,34 @@ def push_to_github():
     try:
         os.chdir(SCRIPT_DIR)
         subprocess.run('git add .', shell=True, check=True)
-        commit_msg = f"Auto-update: {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-        subprocess.run(f'git commit -m "{commit_msg}"', shell=True, check=True)
-        subprocess.run('git push', shell=True, check=True)
-        print("Successfully pushed to GitHub!")
+        status = subprocess.run('git status --porcelain', shell=True, capture_output=True, text=True)
+        if status.stdout.strip():
+            commit_msg = f"Auto-update: {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+            subprocess.run(f'git commit -m "{commit_msg}"', shell=True, check=True)
 
+        # Check if local branch has unpushed commits
+        cherry = subprocess.run(['git', 'cherry', '-v'], capture_output=True, text=True)
+        if not cherry.stdout.strip():
+            print("Already up to date with remote repository.")
+            return True
+
+        # Retry git push up to 3 times in case network is still connecting on startup
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            res = subprocess.run('git push', shell=True, capture_output=True, text=True)
+            if res.returncode == 0:
+                print("Successfully pushed to GitHub!")
+                return True
+            err_msg = res.stderr.strip() if res.stderr else res.stdout.strip()
+            print(f"Git push attempt {attempt}/{max_retries} failed: {err_msg}")
+            if attempt < max_retries:
+                print("Retrying in 10 seconds...")
+                time.sleep(10)
+
+        return False
     except Exception as e:
         print(f"Git sync failed: {e}")
+        return False
 
 def main():
     parser = argparse.ArgumentParser(description="NBA Website Daily Data Ingestion")
@@ -246,6 +267,8 @@ def main():
 
     if not args.force and has_run_today():
         print(f"[SKIP] NBA daily update has already completed today ({today_str}).")
+        if AUTO_PUSH:
+            push_to_github()
         print("Use '--force' if you wish to override and run again.")
         return
     

@@ -908,7 +908,7 @@ class NumpyEncoder(json.JSONEncoder):
             return bool(obj)
         return super().default(obj)
 
-def run_forensic_pipeline(start_date='2026-10-20', end_date='2026-10-30'):
+def run_forensic_pipeline(start_date='2026-10-20', end_date=None):
     """Executes the complete forensic data generation pipeline.
     Default date range strictly covers the active 2026-27 season (2026-10-20 to 2026-10-30)."""
     print(f"Loading game logs (filtered strictly to {start_date} to {end_date})...")
@@ -952,7 +952,7 @@ def run_forensic_pipeline(start_date='2026-10-20', end_date='2026-10-30'):
     print("Computing Positional Matchup Correlations & Allowances...")
     try:
         from position_correlations import calculate_position_correlations
-        calculate_position_correlations(logs_df, start_date=start_date, end_date=end_date)
+        calculate_position_correlations(logs_df, start_date=start_date, end_date=end_date, save_json=True)
     except Exception as e:
         print(f"Warning: Positional correlations computation failed: {e}")
 

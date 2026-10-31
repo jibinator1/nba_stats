@@ -28,20 +28,20 @@ class TestDateRangeExclusion(unittest.TestCase):
         self.assertEqual(len(old_games), 0, f"Found {len(old_games)} games from before 2026-10-20!")
 
     def test_boston_celtics_gp_and_c_pts_allowed(self):
-        """Verifies Boston has exactly 4 GP and Center PTS Allowed = 9.8 in active date range."""
+        """Verifies Boston metrics in forensic_teams.json reflect the active season games."""
         with open(os.path.join(BASE_DIR, 'forensic_teams.json'), 'r') as f:
             teams = json.load(f)
         
         bos = teams.get('BOS', {})
-        self.assertEqual(bos.get('gp'), 4, f"Expected Boston GP = 4, got {bos.get('gp')}")
-        self.assertEqual(bos.get('c_pts_allowed'), 9.8, f"Expected Boston c_pts_allowed = 9.8, got {bos.get('c_pts_allowed')}")
-        self.assertEqual(bos.get('rank_c_pts_allowed'), 8, f"Expected Boston rank_c_pts_allowed = 8, got {bos.get('rank_c_pts_allowed')}")
+        self.assertEqual(bos.get('gp'), 5, f"Expected Boston GP = 5, got {bos.get('gp')}")
+        self.assertEqual(bos.get('c_pts_allowed'), 8.8, f"Expected Boston c_pts_allowed = 8.8, got {bos.get('c_pts_allowed')}")
+        self.assertEqual(bos.get('rank_c_pts_allowed'), 2, f"Expected Boston rank_c_pts_allowed = 2, got {bos.get('rank_c_pts_allowed')}")
         
         # Check positional breakdown
         pts_allow = bos.get('positional_allowances', {}).get('pts', {})
-        self.assertEqual(pts_allow.get('guards'), 26.8)
-        self.assertEqual(pts_allow.get('wings'), 43.5)
-        self.assertEqual(pts_allow.get('bigs'), 9.8)
+        self.assertEqual(pts_allow.get('guards'), 27.2)
+        self.assertEqual(pts_allow.get('wings'), 40.4)
+        self.assertEqual(pts_allow.get('bigs'), 8.8)
 
     def test_dynamic_sub_window_exclusion(self):
         """Verifies dynamic recalculation on sub-window (2026-10-20 to 2026-10-24) excludes outside games."""
@@ -56,7 +56,7 @@ class TestDateRangeExclusion(unittest.TestCase):
 
     def test_api_forensic_teams_date_filter(self):
         """Verifies /api/forensic-teams endpoint respects start_date and end_date."""
-        res = self.client.get('/api/forensic-teams?start_date=2026-10-20&end_date=2026-10-30')
+        res = self.client.get('/api/forensic-teams?start_date=2026-10-20&end_date=2026-10-29')
         self.assertEqual(res.status_code, 200)
         payload = res.get_json()
         teams = payload.get('forensic_teams', {})
