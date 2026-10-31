@@ -694,23 +694,17 @@ def calculate_player_usage_profiles(logs_df):
     for PTS, REB, AST; USG%, AST%, REB%, clutch usage, paint touches.
     """
     # Load player positions map and 2026-27 team rosters from positions.csv
+    from position_correlations import load_position_map
+    pos_map = load_position_map()
     pos_file = os.path.join(BASE_DIR, 'positions.csv')
-    pos_map, pos_teams = {}, {}
+    pos_teams = {}
     team_clean = {'CHO': 'CHA', 'BRK': 'BKN', 'PHO': 'PHX'}
     if os.path.exists(pos_file):
         pos_df = pd.read_csv(pos_file)
-        pos_map = dict(zip(pos_df['Player'], pos_df['Pos']))
         for _, r in pos_df.iterrows():
             tm = str(r['Team']).strip()
             if tm and tm != 'nan':
                 pos_teams[str(r['Player']).strip()] = team_clean.get(tm, tm)
-
-    pos_map.update({
-        'Lamont Butler': 'PG', 'Trevon Scott': 'SF', 'Jimmy Butler III': 'SF', 'Alperen Sengun': 'C',
-        'Adama Bal': 'SG', 'AJ Green': 'SG', 'Luka Dončić': 'PG', 'Nikola Jokić': 'C',
-        'Nikola Joki?': 'C', 'Luka Don?i?': 'PG', 'Nikola Vučević': 'C', 'Nikola Vucevic': 'C',
-        'Kristaps Porziņģis': 'C', 'Dennis Schröder': 'PG'
-    })
 
     # Track each player's current active team from logs as fallback, overridden by 2026-27 contracts
     logs_clean = logs_df.dropna(subset=['PLAYER_NAME'])

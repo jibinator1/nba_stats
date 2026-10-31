@@ -12,6 +12,7 @@ MANUAL_POSITIONS = {
     'Lamont Butler': 'PG', 'Trevon Scott': 'SF', 'Jimmy Butler III': 'SF',
     'Alperen Sengun': 'C', 'Adama Bal': 'SG', 'AJ Green': 'SG',
     'Luka Dončić': 'PG', 'Nikola Jokić': 'C', 'Nikola Joki?': 'C', 'Luka Don?i?': 'PG',
+    'Luka Doncic': 'PG', 'Nikola Jokic': 'C',
     'Ron Holland': 'SF', 'Ronald Holland II': 'SF', 'Tristan Da Silva': 'SF',
     'Tristan da Silva': 'SF', 'Walter Clayton': 'PG', 'Walter Clayton Jr.': 'PG',
     'Bobby Portis': 'PF', 'Bobby Portis Jr.': 'PF', 'Jonas Valanciunas': 'C',

@@ -35,12 +35,12 @@ class TestDateRangeExclusion(unittest.TestCase):
         bos = teams.get('BOS', {})
         self.assertEqual(bos.get('gp'), 5, f"Expected Boston GP = 5, got {bos.get('gp')}")
         self.assertEqual(bos.get('c_pts_allowed'), 8.8, f"Expected Boston c_pts_allowed = 8.8, got {bos.get('c_pts_allowed')}")
-        self.assertEqual(bos.get('rank_c_pts_allowed'), 2, f"Expected Boston rank_c_pts_allowed = 2, got {bos.get('rank_c_pts_allowed')}")
+        self.assertEqual(bos.get('rank_c_pts_allowed'), 4, f"Expected Boston rank_c_pts_allowed = 4, got {bos.get('rank_c_pts_allowed')}")
         
         # Check positional breakdown
         pts_allow = bos.get('positional_allowances', {}).get('pts', {})
-        self.assertEqual(pts_allow.get('guards'), 27.2)
-        self.assertEqual(pts_allow.get('wings'), 40.4)
+        self.assertEqual(pts_allow.get('guards'), 31.8)
+        self.assertEqual(pts_allow.get('wings'), 35.8)
         self.assertEqual(pts_allow.get('bigs'), 8.8)
 
     def test_dynamic_sub_window_exclusion(self):

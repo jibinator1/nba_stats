@@ -3,7 +3,7 @@
     "player_name": "Jalen Johnson",
     "team": "ATL",
     "team_name": "Atlanta Hawks",
-    "position": "SF",
+    "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
       "frequency": 20.9
@@ -179,7 +179,7 @@
       "fg3m": 3.7,
       "paint_pts": 5.5,
       "pts_rank": 43,
-      "reb_rank": 103,
+      "reb_rank": 104,
       "ast_rank": 75
     },
     "distribution_10g": {
@@ -323,10 +323,10 @@
     "player_name": "Dyson Daniels",
     "team": "ATL",
     "team_name": "Atlanta Hawks",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 20.0
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -338,7 +338,7 @@
       "fg3a": 1.2,
       "fg3m": 0.2,
       "paint_pts": 5.9,
-      "pts_rank": 108,
+      "pts_rank": 107,
       "reb_rank": 60,
       "ast_rank": 45
     },
@@ -498,7 +498,7 @@
       "fg3a": 4.3,
       "fg3m": 1.3,
       "paint_pts": 5.1,
-      "pts_rank": 92,
+      "pts_rank": 91,
       "reb_rank": 37,
       "ast_rank": 75
     },
@@ -643,7 +643,7 @@
     "player_name": "Jayson Tatum",
     "team": "BOS",
     "team_name": "Boston Celtics",
-    "position": "PF",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
       "frequency": 25.8
@@ -786,10 +786,10 @@
     "player_name": "Paul George",
     "team": "BOS",
     "team_name": "Boston Celtics",
-    "position": "PF",
+    "position": "SG",
     "role_archetype": {
-      "primary_role": "Isolation Scorer",
-      "frequency": 22.4
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 32.1
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -929,7 +929,7 @@
     "player_name": "Derrick White",
     "team": "BOS",
     "team_name": "Boston Celtics",
-    "position": "SG",
+    "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 26.2
@@ -944,8 +944,8 @@
       "fg3a": 4.8,
       "fg3m": 1.6,
       "paint_pts": 4.1,
-      "pts_rank": 101,
-      "reb_rank": 95,
+      "pts_rank": 100,
+      "reb_rank": 96,
       "ast_rank": 27
     },
     "distribution_10g": {
@@ -1088,7 +1088,7 @@
       "fg3m": 2.6,
       "paint_pts": 5.1,
       "pts_rank": 64,
-      "reb_rank": 114,
+      "reb_rank": 115,
       "ast_rank": 60
     },
     "distribution_10g": {
@@ -1517,7 +1517,7 @@
       "fg3m": 1.2,
       "paint_pts": 1.4,
       "pts_rank": 119,
-      "reb_rank": 117,
+      "reb_rank": 118,
       "ast_rank": 82
     },
     "distribution_10g": {
@@ -1659,8 +1659,8 @@
       "fg3a": 6.0,
       "fg3m": 1.8,
       "paint_pts": 2.9,
-      "pts_rank": 109,
-      "reb_rank": 111,
+      "pts_rank": 108,
+      "reb_rank": 112,
       "ast_rank": 50
     },
     "distribution_10g": {
@@ -1787,7 +1787,7 @@
       "paint_pts": 9.0,
       "pts_rank": 14,
       "reb_rank": 43,
-      "ast_rank": 101
+      "ast_rank": 102
     },
     "distribution_10g": {
       "pts": {
@@ -1945,8 +1945,8 @@
       "fg3a": 4.2,
       "fg3m": 1.0,
       "paint_pts": 5.8,
-      "pts_rank": 91,
-      "reb_rank": 93,
+      "pts_rank": 90,
+      "reb_rank": 94,
       "ast_rank": 34
     },
     "distribution_10g": {
@@ -2105,9 +2105,9 @@
       "fg3a": 0.0,
       "fg3m": 0.0,
       "paint_pts": 5.4,
-      "pts_rank": 111,
+      "pts_rank": 110,
       "reb_rank": 7,
-      "ast_rank": 101
+      "ast_rank": 102
     },
     "distribution_10g": {
       "pts": {
@@ -2250,10 +2250,10 @@
     "player_name": "Naz Reid",
     "team": "CHA",
     "team_name": "Charlotte Hornets",
-    "position": "C",
+    "position": "PF",
     "role_archetype": {
-      "primary_role": "Roll Man / Rim Runner",
-      "frequency": 37.8
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 31.5
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -2267,7 +2267,7 @@
       "paint_pts": 4.4,
       "pts_rank": 68,
       "reb_rank": 12,
-      "ast_rank": 101
+      "ast_rank": 102
     },
     "distribution_10g": {
       "pts": {
@@ -2586,8 +2586,8 @@
       "fg3m": 2.7,
       "paint_pts": 7.3,
       "pts_rank": 40,
-      "reb_rank": 109,
-      "ast_rank": 98
+      "reb_rank": 110,
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -2745,7 +2745,7 @@
       "fg3a": 3.2,
       "fg3m": 0.8,
       "paint_pts": 3.5,
-      "pts_rank": 115,
+      "pts_rank": 114,
       "reb_rank": 58,
       "ast_rank": 9
     },
@@ -2890,7 +2890,7 @@
     "player_name": "Matas Buzelis",
     "team": "CHI",
     "team_name": "Chicago Bulls",
-    "position": "PF",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
       "frequency": 35.0
@@ -2905,9 +2905,9 @@
       "fg3a": 5.0,
       "fg3m": 1.5,
       "paint_pts": 5.8,
-      "pts_rank": 80,
-      "reb_rank": 70,
-      "ast_rank": 101
+      "pts_rank": 79,
+      "reb_rank": 71,
+      "ast_rank": 102
     },
     "distribution_10g": {
       "pts": {
@@ -3066,7 +3066,7 @@
       "fg3m": 2.4,
       "paint_pts": 5.9,
       "pts_rank": 56,
-      "reb_rank": 68,
+      "reb_rank": 69,
       "ast_rank": 22
     },
     "distribution_10g": {
@@ -3494,8 +3494,8 @@
       "fg3a": 4.2,
       "fg3m": 0.6,
       "paint_pts": 5.9,
-      "pts_rank": 97,
-      "reb_rank": 74,
+      "pts_rank": 96,
+      "reb_rank": 75,
       "ast_rank": 89
     },
     "distribution_10g": {
@@ -3637,7 +3637,7 @@
       "fg3a": 6.0,
       "fg3m": 1.8,
       "paint_pts": 4.8,
-      "pts_rank": 85,
+      "pts_rank": 84,
       "reb_rank": 18,
       "ast_rank": 114
     },
@@ -3925,10 +3925,10 @@
     "player_name": "Zaccharie Risacher",
     "team": "DAL",
     "team_name": "Dallas Mavericks",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
-      "primary_role": "Spot-Up Shooter",
-      "frequency": 33.4
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -3940,9 +3940,9 @@
       "fg3a": 4.3,
       "fg3m": 1.3,
       "paint_pts": 3.2,
-      "pts_rank": 110,
+      "pts_rank": 109,
       "reb_rank": 45,
-      "ast_rank": 107
+      "ast_rank": 108
     },
     "distribution_10g": {
       "pts": {
@@ -4101,7 +4101,7 @@
       "fg3m": 3.2,
       "paint_pts": 6.8,
       "pts_rank": 33,
-      "reb_rank": 98,
+      "reb_rank": 99,
       "ast_rank": 41
     },
     "distribution_10g": {
@@ -4529,9 +4529,9 @@
       "fg3a": 6.0,
       "fg3m": 2.4,
       "paint_pts": 4.8,
-      "pts_rank": 76,
-      "reb_rank": 80,
-      "ast_rank": 98
+      "pts_rank": 75,
+      "reb_rank": 81,
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -4672,7 +4672,7 @@
       "fg3a": 4.4,
       "fg3m": 1.6,
       "paint_pts": 4.6,
-      "pts_rank": 92,
+      "pts_rank": 91,
       "reb_rank": 45,
       "ast_rank": 72
     },
@@ -4960,10 +4960,10 @@
     "player_name": "Duncan Robinson",
     "team": "DET",
     "team_name": "Detroit Pistons",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 48.0
+      "frequency": 54.0
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -4976,7 +4976,7 @@
       "fg3m": 3.7,
       "paint_pts": 3.4,
       "pts_rank": 63,
-      "reb_rank": 115,
+      "reb_rank": 116,
       "ast_rank": 92
     },
     "distribution_10g": {
@@ -5135,9 +5135,9 @@
       "fg3a": 1.2,
       "fg3m": 0.8,
       "paint_pts": 6.6,
-      "pts_rank": 85,
+      "pts_rank": 84,
       "reb_rank": 31,
-      "ast_rank": 101
+      "ast_rank": 102
     },
     "distribution_10g": {
       "pts": {
@@ -5295,7 +5295,7 @@
       "fg3a": 3.2,
       "fg3m": 1.2,
       "paint_pts": 3.3,
-      "pts_rank": 112,
+      "pts_rank": 111,
       "reb_rank": 27,
       "ast_rank": 120
     },
@@ -5566,7 +5566,7 @@
     "player_name": "Yaxel Lendeborg",
     "team": "GSW",
     "team_name": "Golden State Warriors",
-    "position": "PF",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
       "frequency": 27.8
@@ -5726,10 +5726,10 @@
     "player_name": "Draymond Green",
     "team": "GSW",
     "team_name": "Golden State Warriors",
-    "position": "PF",
+    "position": "C",
     "role_archetype": {
-      "primary_role": "Isolation Scorer",
-      "frequency": 15.0
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 34.0
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -5885,7 +5885,7 @@
       "fg3m": 4.4,
       "paint_pts": 9.3,
       "pts_rank": 3,
-      "reb_rank": 88,
+      "reb_rank": 89,
       "ast_rank": 53
     },
     "distribution_10g": {
@@ -6012,7 +6012,7 @@
     "player_name": "Amen Thompson",
     "team": "HOU",
     "team_name": "Houston Rockets",
-    "position": "PG",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 20.0
@@ -6634,7 +6634,7 @@
       "fg3m": 2.5,
       "paint_pts": 8.3,
       "pts_rank": 30,
-      "reb_rank": 70,
+      "reb_rank": 71,
       "ast_rank": 2
     },
     "distribution_10g": {
@@ -6744,7 +6744,7 @@
     "player_name": "Andrew Nembhard",
     "team": "IND",
     "team_name": "Indiana Pacers",
-    "position": "PG",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 30.4
@@ -6760,7 +6760,7 @@
       "fg3m": 2.2,
       "paint_pts": 6.4,
       "pts_rank": 55,
-      "reb_rank": 115,
+      "reb_rank": 116,
       "ast_rank": 6
     },
     "distribution_10g": {
@@ -7047,10 +7047,10 @@
     "player_name": "Kelly Oubre Jr.",
     "team": "IND",
     "team_name": "Indiana Pacers",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
-      "primary_role": "Spot-Up Shooter",
-      "frequency": 32.4
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 20.0
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -7062,9 +7062,9 @@
       "fg3a": 3.7,
       "fg3m": 0.8,
       "paint_pts": 3.9,
-      "pts_rank": 112,
-      "reb_rank": 109,
-      "ast_rank": 107
+      "pts_rank": 111,
+      "reb_rank": 110,
+      "ast_rank": 108
     },
     "distribution_10g": {
       "pts": {
@@ -7350,7 +7350,7 @@
     "player_name": "Kris Dunn",
     "team": "LAC",
     "team_name": "LA Clippers",
-    "position": "PG",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 25.0
@@ -7365,8 +7365,8 @@
       "fg3a": 2.6,
       "fg3m": 1.0,
       "paint_pts": 2.8,
-      "pts_rank": 117,
-      "reb_rank": 74,
+      "pts_rank": 116,
+      "reb_rank": 75,
       "ast_rank": 30
     },
     "distribution_10g": {
@@ -7508,7 +7508,7 @@
       "fg3a": 6.0,
       "fg3m": 2.0,
       "paint_pts": 2.8,
-      "pts_rank": 106,
+      "pts_rank": 105,
       "reb_rank": 50,
       "ast_rank": 119
     },
@@ -7634,9 +7634,9 @@
       "fg3a": 4.0,
       "fg3m": 2.4,
       "paint_pts": 2.8,
-      "pts_rank": 97,
-      "reb_rank": 74,
-      "ast_rank": 109
+      "pts_rank": 96,
+      "reb_rank": 75,
+      "ast_rank": 110
     },
     "distribution_10g": {
       "pts": {
@@ -7921,7 +7921,7 @@
       "fg3m": 2.3,
       "paint_pts": 9.8,
       "pts_rank": 21,
-      "reb_rank": 96,
+      "reb_rank": 97,
       "ast_rank": 34
     },
     "distribution_10g": {
@@ -8080,7 +8080,7 @@
       "fg3a": 0.0,
       "fg3m": 0.0,
       "paint_pts": 8.1,
-      "pts_rank": 84,
+      "pts_rank": 83,
       "reb_rank": 14,
       "ast_rank": 114
     },
@@ -8240,8 +8240,8 @@
       "fg3a": 3.8,
       "fg3m": 1.8,
       "paint_pts": 3.5,
-      "pts_rank": 104,
-      "reb_rank": 106,
+      "pts_rank": 103,
+      "reb_rank": 107,
       "ast_rank": 92
     },
     "distribution_10g": {
@@ -8366,7 +8366,7 @@
       "fg3a": 6.4,
       "fg3m": 2.2,
       "paint_pts": 5.1,
-      "pts_rank": 76,
+      "pts_rank": 75,
       "reb_rank": 6,
       "ast_rank": 22
     },
@@ -8494,7 +8494,7 @@
     "player_name": "Ty Jerome",
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
-    "position": "SG",
+    "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 39.0
@@ -8510,7 +8510,7 @@
       "fg3m": 2.2,
       "paint_pts": 11.1,
       "pts_rank": 10,
-      "reb_rank": 104,
+      "reb_rank": 105,
       "ast_rank": 27
     },
     "distribution_10g": {
@@ -8652,7 +8652,7 @@
       "fg3a": 4.0,
       "fg3m": 2.8,
       "paint_pts": 3.5,
-      "pts_rank": 81,
+      "pts_rank": 80,
       "reb_rank": 14,
       "ast_rank": 85
     },
@@ -8763,10 +8763,10 @@
     "player_name": "Jaylen Wells",
     "team": "MEM",
     "team_name": "Memphis Grizzlies",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 42.6
+      "frequency": 39.8
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -8778,8 +8778,8 @@
       "fg3a": 5.0,
       "fg3m": 2.2,
       "paint_pts": 4.2,
-      "pts_rank": 85,
-      "reb_rank": 83,
+      "pts_rank": 84,
+      "reb_rank": 84,
       "ast_rank": 114
     },
     "distribution_10g": {
@@ -9386,10 +9386,10 @@
     "player_name": "Pelle Larsson",
     "team": "MIA",
     "team_name": "Miami Heat",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 20.0
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -9401,8 +9401,8 @@
       "fg3a": 2.5,
       "fg3m": 1.0,
       "paint_pts": 5.1,
-      "pts_rank": 101,
-      "reb_rank": 96,
+      "pts_rank": 100,
+      "reb_rank": 97,
       "ast_rank": 53
     },
     "distribution_10g": {
@@ -9686,132 +9686,6 @@
     ]
   },
   {
-    "player_name": "Damian Lillard",
-    "team": "MIL",
-    "team_name": "Milwaukee Bucks",
-    "position": "PG",
-    "role_archetype": {
-      "primary_role": "Spot-Up Shooter",
-      "frequency": 50.2
-    },
-    "games_played": 4,
-    "is_small_sample": false,
-    "season_avg": {
-      "pts": 18.5,
-      "reb": 3.8,
-      "ast": 3.5,
-      "min": 29.6,
-      "fg3a": 9.2,
-      "fg3m": 3.2,
-      "paint_pts": 5.1,
-      "pts_rank": 49,
-      "reb_rank": 88,
-      "ast_rank": 64
-    },
-    "distribution_10g": {
-      "pts": {
-        "floor": 16.5,
-        "median": 20.0,
-        "ceiling": 22.0,
-        "logs": [
-          9,
-          21,
-          19,
-          25
-        ]
-      },
-      "reb": {
-        "floor": 2.8,
-        "median": 4.0,
-        "ceiling": 5.0,
-        "logs": [
-          2,
-          5,
-          5,
-          3
-        ]
-      },
-      "ast": {
-        "floor": 2.0,
-        "median": 3.0,
-        "ceiling": 4.5,
-        "logs": [
-          2,
-          4,
-          2,
-          6
-        ]
-      }
-    },
-    "context_stats": {
-      "usg_pct": 24.2,
-      "ast_pct": 17.5,
-      "reb_pct": 6.1
-    },
-    "situational": {
-      "clutch_usg_pct": 25.7,
-      "paint_touches_pg": 5.3
-    },
-    "all_logs": [
-      {
-        "d": "2026-10-29",
-        "pts": 9,
-        "reb": 2,
-        "ast": 2,
-        "min": 30.2,
-        "fg3m": 1,
-        "fg3a": 9,
-        "paint_pts": 3.5,
-        "fga": 13,
-        "fgm": 3,
-        "fta": 4,
-        "tov": 1
-      },
-      {
-        "d": "2026-10-27",
-        "pts": 21,
-        "reb": 5,
-        "ast": 4,
-        "min": 31.5,
-        "fg3m": 4,
-        "fg3a": 8,
-        "paint_pts": 5.2,
-        "fga": 12,
-        "fgm": 5,
-        "fta": 11,
-        "tov": 2
-      },
-      {
-        "d": "2026-10-23",
-        "pts": 19,
-        "reb": 5,
-        "ast": 2,
-        "min": 32.7,
-        "fg3m": 2,
-        "fg3a": 10,
-        "paint_pts": 7.5,
-        "fga": 18,
-        "fgm": 7,
-        "fta": 3,
-        "tov": 2
-      },
-      {
-        "d": "2026-10-21",
-        "pts": 25,
-        "reb": 3,
-        "ast": 6,
-        "min": 23.9,
-        "fg3m": 6,
-        "fg3a": 10,
-        "paint_pts": 4.1,
-        "fga": 12,
-        "fgm": 7,
-        "fta": 5,
-        "tov": 1
-      }
-    ]
-  },
-  {
     "player_name": "Jaime Jaquez Jr.",
     "team": "MIL",
     "team_name": "Milwaukee Bucks",
@@ -9973,7 +9847,7 @@
       "fg3a": 4.0,
       "fg3m": 1.4,
       "paint_pts": 3.8,
-      "pts_rank": 106,
+      "pts_rank": 105,
       "reb_rank": 19,
       "ast_rank": 75
     },
@@ -10093,6 +9967,149 @@
         "fga": 9,
         "fgm": 2,
         "fta": 0,
+        "tov": 3
+      }
+    ]
+  },
+  {
+    "player_name": "Myles Turner",
+    "team": "MIL",
+    "team_name": "Milwaukee Bucks",
+    "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 33.5
+    },
+    "games_played": 5,
+    "is_small_sample": false,
+    "season_avg": {
+      "pts": 6.6,
+      "reb": 4.8,
+      "ast": 2.2,
+      "min": 26.6,
+      "fg3a": 4.4,
+      "fg3m": 0.8,
+      "paint_pts": 2.4,
+      "pts_rank": 118,
+      "reb_rank": 65,
+      "ast_rank": 92
+    },
+    "distribution_10g": {
+      "pts": {
+        "floor": 4.0,
+        "median": 6.0,
+        "ceiling": 11.0,
+        "logs": [
+          4,
+          6,
+          0,
+          12,
+          11
+        ]
+      },
+      "reb": {
+        "floor": 3.0,
+        "median": 5.0,
+        "ceiling": 5.0,
+        "logs": [
+          2,
+          9,
+          5,
+          3,
+          5
+        ]
+      },
+      "ast": {
+        "floor": 1.0,
+        "median": 2.0,
+        "ceiling": 3.0,
+        "logs": [
+          2,
+          4,
+          1,
+          1,
+          3
+        ]
+      }
+    },
+    "context_stats": {
+      "usg_pct": 15.8,
+      "ast_pct": 10.8,
+      "reb_pct": 8.7
+    },
+    "situational": {
+      "clutch_usg_pct": 14.8,
+      "paint_touches_pg": 5.6
+    },
+    "all_logs": [
+      {
+        "d": "2026-10-28",
+        "pts": 4,
+        "reb": 2,
+        "ast": 2,
+        "min": 22.5,
+        "fg3m": 0,
+        "fg3a": 5,
+        "paint_pts": 2.3,
+        "fga": 7,
+        "fgm": 2,
+        "fta": 0,
+        "tov": 2
+      },
+      {
+        "d": "2026-10-26",
+        "pts": 6,
+        "reb": 9,
+        "ast": 4,
+        "min": 28.3,
+        "fg3m": 0,
+        "fg3a": 3,
+        "paint_pts": 3.5,
+        "fga": 7,
+        "fgm": 2,
+        "fta": 2,
+        "tov": 3
+      },
+      {
+        "d": "2026-10-24",
+        "pts": 0,
+        "reb": 5,
+        "ast": 1,
+        "min": 19.9,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 0.0,
+        "fga": 4,
+        "fgm": 0,
+        "fta": 0,
+        "tov": 3
+      },
+      {
+        "d": "2026-10-23",
+        "pts": 12,
+        "reb": 3,
+        "ast": 1,
+        "min": 30.2,
+        "fg3m": 2,
+        "fg3a": 7,
+        "paint_pts": 3.5,
+        "fga": 12,
+        "fgm": 5,
+        "fta": 0,
+        "tov": 3
+      },
+      {
+        "d": "2026-10-21",
+        "pts": 11,
+        "reb": 5,
+        "ast": 3,
+        "min": 32.2,
+        "fg3m": 2,
+        "fg3a": 5,
+        "paint_pts": 2.9,
+        "fga": 7,
+        "fgm": 4,
+        "fta": 1,
         "tov": 3
       }
     ]
@@ -10227,7 +10244,7 @@
     "player_name": "Jaden McDaniels",
     "team": "MIN",
     "team_name": "Minnesota Timberwolves",
-    "position": "PF",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
       "frequency": 26.0
@@ -10402,9 +10419,9 @@
       "fg3a": 0.3,
       "fg3m": 0.0,
       "paint_pts": 4.1,
-      "pts_rank": 118,
+      "pts_rank": 117,
       "reb_rank": 3,
-      "ast_rank": 110
+      "ast_rank": 111
     },
     "distribution_10g": {
       "pts": {
@@ -10562,8 +10579,8 @@
       "fg3a": 4.0,
       "fg3m": 1.8,
       "paint_pts": 3.7,
-      "pts_rank": 101,
-      "reb_rank": 70,
+      "pts_rank": 100,
+      "reb_rank": 71,
       "ast_rank": 85
     },
     "distribution_10g": {
@@ -10722,8 +10739,8 @@
       "fg3a": 6.2,
       "fg3m": 2.2,
       "paint_pts": 4.4,
-      "pts_rank": 81,
-      "reb_rank": 74,
+      "pts_rank": 80,
+      "reb_rank": 75,
       "ast_rank": 75
     },
     "distribution_10g": {
@@ -10992,7 +11009,7 @@
       "fg3m": 0.6,
       "paint_pts": 11.6,
       "pts_rank": 30,
-      "reb_rank": 83,
+      "reb_rank": 84,
       "ast_rank": 92
     },
     "distribution_10g": {
@@ -11134,9 +11151,9 @@
       "fg3a": 4.8,
       "fg3m": 1.8,
       "paint_pts": 4.5,
-      "pts_rank": 90,
-      "reb_rank": 104,
-      "ast_rank": 98
+      "pts_rank": 89,
+      "reb_rank": 105,
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -11278,7 +11295,7 @@
       "fg3m": 2.2,
       "paint_pts": 11.0,
       "pts_rank": 12,
-      "reb_rank": 108,
+      "reb_rank": 109,
       "ast_rank": 36
     },
     "distribution_10g": {
@@ -11582,10 +11599,10 @@
     "player_name": "Josh Hart",
     "team": "NYK",
     "team_name": "New York Knicks",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 45.3
+      "frequency": 48.5
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -11597,7 +11614,7 @@
       "fg3a": 5.5,
       "fg3m": 1.8,
       "paint_pts": 1.8,
-      "pts_rank": 114,
+      "pts_rank": 113,
       "reb_rank": 25,
       "ast_rank": 67
     },
@@ -11918,7 +11935,7 @@
       "fg3m": 1.8,
       "paint_pts": 11.9,
       "pts_rank": 8,
-      "reb_rank": 68,
+      "reb_rank": 69,
       "ast_rank": 66
     },
     "distribution_10g": {
@@ -12045,10 +12062,10 @@
     "player_name": "Jalen Williams",
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 20.0
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
     },
     "games_played": 3,
     "is_small_sample": false,
@@ -12060,8 +12077,8 @@
       "fg3a": 3.0,
       "fg3m": 1.0,
       "paint_pts": 6.2,
-      "pts_rank": 89,
-      "reb_rank": 67,
+      "pts_rank": 88,
+      "reb_rank": 68,
       "ast_rank": 67
     },
     "distribution_10g": {
@@ -12169,7 +12186,7 @@
       "fg3a": 2.0,
       "fg3m": 0.7,
       "paint_pts": 5.8,
-      "pts_rank": 97,
+      "pts_rank": 96,
       "reb_rank": 10,
       "ast_rank": 113
     },
@@ -12263,10 +12280,10 @@
     "player_name": "Ajay Mitchell",
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 33.1
+      "primary_role": "Isolation Scorer",
+      "frequency": 22.6
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -12279,7 +12296,7 @@
       "fg3m": 0.8,
       "paint_pts": 9.4,
       "pts_rank": 48,
-      "reb_rank": 98,
+      "reb_rank": 99,
       "ast_rank": 60
     },
     "distribution_10g": {
@@ -12406,7 +12423,7 @@
     "player_name": "Franz Wagner",
     "team": "ORL",
     "team_name": "Orlando Magic",
-    "position": "SF",
+    "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
       "frequency": 24.6
@@ -12641,10 +12658,10 @@
     "player_name": "Desmond Bane",
     "team": "ORL",
     "team_name": "Orlando Magic",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 50.7
+      "frequency": 47.3
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -12657,7 +12674,7 @@
       "fg3m": 3.2,
       "paint_pts": 4.4,
       "pts_rank": 58,
-      "reb_rank": 83,
+      "reb_rank": 84,
       "ast_rank": 75
     },
     "distribution_10g": {
@@ -12799,7 +12816,7 @@
       "fg3a": 3.0,
       "fg3m": 0.3,
       "paint_pts": 4.1,
-      "pts_rank": 116,
+      "pts_rank": 115,
       "reb_rank": 64,
       "ast_rank": 29
     },
@@ -12909,7 +12926,7 @@
       "fg3m": 2.5,
       "paint_pts": 12.0,
       "pts_rank": 4,
-      "reb_rank": 80,
+      "reb_rank": 81,
       "ast_rank": 45
     },
     "distribution_10g": {
@@ -13339,7 +13356,7 @@
     "player_name": "LeBron James",
     "team": "PHI",
     "team_name": "Philadelphia 76ers",
-    "position": "SF",
+    "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
       "frequency": 26.0
@@ -13482,7 +13499,7 @@
     "player_name": "Devin Booker",
     "team": "PHX",
     "team_name": "Phoenix Suns",
-    "position": "SG",
+    "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 30.4
@@ -13498,7 +13515,7 @@
       "fg3m": 1.2,
       "paint_pts": 10.7,
       "pts_rank": 26,
-      "reb_rank": 88,
+      "reb_rank": 89,
       "ast_rank": 36
     },
     "distribution_10g": {
@@ -13750,7 +13767,7 @@
       "fg3m": 2.2,
       "paint_pts": 5.7,
       "pts_rank": 65,
-      "reb_rank": 106,
+      "reb_rank": 107,
       "ast_rank": 72
     },
     "distribution_10g": {
@@ -13875,8 +13892,8 @@
       "fg3a": 3.5,
       "fg3m": 1.0,
       "paint_pts": 4.6,
-      "pts_rank": 105,
-      "reb_rank": 111,
+      "pts_rank": 104,
+      "reb_rank": 112,
       "ast_rank": 85
     },
     "distribution_10g": {
@@ -13986,7 +14003,7 @@
     "player_name": "Deni Avdija",
     "team": "POR",
     "team_name": "Portland Trail Blazers",
-    "position": "SF",
+    "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
       "frequency": 22.6
@@ -14109,6 +14126,132 @@
     ]
   },
   {
+    "player_name": "Damian Lillard",
+    "team": "POR",
+    "team_name": "Portland Trail Blazers",
+    "position": "PG",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 50.2
+    },
+    "games_played": 4,
+    "is_small_sample": false,
+    "season_avg": {
+      "pts": 18.5,
+      "reb": 3.8,
+      "ast": 3.5,
+      "min": 29.6,
+      "fg3a": 9.2,
+      "fg3m": 3.2,
+      "paint_pts": 5.1,
+      "pts_rank": 49,
+      "reb_rank": 89,
+      "ast_rank": 64
+    },
+    "distribution_10g": {
+      "pts": {
+        "floor": 16.5,
+        "median": 20.0,
+        "ceiling": 22.0,
+        "logs": [
+          9,
+          21,
+          19,
+          25
+        ]
+      },
+      "reb": {
+        "floor": 2.8,
+        "median": 4.0,
+        "ceiling": 5.0,
+        "logs": [
+          2,
+          5,
+          5,
+          3
+        ]
+      },
+      "ast": {
+        "floor": 2.0,
+        "median": 3.0,
+        "ceiling": 4.5,
+        "logs": [
+          2,
+          4,
+          2,
+          6
+        ]
+      }
+    },
+    "context_stats": {
+      "usg_pct": 24.8,
+      "ast_pct": 16.4,
+      "reb_pct": 6.6
+    },
+    "situational": {
+      "clutch_usg_pct": 26.3,
+      "paint_touches_pg": 5.3
+    },
+    "all_logs": [
+      {
+        "d": "2026-10-29",
+        "pts": 9,
+        "reb": 2,
+        "ast": 2,
+        "min": 30.2,
+        "fg3m": 1,
+        "fg3a": 9,
+        "paint_pts": 3.5,
+        "fga": 13,
+        "fgm": 3,
+        "fta": 4,
+        "tov": 1
+      },
+      {
+        "d": "2026-10-27",
+        "pts": 21,
+        "reb": 5,
+        "ast": 4,
+        "min": 31.5,
+        "fg3m": 4,
+        "fg3a": 8,
+        "paint_pts": 5.2,
+        "fga": 12,
+        "fgm": 5,
+        "fta": 11,
+        "tov": 2
+      },
+      {
+        "d": "2026-10-23",
+        "pts": 19,
+        "reb": 5,
+        "ast": 2,
+        "min": 32.7,
+        "fg3m": 2,
+        "fg3a": 10,
+        "paint_pts": 7.5,
+        "fga": 18,
+        "fgm": 7,
+        "fta": 3,
+        "tov": 2
+      },
+      {
+        "d": "2026-10-21",
+        "pts": 25,
+        "reb": 3,
+        "ast": 6,
+        "min": 23.9,
+        "fg3m": 6,
+        "fg3a": 10,
+        "paint_pts": 4.1,
+        "fga": 12,
+        "fgm": 7,
+        "fta": 5,
+        "tov": 1
+      }
+    ]
+  },
+  {
     "player_name": "Ja Morant",
     "team": "POR",
     "team_name": "Portland Trail Blazers",
@@ -14128,7 +14271,7 @@
       "fg3m": 1.5,
       "paint_pts": 6.5,
       "pts_rank": 74,
-      "reb_rank": 111,
+      "reb_rank": 112,
       "ast_rank": 32
     },
     "distribution_10g": {
@@ -14238,7 +14381,7 @@
     "player_name": "Jrue Holiday",
     "team": "POR",
     "team_name": "Portland Trail Blazers",
-    "position": "PG",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
       "frequency": 49.7
@@ -14253,8 +14396,8 @@
       "fg3a": 5.8,
       "fg3m": 1.8,
       "paint_pts": 3.9,
-      "pts_rank": 97,
-      "reb_rank": 88,
+      "pts_rank": 96,
+      "reb_rank": 89,
       "ast_rank": 53
     },
     "distribution_10g": {
@@ -14357,132 +14500,6 @@
         "fgm": 2,
         "fta": 4,
         "tov": 0
-      }
-    ]
-  },
-  {
-    "player_name": "Toumani Camara",
-    "team": "POR",
-    "team_name": "Portland Trail Blazers",
-    "position": "PF",
-    "role_archetype": {
-      "primary_role": "Spot-Up Shooter",
-      "frequency": 48.0
-    },
-    "games_played": 4,
-    "is_small_sample": false,
-    "season_avg": {
-      "pts": 15.5,
-      "reb": 1.8,
-      "ast": 1.5,
-      "min": 25.0,
-      "fg3a": 7.5,
-      "fg3m": 4.0,
-      "paint_pts": 2.0,
-      "pts_rank": 75,
-      "reb_rank": 117,
-      "ast_rank": 110
-    },
-    "distribution_10g": {
-      "pts": {
-        "floor": 12.8,
-        "median": 15.5,
-        "ceiling": 18.2,
-        "logs": [
-          13,
-          12,
-          19,
-          18
-        ]
-      },
-      "reb": {
-        "floor": 1.8,
-        "median": 2.0,
-        "ceiling": 2.0,
-        "logs": [
-          2,
-          1,
-          2,
-          2
-        ]
-      },
-      "ast": {
-        "floor": 1.0,
-        "median": 1.0,
-        "ceiling": 1.5,
-        "logs": [
-          1,
-          1,
-          1,
-          3
-        ]
-      }
-    },
-    "context_stats": {
-      "usg_pct": 16.5,
-      "ast_pct": 8.7,
-      "reb_pct": 3.7
-    },
-    "situational": {
-      "clutch_usg_pct": 15.5,
-      "paint_touches_pg": 4.0
-    },
-    "all_logs": [
-      {
-        "d": "2026-10-29",
-        "pts": 13,
-        "reb": 2,
-        "ast": 1,
-        "min": 25.7,
-        "fg3m": 3,
-        "fg3a": 8,
-        "paint_pts": 2.3,
-        "fga": 10,
-        "fgm": 5,
-        "fta": 0,
-        "tov": 2
-      },
-      {
-        "d": "2026-10-27",
-        "pts": 12,
-        "reb": 1,
-        "ast": 1,
-        "min": 24.3,
-        "fg3m": 4,
-        "fg3a": 5,
-        "paint_pts": 0.0,
-        "fga": 5,
-        "fgm": 4,
-        "fta": 0,
-        "tov": 0
-      },
-      {
-        "d": "2026-10-23",
-        "pts": 19,
-        "reb": 2,
-        "ast": 1,
-        "min": 27.3,
-        "fg3m": 5,
-        "fg3a": 10,
-        "paint_pts": 2.3,
-        "fga": 12,
-        "fgm": 7,
-        "fta": 0,
-        "tov": 0
-      },
-      {
-        "d": "2026-10-21",
-        "pts": 18,
-        "reb": 2,
-        "ast": 3,
-        "min": 22.6,
-        "fg3m": 4,
-        "fg3a": 7,
-        "paint_pts": 3.5,
-        "fga": 9,
-        "fgm": 6,
-        "fta": 2,
-        "tov": 1
       }
     ]
   },
@@ -14649,7 +14666,7 @@
       "fg3m": 3.0,
       "paint_pts": 9.9,
       "pts_rank": 8,
-      "reb_rank": 98,
+      "reb_rank": 99,
       "ast_rank": 60
     },
     "distribution_10g": {
@@ -14792,7 +14809,7 @@
       "fg3m": 2.0,
       "paint_pts": 10.4,
       "pts_rank": 19,
-      "reb_rank": 98,
+      "reb_rank": 99,
       "ast_rank": 19
     },
     "distribution_10g": {
@@ -14919,10 +14936,10 @@
     "player_name": "Precious Achiuwa",
     "team": "SAC",
     "team_name": "Sacramento Kings",
-    "position": "C",
+    "position": "PF",
     "role_archetype": {
-      "primary_role": "Roll Man / Rim Runner",
-      "frequency": 39.8
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -14934,7 +14951,7 @@
       "fg3a": 1.0,
       "fg3m": 0.2,
       "paint_pts": 7.7,
-      "pts_rank": 85,
+      "pts_rank": 84,
       "reb_rank": 44,
       "ast_rank": 117
     },
@@ -15062,10 +15079,10 @@
     "player_name": "Dylan Harper",
     "team": "SAS",
     "team_name": "San Antonio Spurs",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 20.6
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 26.0
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -15348,10 +15365,10 @@
     "player_name": "Devin Vassell",
     "team": "SAS",
     "team_name": "San Antonio Spurs",
-    "position": "SG",
+    "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 36.8
+      "frequency": 34.4
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -15363,8 +15380,8 @@
       "fg3a": 5.4,
       "fg3m": 1.8,
       "paint_pts": 4.2,
-      "pts_rank": 95,
-      "reb_rank": 83,
+      "pts_rank": 94,
+      "reb_rank": 84,
       "ast_rank": 57
     },
     "distribution_10g": {
@@ -15506,8 +15523,8 @@
       "fg3a": 3.6,
       "fg3m": 1.4,
       "paint_pts": 6.5,
-      "pts_rank": 76,
-      "reb_rank": 80,
+      "pts_rank": 75,
+      "reb_rank": 81,
       "ast_rank": 14
     },
     "distribution_10g": {
@@ -15777,10 +15794,10 @@
     "player_name": "RJ Barrett",
     "team": "TOR",
     "team_name": "Toronto Raptors",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
-      "primary_role": "Spot-Up Shooter",
-      "frequency": 26.0
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 22.3
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -15936,7 +15953,7 @@
       "fg3m": 3.0,
       "paint_pts": 4.9,
       "pts_rank": 56,
-      "reb_rank": 98,
+      "reb_rank": 99,
       "ast_rank": 25
     },
     "distribution_10g": {
@@ -16063,10 +16080,10 @@
     "player_name": "Ja'Kobe Walter",
     "team": "TOR",
     "team_name": "Toronto Raptors",
-    "position": "SG",
+    "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 54.0
+      "frequency": 48.0
     },
     "games_played": 5,
     "is_small_sample": false,
@@ -16078,8 +16095,8 @@
       "fg3a": 6.4,
       "fg3m": 2.8,
       "paint_pts": 2.3,
-      "pts_rank": 96,
-      "reb_rank": 88,
+      "pts_rank": 95,
+      "reb_rank": 89,
       "ast_rank": 92
     },
     "distribution_10g": {
@@ -16222,7 +16239,7 @@
       "fg3m": 2.8,
       "paint_pts": 9.3,
       "pts_rank": 17,
-      "reb_rank": 83,
+      "reb_rank": 84,
       "ast_rank": 18
     },
     "distribution_10g": {
@@ -16364,7 +16381,7 @@
       "fg3a": 5.0,
       "fg3m": 1.6,
       "paint_pts": 5.5,
-      "pts_rank": 81,
+      "pts_rank": 80,
       "reb_rank": 19,
       "ast_rank": 89
     },
@@ -16507,8 +16524,8 @@
       "fg3a": 4.0,
       "fg3m": 1.4,
       "paint_pts": 5.0,
-      "pts_rank": 92,
-      "reb_rank": 74,
+      "pts_rank": 91,
+      "reb_rank": 75,
       "ast_rank": 82
     },
     "distribution_10g": {
@@ -16652,7 +16669,7 @@
       "paint_pts": 4.9,
       "pts_rank": 73,
       "reb_rank": 55,
-      "ast_rank": 101
+      "ast_rank": 102
     },
     "distribution_10g": {
       "pts": {
@@ -16777,7 +16794,7 @@
       "fg3m": 1.8,
       "paint_pts": 8.8,
       "pts_rank": 40,
-      "reb_rank": 93,
+      "reb_rank": 94,
       "ast_rank": 1
     },
     "distribution_10g": {
@@ -17081,10 +17098,10 @@
     "player_name": "Kyshawn George",
     "team": "WAS",
     "team_name": "Washington Wizards",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 27.2
+      "frequency": 29.2
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -17096,8 +17113,8 @@
       "fg3a": 4.8,
       "fg3m": 1.3,
       "paint_pts": 6.5,
-      "pts_rank": 79,
-      "reb_rank": 79,
+      "pts_rank": 78,
+      "reb_rank": 80,
       "ast_rank": 49
     },
     "distribution_10g": {
@@ -17257,8 +17274,8 @@
       "fg3m": 1.0,
       "paint_pts": 8.7,
       "pts_rank": 51,
-      "reb_rank": 70,
-      "ast_rank": 110
+      "reb_rank": 71,
+      "ast_rank": 111
     },
     "distribution_10g": {
       "pts": {

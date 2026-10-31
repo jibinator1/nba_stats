@@ -278,6 +278,12 @@ def main():
     update_todays_games()
     fetch_injuries()
 
+    try:
+        from fetch_espn_depth_charts import sync_espn_positions
+        sync_espn_positions()
+    except Exception as e:
+        print(f"Warning: Failed to sync ESPN depth charts: {e}")
+
     if logs_ok:
         print("Executing forensic scouting analytics pipeline...")
         run_forensic_pipeline()
