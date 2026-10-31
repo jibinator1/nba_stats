@@ -652,11 +652,11 @@
         };
         window.NBA_TEAM_NAMES = {{ team_names | tojson }};
     </script>
-    <script src="{{ url_for('static', filename='js/app.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
-    <script src="{{ url_for('static', filename='js/visuals.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
-    <script src="{{ url_for('static', filename='js/modal.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
-    <script src="{{ url_for('static', filename='js/profiles.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
-    <script src="{{ url_for('static', filename='js/positional.js') }}?v={{ last_updated|replace(' ', '_') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>
+    <script src="{{ url_for('static', filename='js/visuals.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>
+    <script src="{{ url_for('static', filename='js/profiles.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>
+    <script src="{{ url_for('static', filename='js/positional.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>
     {% if page_type == 'positional' %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {

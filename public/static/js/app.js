@@ -33,7 +33,7 @@ function getTodayDateStr() {
     return `${y}-${m}-${d}`;
 }
 const clientTodayStr = getTodayDateStr();
-const defaultSeasonStart = APP_DATA.startDate || '2025-10-02';
+const defaultSeasonStart = APP_DATA.startDate || '2026-10-20';
 // State variables: Start at start of last season to current date (dynamic)
 let startDate = defaultSeasonStart;
 let endDate = APP_DATA.endDate || clientTodayStr;
@@ -110,7 +110,7 @@ const POS_METRIC_LABELS = {
     'pg_pts_allowed': 'PG PTS Allowed', 'pg_reb_allowed': 'PG REB Allowed', 'pg_ast_allowed': 'PG AST Allowed', 'pg_fg3m_allowed': 'PG 3PM Allowed'
 };
 SIGNIFICANT_POS_KEYS.forEach(k => {
-    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position. Ranks #1-#10 (green) indicate high defensive containment.`;
+    STAT_EXPLANATIONS[POS_METRIC_LABELS[k]] = `Opponent per-game production surrendered to this position (Volume, Rank #1-#30), alongside the relative differential in parentheses vs opposing players' season baselines (+/-). Negative differentials indicate the defense suppresses players below their normal scoring.`;
 });
 // Evaluation Mode State ('overall' vs 'opponent_diff')
 window.matchupEvaluationMode = window.matchupEvaluationMode || 'overall';
@@ -200,13 +200,30 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         const hW = (hD && hD.weighted_diff != null) ? ` (weighted: ${hD.weighted_diff > 0 ? '+' : ''}${hD.weighted_diff})` : '';
         const aTitle = aD ? `${aTeam} defensive differential: ${aFmt.text}${aW} vs ${pos} baseline average (Rank #${aRankVal ?? '--'})` : 'No positional differential recorded';
         const hTitle = hD ? `${hTeam} defensive differential: ${hFmt.text}${hW} vs ${pos} baseline average (Rank #${hRankVal ?? '--'})` : 'No positional differential recorded';
-        return `
-            <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
-                <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
-                <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label}</span>${tooltipBody}</span></div>
-                <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span>${hBadge}</div>
-            </div>
-        `;
+        
+        const isDiffMode = (window.matchupEvaluationMode === 'opponent_diff');
+        if (isDiffMode) {
+            return `
+                <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                    <div class="flex items-center space-x-1.5 text-left font-mono">${aBadge}<span class="${aFmt.className}" title="${aTitle}">${aFmt.text}</span></div>
+                    <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label} (Diff)</span>${tooltipBody}</span></div>
+                    <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="${hFmt.className}" title="${hTitle}">${hFmt.text}</span>${hBadge}</div>
+                </div>
+            `;
+        } else {
+            // Overall per-game volume mode: show actual allowed stat with differential in parentheses
+            const aDiffTag = aD ? `<span class="${aFmt.className} text-[10px] ml-1 font-mono font-normal">(${aFmt.text})</span>` : '';
+            const hDiffTag = hD ? `<span class="${hFmt.className} text-[10px] mr-1 font-mono font-normal">(${hFmt.text})</span>` : '';
+            const aVolBadge = formatRankBadge(aRank);
+            const hVolBadge = formatRankBadge(hRank);
+            return `
+                <div class="grid grid-cols-3 items-center py-1.5 border-b border-[#21262d] text-xs hover:bg-[#21262d]/50 px-2 rounded transition">
+                    <div class="flex items-center space-x-1.5 text-left font-mono">${aVolBadge}<span class="text-slate-200 font-bold" title="${aTitle}">${aVal != null ? aVal : '--'}${aDiffTag}</span></div>
+                    <div class="text-center text-slate-400 text-[11px] font-medium uppercase tracking-tight"><span class="stat-info-trigger"><span>${label}</span>${tooltipBody}</span></div>
+                    <div class="flex items-center justify-end space-x-1.5 text-right font-mono"><span class="text-slate-200 font-bold" title="${hTitle}">${hDiffTag}${hVal != null ? hVal : '--'}</span>${hVolBadge}</div>
+                </div>
+            `;
+        }
     }
     let aBadge = (aVal != null) ? formatRankBadge(aRank) : '';
     let hBadge = (hVal != null) ? formatRankBadge(hRank) : '';
@@ -255,7 +272,7 @@ function createEmptyTeamProfile(t) {
 // Dynamic In-Memory Recalculation Engine across Date Range
 
 function recalculateForensicsForDateRange(sDate, eDate) {
-    if (!sDate) sDate = '2025-10-02';
+    if (!sDate) sDate = '2026-10-20';
     if (!eDate) eDate = clientTodayStr;
     if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
     const filteredTeamLogs = (allTeamGameLogs || []).filter(g => g.d >= sDate && g.d <= eDate);
@@ -327,7 +344,33 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                     above_break_3: { freq: parseFloat((fg3Rate * 0.76).toFixed(1)), ppp: (1.10 * offScale).toFixed(2) }
                 },
                 rebounding: { dreb_secured_pct: parseFloat(drebSecured.toFixed(1)), oreb_allowed_pct: parseFloat(orebAllowed.toFixed(1)) },
-                positional_allowances: baseProf.positional_allowances || null,
+                positional_allowances: (() => {
+                    const sumG = (k) => tGames.reduce((acc, g) => acc + (g[k] || 0), 0);
+                    const gP = sumG('opp_g_pts'), wP = sumG('opp_w_pts'), bP = sumG('opp_b_pts'), totP = gP + wP + bP;
+                    const gR = sumG('opp_g_reb'), wR = sumG('opp_w_reb'), bR = sumG('opp_b_reb'), totR = gR + wR + bR;
+                    const gF = sumG('opp_g_fg3m'), wF = sumG('opp_w_fg3m'), bF = sumG('opp_b_fg3m'), totF = gF + wF + bF;
+                    if (gp === 0) return null;
+                    return {
+                        pts: {
+                            guards: parseFloat((gP / gp).toFixed(1)), wings: parseFloat((wP / gp).toFixed(1)), bigs: parseFloat((bP / gp).toFixed(1)),
+                            guards_pct: totP > 0 ? parseFloat((gP / totP * 100).toFixed(1)) : 33.3,
+                            wings_pct: totP > 0 ? parseFloat((wP / totP * 100).toFixed(1)) : 33.3,
+                            bigs_pct: totP > 0 ? parseFloat((bP / totP * 100).toFixed(1)) : 33.4
+                        },
+                        reb: {
+                            guards: parseFloat((gR / gp).toFixed(1)), wings: parseFloat((wR / gp).toFixed(1)), bigs: parseFloat((bR / gp).toFixed(1)),
+                            guards_pct: totR > 0 ? parseFloat((gR / totR * 100).toFixed(1)) : 33.3,
+                            wings_pct: totR > 0 ? parseFloat((wR / totR * 100).toFixed(1)) : 33.3,
+                            bigs_pct: totR > 0 ? parseFloat((bR / totR * 100).toFixed(1)) : 33.4
+                        },
+                        fg3m: {
+                            guards: parseFloat((gF / gp).toFixed(1)), wings: parseFloat((wF / gp).toFixed(1)), bigs: parseFloat((bF / gp).toFixed(1)),
+                            guards_pct: totF > 0 ? parseFloat((gF / totF * 100).toFixed(1)) : 33.3,
+                            wings_pct: totF > 0 ? parseFloat((wF / totF * 100).toFixed(1)) : 33.3,
+                            bigs_pct: totF > 0 ? parseFloat((bF / totF * 100).toFixed(1)) : 33.4
+                        }
+                    };
+                })(),
                 playtypes_offense: baseProf.playtypes_offense || {}, playtypes_defense: baseProf.playtypes_defense || {},
                 turnover_profile: {
                     avg_total: (totTov / gp).toFixed(1),
@@ -343,7 +386,23 @@ function recalculateForensicsForDateRange(sDate, eDate) {
                 fg3m_total: (totFg3m / gp).toFixed(1), fg3m_allowed: (totFg3mOpp / gp).toFixed(1),
                 fg3a_total: (totFg3a / gp).toFixed(1), fg3a_allowed: (totFg3aOpp / gp).toFixed(1),
                 fg_pct: fgPct, fg_pct_opp: fgPctOpp,
-                ...SIGNIFICANT_POS_KEYS.reduce((acc, k) => { acc[k] = baseProf[k] || null; return acc; }, {})
+                c_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_pts || 0), 0) / gp).toFixed(1)) : null,
+                c_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_reb || 0), 0) / gp).toFixed(1)) : null,
+                c_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_ast || 0), 0) / gp).toFixed(1)) : null,
+                c_fg3m_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_c_fg3m || 0), 0) / gp).toFixed(1)) : null,
+                pf_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pf_pts || 0), 0) / gp).toFixed(1)) : null,
+                pf_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pf_reb || 0), 0) / gp).toFixed(1)) : null,
+                pf_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pf_ast || 0), 0) / gp).toFixed(1)) : null,
+                sf_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sf_reb || 0), 0) / gp).toFixed(1)) : null,
+                sf_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sf_ast || 0), 0) / gp).toFixed(1)) : null,
+                sg_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_pts || 0), 0) / gp).toFixed(1)) : null,
+                sg_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_reb || 0), 0) / gp).toFixed(1)) : null,
+                sg_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_ast || 0), 0) / gp).toFixed(1)) : null,
+                sg_fg3m_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_sg_fg3m || 0), 0) / gp).toFixed(1)) : null,
+                pg_pts_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_pts || 0), 0) / gp).toFixed(1)) : null,
+                pg_reb_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_reb || 0), 0) / gp).toFixed(1)) : null,
+                pg_ast_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_ast || 0), 0) / gp).toFixed(1)) : null,
+                pg_fg3m_allowed: gp > 0 ? parseFloat((tGames.reduce((acc, g) => acc + (g.opp_pg_fg3m || 0), 0) / gp).toFixed(1)) : null
             };
         }
     });
@@ -476,10 +535,10 @@ function recalculateForensicsForDateRange(sDate, eDate) {
 async function updatePositionalDeltasForDateRange(sDate, eDate) {
     if (!sDate || !eDate) return;
     if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
-    const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
+    const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 25;
     const baseStart = (window.APP_DATA && window.APP_DATA.startDate) || window.startDate || startDate;
     const baseEnd = (window.APP_DATA && window.APP_DATA.endDate) || window.endDate || endDate;
-    if (sDate === baseStart && eDate === baseEnd && minM === 20 && window.APP_DATA && window.APP_DATA.positionMatchupDeltas && Object.keys(window.APP_DATA.positionMatchupDeltas).length > 0) return;
+    if (sDate === baseStart && eDate === baseEnd && minM === 25 && window.APP_DATA && window.APP_DATA.positionMatchupDeltas && Object.keys(window.APP_DATA.positionMatchupDeltas).length > 0) return;
     try {
         const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}&min_minutes=${encodeURIComponent(minM)}`);
         if (res.ok) {
@@ -502,10 +561,10 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
     }
 }
 
-window.currentMinMinutes = 20;
+window.currentMinMinutes = 25;
 function onMinMinutesChange(val) {
     const minM = parseFloat(val);
-    window.currentMinMinutes = isNaN(minM) ? 20 : minM;
+    window.currentMinMinutes = isNaN(minM) ? 25 : minM;
     updatePositionalDeltasForDateRange(startDate, endDate);
     if (typeof loadPositionalTab === 'function' && window.hasLoadedPositional) loadPositionalTab();
     if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
@@ -774,6 +833,9 @@ function renderScheduleGames() {
             (g.home_team_name && g.home_team_name.toLowerCase().includes(q))
         );
     }
+    // Reverse chronological order so current/latest matchups appear first
+    games.sort((a, b) => (b.gameday || '').localeCompare(a.gameday || ''));
+
     const countEl = document.getElementById('sched-stat-total-games');
     if (countEl) countEl.textContent = games.length;
     const compEl = document.getElementById('sched-stat-completed-games');
@@ -795,14 +857,36 @@ function renderScheduleGames() {
 function renderScheduleDatePills() {
     const container = document.getElementById('schedule-date-pills');
     if (!container) return;
-    const seasonGames = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
+    const sDate = (window.APP_DATA && window.APP_DATA.startDate) || window.startDate || startDate || '2026-10-20';
+    const eDate = (window.APP_DATA && window.APP_DATA.endDate) || window.endDate || endDate || clientTodayStr;
+
+    // Filter games to current season date range (matching Floor Streaks logic)
+    const seasonGames = allScheduleGames.filter(g => {
+        const d = g.gameday;
+        if (!d || d < '2026-10-20') return false;
+        if (sDate && d < sDate) return false;
+        if (eDate && d > eDate) return false;
+        return true;
+    });
+
     const dateCounts = {};
     seasonGames.forEach(g => {
         const d = g.gameday;
         dateCounts[d] = (dateCounts[d] || 0) + 1;
     });
-    // Chronological order: Opening Night 2026-10-20 first, then upcoming dates
-    const sortedDates = Object.keys(dateCounts).sort();
+
+    // Reverse chronological order: Current date on the very left, matching Floor Streaks
+    const sortedDates = Object.keys(dateCounts).sort().reverse();
+
+    // If a specific date is selected but outside current window, ensure it is represented at the front
+    if (selectedScheduleDate && selectedScheduleDate !== 'all' && !sortedDates.includes(selectedScheduleDate)) {
+        const cnt = allScheduleGames.filter(g => g.gameday === selectedScheduleDate).length;
+        if (cnt > 0) {
+            dateCounts[selectedScheduleDate] = cnt;
+            sortedDates.unshift(selectedScheduleDate);
+        }
+    }
+
     const isAll = selectedScheduleDate === 'all';
     let html = `
         <button onclick="filterScheduleDate('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">

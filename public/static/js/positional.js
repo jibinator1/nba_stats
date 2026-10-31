@@ -30,7 +30,7 @@ async function loadPositionalTab() {
     try {
         const sDate = document.getElementById('input-start-date')?.value || window.startDate;
         const eDate = document.getElementById('input-end-date')?.value || window.endDate;
-        const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
+        const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 25;
         let url = `/api/positional-correlations?min_minutes=${encodeURIComponent(minM)}`;
         if (sDate && eDate) {
             url += `&start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}`;
