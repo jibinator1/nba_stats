@@ -833,6 +833,9 @@ function renderScheduleGames() {
             (g.home_team_name && g.home_team_name.toLowerCase().includes(q))
         );
     }
+    // Reverse chronological order so current/latest matchups appear first
+    games.sort((a, b) => (b.gameday || '').localeCompare(a.gameday || ''));
+
     const countEl = document.getElementById('sched-stat-total-games');
     if (countEl) countEl.textContent = games.length;
     const compEl = document.getElementById('sched-stat-completed-games');
@@ -854,14 +857,36 @@ function renderScheduleGames() {
 function renderScheduleDatePills() {
     const container = document.getElementById('schedule-date-pills');
     if (!container) return;
-    const seasonGames = allScheduleGames.filter(g => g.gameday && g.gameday >= '2026-10-20');
+    const sDate = (window.APP_DATA && window.APP_DATA.startDate) || window.startDate || startDate || '2026-10-20';
+    const eDate = (window.APP_DATA && window.APP_DATA.endDate) || window.endDate || endDate || clientTodayStr;
+
+    // Filter games to current season date range (matching Floor Streaks logic)
+    const seasonGames = allScheduleGames.filter(g => {
+        const d = g.gameday;
+        if (!d || d < '2026-10-20') return false;
+        if (sDate && d < sDate) return false;
+        if (eDate && d > eDate) return false;
+        return true;
+    });
+
     const dateCounts = {};
     seasonGames.forEach(g => {
         const d = g.gameday;
         dateCounts[d] = (dateCounts[d] || 0) + 1;
     });
-    // Chronological order: Opening Night 2026-10-20 first, then upcoming dates
-    const sortedDates = Object.keys(dateCounts).sort();
+
+    // Reverse chronological order: Current date on the very left, matching Floor Streaks
+    const sortedDates = Object.keys(dateCounts).sort().reverse();
+
+    // If a specific date is selected but outside current window, ensure it is represented at the front
+    if (selectedScheduleDate && selectedScheduleDate !== 'all' && !sortedDates.includes(selectedScheduleDate)) {
+        const cnt = allScheduleGames.filter(g => g.gameday === selectedScheduleDate).length;
+        if (cnt > 0) {
+            dateCounts[selectedScheduleDate] = cnt;
+            sortedDates.unshift(selectedScheduleDate);
+        }
+    }
+
     const isAll = selectedScheduleDate === 'all';
     let html = `
         <button onclick="filterScheduleDate('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border shrink-0 ${isAll ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60 font-bold' : 'bg-[#21262d] text-slate-400 hover:text-slate-200 border-[#30363d]'}">
