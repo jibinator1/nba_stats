@@ -34,14 +34,14 @@ class TestDateRangeExclusion(unittest.TestCase):
         
         bos = teams.get('BOS', {})
         self.assertEqual(bos.get('gp'), 5, f"Expected Boston GP = 5, got {bos.get('gp')}")
-        self.assertEqual(bos.get('c_pts_allowed'), 8.8, f"Expected Boston c_pts_allowed = 8.8, got {bos.get('c_pts_allowed')}")
-        self.assertEqual(bos.get('rank_c_pts_allowed'), 4, f"Expected Boston rank_c_pts_allowed = 4, got {bos.get('rank_c_pts_allowed')}")
+        self.assertEqual(bos.get('c_pts_allowed'), 5.6, f"Expected Boston c_pts_allowed = 5.6, got {bos.get('c_pts_allowed')}")
+        self.assertEqual(bos.get('rank_c_pts_allowed'), 5, f"Expected Boston rank_c_pts_allowed = 5, got {bos.get('rank_c_pts_allowed')}")
         
         # Check positional breakdown
         pts_allow = bos.get('positional_allowances', {}).get('pts', {})
-        self.assertEqual(pts_allow.get('guards'), 31.8)
-        self.assertEqual(pts_allow.get('wings'), 35.8)
-        self.assertEqual(pts_allow.get('bigs'), 8.8)
+        self.assertEqual(pts_allow.get('guards'), 26.8)
+        self.assertEqual(pts_allow.get('wings'), 30.6)
+        self.assertEqual(pts_allow.get('bigs'), 5.6)
 
     def test_dynamic_sub_window_exclusion(self):
         """Verifies dynamic recalculation on sub-window (2026-10-20 to 2026-10-24) excludes outside games."""
@@ -52,7 +52,7 @@ class TestDateRangeExclusion(unittest.TestCase):
         bos_sub = dyn.get('BOS', {})
         self.assertEqual(bos_sub.get('gp'), 2, f"Expected Boston GP = 2 in sub-window, got {bos_sub.get('gp')}")
         self.assertEqual(bos_sub.get('c_pts_allowed'), 14.0)
-        self.assertEqual(bos_sub.get('rank_c_pts_allowed'), 16)
+        self.assertEqual(bos_sub.get('rank_c_pts_allowed'), 24)
 
     def test_api_forensic_teams_date_filter(self):
         """Verifies /api/forensic-teams endpoint respects start_date and end_date."""
@@ -62,7 +62,7 @@ class TestDateRangeExclusion(unittest.TestCase):
         teams = payload.get('forensic_teams', {})
         bos = teams.get('BOS', {})
         self.assertEqual(bos.get('gp'), 4)
-        self.assertEqual(bos.get('c_pts_allowed'), 9.8)
+        self.assertEqual(bos.get('c_pts_allowed'), 7.0)
 
 if __name__ == '__main__':
     unittest.main()

@@ -15,13 +15,13 @@ class TestPositionalCorrelations(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.data = calculate_position_correlations(min_minutes=20.0)
+        cls.data = calculate_position_correlations(min_minutes=25.0)
         cls.client = app.test_client()
 
     def test_metadata_structure(self):
         meta = self.data.get('metadata', {})
         self.assertIn('qualifying_logs_count', meta)
-        self.assertGreater(meta['qualifying_logs_count'], 15000)
+        self.assertGreater(meta['qualifying_logs_count'], 10000)
         self.assertEqual(meta['teams_count'], 30)
         self.assertListEqual(meta['positions'], ['PG', 'SG', 'SF', 'PF', 'C'])
         self.assertListEqual(meta['tiers'], ['Guards', 'Wings', 'Bigs'])
@@ -127,7 +127,7 @@ class TestPositionalCorrelations(unittest.TestCase):
         self.assertEqual(meta.get('start_date'), '2026-10-20')
         self.assertEqual(meta.get('end_date'), '2026-10-29')
         # All qualifying logs must be strictly from the selected window
-        self.assertGreater(meta.get('qualifying_logs_count', 0), 1000)
+        self.assertGreater(meta.get('qualifying_logs_count', 0), 500)
         self.assertLess(meta.get('qualifying_logs_count', 0), 2000)
         
         # Verify matchups exist for positions and tiers

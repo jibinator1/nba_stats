@@ -55,7 +55,7 @@ def load_position_map():
     pos_map.update(MANUAL_POSITIONS)
     return pos_map
 
-def calculate_position_correlations(logs_df=None, min_minutes=20.0, start_date=None, end_date=None, save_json=None):
+def calculate_position_correlations(logs_df=None, min_minutes=25.0, start_date=None, end_date=None, save_json=None):
     """
     Computes statistical correlation and performance deltas (vs player season avg & median)
     for each position against every opponent team. When start_date or end_date is provided,

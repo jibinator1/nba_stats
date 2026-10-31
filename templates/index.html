@@ -138,7 +138,7 @@
                         <!-- Min Minutes Avg Box -->
                         <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5" title="Filter players by minimum average minutes per game to eliminate garbage time players">
                             <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">Min Mins Avg:</span>
-                            <input type="number" id="input-min-minutes-avg" value="{{ min_minutes|default(20)|int }}" min="0" max="48" step="1" onchange="onMinMinutesChange(this.value)" class="w-12 bg-[#161b22] border border-[#30363d] text-cyan-300 text-xs font-bold font-mono rounded px-1.5 py-0.5 text-center outline-none focus:border-cyan-500 cursor-pointer">
+                            <input type="number" id="input-min-minutes-avg" value="{{ min_minutes|default(25)|int }}" min="0" max="48" step="1" onchange="onMinMinutesChange(this.value)" class="w-12 bg-[#161b22] border border-[#30363d] text-cyan-300 text-xs font-bold font-mono rounded px-1.5 py-0.5 text-center outline-none focus:border-cyan-500 cursor-pointer">
                         </div>
                         <!-- Team Selector -->
                         <div class="flex items-center space-x-1.5 bg-[#21262d] border border-[#30363d] rounded-lg px-2.5 py-1.5">

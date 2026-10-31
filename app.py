@@ -133,16 +133,16 @@ def load_forensic_data():
 _POS_CORR_CACHE = {}
 
 
-def load_position_correlations(start_date=None, end_date=None, min_minutes=20.0):
+def load_position_correlations(start_date=None, end_date=None, min_minutes=25.0):
     """Loads positional matchup correlation dataset with fallback to calculation engine."""
     if start_date and end_date and str(start_date) > str(end_date):
         start_date, end_date = end_date, start_date
     try:
         min_m = float(min_minutes)
     except (ValueError, TypeError):
-        min_m = 20.0
+        min_m = 25.0
 
-    is_default_range = (start_date is None and end_date is None and min_m == 20.0)
+    is_default_range = (start_date is None and end_date is None and min_m == 25.0)
 
     cache_key = (None if is_default_range else str(start_date),
                  None if is_default_range else str(end_date),
@@ -534,9 +534,9 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
     active_s = s_date or '2026-10-20'
     active_e = e_date or today_str
     try:
-        min_minutes = float(request.args.get('min_minutes', 20.0))
+        min_minutes = float(request.args.get('min_minutes', 25.0))
     except (ValueError, TypeError):
-        min_minutes = 20.0
+        min_minutes = 25.0
     pos_data = load_position_correlations(start_date=s_date, end_date=e_date, min_minutes=min_minutes)
     position_matchup_deltas = build_position_matchup_deltas(pos_data)
 
@@ -871,11 +871,11 @@ def api_positional_correlations():
     s_date = request.args.get('start_date')
     e_date = request.args.get('end_date')
     try:
-        min_minutes = float(request.args.get('min_minutes', 20.0))
+        min_minutes = float(request.args.get('min_minutes', 25.0))
         if min_minutes < 0:
             min_minutes = 0.0
     except (ValueError, TypeError):
-        min_minutes = 20.0
+        min_minutes = 25.0
     data = load_position_correlations(start_date=s_date, end_date=e_date, min_minutes=min_minutes)
     position = request.args.get('position')
     metric = request.args.get('metric')

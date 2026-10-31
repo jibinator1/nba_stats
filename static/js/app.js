@@ -535,10 +535,10 @@ function recalculateForensicsForDateRange(sDate, eDate) {
 async function updatePositionalDeltasForDateRange(sDate, eDate) {
     if (!sDate || !eDate) return;
     if (sDate > eDate) { const tmp = sDate; sDate = eDate; eDate = tmp; }
-    const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 20;
+    const minM = window.currentMinMinutes != null ? window.currentMinMinutes : 25;
     const baseStart = (window.APP_DATA && window.APP_DATA.startDate) || window.startDate || startDate;
     const baseEnd = (window.APP_DATA && window.APP_DATA.endDate) || window.endDate || endDate;
-    if (sDate === baseStart && eDate === baseEnd && minM === 20 && window.APP_DATA && window.APP_DATA.positionMatchupDeltas && Object.keys(window.APP_DATA.positionMatchupDeltas).length > 0) return;
+    if (sDate === baseStart && eDate === baseEnd && minM === 25 && window.APP_DATA && window.APP_DATA.positionMatchupDeltas && Object.keys(window.APP_DATA.positionMatchupDeltas).length > 0) return;
     try {
         const res = await fetch(`/api/positional-correlations?start_date=${encodeURIComponent(sDate)}&end_date=${encodeURIComponent(eDate)}&min_minutes=${encodeURIComponent(minM)}`);
         if (res.ok) {
@@ -561,10 +561,10 @@ async function updatePositionalDeltasForDateRange(sDate, eDate) {
     }
 }
 
-window.currentMinMinutes = 20;
+window.currentMinMinutes = 25;
 function onMinMinutesChange(val) {
     const minM = parseFloat(val);
-    window.currentMinMinutes = isNaN(minM) ? 20 : minM;
+    window.currentMinMinutes = isNaN(minM) ? 25 : minM;
     updatePositionalDeltasForDateRange(startDate, endDate);
     if (typeof loadPositionalTab === 'function' && window.hasLoadedPositional) loadPositionalTab();
     if (typeof renderPlayerProfiles === 'function') renderPlayerProfiles();
