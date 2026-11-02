@@ -866,9 +866,9 @@
       ],
       "C": [
         "Yves Missi",
+        "Karlo Matkovic",
         "DeAndre Jordan",
         "Derik Queen",
-        "Karlo Matkovic",
         "Zion Williamson",
         "Malik Dia"
       ]
@@ -1093,18 +1093,18 @@
     "POR": {
       "PG": [
         "Damian Lillard",
-        "Scoot Henderson",
         "Jrue Holiday",
         "Deni Avdija",
+        "Scoot Henderson",
         "Vit Krejci",
         "Ja Morant",
         "Shaedon Sharpe"
       ],
       "SG": [
-        "Jrue Holiday",
+        "Scoot Henderson",
         "Vit Krejci",
         "Damian Lillard",
-        "Scoot Henderson",
+        "Jrue Holiday",
         "Toumani Camara",
         "Chris Youngblood",
         "John Tonje",
@@ -6536,19 +6536,19 @@
         ],
         [
           "C",
-          2
+          3
         ]
       ]
     },
     "Karlo Matkovic": {
       "pos": "C",
       "team": "NOP",
-      "depth": 3,
+      "depth": 1,
       "espn_id": "4997538",
       "all_positions": [
         [
           "C",
-          3
+          1
         ],
         [
           "PF",
@@ -6611,12 +6611,12 @@
     "DeAndre Jordan": {
       "pos": "C",
       "team": "NOP",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "3442",
       "all_positions": [
         [
           "C",
-          1
+          2
         ]
       ]
     },
@@ -7944,11 +7944,11 @@
         ]
       ]
     },
-    "Scoot Henderson": {
+    "Jrue Holiday": {
       "pos": "PG",
       "team": "POR",
       "depth": 1,
-      "espn_id": "4683678",
+      "espn_id": "3995",
       "all_positions": [
         [
           "PG",
@@ -7957,22 +7957,6 @@
         [
           "SG",
           3
-        ]
-      ]
-    },
-    "Jrue Holiday": {
-      "pos": "SG",
-      "team": "POR",
-      "depth": 0,
-      "espn_id": "3995",
-      "all_positions": [
-        [
-          "SG",
-          0
-        ],
-        [
-          "PG",
-          2
         ],
         [
           "SF",
@@ -7992,11 +7976,27 @@
         ],
         [
           "PG",
-          3
+          2
         ],
         [
           "SF",
           4
+        ]
+      ]
+    },
+    "Scoot Henderson": {
+      "pos": "SG",
+      "team": "POR",
+      "depth": 0,
+      "espn_id": "4683678",
+      "all_positions": [
+        [
+          "SG",
+          0
+        ],
+        [
+          "PG",
+          3
         ]
       ]
     },
