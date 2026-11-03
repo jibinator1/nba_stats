@@ -562,29 +562,29 @@
         "Bradley Beal",
         "Keaton Wagler",
         "Kobe Sanders",
+        "Max Strus",
         "Gradey Dick",
         "Cam Christie",
-        "Max Strus",
         "Jordan Miller",
         "Blake Wesley"
       ],
       "SF": [
         "Derrick Jones Jr.",
+        "Max Strus",
         "Gradey Dick",
         "Kobe Sanders",
         "Rui Hachimura",
         "Nick Martinelli",
         "Cam Christie",
-        "Max Strus",
         "Brandon Ingram",
         "Jordan Miller"
       ],
       "PF": [
         "Rui Hachimura",
         "Kobe Sanders",
+        "Max Strus",
         "Gradey Dick",
         "Derrick Jones Jr.",
-        "Max Strus",
         "Baba Miller",
         "Nick Martinelli"
       ],
@@ -735,9 +735,9 @@
     },
     "MIL": {
       "PG": [
+        "Brayden Burries",
         "Ryan Rollins",
         "Kasparas Jakucionis",
-        "Brayden Burries",
         "Caris LeVert",
         "Tyler Herro",
         "AJ Green",
@@ -929,6 +929,7 @@
         "Bennett Stirtz",
         "Alex Caruso",
         "Nikola Topic",
+        "Dalen Terry",
         "Josh Dix",
         "Cason Wallace"
       ],
@@ -939,6 +940,7 @@
         "Josh Dix",
         "Brooks Barnhizer",
         "Micah Peavy",
+        "Dalen Terry",
         "Cason Wallace",
         "Jalen Williams"
       ],
@@ -948,6 +950,7 @@
         "Jaylin Williams",
         "Brooks Barnhizer",
         "Micah Peavy",
+        "Dalen Terry",
         "Chet Holmgren"
       ],
       "C": [
@@ -4771,20 +4774,20 @@
           1
         ],
         [
-          "SF",
-          2
+          "SG",
+          3
         ],
         [
-          "SG",
+          "SF",
           3
         ]
       ]
     },
-    "Gradey Dick": {
+    "Max Strus": {
       "pos": "SF",
       "team": "LAC",
       "depth": 1,
-      "espn_id": "5106258",
+      "espn_id": "4065778",
       "all_positions": [
         [
           "SF",
@@ -4800,32 +4803,32 @@
         ]
       ]
     },
-    "Cam Christie": {
-      "pos": "SG",
+    "Gradey Dick": {
+      "pos": "SF",
       "team": "LAC",
-      "depth": 5,
-      "espn_id": "4845363",
+      "depth": 2,
+      "espn_id": "5106258",
       "all_positions": [
         [
-          "SG",
-          5
+          "SF",
+          2
         ],
         [
-          "SF",
+          "PF",
+          3
+        ],
+        [
+          "SG",
           5
         ]
       ]
     },
-    "Max Strus": {
-      "pos": "PF",
+    "Cam Christie": {
+      "pos": "SG",
       "team": "LAC",
-      "depth": 4,
-      "espn_id": "4065778",
+      "depth": 6,
+      "espn_id": "4845363",
       "all_positions": [
-        [
-          "PF",
-          4
-        ],
         [
           "SG",
           6
@@ -4848,7 +4851,7 @@
         ],
         [
           "PF",
-          3
+          4
         ]
       ]
     },
@@ -4864,19 +4867,19 @@
         ],
         [
           "SF",
-          3
+          4
         ]
       ]
     },
     "Nick Martinelli": {
       "pos": "SF",
       "team": "LAC",
-      "depth": 4,
+      "depth": 5,
       "espn_id": "5105832",
       "all_positions": [
         [
           "SF",
-          4
+          5
         ],
         [
           "PF",
@@ -5780,15 +5783,31 @@
         ]
       ]
     },
-    "Ryan Rollins": {
+    "Brayden Burries": {
       "pos": "PG",
       "team": "MIL",
       "depth": 0,
-      "espn_id": "4591725",
+      "espn_id": "5082206",
       "all_positions": [
         [
           "PG",
           0
+        ],
+        [
+          "SG",
+          2
+        ]
+      ]
+    },
+    "Ryan Rollins": {
+      "pos": "PG",
+      "team": "MIL",
+      "depth": 1,
+      "espn_id": "4591725",
+      "all_positions": [
+        [
+          "PG",
+          1
         ],
         [
           "SG",
@@ -5799,32 +5818,16 @@
     "Kasparas Jakucionis": {
       "pos": "PG",
       "team": "MIL",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "5214640",
       "all_positions": [
         [
           "PG",
-          1
+          2
         ],
         [
           "SG",
           5
-        ]
-      ]
-    },
-    "Brayden Burries": {
-      "pos": "PG",
-      "team": "MIL",
-      "depth": 2,
-      "espn_id": "5082206",
-      "all_positions": [
-        [
-          "PG",
-          2
-        ],
-        [
-          "SG",
-          2
         ]
       ]
     },
@@ -6964,11 +6967,11 @@
         ],
         [
           "SG",
-          6
+          7
         ],
         [
           "SF",
-          6
+          7
         ]
       ]
     },
@@ -6992,6 +6995,26 @@
         ]
       ]
     },
+    "Dalen Terry": {
+      "pos": "SG",
+      "team": "OKC",
+      "depth": 5,
+      "espn_id": "4433159",
+      "all_positions": [
+        [
+          "SG",
+          5
+        ],
+        [
+          "PF",
+          5
+        ],
+        [
+          "SF",
+          6
+        ]
+      ]
+    },
     "Josh Dix": {
       "pos": "SF",
       "team": "OKC",
@@ -7004,7 +7027,7 @@
         ],
         [
           "SG",
-          5
+          6
         ]
       ]
     },
@@ -7059,12 +7082,12 @@
     "Jalen Williams": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 7,
+      "depth": 8,
       "espn_id": "4593803",
       "all_positions": [
         [
           "SF",
-          7
+          8
         ]
       ]
     },
@@ -7087,12 +7110,12 @@
     "Chet Holmgren": {
       "pos": "PF",
       "team": "OKC",
-      "depth": 5,
+      "depth": 6,
       "espn_id": "4433255",
       "all_positions": [
         [
           "PF",
-          5
+          6
         ]
       ]
     },
