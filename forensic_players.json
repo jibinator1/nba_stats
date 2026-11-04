@@ -939,10 +939,10 @@
     "player_name": "Paul George",
     "team": "BOS",
     "team_name": "Boston Celtics",
-    "position": "SG",
+    "position": "PF",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 33.3
+      "primary_role": "Isolation Scorer",
+      "frequency": 22.2
     },
     "games_played": 6,
     "is_small_sample": false,
@@ -2194,12 +2194,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 33.7,
+      "usg_pct": 33.6,
       "ast_pct": 15.4,
       "reb_pct": 8.4
     },
     "situational": {
-      "clutch_usg_pct": 35.2,
+      "clutch_usg_pct": 35.1,
       "paint_touches_pg": 7.6
     },
     "all_logs": [
@@ -2776,12 +2776,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 27.6,
+      "usg_pct": 27.5,
       "ast_pct": 12.3,
       "reb_pct": 14.8
     },
     "situational": {
-      "clutch_usg_pct": 29.1,
+      "clutch_usg_pct": 29.0,
       "paint_touches_pg": 8.0
     },
     "all_logs": [
@@ -14337,10 +14337,10 @@
     "player_name": "Ajay Mitchell",
     "team": "OKC",
     "team_name": "Oklahoma City Thunder",
-    "position": "SF",
+    "position": "SG",
     "role_archetype": {
-      "primary_role": "Isolation Scorer",
-      "frequency": 20.5
+      "primary_role": "Pick & Roll Ball Handler",
+      "frequency": 23.0
     },
     "games_played": 7,
     "is_small_sample": false,

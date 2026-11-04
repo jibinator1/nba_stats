@@ -57,10 +57,9 @@
         "Devin Carter"
       ],
       "SG": [
-        "Paul George",
+        "Hugo Gonzalez",
         "Baylor Scheierman",
         "Payton Pritchard",
-        "Hugo Gonzalez",
         "Derrick White",
         "Ron Harper Jr.",
         "Devin Carter"
@@ -76,20 +75,20 @@
         "Dillon Mitchell"
       ],
       "PF": [
+        "Paul George",
         "Jordan Walsh",
         "Jayson Tatum",
-        "Paul George",
         "Sam Hauser",
+        "Baylor Scheierman",
         "Hugo Gonzalez",
         "Luka Garza",
-        "Baylor Scheierman",
         "Chris Cenac Jr.",
         "Ron Harper Jr.",
         "Dillon Mitchell"
       ],
       "C": [
-        "Mitchell Robinson",
         "Neemias Queta",
+        "Mitchell Robinson",
         "Luka Garza",
         "Chris Cenac Jr.",
         "Amari Williams"
@@ -811,7 +810,8 @@
         "Jaylen Clark",
         "Cody Williams",
         "Jonathan Kuminga",
-        "Isaiah Evans"
+        "Isaiah Evans",
+        "Norchad Omier"
       ],
       "PF": [
         "Jonathan Kuminga",
@@ -819,14 +819,13 @@
         "Jaden McDaniels",
         "Terrence Shannon Jr.",
         "Cody Williams",
-        "Enrique Freeman"
+        "Norchad Omier"
       ],
       "C": [
         "Rudy Gobert",
         "Joan Beringer",
         "Rocco Zikarsky",
-        "Trey Lyles",
-        "Enrique Freeman"
+        "Trey Lyles"
       ]
     },
     "NOP": {
@@ -918,14 +917,14 @@
       "PG": [
         "Shai Gilgeous-Alexander",
         "Ajay Mitchell",
-        "Bennett Stirtz",
         "Jared McCain",
+        "Bennett Stirtz",
         "Nikola Topic",
         "Cason Wallace"
       ],
       "SG": [
-        "Jared McCain",
         "Ajay Mitchell",
+        "Jared McCain",
         "Bennett Stirtz",
         "Alex Caruso",
         "Nikola Topic",
@@ -934,9 +933,9 @@
         "Cason Wallace"
       ],
       "SF": [
-        "Ajay Mitchell",
-        "Alex Caruso",
         "Kenrich Williams",
+        "Alex Caruso",
+        "Ajay Mitchell",
         "Josh Dix",
         "Brooks Barnhizer",
         "Micah Peavy",
@@ -945,9 +944,9 @@
         "Jalen Williams"
       ],
       "PF": [
+        "Jaylin Williams",
         "Kenrich Williams",
         "Alex Caruso",
-        "Jaylin Williams",
         "Brooks Barnhizer",
         "Micah Peavy",
         "Dalen Terry",
@@ -1667,7 +1666,7 @@
         ],
         [
           "SG",
-          4
+          3
         ]
       ]
     },
@@ -1711,15 +1710,15 @@
         ],
         [
           "SG",
-          6
+          5
         ]
       ]
     },
-    "Paul George": {
+    "Hugo Gonzalez": {
       "pos": "SG",
       "team": "BOS",
       "depth": 0,
-      "espn_id": "4251",
+      "espn_id": "5175647",
       "all_positions": [
         [
           "SG",
@@ -1727,11 +1726,11 @@
         ],
         [
           "SF",
-          2
+          4
         ],
         [
           "PF",
-          2
+          5
         ]
       ]
     },
@@ -1751,26 +1750,6 @@
         ],
         [
           "PF",
-          6
-        ]
-      ]
-    },
-    "Hugo Gonzalez": {
-      "pos": "SG",
-      "team": "BOS",
-      "depth": 3,
-      "espn_id": "5175647",
-      "all_positions": [
-        [
-          "SG",
-          3
-        ],
-        [
-          "SF",
-          4
-        ],
-        [
-          "PF",
           4
         ]
       ]
@@ -1778,12 +1757,12 @@
     "Ron Harper Jr.": {
       "pos": "SG",
       "team": "BOS",
-      "depth": 5,
+      "depth": 4,
       "espn_id": "4397251",
       "all_positions": [
         [
           "SG",
-          5
+          4
         ],
         [
           "SF",
@@ -1807,7 +1786,7 @@
         ],
         [
           "PF",
-          1
+          2
         ]
       ]
     },
@@ -1827,15 +1806,31 @@
         ]
       ]
     },
-    "Jordan Walsh": {
+    "Paul George": {
       "pos": "PF",
       "team": "BOS",
       "depth": 0,
-      "espn_id": "4683689",
+      "espn_id": "4251",
       "all_positions": [
         [
           "PF",
           0
+        ],
+        [
+          "SF",
+          2
+        ]
+      ]
+    },
+    "Jordan Walsh": {
+      "pos": "PF",
+      "team": "BOS",
+      "depth": 1,
+      "espn_id": "4683689",
+      "all_positions": [
+        [
+          "PF",
+          1
         ],
         [
           "SF",
@@ -1871,7 +1866,7 @@
         ],
         [
           "PF",
-          5
+          6
         ]
       ]
     },
@@ -1891,11 +1886,11 @@
         ]
       ]
     },
-    "Mitchell Robinson": {
+    "Neemias Queta": {
       "pos": "C",
       "team": "BOS",
       "depth": 0,
-      "espn_id": "4351852",
+      "espn_id": "4397424",
       "all_positions": [
         [
           "C",
@@ -1903,11 +1898,11 @@
         ]
       ]
     },
-    "Neemias Queta": {
+    "Mitchell Robinson": {
       "pos": "C",
       "team": "BOS",
       "depth": 1,
-      "espn_id": "4397424",
+      "espn_id": "4351852",
       "all_positions": [
         [
           "C",
@@ -6283,6 +6278,22 @@
         ]
       ]
     },
+    "Norchad Omier": {
+      "pos": "PF",
+      "team": "MIN",
+      "depth": 5,
+      "espn_id": "4702134",
+      "all_positions": [
+        [
+          "PF",
+          5
+        ],
+        [
+          "SF",
+          7
+        ]
+      ]
+    },
     "Trey Lyles": {
       "pos": "PF",
       "team": "MIN",
@@ -6296,22 +6307,6 @@
         [
           "C",
           3
-        ]
-      ]
-    },
-    "Enrique Freeman": {
-      "pos": "C",
-      "team": "MIN",
-      "depth": 4,
-      "espn_id": "4592699",
-      "all_positions": [
-        [
-          "C",
-          4
-        ],
-        [
-          "PF",
-          5
         ]
       ]
     },
@@ -6888,13 +6883,13 @@
       ]
     },
     "Ajay Mitchell": {
-      "pos": "SF",
+      "pos": "SG",
       "team": "OKC",
       "depth": 0,
       "espn_id": "4900671",
       "all_positions": [
         [
-          "SF",
+          "SG",
           0
         ],
         [
@@ -6902,23 +6897,7 @@
           1
         ],
         [
-          "SG",
-          1
-        ]
-      ]
-    },
-    "Bennett Stirtz": {
-      "pos": "PG",
-      "team": "OKC",
-      "depth": 2,
-      "espn_id": "5241364",
-      "all_positions": [
-        [
-          "PG",
-          2
-        ],
-        [
-          "SG",
+          "SF",
           2
         ]
       ]
@@ -6926,12 +6905,28 @@
     "Jared McCain": {
       "pos": "SG",
       "team": "OKC",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "4683778",
       "all_positions": [
         [
           "SG",
-          0
+          1
+        ],
+        [
+          "PG",
+          2
+        ]
+      ]
+    },
+    "Bennett Stirtz": {
+      "pos": "SG",
+      "team": "OKC",
+      "depth": 2,
+      "espn_id": "5241364",
+      "all_positions": [
+        [
+          "SG",
+          2
         ],
         [
           "PG",
@@ -6987,7 +6982,7 @@
         ],
         [
           "PF",
-          1
+          2
         ],
         [
           "SG",
@@ -7032,18 +7027,18 @@
       ]
     },
     "Kenrich Williams": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "OKC",
       "depth": 0,
       "espn_id": "3133626",
       "all_positions": [
         [
-          "PF",
+          "SF",
           0
         ],
         [
-          "SF",
-          2
+          "PF",
+          1
         ]
       ]
     },
@@ -7092,18 +7087,18 @@
       ]
     },
     "Jaylin Williams": {
-      "pos": "C",
+      "pos": "PF",
       "team": "OKC",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "4432823",
       "all_positions": [
         [
-          "C",
-          1
+          "PF",
+          0
         ],
         [
-          "PF",
-          2
+          "C",
+          1
         ]
       ]
     },

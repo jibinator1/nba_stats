@@ -23,8 +23,8 @@
         "IND",
         "ORL",
         "CLE",
-        "MIA",
-        "CHA"
+        "CHA",
+        "MIA"
       ],
       "n_games": 5,
       "median_pts_allowed": 111.0,
@@ -391,8 +391,8 @@
         "IND",
         "ORL",
         "CLE",
-        "MIA",
-        "CHA"
+        "CHA",
+        "MIA"
       ],
       "n_games": 5,
       "median_pts_allowed": 111.0,
@@ -3873,8 +3873,8 @@
       "cluster_opponents": [
         "BKN",
         "NYK",
-        "MIA",
         "CHA",
+        "MIA",
         "PHI"
       ],
       "n_games": 6,
@@ -4242,8 +4242,8 @@
         "BKN",
         "BOS",
         "NYK",
-        "MIA",
-        "CHA"
+        "CHA",
+        "MIA"
       ],
       "n_games": 6,
       "median_pts_allowed": 102.5,
@@ -5301,8 +5301,8 @@
       "defending_team": "IND",
       "attacking_team": "ATL",
       "cluster_opponents": [
-        "MIL",
         "MIA",
+        "MIL",
         "PHI",
         "BKN",
         "DAL"
@@ -7244,7 +7244,7 @@
         "IND",
         "DAL",
         "DET",
-        "ATL"
+        "CHA"
       ],
       "n_games": 5,
       "median_pts_allowed": 125.0,
@@ -8189,8 +8189,8 @@
       "attacking_team": "ATL",
       "cluster_opponents": [
         "CLE",
-        "MIL",
         "MIA",
+        "MIL",
         "LAC",
         "SAS"
       ],
@@ -8221,8 +8221,8 @@
       "attacking_team": "BKN",
       "cluster_opponents": [
         "GSW",
-        "ORL",
         "MIL",
+        "ORL",
         "CLE",
         "LAC"
       ],
@@ -9813,8 +9813,8 @@
         "DAL",
         "LAC",
         "PHX",
-        "CLE",
-        "DEN"
+        "DEN",
+        "CLE"
       ],
       "n_games": 5,
       "median_pts_allowed": 112.0,
@@ -12092,8 +12092,8 @@
       "cluster_opponents": [
         "LAC",
         "MEM",
-        "POR",
         "SAS",
+        "POR",
         "DAL"
       ],
       "n_games": 6,
@@ -12877,8 +12877,8 @@
       "attacking_team": "POR",
       "cluster_opponents": [
         "DAL",
-        "MIN",
         "UTA",
+        "MIN",
         "SAC",
         "HOU"
       ],
@@ -13088,8 +13088,8 @@
       "cluster_opponents": [
         "WAS",
         "LAC",
-        "LAL",
         "ORL",
+        "LAL",
         "MIN"
       ],
       "n_games": 6,
@@ -13538,8 +13538,8 @@
       "cluster_opponents": [
         "MEM",
         "LAL",
-        "POR",
         "SAS",
+        "POR",
         "NOP"
       ],
       "n_games": 7,
@@ -13965,8 +13965,8 @@
       "defending_team": "WAS",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "ORL",
         "MIL",
+        "ORL",
         "CLE",
         "CHI",
         "CHA"
@@ -14257,13 +14257,13 @@
         "MIL",
         "CLE",
         "ORL",
-        "CHI"
+        "CHA"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 116.0,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 28.2,
-      "summary_text": "WAS Defense vs. Opponents Similar to OKC (n=5 games). WAS allowed a median of 116.0 points, 13.0 offensive rebounds, and 28.2% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 111.0,
+      "median_oreb_allowed": 16.5,
+      "median_3pt_pct_allowed": 29.5,
+      "summary_text": "WAS Defense vs. Opponents Similar to OKC (n=6 games). WAS allowed a median of 111.0 points, 16.5 offensive rebounds, and 29.5% from 3PT."
     },
     "ORL": {
       "defending_team": "WAS",
