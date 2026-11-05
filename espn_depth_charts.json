@@ -30,9 +30,9 @@
       ],
       "PF": [
         "Jalen Johnson",
-        "Aaron Wiggins",
         "Luguentz Dort",
         "Asa Newell",
+        "Aaron Wiggins",
         "Dorian Finney-Smith",
         "Corey Kispert",
         "Zuby Ejiofor",
@@ -42,8 +42,8 @@
       "C": [
         "Onyeka Okongwu",
         "Jock Landale",
-        "Zuby Ejiofor",
         "Asa Newell",
+        "Zuby Ejiofor",
         "Dorian Finney-Smith",
         "Mouhamed Gueye",
         "Henri Veesaar"
@@ -70,8 +70,8 @@
         "Paul George",
         "Baylor Scheierman",
         "Hugo Gonzalez",
-        "Ron Harper Jr.",
         "Jordan Walsh",
+        "Ron Harper Jr.",
         "Dillon Mitchell"
       ],
       "PF": [
@@ -100,32 +100,33 @@
         "Mikel Brown Jr.",
         "Nolan Traore",
         "Keon Ellis",
-        "Ben Saraf",
-        "Terance Mann"
+        "Terance Mann",
+        "Ben Saraf"
       ],
       "SG": [
         "Nolan Traore",
         "Keon Ellis",
         "Egor Demin",
         "Mikel Brown Jr.",
-        "Drake Powell",
-        "Terance Mann"
+        "Terance Mann",
+        "Drake Powell"
       ],
       "SF": [
         "Michael Porter Jr.",
         "Chaney Johnson",
         "Keon Ellis",
         "Noah Clowney",
-        "Josh Minott",
         "Terance Mann",
+        "Josh Minott",
         "Drake Powell"
       ],
       "PF": [
         "Julius Randle",
         "Noah Clowney",
+        "Chaney Johnson",
+        "Terance Mann",
         "Josh Minott",
         "Danny Wolf",
-        "Chaney Johnson",
         "Joshua Jefferson",
         "Tyler Bilodeau"
       ],
@@ -147,17 +148,17 @@
       ],
       "SG": [
         "Kon Knueppel",
-        "Sion James",
         "Grayson Allen",
         "Coby White",
         "Dennis Schroder",
+        "Sion James",
         "Liam McNeeley",
         "Kylan Boswell"
       ],
       "SF": [
         "Brandon Miller",
-        "Grayson Allen",
         "Sion James",
+        "Grayson Allen",
         "Royce O'Neale",
         "Liam McNeeley",
         "Tidjane Salaun",
@@ -168,8 +169,8 @@
         "Royce O'Neale",
         "Tidjane Salaun",
         "Sion James",
-        "Liam McNeeley",
         "Grant Williams",
+        "Liam McNeeley",
         "Hannes Steinbach",
         "PJ Hall",
         "Michael Ajayi"
@@ -229,8 +230,8 @@
     "CLE": {
       "PG": [
         "James Harden",
-        "Craig Porter Jr.",
-        "Tyrese Proctor"
+        "Tyrese Proctor",
+        "Craig Porter Jr."
       ],
       "SG": [
         "Donovan Mitchell",
@@ -243,25 +244,25 @@
       "SF": [
         "Peyton Watson",
         "Jaylon Tyson",
+        "Meleek Thomas",
         "Mario Hezonja",
-        "Sam Merrill",
         "Nae'Qwan Tomlin",
         "Tristan Enaruna",
         "Riley Minix"
       ],
       "PF": [
         "Evan Mobley",
-        "Peyton Watson",
-        "Jaylon Tyson",
         "Mario Hezonja",
+        "Jaylon Tyson",
+        "Peyton Watson",
         "Nae'Qwan Tomlin",
         "Tristan Enaruna",
         "Riley Minix"
       ],
       "C": [
         "Jarrett Allen",
-        "Evan Mobley",
         "Thomas Bryant",
+        "Evan Mobley",
         "Khalifa Diop",
         "Ernest Udeh Jr."
       ]
@@ -270,28 +271,26 @@
       "PG": [
         "Kyrie Irving",
         "Marcus Sasser",
-        "Sergio de Larrea",
         "Walter Clayton Jr.",
+        "Sergio de Larrea",
         "Cooper Flagg"
       ],
       "SG": [
         "Max Christie",
-        "Zaccharie Risacher",
         "Caleb Martin",
         "Marcus Sasser",
-        "Naji Marshall",
+        "Kyrie Irving",
+        "Walter Clayton Jr.",
         "Sergio de Larrea",
         "Jett Howard",
-        "Kyrie Irving",
-        "Tarik Biberovic",
-        "Walter Clayton Jr."
+        "Tarik Biberovic"
       ],
       "SF": [
         "Cooper Flagg",
-        "Naji Marshall",
         "Zaccharie Risacher",
-        "Santi Aldama",
+        "Naji Marshall",
         "Caleb Martin",
+        "Santi Aldama",
         "Max Christie",
         "P.J. Washington",
         "Tobi Lawal",
@@ -300,22 +299,22 @@
       ],
       "PF": [
         "P.J. Washington",
-        "Morez Johnson Jr.",
+        "Naji Marshall",
         "Santi Aldama",
+        "Morez Johnson Jr.",
         "Caleb Martin",
         "Cooper Flagg",
-        "Naji Marshall",
         "Tobi Lawal",
         "Jett Howard",
         "Tarik Biberovic"
       ],
       "C": [
         "Daniel Gafford",
-        "Dereck Lively II",
-        "Moussa Cisse",
-        "Santi Aldama",
         "Morez Johnson Jr.",
-        "P.J. Washington"
+        "Santi Aldama",
+        "Moussa Cisse",
+        "P.J. Washington",
+        "Dereck Lively II"
       ]
     },
     "DEN": {
@@ -327,40 +326,38 @@
       "SG": [
         "Christian Braun",
         "DeMar DeRozan",
-        "Julian Strawther",
+        "Cameron Johnson",
         "Spencer Jones",
-        "Tyus Jones",
-        "Cameron Johnson"
+        "Julian Strawther"
       ],
       "SF": [
         "Cameron Johnson",
-        "Bryce Hopkins",
-        "DeMar DeRozan",
-        "Julian Strawther",
-        "Alpha Diallo",
         "Spencer Jones",
+        "DeMar DeRozan",
         "Christian Braun",
-        "Cam Whitmore"
+        "Alpha Diallo",
+        "Bryce Hopkins",
+        "Cam Whitmore",
+        "Julian Strawther"
       ],
       "PF": [
         "Aaron Gordon",
+        "Trevon Brazile",
         "DeMar DeRozan",
+        "Cameron Johnson",
         "Spencer Jones",
         "Alpha Diallo",
-        "Trevon Brazile",
-        "Cameron Johnson",
         "Cam Whitmore",
         "Marvin Bagley III",
         "Bryce Hopkins",
-        "Zeke Nnaji",
-        "Julian Strawther"
+        "Zeke Nnaji"
       ],
       "C": [
         "Nikola Jokic",
         "Marvin Bagley III",
-        "DaRon Holmes II",
         "Trevon Brazile",
         "Aaron Gordon",
+        "DaRon Holmes II",
         "Zeke Nnaji"
       ]
     },
@@ -386,15 +383,15 @@
         "Isaiah Joe",
         "Kevin Huerter",
         "Duncan Robinson",
-        "Ronald Holland II",
         "Javonte Green",
+        "Ronald Holland II",
         "Taurean Prince",
         "Chaz Lanier"
       ],
       "PF": [
         "John Collins",
-        "Ronald Holland II",
         "Javonte Green",
+        "Ronald Holland II",
         "Taurean Prince",
         "Isaac Jones"
       ],
@@ -410,17 +407,17 @@
     "GSW": {
       "PG": [
         "Stephen Curry",
-        "De'Anthony Melton",
-        "Brandin Podziemski",
-        "Will Richard",
         "Brandon Williams",
+        "Brandin Podziemski",
+        "De'Anthony Melton",
+        "Will Richard",
         "Gary Payton II",
         "LJ Cryer"
       ],
       "SG": [
         "Brandin Podziemski",
-        "Gary Payton II",
         "De'Anthony Melton",
+        "Gary Payton II",
         "Will Richard",
         "Gui Santos",
         "Moses Moody"
@@ -440,8 +437,8 @@
         "Georges Niang",
         "Draymond Green",
         "Yaxel Lendeborg",
-        "Graham Ike",
         "Al Horford",
+        "Graham Ike",
         "Malevy Leons",
         "Kristaps Porzingis",
         "Jimmy Butler III",
@@ -450,8 +447,8 @@
       "C": [
         "Draymond Green",
         "Al Horford",
-        "Graham Ike",
         "Charles Bassey",
+        "Graham Ike",
         "Kristaps Porzingis"
       ]
     },
@@ -495,8 +492,8 @@
       "C": [
         "Alperen Sengun",
         "Steven Adams",
-        "Jabari Smith Jr.",
         "Clint Capela",
+        "Jabari Smith Jr.",
         "Oscar Tshiebwe"
       ]
     },
@@ -512,30 +509,29 @@
       "SG": [
         "Andrew Nembhard",
         "Kelly Oubre Jr.",
-        "Ben Sheppard",
-        "Johnny Furphy",
         "Quenton Jackson",
-        "Aaron Nesmith"
+        "Aaron Nesmith",
+        "Ben Sheppard",
+        "Johnny Furphy"
       ],
       "SF": [
         "Aaron Nesmith",
         "Jarace Walker",
         "Kelly Oubre Jr.",
-        "Johnny Furphy",
+        "Quenton Jackson",
         "Kobe Brown",
         "Jalen Slawson",
         "Ben Sheppard",
-        "Quenton Jackson"
+        "Johnny Furphy"
       ],
       "PF": [
         "Pascal Siakam",
         "Obi Toppin",
         "Kelly Oubre Jr.",
-        "Kobe Brown",
         "Larry Nance Jr.",
         "Jarace Walker",
-        "Jalen Slawson",
-        "Jay Huff"
+        "Kobe Brown",
+        "Jalen Slawson"
       ],
       "C": [
         "Ivica Zubac",
@@ -628,24 +624,25 @@
       "PF": [
         "Matisse Thybulle",
         "Sandro Mamukelashvili",
-        "Jake LaRavia",
         "Jarred Vanderbilt",
+        "Jake LaRavia",
         "Ziaire Williams",
         "Adou Thiero",
         "Arthur Kaluma"
       ],
       "C": [
         "Walker Kessler",
-        "Kevon Looney",
         "Sandro Mamukelashvili",
+        "Jarred Vanderbilt",
+        "Kevon Looney",
         "Lawson Lovering"
       ]
     },
     "MEM": {
       "PG": [
         "Ty Jerome",
-        "Cam Spencer",
         "Scotty Pippen Jr.",
+        "Cam Spencer",
         "Javon Small",
         "Jahmai Mashack"
       ],
@@ -661,11 +658,11 @@
         "Jaylen Wells",
         "Jerami Grant",
         "GG Jackson",
-        "Karim Lopez",
         "Cam Spencer",
         "Cedric Coward",
         "Kris Murray",
         "Olivier-Maxence Prosper",
+        "Karim Lopez",
         "Jahmai Mashack"
       ],
       "PF": [
@@ -737,30 +734,31 @@
         "Brayden Burries",
         "Ryan Rollins",
         "Kasparas Jakucionis",
-        "Caris LeVert",
         "Tyler Herro",
         "AJ Green",
+        "Caris LeVert",
         "Kam Jones",
         "Cormac Ryan"
       ],
       "SG": [
         "Tyler Herro",
         "AJ Green",
+        "Ryan Rollins",
         "Brayden Burries",
-        "Gary Trent Jr.",
-        "Caris LeVert",
         "Kasparas Jakucionis",
         "Jaime Jaquez Jr.",
+        "Gary Trent Jr.",
+        "Caris LeVert",
         "Cormac Ryan",
-        "Kam Jones",
-        "Ryan Rollins"
+        "Kam Jones"
       ],
       "SF": [
         "Jaime Jaquez Jr.",
-        "Ousmane Dieng",
-        "Nate Ament",
+        "Kasparas Jakucionis",
         "AJ Green",
+        "Nate Ament",
         "Kyle Kuzma",
+        "Ousmane Dieng",
         "Gary Trent Jr.",
         "Caris LeVert",
         "Pete Nance"
@@ -805,12 +803,12 @@
       ],
       "SF": [
         "Jaden McDaniels",
+        "Jaylen Clark",
         "Terrence Shannon Jr.",
         "Ayo Dosunmu",
-        "Jaylen Clark",
-        "Cody Williams",
         "Jonathan Kuminga",
         "Isaiah Evans",
+        "Cody Williams",
         "Norchad Omier"
       ],
       "PF": [
@@ -824,8 +822,8 @@
       "C": [
         "Rudy Gobert",
         "Joan Beringer",
-        "Rocco Zikarsky",
-        "Trey Lyles"
+        "Trey Lyles",
+        "Rocco Zikarsky"
       ]
     },
     "NOP": {
@@ -839,25 +837,25 @@
         "Jeremiah Fears",
         "Bennedict Mathurin",
         "Trey Murphy III",
-        "Jaron Pierre Jr.",
         "Jordan Poole",
         "Herbert Jones",
         "Bryce McGowens",
-        "AJ Johnson"
+        "AJ Johnson",
+        "Jaron Pierre Jr."
       ],
       "SF": [
         "Trey Murphy III",
         "Saddiq Bey",
         "Herbert Jones",
         "Bennedict Mathurin",
-        "Jaron Pierre Jr.",
-        "Bryce McGowens"
+        "Bryce McGowens",
+        "Jaron Pierre Jr."
       ],
       "PF": [
         "Zion Williamson",
         "Derik Queen",
-        "Saddiq Bey",
         "Herbert Jones",
+        "Saddiq Bey",
         "Karlo Matkovic",
         "Trendon Watford",
         "Malik Dia",
@@ -866,9 +864,10 @@
       "C": [
         "Yves Missi",
         "Karlo Matkovic",
-        "DeAndre Jordan",
         "Derik Queen",
+        "Trendon Watford",
         "Zion Williamson",
+        "DeAndre Jordan",
         "Malik Dia"
       ]
     },
@@ -876,9 +875,9 @@
       "PG": [
         "Jalen Brunson",
         "Jose Alvarado",
-        "Miles McBride",
         "Tyler Kolek",
         "Jordan Clarkson",
+        "Miles McBride",
         "Jaden Akins"
       ],
       "SG": [
@@ -893,15 +892,16 @@
       ],
       "SF": [
         "Mikal Bridges",
+        "Jordan Clarkson",
         "Landry Shamet",
         "Josh Hart",
-        "Jordan Clarkson",
         "Pacome Dadiet",
         "Tyler Nickel",
         "Dalton Knecht"
       ],
       "PF": [
         "OG Anunoby",
+        "Landry Shamet",
         "Karl-Anthony Towns",
         "Josh Hart",
         "Mohamed Diawara",
@@ -916,9 +916,9 @@
     "OKC": {
       "PG": [
         "Shai Gilgeous-Alexander",
+        "Bennett Stirtz",
         "Ajay Mitchell",
         "Jared McCain",
-        "Bennett Stirtz",
         "Nikola Topic",
         "Cason Wallace"
       ],
@@ -927,15 +927,14 @@
         "Jared McCain",
         "Bennett Stirtz",
         "Alex Caruso",
-        "Nikola Topic",
-        "Dalen Terry",
         "Josh Dix",
+        "Dalen Terry",
+        "Nikola Topic",
         "Cason Wallace"
       ],
       "SF": [
-        "Kenrich Williams",
         "Alex Caruso",
-        "Ajay Mitchell",
+        "Kenrich Williams",
         "Josh Dix",
         "Brooks Barnhizer",
         "Micah Peavy",
@@ -954,16 +953,16 @@
       ],
       "C": [
         "Isaiah Hartenstein",
-        "Jaylin Williams",
         "Aday Mara",
+        "Jaylin Williams",
         "Thomas Sorber"
       ]
     },
     "ORL": {
       "PG": [
         "Jase Richardson",
-        "Anthony Black",
         "Jevon Carter",
+        "Anthony Black",
         "Alex Morales",
         "Jalen Suggs"
       ],
@@ -1006,16 +1005,16 @@
         "Tyrese Maxey",
         "Anfernee Simons",
         "VJ Edgecombe",
-        "Labaron Philon Jr.",
         "Kentavious Caldwell-Pope",
+        "Labaron Philon Jr.",
         "Caleb Love"
       ],
       "SG": [
         "VJ Edgecombe",
         "Kentavious Caldwell-Pope",
         "Anfernee Simons",
-        "Labaron Philon Jr.",
         "Jaylen Brown",
+        "Labaron Philon Jr.",
         "Rayan Rupert",
         "Caleb Love"
       ],
@@ -1104,10 +1103,10 @@
       ],
       "SG": [
         "Scoot Henderson",
-        "Vit Krejci",
         "Damian Lillard",
         "Jrue Holiday",
         "Toumani Camara",
+        "Vit Krejci",
         "Chris Youngblood",
         "John Tonje",
         "Ja Morant",
@@ -1116,9 +1115,9 @@
       "SF": [
         "Toumani Camara",
         "Sidy Cissoko",
-        "Vit Krejci",
         "Jrue Holiday",
         "Deni Avdija",
+        "Vit Krejci",
         "Shaedon Sharpe",
         "Jayson Kent",
         "John Tonje"
@@ -1133,9 +1132,9 @@
       "C": [
         "Donovan Clingan",
         "Robert Williams III",
-        "Micah Potter",
         "Yang Hansen",
-        "Branden Carlson"
+        "Branden Carlson",
+        "Micah Potter"
       ]
     },
     "SAC": {
@@ -1150,18 +1149,18 @@
         "Emanuel Sharp",
         "Darius Acuff Jr.",
         "Malik Monk",
-        "Daeqwon Plowden",
         "Nique Clifford",
+        "Daeqwon Plowden",
         "Sean Pedulla"
       ],
       "SF": [
         "De'Andre Hunter",
-        "Daeqwon Plowden",
         "Zach LaVine",
         "Malik Monk",
         "Keegan Murray",
-        "Nique Clifford",
         "Alex Karaban",
+        "Nique Clifford",
+        "Daeqwon Plowden",
         "Leaky Black"
       ],
       "PF": [
@@ -1178,10 +1177,10 @@
       ],
       "C": [
         "Domantas Sabonis",
-        "Maxime Raynaud",
         "Dylan Cardwell",
+        "Jonathan Mogbo",
         "Precious Achiuwa",
-        "Jonathan Mogbo"
+        "Maxime Raynaud"
       ]
     },
     "SAS": {
@@ -1204,9 +1203,9 @@
         "Dylan Harper",
         "Keldon Johnson",
         "Devin Vassell",
-        "Carter Bryant",
         "Julian Champagnie",
         "Harrison Barnes",
+        "Carter Bryant",
         "David Jones Garcia"
       ],
       "PF": [
@@ -1232,22 +1231,23 @@
         "Immanuel Quickley",
         "Jamal Shead",
         "Ja'Kobe Walter",
-        "Jaden Bradley",
         "Scottie Barnes",
+        "Jaden Bradley",
         "Malachi Smith"
       ],
       "SG": [
-        "RJ Barrett",
         "Ja'Kobe Walter",
+        "RJ Barrett",
         "Jamal Shead",
-        "Jaden Bradley",
         "Alijah Martin",
+        "Jaden Bradley",
         "Malachi Smith"
       ],
       "SF": [
+        "RJ Barrett",
+        "Jamison Battle",
         "Ja'Kobe Walter",
         "Allen Graves",
-        "Jamison Battle",
         "Scottie Barnes",
         "Kyle Anderson",
         "Kawhi Leonard"
@@ -1278,8 +1278,8 @@
       ],
       "SG": [
         "Darryn Peterson",
-        "Brice Sensabaugh",
         "Svi Mykhailiuk",
+        "Brice Sensabaugh",
         "Ace Bailey",
         "Josh Okogie",
         "Josh Green",
@@ -1288,8 +1288,8 @@
       ],
       "SF": [
         "Ace Bailey",
-        "Svi Mykhailiuk",
         "Brice Sensabaugh",
+        "Svi Mykhailiuk",
         "Josh Okogie",
         "Lauri Markkanen",
         "Josh Green",
@@ -1297,10 +1297,10 @@
       ],
       "PF": [
         "Lauri Markkanen",
-        "Kyle Filipowski",
+        "Josh Okogie",
         "Ace Bailey",
         "Brice Sensabaugh",
-        "Josh Okogie",
+        "Kyle Filipowski",
         "Harrison Ingram",
         "Jaren Jackson Jr."
       ],
@@ -1469,12 +1469,12 @@
           1
         ],
         [
-          "PF",
-          1
-        ],
-        [
           "SF",
           2
+        ],
+        [
+          "PF",
+          3
         ]
       ]
     },
@@ -1489,11 +1489,11 @@
           1
         ],
         [
-          "SG",
-          2
+          "PF",
+          1
         ],
         [
-          "PF",
+          "SG",
           2
         ]
       ]
@@ -1573,28 +1573,28 @@
     "Asa Newell": {
       "pos": "PF",
       "team": "ATL",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "4873201",
       "all_positions": [
         [
           "PF",
-          3
+          2
         ],
         [
           "C",
-          3
+          2
         ]
       ]
     },
     "Zuby Ejiofor": {
       "pos": "C",
       "team": "ATL",
-      "depth": 2,
+      "depth": 3,
       "espn_id": "5106262",
       "all_positions": [
         [
           "C",
-          2
+          3
         ],
         [
           "PF",
@@ -1766,7 +1766,7 @@
         ],
         [
           "SF",
-          5
+          6
         ],
         [
           "PF",
@@ -1834,7 +1834,7 @@
         ],
         [
           "SF",
-          6
+          5
         ]
       ]
     },
@@ -1990,34 +1990,38 @@
         ]
       ]
     },
-    "Ben Saraf": {
-      "pos": "PG",
+    "Terance Mann": {
+      "pos": "PF",
       "team": "BKN",
-      "depth": 4,
-      "espn_id": "5242502",
+      "depth": 3,
+      "espn_id": "3907823",
       "all_positions": [
         [
+          "PF",
+          3
+        ],
+        [
           "PG",
+          4
+        ],
+        [
+          "SG",
+          4
+        ],
+        [
+          "SF",
           4
         ]
       ]
     },
-    "Terance Mann": {
+    "Ben Saraf": {
       "pos": "PG",
       "team": "BKN",
       "depth": 5,
-      "espn_id": "3907823",
+      "espn_id": "5242502",
       "all_positions": [
         [
           "PG",
-          5
-        ],
-        [
-          "SG",
-          5
-        ],
-        [
-          "SF",
           5
         ]
       ]
@@ -2025,12 +2029,12 @@
     "Drake Powell": {
       "pos": "SG",
       "team": "BKN",
-      "depth": 4,
+      "depth": 5,
       "espn_id": "5037873",
       "all_positions": [
         [
           "SG",
-          4
+          5
         ],
         [
           "SF",
@@ -2062,7 +2066,7 @@
         ],
         [
           "PF",
-          4
+          2
         ],
         [
           "C",
@@ -2087,22 +2091,22 @@
       ]
     },
     "Josh Minott": {
-      "pos": "PF",
+      "pos": "C",
       "team": "BKN",
-      "depth": 2,
+      "depth": 3,
       "espn_id": "4687718",
       "all_positions": [
-        [
-          "PF",
-          2
-        ],
         [
           "C",
           3
         ],
         [
-          "SF",
+          "PF",
           4
+        ],
+        [
+          "SF",
+          5
         ]
       ]
     },
@@ -2130,31 +2134,31 @@
         ],
         [
           "PF",
-          3
+          5
         ]
       ]
     },
     "Joshua Jefferson": {
       "pos": "PF",
       "team": "BKN",
-      "depth": 5,
+      "depth": 6,
       "espn_id": "4870564",
       "all_positions": [
         [
           "PF",
-          5
+          6
         ]
       ]
     },
     "Tyler Bilodeau": {
       "pos": "PF",
       "team": "BKN",
-      "depth": 6,
+      "depth": 7,
       "espn_id": "5105626",
       "all_positions": [
         [
           "PF",
-          6
+          7
         ]
       ]
     },
@@ -2206,7 +2210,7 @@
         ],
         [
           "SG",
-          3
+          2
         ]
       ]
     },
@@ -2222,7 +2226,7 @@
         ],
         [
           "SG",
-          4
+          3
         ]
       ]
     },
@@ -2266,39 +2270,39 @@
         ]
       ]
     },
-    "Sion James": {
-      "pos": "SG",
-      "team": "CHA",
-      "depth": 1,
-      "espn_id": "4602025",
-      "all_positions": [
-        [
-          "SG",
-          1
-        ],
-        [
-          "SF",
-          2
-        ],
-        [
-          "PF",
-          3
-        ]
-      ]
-    },
     "Grayson Allen": {
-      "pos": "SF",
+      "pos": "SG",
       "team": "CHA",
       "depth": 1,
       "espn_id": "3135045",
       "all_positions": [
         [
+          "SG",
+          1
+        ],
+        [
+          "SF",
+          2
+        ]
+      ]
+    },
+    "Sion James": {
+      "pos": "SF",
+      "team": "CHA",
+      "depth": 1,
+      "espn_id": "4602025",
+      "all_positions": [
+        [
           "SF",
           1
         ],
         [
+          "PF",
+          3
+        ],
+        [
           "SG",
-          2
+          4
         ]
       ]
     },
@@ -2313,11 +2317,11 @@
           4
         ],
         [
-          "PF",
-          4
+          "SG",
+          5
         ],
         [
-          "SG",
+          "PF",
           5
         ]
       ]
@@ -2401,12 +2405,12 @@
     "Grant Williams": {
       "pos": "PF",
       "team": "CHA",
-      "depth": 5,
+      "depth": 4,
       "espn_id": "4066218",
       "all_positions": [
         [
           "PF",
-          5
+          4
         ]
       ]
     },
@@ -2742,11 +2746,11 @@
         ]
       ]
     },
-    "Craig Porter Jr.": {
+    "Tyrese Proctor": {
       "pos": "PG",
       "team": "CLE",
       "depth": 1,
-      "espn_id": "4701233",
+      "espn_id": "5023693",
       "all_positions": [
         [
           "PG",
@@ -2754,15 +2758,15 @@
         ],
         [
           "SG",
-          5
+          4
         ]
       ]
     },
-    "Tyrese Proctor": {
+    "Craig Porter Jr.": {
       "pos": "PG",
       "team": "CLE",
       "depth": 2,
-      "espn_id": "5023693",
+      "espn_id": "4701233",
       "all_positions": [
         [
           "PG",
@@ -2770,7 +2774,7 @@
         ],
         [
           "SG",
-          4
+          5
         ]
       ]
     },
@@ -2795,10 +2799,6 @@
         [
           "SG",
           1
-        ],
-        [
-          "SF",
-          3
         ]
       ]
     },
@@ -2823,11 +2823,15 @@
       ]
     },
     "Meleek Thomas": {
-      "pos": "SG",
+      "pos": "SF",
       "team": "CLE",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "5041951",
       "all_positions": [
+        [
+          "SF",
+          2
+        ],
         [
           "SG",
           3
@@ -2846,22 +2850,22 @@
         ],
         [
           "PF",
-          1
+          3
         ]
       ]
     },
     "Mario Hezonja": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "CLE",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "2995706",
       "all_positions": [
         [
-          "SF",
-          2
+          "PF",
+          1
         ],
         [
-          "PF",
+          "SF",
           3
         ]
       ]
@@ -2926,7 +2930,7 @@
         ],
         [
           "C",
-          1
+          2
         ]
       ]
     },
@@ -2945,12 +2949,12 @@
     "Thomas Bryant": {
       "pos": "C",
       "team": "CLE",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "3934723",
       "all_positions": [
         [
           "C",
-          2
+          1
         ]
       ]
     },
@@ -2990,7 +2994,7 @@
         ],
         [
           "SG",
-          7
+          3
         ]
       ]
     },
@@ -3006,15 +3010,15 @@
         ],
         [
           "SG",
-          3
+          2
         ]
       ]
     },
-    "Sergio de Larrea": {
+    "Walter Clayton Jr.": {
       "pos": "PG",
       "team": "DAL",
       "depth": 2,
-      "espn_id": "5279129",
+      "espn_id": "4896372",
       "all_positions": [
         [
           "PG",
@@ -3022,15 +3026,15 @@
         ],
         [
           "SG",
-          5
+          4
         ]
       ]
     },
-    "Walter Clayton Jr.": {
+    "Sergio de Larrea": {
       "pos": "PG",
       "team": "DAL",
       "depth": 3,
-      "espn_id": "4896372",
+      "espn_id": "5279129",
       "all_positions": [
         [
           "PG",
@@ -3038,7 +3042,7 @@
         ],
         [
           "SG",
-          9
+          5
         ]
       ]
     },
@@ -3058,7 +3062,7 @@
         ],
         [
           "PF",
-          4
+          5
         ]
       ]
     },
@@ -3078,59 +3082,23 @@
         ]
       ]
     },
-    "Zaccharie Risacher": {
-      "pos": "SG",
-      "team": "DAL",
-      "depth": 1,
-      "espn_id": "5211175",
-      "all_positions": [
-        [
-          "SG",
-          1
-        ],
-        [
-          "SF",
-          2
-        ]
-      ]
-    },
     "Caleb Martin": {
       "pos": "SG",
       "team": "DAL",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "3138160",
       "all_positions": [
         [
           "SG",
-          2
-        ],
-        [
-          "PF",
-          3
-        ],
-        [
-          "SF",
-          4
-        ]
-      ]
-    },
-    "Naji Marshall": {
-      "pos": "SF",
-      "team": "DAL",
-      "depth": 1,
-      "espn_id": "4278594",
-      "all_positions": [
-        [
-          "SF",
           1
         ],
         [
-          "SG",
-          4
+          "SF",
+          3
         ],
         [
           "PF",
-          5
+          4
         ]
       ]
     },
@@ -3157,12 +3125,12 @@
     "Tarik Biberovic": {
       "pos": "SG",
       "team": "DAL",
-      "depth": 8,
+      "depth": 7,
       "espn_id": "5148538",
       "all_positions": [
         [
           "SG",
-          8
+          7
         ],
         [
           "PF",
@@ -3171,6 +3139,34 @@
         [
           "SF",
           9
+        ]
+      ]
+    },
+    "Zaccharie Risacher": {
+      "pos": "SF",
+      "team": "DAL",
+      "depth": 1,
+      "espn_id": "5211175",
+      "all_positions": [
+        [
+          "SF",
+          1
+        ]
+      ]
+    },
+    "Naji Marshall": {
+      "pos": "PF",
+      "team": "DAL",
+      "depth": 1,
+      "espn_id": "4278594",
+      "all_positions": [
+        [
+          "PF",
+          1
+        ],
+        [
+          "SF",
+          2
         ]
       ]
     },
@@ -3185,12 +3181,12 @@
           2
         ],
         [
-          "SF",
-          3
+          "C",
+          2
         ],
         [
-          "C",
-          3
+          "SF",
+          4
         ]
       ]
     },
@@ -3206,7 +3202,7 @@
         ],
         [
           "C",
-          5
+          4
         ],
         [
           "SF",
@@ -3231,18 +3227,18 @@
       ]
     },
     "Morez Johnson Jr.": {
-      "pos": "PF",
+      "pos": "C",
       "team": "DAL",
       "depth": 1,
       "espn_id": "4873153",
       "all_positions": [
         [
-          "PF",
+          "C",
           1
         ],
         [
-          "C",
-          4
+          "PF",
+          3
         ]
       ]
     },
@@ -3258,27 +3254,27 @@
         ]
       ]
     },
-    "Dereck Lively II": {
-      "pos": "C",
-      "team": "DAL",
-      "depth": 1,
-      "espn_id": "4683688",
-      "all_positions": [
-        [
-          "C",
-          1
-        ]
-      ]
-    },
     "Moussa Cisse": {
       "pos": "C",
       "team": "DAL",
-      "depth": 2,
+      "depth": 3,
       "espn_id": "4701208",
       "all_positions": [
         [
           "C",
-          2
+          3
+        ]
+      ]
+    },
+    "Dereck Lively II": {
+      "pos": "C",
+      "team": "DAL",
+      "depth": 5,
+      "espn_id": "4683688",
+      "all_positions": [
+        [
+          "C",
+          5
         ]
       ]
     },
@@ -3303,10 +3299,6 @@
         [
           "PG",
           1
-        ],
-        [
-          "SG",
-          4
         ]
       ]
     },
@@ -3334,7 +3326,7 @@
         ],
         [
           "SF",
-          6
+          3
         ]
       ]
     },
@@ -3349,52 +3341,12 @@
           1
         ],
         [
-          "PF",
-          1
-        ],
-        [
           "SF",
           2
-        ]
-      ]
-    },
-    "Julian Strawther": {
-      "pos": "SG",
-      "team": "DEN",
-      "depth": 2,
-      "espn_id": "4432181",
-      "all_positions": [
-        [
-          "SG",
-          2
-        ],
-        [
-          "SF",
-          3
         ],
         [
           "PF",
-          10
-        ]
-      ]
-    },
-    "Spencer Jones": {
-      "pos": "PF",
-      "team": "DEN",
-      "depth": 2,
-      "espn_id": "4592427",
-      "all_positions": [
-        [
-          "PF",
           2
-        ],
-        [
-          "SG",
-          3
-        ],
-        [
-          "SF",
-          5
         ]
       ]
     },
@@ -3410,7 +3362,59 @@
         ],
         [
           "SG",
-          5
+          2
+        ],
+        [
+          "PF",
+          3
+        ]
+      ]
+    },
+    "Spencer Jones": {
+      "pos": "SF",
+      "team": "DEN",
+      "depth": 1,
+      "espn_id": "4592427",
+      "all_positions": [
+        [
+          "SF",
+          1
+        ],
+        [
+          "SG",
+          3
+        ],
+        [
+          "PF",
+          4
+        ]
+      ]
+    },
+    "Julian Strawther": {
+      "pos": "SG",
+      "team": "DEN",
+      "depth": 4,
+      "espn_id": "4432181",
+      "all_positions": [
+        [
+          "SG",
+          4
+        ],
+        [
+          "SF",
+          7
+        ]
+      ]
+    },
+    "Alpha Diallo": {
+      "pos": "SF",
+      "team": "DEN",
+      "depth": 4,
+      "espn_id": "4065813",
+      "all_positions": [
+        [
+          "SF",
+          4
         ],
         [
           "PF",
@@ -3421,12 +3425,12 @@
     "Bryce Hopkins": {
       "pos": "SF",
       "team": "DEN",
-      "depth": 1,
+      "depth": 5,
       "espn_id": "4565698",
       "all_positions": [
         [
           "SF",
-          1
+          5
         ],
         [
           "PF",
@@ -3434,35 +3438,19 @@
         ]
       ]
     },
-    "Alpha Diallo": {
-      "pos": "PF",
-      "team": "DEN",
-      "depth": 3,
-      "espn_id": "4065813",
-      "all_positions": [
-        [
-          "PF",
-          3
-        ],
-        [
-          "SF",
-          4
-        ]
-      ]
-    },
     "Cam Whitmore": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "DEN",
       "depth": 6,
       "espn_id": "5105592",
       "all_positions": [
         [
-          "PF",
+          "SF",
           6
         ],
         [
-          "SF",
-          7
+          "PF",
+          6
         ]
       ]
     },
@@ -3478,23 +3466,23 @@
         ],
         [
           "C",
-          4
+          3
         ]
       ]
     },
     "Trevon Brazile": {
-      "pos": "C",
+      "pos": "PF",
       "team": "DEN",
-      "depth": 3,
+      "depth": 1,
       "espn_id": "4698719",
       "all_positions": [
         [
-          "C",
-          3
+          "PF",
+          1
         ],
         [
-          "PF",
-          4
+          "C",
+          2
         ]
       ]
     },
@@ -3545,12 +3533,12 @@
     "DaRon Holmes II": {
       "pos": "C",
       "team": "DEN",
-      "depth": 2,
+      "depth": 4,
       "espn_id": "4433607",
       "all_positions": [
         [
           "C",
-          2
+          4
         ]
       ]
     },
@@ -3661,12 +3649,12 @@
     "Ronald Holland II": {
       "pos": "PF",
       "team": "DET",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "4683771",
       "all_positions": [
         [
           "PF",
-          1
+          2
         ],
         [
           "SG",
@@ -3674,7 +3662,7 @@
         ],
         [
           "SF",
-          4
+          5
         ]
       ]
     },
@@ -3729,16 +3717,16 @@
     "Javonte Green": {
       "pos": "PF",
       "team": "DET",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "2596112",
       "all_positions": [
         [
           "PF",
-          2
+          1
         ],
         [
           "SF",
-          5
+          4
         ]
       ]
     },
@@ -3834,19 +3822,15 @@
         ]
       ]
     },
-    "De'Anthony Melton": {
+    "Brandon Williams": {
       "pos": "PG",
       "team": "GSW",
       "depth": 1,
-      "espn_id": "4066436",
+      "espn_id": "4397040",
       "all_positions": [
         [
           "PG",
           1
-        ],
-        [
-          "SG",
-          2
         ]
       ]
     },
@@ -3866,6 +3850,22 @@
         ]
       ]
     },
+    "De'Anthony Melton": {
+      "pos": "SG",
+      "team": "GSW",
+      "depth": 1,
+      "espn_id": "4066436",
+      "all_positions": [
+        [
+          "SG",
+          1
+        ],
+        [
+          "PG",
+          3
+        ]
+      ]
+    },
     "Will Richard": {
       "pos": "SF",
       "team": "GSW",
@@ -3877,21 +3877,9 @@
           1
         ],
         [
-          "PG",
-          3
-        ],
-        [
           "SG",
           3
-        ]
-      ]
-    },
-    "Brandon Williams": {
-      "pos": "PG",
-      "team": "GSW",
-      "depth": 4,
-      "espn_id": "4397040",
-      "all_positions": [
+        ],
         [
           "PG",
           4
@@ -3901,12 +3889,12 @@
     "Gary Payton II": {
       "pos": "SG",
       "team": "GSW",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "3134903",
       "all_positions": [
         [
           "SG",
-          1
+          2
         ],
         [
           "SF",
@@ -4050,22 +4038,6 @@
         ]
       ]
     },
-    "Graham Ike": {
-      "pos": "C",
-      "team": "GSW",
-      "depth": 2,
-      "espn_id": "4703396",
-      "all_positions": [
-        [
-          "C",
-          2
-        ],
-        [
-          "PF",
-          4
-        ]
-      ]
-    },
     "Al Horford": {
       "pos": "C",
       "team": "GSW",
@@ -4075,6 +4047,22 @@
         [
           "C",
           1
+        ],
+        [
+          "PF",
+          4
+        ]
+      ]
+    },
+    "Graham Ike": {
+      "pos": "C",
+      "team": "GSW",
+      "depth": 3,
+      "espn_id": "4703396",
+      "all_positions": [
+        [
+          "C",
+          3
         ],
         [
           "PF",
@@ -4101,12 +4089,12 @@
     "Charles Bassey": {
       "pos": "C",
       "team": "GSW",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "4397886",
       "all_positions": [
         [
           "C",
-          3
+          2
         ]
       ]
     },
@@ -4286,7 +4274,7 @@
         ],
         [
           "C",
-          2
+          3
         ],
         [
           "SF",
@@ -4357,12 +4345,12 @@
     "Clint Capela": {
       "pos": "C",
       "team": "HOU",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "3102529",
       "all_positions": [
         [
           "C",
-          3
+          2
         ]
       ]
     },
@@ -4419,22 +4407,22 @@
       ]
     },
     "Quenton Jackson": {
-      "pos": "PG",
+      "pos": "SG",
       "team": "IND",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "4592829",
       "all_positions": [
+        [
+          "SG",
+          2
+        ],
         [
           "PG",
           3
         ],
         [
-          "SG",
-          4
-        ],
-        [
           "SF",
-          7
+          3
         ]
       ]
     },
@@ -4453,12 +4441,12 @@
     "Ben Sheppard": {
       "pos": "SG",
       "team": "IND",
-      "depth": 2,
+      "depth": 4,
       "espn_id": "4433076",
       "all_positions": [
         [
           "SG",
-          2
+          4
         ],
         [
           "PG",
@@ -4490,22 +4478,6 @@
         ]
       ]
     },
-    "Johnny Furphy": {
-      "pos": "SG",
-      "team": "IND",
-      "depth": 3,
-      "espn_id": "5157066",
-      "all_positions": [
-        [
-          "SG",
-          3
-        ],
-        [
-          "SF",
-          3
-        ]
-      ]
-    },
     "Aaron Nesmith": {
       "pos": "SF",
       "team": "IND",
@@ -4518,7 +4490,23 @@
         ],
         [
           "SG",
+          3
+        ]
+      ]
+    },
+    "Johnny Furphy": {
+      "pos": "SG",
+      "team": "IND",
+      "depth": 5,
+      "espn_id": "5157066",
+      "all_positions": [
+        [
+          "SG",
           5
+        ],
+        [
+          "SF",
+          7
         ]
       ]
     },
@@ -4534,20 +4522,16 @@
         ],
         [
           "PF",
-          5
+          4
         ]
       ]
     },
     "Kobe Brown": {
-      "pos": "PF",
+      "pos": "C",
       "team": "IND",
       "depth": 3,
       "espn_id": "4431752",
       "all_positions": [
-        [
-          "PF",
-          3
-        ],
         [
           "C",
           3
@@ -4555,6 +4539,10 @@
         [
           "SF",
           4
+        ],
+        [
+          "PF",
+          5
         ]
       ]
     },
@@ -4618,23 +4606,7 @@
         ],
         [
           "PF",
-          4
-        ]
-      ]
-    },
-    "Jay Huff": {
-      "pos": "C",
-      "team": "IND",
-      "depth": 1,
-      "espn_id": "4065731",
-      "all_positions": [
-        [
-          "C",
-          1
-        ],
-        [
-          "PF",
-          7
+          3
         ]
       ]
     },
@@ -4647,6 +4619,18 @@
         [
           "C",
           0
+        ]
+      ]
+    },
+    "Jay Huff": {
+      "pos": "C",
+      "team": "IND",
+      "depth": 1,
+      "espn_id": "4065731",
+      "all_positions": [
+        [
+          "C",
+          1
         ]
       ]
     },
@@ -5094,7 +5078,7 @@
         ],
         [
           "PF",
-          2
+          3
         ],
         [
           "SG",
@@ -5178,19 +5162,23 @@
         ],
         [
           "C",
-          2
+          1
         ]
       ]
     },
     "Jarred Vanderbilt": {
       "pos": "PF",
       "team": "LAL",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "4278077",
       "all_positions": [
         [
           "PF",
-          3
+          2
+        ],
+        [
+          "C",
+          2
         ]
       ]
     },
@@ -5209,24 +5197,24 @@
     "Kevon Looney": {
       "pos": "C",
       "team": "LAL",
-      "depth": 1,
+      "depth": 3,
       "espn_id": "3155535",
       "all_positions": [
         [
           "C",
-          1
+          3
         ]
       ]
     },
     "Lawson Lovering": {
       "pos": "C",
       "team": "LAL",
-      "depth": 3,
+      "depth": 4,
       "espn_id": "4596528",
       "all_positions": [
         [
           "C",
-          3
+          4
         ]
       ]
     },
@@ -5246,39 +5234,39 @@
         ]
       ]
     },
-    "Cam Spencer": {
+    "Scotty Pippen Jr.": {
       "pos": "PG",
+      "team": "MEM",
+      "depth": 1,
+      "espn_id": "4431785",
+      "all_positions": [
+        [
+          "PG",
+          1
+        ],
+        [
+          "SG",
+          5
+        ]
+      ]
+    },
+    "Cam Spencer": {
+      "pos": "SG",
       "team": "MEM",
       "depth": 1,
       "espn_id": "4433083",
       "all_positions": [
         [
-          "PG",
-          1
-        ],
-        [
           "SG",
           1
         ],
-        [
-          "SF",
-          4
-        ]
-      ]
-    },
-    "Scotty Pippen Jr.": {
-      "pos": "PG",
-      "team": "MEM",
-      "depth": 2,
-      "espn_id": "4431785",
-      "all_positions": [
         [
           "PG",
           2
         ],
         [
-          "SG",
-          5
+          "SF",
+          3
         ]
       ]
     },
@@ -5330,7 +5318,7 @@
         ],
         [
           "SF",
-          5
+          4
         ]
       ]
     },
@@ -5382,22 +5370,6 @@
         ]
       ]
     },
-    "Karim Lopez": {
-      "pos": "SF",
-      "team": "MEM",
-      "depth": 3,
-      "espn_id": "5231919",
-      "all_positions": [
-        [
-          "SF",
-          3
-        ],
-        [
-          "PF",
-          6
-        ]
-      ]
-    },
     "Kris Murray": {
       "pos": "PF",
       "team": "MEM",
@@ -5410,7 +5382,7 @@
         ],
         [
           "SF",
-          6
+          5
         ]
       ]
     },
@@ -5426,10 +5398,26 @@
         ],
         [
           "SF",
-          7
+          6
         ],
         [
           "PF",
+          7
+        ]
+      ]
+    },
+    "Karim Lopez": {
+      "pos": "PF",
+      "team": "MEM",
+      "depth": 6,
+      "espn_id": "5231919",
+      "all_positions": [
+        [
+          "PF",
+          6
+        ],
+        [
+          "SF",
           7
         ]
       ]
@@ -5790,7 +5778,7 @@
         ],
         [
           "SG",
-          2
+          3
         ]
       ]
     },
@@ -5806,43 +5794,27 @@
         ],
         [
           "SG",
-          9
+          2
         ]
       ]
     },
     "Kasparas Jakucionis": {
-      "pos": "PG",
+      "pos": "SF",
       "team": "MIL",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "5214640",
       "all_positions": [
+        [
+          "SF",
+          1
+        ],
         [
           "PG",
           2
         ],
         [
           "SG",
-          5
-        ]
-      ]
-    },
-    "Caris LeVert": {
-      "pos": "PG",
-      "team": "MIL",
-      "depth": 3,
-      "espn_id": "2991043",
-      "all_positions": [
-        [
-          "PG",
-          3
-        ],
-        [
-          "SG",
           4
-        ],
-        [
-          "SF",
-          6
         ]
       ]
     },
@@ -5858,7 +5830,7 @@
         ],
         [
           "PG",
-          4
+          3
         ]
       ]
     },
@@ -5874,11 +5846,31 @@
         ],
         [
           "SF",
-          3
+          2
         ],
         [
           "PG",
+          4
+        ]
+      ]
+    },
+    "Caris LeVert": {
+      "pos": "PG",
+      "team": "MIL",
+      "depth": 5,
+      "espn_id": "2991043",
+      "all_positions": [
+        [
+          "PG",
           5
+        ],
+        [
+          "SG",
+          7
+        ],
+        [
+          "SF",
+          7
         ]
       ]
     },
@@ -5894,7 +5886,7 @@
         ],
         [
           "SG",
-          8
+          9
         ]
       ]
     },
@@ -5910,23 +5902,7 @@
         ],
         [
           "SG",
-          7
-        ]
-      ]
-    },
-    "Gary Trent Jr.": {
-      "pos": "SG",
-      "team": "MIL",
-      "depth": 3,
-      "espn_id": "4277843",
-      "all_positions": [
-        [
-          "SG",
-          3
-        ],
-        [
-          "SF",
-          5
+          8
         ]
       ]
     },
@@ -5946,43 +5922,39 @@
         ],
         [
           "SG",
+          5
+        ]
+      ]
+    },
+    "Gary Trent Jr.": {
+      "pos": "SG",
+      "team": "MIL",
+      "depth": 6,
+      "espn_id": "4277843",
+      "all_positions": [
+        [
+          "SG",
+          6
+        ],
+        [
+          "SF",
           6
         ]
       ]
     },
-    "Ousmane Dieng": {
-      "pos": "SF",
-      "team": "MIL",
-      "depth": 1,
-      "espn_id": "4997526",
-      "all_positions": [
-        [
-          "SF",
-          1
-        ],
-        [
-          "PF",
-          3
-        ],
-        [
-          "C",
-          3
-        ]
-      ]
-    },
     "Nate Ament": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "MIL",
       "depth": 2,
       "espn_id": "5164559",
       "all_positions": [
         [
-          "SF",
+          "PF",
           2
         ],
         [
-          "PF",
-          2
+          "SF",
+          3
         ]
       ]
     },
@@ -6002,6 +5974,26 @@
         ]
       ]
     },
+    "Ousmane Dieng": {
+      "pos": "PF",
+      "team": "MIL",
+      "depth": 3,
+      "espn_id": "4997526",
+      "all_positions": [
+        [
+          "PF",
+          3
+        ],
+        [
+          "C",
+          3
+        ],
+        [
+          "SF",
+          5
+        ]
+      ]
+    },
     "Pete Nance": {
       "pos": "C",
       "team": "MIL",
@@ -6013,12 +6005,12 @@
           5
         ],
         [
-          "SF",
+          "PF",
           7
         ],
         [
-          "PF",
-          7
+          "SF",
+          8
         ]
       ]
     },
@@ -6126,7 +6118,7 @@
         ],
         [
           "SF",
-          2
+          3
         ]
       ]
     },
@@ -6146,7 +6138,7 @@
         ],
         [
           "SF",
-          6
+          5
         ]
       ]
     },
@@ -6190,7 +6182,7 @@
         ],
         [
           "SF",
-          1
+          2
         ],
         [
           "PF",
@@ -6201,12 +6193,12 @@
     "Jaylen Clark": {
       "pos": "SF",
       "team": "MIN",
-      "depth": 3,
+      "depth": 1,
       "espn_id": "4432247",
       "all_positions": [
         [
           "SF",
-          3
+          1
         ],
         [
           "SG",
@@ -6215,15 +6207,11 @@
       ]
     },
     "Cody Williams": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "MIN",
       "depth": 4,
       "espn_id": "4895758",
       "all_positions": [
-        [
-          "SF",
-          4
-        ],
         [
           "PF",
           4
@@ -6231,6 +6219,10 @@
         [
           "SG",
           5
+        ],
+        [
+          "SF",
+          6
         ]
       ]
     },
@@ -6274,7 +6266,7 @@
         ],
         [
           "SF",
-          5
+          4
         ]
       ]
     },
@@ -6306,7 +6298,7 @@
         ],
         [
           "C",
-          3
+          2
         ]
       ]
     },
@@ -6337,12 +6329,12 @@
     "Rocco Zikarsky": {
       "pos": "C",
       "team": "MIN",
-      "depth": 2,
+      "depth": 3,
       "espn_id": "5157587",
       "all_positions": [
         [
           "C",
-          2
+          3
         ]
       ]
     },
@@ -6370,7 +6362,7 @@
         ],
         [
           "SG",
-          4
+          3
         ]
       ]
     },
@@ -6402,7 +6394,7 @@
         ],
         [
           "SG",
-          7
+          6
         ]
       ]
     },
@@ -6438,22 +6430,6 @@
         ]
       ]
     },
-    "Jaron Pierre Jr.": {
-      "pos": "SG",
-      "team": "NOP",
-      "depth": 3,
-      "espn_id": "4703115",
-      "all_positions": [
-        [
-          "SG",
-          3
-        ],
-        [
-          "SF",
-          4
-        ]
-      ]
-    },
     "Herbert Jones": {
       "pos": "SF",
       "team": "NOP",
@@ -6466,7 +6442,23 @@
         ],
         [
           "PF",
-          3
+          2
+        ],
+        [
+          "SG",
+          4
+        ]
+      ]
+    },
+    "Bryce McGowens": {
+      "pos": "SF",
+      "team": "NOP",
+      "depth": 4,
+      "espn_id": "4576086",
+      "all_positions": [
+        [
+          "SF",
+          4
         ],
         [
           "SG",
@@ -6474,11 +6466,11 @@
         ]
       ]
     },
-    "Bryce McGowens": {
+    "Jaron Pierre Jr.": {
       "pos": "SF",
       "team": "NOP",
       "depth": 5,
-      "espn_id": "4576086",
+      "espn_id": "4703115",
       "all_positions": [
         [
           "SF",
@@ -6486,7 +6478,7 @@
         ],
         [
           "SG",
-          6
+          7
         ]
       ]
     },
@@ -6502,7 +6494,7 @@
         ],
         [
           "PF",
-          2
+          3
         ]
       ]
     },
@@ -6534,7 +6526,7 @@
         ],
         [
           "C",
-          3
+          2
         ]
       ]
     },
@@ -6555,11 +6547,15 @@
       ]
     },
     "Trendon Watford": {
-      "pos": "PF",
+      "pos": "C",
       "team": "NOP",
-      "depth": 5,
+      "depth": 3,
       "espn_id": "4431675",
       "all_positions": [
+        [
+          "C",
+          3
+        ],
         [
           "PF",
           5
@@ -6567,17 +6563,17 @@
       ]
     },
     "Malik Dia": {
-      "pos": "C",
+      "pos": "PF",
       "team": "NOP",
-      "depth": 5,
+      "depth": 6,
       "espn_id": "4712862",
       "all_positions": [
         [
-          "C",
-          5
+          "PF",
+          6
         ],
         [
-          "PF",
+          "C",
           6
         ]
       ]
@@ -6609,12 +6605,12 @@
     "DeAndre Jordan": {
       "pos": "C",
       "team": "NOP",
-      "depth": 2,
+      "depth": 5,
       "espn_id": "3442",
       "all_positions": [
         [
           "C",
-          2
+          5
         ]
       ]
     },
@@ -6642,6 +6638,38 @@
         ]
       ]
     },
+    "Tyler Kolek": {
+      "pos": "PG",
+      "team": "NYK",
+      "depth": 2,
+      "espn_id": "4433225",
+      "all_positions": [
+        [
+          "PG",
+          2
+        ]
+      ]
+    },
+    "Jordan Clarkson": {
+      "pos": "SF",
+      "team": "NYK",
+      "depth": 1,
+      "espn_id": "2528426",
+      "all_positions": [
+        [
+          "SF",
+          1
+        ],
+        [
+          "PG",
+          3
+        ],
+        [
+          "SG",
+          3
+        ]
+      ]
+    },
     "Miles McBride": {
       "pos": "SG",
       "team": "NYK",
@@ -6651,38 +6679,6 @@
         [
           "SG",
           1
-        ],
-        [
-          "PG",
-          2
-        ]
-      ]
-    },
-    "Tyler Kolek": {
-      "pos": "PG",
-      "team": "NYK",
-      "depth": 3,
-      "espn_id": "4433225",
-      "all_positions": [
-        [
-          "PG",
-          3
-        ]
-      ]
-    },
-    "Jordan Clarkson": {
-      "pos": "SG",
-      "team": "NYK",
-      "depth": 3,
-      "espn_id": "2528426",
-      "all_positions": [
-        [
-          "SG",
-          3
-        ],
-        [
-          "SF",
-          3
         ],
         [
           "PG",
@@ -6718,26 +6714,30 @@
         ],
         [
           "SF",
-          2
+          3
         ],
         [
           "PF",
-          2
+          3
         ]
       ]
     },
     "Landry Shamet": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "NYK",
       "depth": 1,
       "espn_id": "3914044",
       "all_positions": [
         [
-          "SF",
+          "PF",
           1
         ],
         [
           "SG",
+          2
+        ],
+        [
+          "SF",
           2
         ]
       ]
@@ -6758,7 +6758,7 @@
         ],
         [
           "PF",
-          4
+          5
         ]
       ]
     },
@@ -6830,19 +6830,19 @@
         ],
         [
           "PF",
-          1
+          2
         ]
       ]
     },
     "Mohamed Diawara": {
       "pos": "PF",
       "team": "NYK",
-      "depth": 3,
+      "depth": 4,
       "espn_id": "5289900",
       "all_positions": [
         [
           "PF",
-          3
+          4
         ]
       ]
     },
@@ -6882,6 +6882,22 @@
         ]
       ]
     },
+    "Bennett Stirtz": {
+      "pos": "PG",
+      "team": "OKC",
+      "depth": 1,
+      "espn_id": "5241364",
+      "all_positions": [
+        [
+          "PG",
+          1
+        ],
+        [
+          "SG",
+          2
+        ]
+      ]
+    },
     "Ajay Mitchell": {
       "pos": "SG",
       "team": "OKC",
@@ -6894,10 +6910,6 @@
         ],
         [
           "PG",
-          1
-        ],
-        [
-          "SF",
           2
         ]
       ]
@@ -6911,22 +6923,6 @@
         [
           "SG",
           1
-        ],
-        [
-          "PG",
-          2
-        ]
-      ]
-    },
-    "Bennett Stirtz": {
-      "pos": "SG",
-      "team": "OKC",
-      "depth": 2,
-      "espn_id": "5241364",
-      "all_positions": [
-        [
-          "SG",
-          2
         ],
         [
           "PG",
@@ -6946,7 +6942,7 @@
         ],
         [
           "SG",
-          4
+          6
         ]
       ]
     },
@@ -6961,11 +6957,11 @@
           5
         ],
         [
-          "SG",
-          7
+          "SF",
+          6
         ],
         [
-          "SF",
+          "SG",
           7
         ]
       ]
@@ -6973,12 +6969,12 @@
     "Alex Caruso": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "2991350",
       "all_positions": [
         [
           "SF",
-          1
+          0
         ],
         [
           "PF",
@@ -6987,6 +6983,22 @@
         [
           "SG",
           3
+        ]
+      ]
+    },
+    "Josh Dix": {
+      "pos": "SF",
+      "team": "OKC",
+      "depth": 2,
+      "espn_id": "5105800",
+      "all_positions": [
+        [
+          "SF",
+          2
+        ],
+        [
+          "SG",
+          4
         ]
       ]
     },
@@ -7001,40 +7013,24 @@
           5
         ],
         [
-          "PF",
+          "SF",
           5
         ],
         [
-          "SF",
-          6
-        ]
-      ]
-    },
-    "Josh Dix": {
-      "pos": "SF",
-      "team": "OKC",
-      "depth": 3,
-      "espn_id": "5105800",
-      "all_positions": [
-        [
-          "SF",
-          3
-        ],
-        [
-          "SG",
-          6
+          "PF",
+          5
         ]
       ]
     },
     "Kenrich Williams": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "3133626",
       "all_positions": [
         [
           "SF",
-          0
+          1
         ],
         [
           "PF",
@@ -7043,46 +7039,46 @@
       ]
     },
     "Brooks Barnhizer": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "OKC",
       "depth": 3,
       "espn_id": "4684208",
       "all_positions": [
         [
-          "PF",
+          "SF",
           3
         ],
         [
-          "SF",
-          4
+          "PF",
+          3
         ]
       ]
     },
     "Micah Peavy": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "OKC",
       "depth": 4,
       "espn_id": "4432185",
       "all_positions": [
         [
-          "PF",
+          "SF",
           4
         ],
         [
-          "SF",
-          5
+          "PF",
+          4
         ]
       ]
     },
     "Jalen Williams": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 8,
+      "depth": 7,
       "espn_id": "4593803",
       "all_positions": [
         [
           "SF",
-          8
+          7
         ]
       ]
     },
@@ -7098,7 +7094,7 @@
         ],
         [
           "C",
-          1
+          2
         ]
       ]
     },
@@ -7129,12 +7125,12 @@
     "Aday Mara": {
       "pos": "C",
       "team": "OKC",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "5174983",
       "all_positions": [
         [
           "C",
-          2
+          1
         ]
       ]
     },
@@ -7166,6 +7162,22 @@
         ]
       ]
     },
+    "Jevon Carter": {
+      "pos": "PG",
+      "team": "ORL",
+      "depth": 1,
+      "espn_id": "3133635",
+      "all_positions": [
+        [
+          "PG",
+          1
+        ],
+        [
+          "SG",
+          4
+        ]
+      ]
+    },
     "Anthony Black": {
       "pos": "SG",
       "team": "ORL",
@@ -7178,23 +7190,7 @@
         ],
         [
           "PG",
-          1
-        ]
-      ]
-    },
-    "Jevon Carter": {
-      "pos": "PG",
-      "team": "ORL",
-      "depth": 2,
-      "espn_id": "3133635",
-      "all_positions": [
-        [
-          "PG",
           2
-        ],
-        [
-          "SG",
-          4
         ]
       ]
     },
@@ -7450,22 +7446,6 @@
         ]
       ]
     },
-    "Labaron Philon Jr.": {
-      "pos": "PG",
-      "team": "PHI",
-      "depth": 3,
-      "espn_id": "4873090",
-      "all_positions": [
-        [
-          "PG",
-          3
-        ],
-        [
-          "SG",
-          3
-        ]
-      ]
-    },
     "Kentavious Caldwell-Pope": {
       "pos": "SG",
       "team": "PHI",
@@ -7482,6 +7462,22 @@
         ],
         [
           "PG",
+          3
+        ]
+      ]
+    },
+    "Labaron Philon Jr.": {
+      "pos": "PG",
+      "team": "PHI",
+      "depth": 4,
+      "espn_id": "4873090",
+      "all_positions": [
+        [
+          "PG",
+          4
+        ],
+        [
+          "SG",
           4
         ]
       ]
@@ -7514,7 +7510,7 @@
         ],
         [
           "SG",
-          4
+          3
         ]
       ]
     },
@@ -7958,7 +7954,7 @@
         ],
         [
           "SG",
-          2
+          1
         ]
       ]
     },
@@ -7974,11 +7970,11 @@
         ],
         [
           "SG",
-          3
+          2
         ],
         [
           "SF",
-          3
+          2
         ]
       ]
     },
@@ -7998,7 +7994,7 @@
         ],
         [
           "SF",
-          4
+          3
         ]
       ]
     },
@@ -8019,21 +8015,21 @@
       ]
     },
     "Vit Krejci": {
-      "pos": "SG",
+      "pos": "PG",
       "team": "POR",
-      "depth": 1,
+      "depth": 4,
       "espn_id": "4578893",
       "all_positions": [
         [
+          "PG",
+          4
+        ],
+        [
           "SG",
-          1
+          4
         ],
         [
           "SF",
-          2
-        ],
-        [
-          "PG",
           4
         ]
       ]
@@ -8086,7 +8082,7 @@
         ],
         [
           "SG",
-          4
+          3
         ]
       ]
     },
@@ -8162,7 +8158,7 @@
         ],
         [
           "C",
-          2
+          4
         ]
       ]
     },
@@ -8197,24 +8193,24 @@
     "Yang Hansen": {
       "pos": "C",
       "team": "POR",
-      "depth": 3,
+      "depth": 2,
       "espn_id": "5217746",
       "all_positions": [
         [
           "C",
-          3
+          2
         ]
       ]
     },
     "Branden Carlson": {
       "pos": "C",
       "team": "POR",
-      "depth": 4,
+      "depth": 3,
       "espn_id": "4592435",
       "all_positions": [
         [
           "C",
-          4
+          3
         ]
       ]
     },
@@ -8245,11 +8241,11 @@
           1
         ],
         [
-          "SG",
-          3
+          "SF",
+          2
         ],
         [
-          "SF",
+          "SG",
           3
         ]
       ]
@@ -8298,7 +8294,7 @@
         ],
         [
           "SF",
-          2
+          1
         ]
       ]
     },
@@ -8314,35 +8310,15 @@
         ]
       ]
     },
-    "Daeqwon Plowden": {
-      "pos": "SF",
-      "team": "SAC",
-      "depth": 1,
-      "espn_id": "4279318",
-      "all_positions": [
-        [
-          "SF",
-          1
-        ],
-        [
-          "SG",
-          4
-        ],
-        [
-          "PF",
-          6
-        ]
-      ]
-    },
     "Nique Clifford": {
       "pos": "SG",
       "team": "SAC",
-      "depth": 5,
+      "depth": 4,
       "espn_id": "4702384",
       "all_positions": [
         [
           "SG",
-          5
+          4
         ],
         [
           "SF",
@@ -8351,6 +8327,26 @@
         [
           "PF",
           8
+        ]
+      ]
+    },
+    "Daeqwon Plowden": {
+      "pos": "SG",
+      "team": "SAC",
+      "depth": 5,
+      "espn_id": "4279318",
+      "all_positions": [
+        [
+          "SG",
+          5
+        ],
+        [
+          "SF",
+          6
+        ],
+        [
+          "PF",
+          6
         ]
       ]
     },
@@ -8382,23 +8378,23 @@
         ],
         [
           "SF",
-          4
+          3
         ]
       ]
     },
     "Alex Karaban": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "SAC",
-      "depth": 5,
+      "depth": 4,
       "espn_id": "4917149",
       "all_positions": [
         [
-          "PF",
-          5
+          "SF",
+          4
         ],
         [
-          "SF",
-          6
+          "PF",
+          5
         ]
       ]
     },
@@ -8433,12 +8429,12 @@
     "Dylan Cardwell": {
       "pos": "C",
       "team": "SAC",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "4433174",
       "all_positions": [
         [
           "C",
-          2
+          1
         ],
         [
           "PF",
@@ -8447,17 +8443,17 @@
       ]
     },
     "Jonathan Mogbo": {
-      "pos": "PF",
+      "pos": "C",
       "team": "SAC",
-      "depth": 4,
+      "depth": 2,
       "espn_id": "5107897",
       "all_positions": [
         [
-          "PF",
-          4
+          "C",
+          2
         ],
         [
-          "C",
+          "PF",
           4
         ]
       ]
@@ -8481,12 +8477,12 @@
     "Maxime Raynaud": {
       "pos": "C",
       "team": "SAC",
-      "depth": 1,
+      "depth": 4,
       "espn_id": "4898371",
       "all_positions": [
         [
           "C",
-          1
+          4
         ]
       ]
     },
@@ -8598,7 +8594,7 @@
         ],
         [
           "SF",
-          4
+          3
         ]
       ]
     },
@@ -8638,34 +8634,34 @@
         ]
       ]
     },
-    "Carter Bryant": {
-      "pos": "SF",
-      "team": "SAS",
-      "depth": 3,
-      "espn_id": "5061568",
-      "all_positions": [
-        [
-          "SF",
-          3
-        ],
-        [
-          "PF",
-          4
-        ]
-      ]
-    },
     "Harrison Barnes": {
       "pos": "SF",
       "team": "SAS",
-      "depth": 5,
+      "depth": 4,
       "espn_id": "6578",
       "all_positions": [
         [
           "SF",
-          5
+          4
         ],
         [
           "PF",
+          5
+        ]
+      ]
+    },
+    "Carter Bryant": {
+      "pos": "PF",
+      "team": "SAS",
+      "depth": 4,
+      "espn_id": "5061568",
+      "all_positions": [
+        [
+          "PF",
+          4
+        ],
+        [
+          "SF",
           5
         ]
       ]
@@ -8779,38 +8775,22 @@
       ]
     },
     "Ja'Kobe Walter": {
-      "pos": "SF",
+      "pos": "SG",
       "team": "TOR",
       "depth": 0,
       "espn_id": "4684272",
       "all_positions": [
         [
-          "SF",
-          0
-        ],
-        [
           "SG",
-          1
+          0
         ],
         [
           "PG",
           2
-        ]
-      ]
-    },
-    "Jaden Bradley": {
-      "pos": "PG",
-      "team": "TOR",
-      "depth": 3,
-      "espn_id": "4432737",
-      "all_positions": [
-        [
-          "PG",
-          3
         ],
         [
-          "SG",
-          3
+          "SF",
+          2
         ]
       ]
     },
@@ -8825,11 +8805,27 @@
           0
         ],
         [
-          "SF",
+          "PG",
           3
         ],
         [
+          "SF",
+          4
+        ]
+      ]
+    },
+    "Jaden Bradley": {
+      "pos": "PG",
+      "team": "TOR",
+      "depth": 4,
+      "espn_id": "4432737",
+      "all_positions": [
+        [
           "PG",
+          4
+        ],
+        [
+          "SG",
           4
         ]
       ]
@@ -8851,14 +8847,18 @@
       ]
     },
     "RJ Barrett": {
-      "pos": "SG",
+      "pos": "SF",
       "team": "TOR",
       "depth": 0,
       "espn_id": "4395625",
       "all_positions": [
         [
-          "SG",
+          "SF",
           0
+        ],
+        [
+          "SG",
+          1
         ],
         [
           "PF",
@@ -8869,27 +8869,11 @@
     "Alijah Martin": {
       "pos": "SG",
       "team": "TOR",
-      "depth": 4,
+      "depth": 3,
       "espn_id": "4702656",
       "all_positions": [
         [
           "SG",
-          4
-        ]
-      ]
-    },
-    "Allen Graves": {
-      "pos": "SF",
-      "team": "TOR",
-      "depth": 1,
-      "espn_id": "5149115",
-      "all_positions": [
-        [
-          "SF",
-          1
-        ],
-        [
-          "PF",
           3
         ]
       ]
@@ -8897,12 +8881,12 @@
     "Jamison Battle": {
       "pos": "SF",
       "team": "TOR",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "4431893",
       "all_positions": [
         [
           "SF",
-          2
+          1
         ],
         [
           "C",
@@ -8911,6 +8895,22 @@
         [
           "PF",
           5
+        ]
+      ]
+    },
+    "Allen Graves": {
+      "pos": "SF",
+      "team": "TOR",
+      "depth": 3,
+      "espn_id": "5149115",
+      "all_positions": [
+        [
+          "SF",
+          3
+        ],
+        [
+          "PF",
+          3
         ]
       ]
     },
@@ -8926,19 +8926,19 @@
         ],
         [
           "SF",
-          4
+          5
         ]
       ]
     },
     "Kawhi Leonard": {
       "pos": "SF",
       "team": "TOR",
-      "depth": 5,
+      "depth": 6,
       "espn_id": "6450",
       "all_positions": [
         [
           "SF",
-          5
+          6
         ]
       ]
     },
@@ -9066,39 +9066,39 @@
         ]
       ]
     },
-    "Brice Sensabaugh": {
-      "pos": "SG",
-      "team": "UTA",
-      "depth": 1,
-      "espn_id": "5105839",
-      "all_positions": [
-        [
-          "SG",
-          1
-        ],
-        [
-          "SF",
-          2
-        ],
-        [
-          "PF",
-          3
-        ]
-      ]
-    },
     "Svi Mykhailiuk": {
-      "pos": "SF",
+      "pos": "SG",
       "team": "UTA",
       "depth": 1,
       "espn_id": "3133602",
       "all_positions": [
         [
+          "SG",
+          1
+        ],
+        [
+          "SF",
+          2
+        ]
+      ]
+    },
+    "Brice Sensabaugh": {
+      "pos": "SF",
+      "team": "UTA",
+      "depth": 1,
+      "espn_id": "5105839",
+      "all_positions": [
+        [
           "SF",
           1
         ],
         [
           "SG",
           2
+        ],
+        [
+          "PF",
+          3
         ]
       ]
     },
@@ -9123,21 +9123,21 @@
       ]
     },
     "Josh Okogie": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "UTA",
-      "depth": 3,
+      "depth": 1,
       "espn_id": "4065663",
       "all_positions": [
+        [
+          "PF",
+          1
+        ],
         [
           "SF",
           3
         ],
         [
           "SG",
-          4
-        ],
-        [
-          "PF",
           4
         ]
       ]
@@ -9191,18 +9191,18 @@
       ]
     },
     "Kyle Filipowski": {
-      "pos": "PF",
+      "pos": "C",
       "team": "UTA",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "4684793",
       "all_positions": [
         [
-          "PF",
-          1
-        ],
-        [
           "C",
           2
+        ],
+        [
+          "PF",
+          4
         ]
       ]
     },
