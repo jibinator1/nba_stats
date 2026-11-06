@@ -4,17 +4,17 @@
       "defending_team": "ATL",
       "attacking_team": "ATL",
       "cluster_opponents": [
-        "CLE",
         "MIA",
+        "CLE",
         "IND",
         "NOP",
-        "HOU"
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 120.5,
-      "median_oreb_allowed": 11.0,
-      "median_3pt_pct_allowed": 34.4,
-      "summary_text": "ATL Defense vs. Opponents Similar to ATL (n=6 games). ATL allowed a median of 120.5 points, 11.0 offensive rebounds, and 34.4% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 121.0,
+      "median_oreb_allowed": 9.0,
+      "median_3pt_pct_allowed": 32.5,
+      "summary_text": "ATL Defense vs. Opponents Similar to ATL (n=5 games). ATL allowed a median of 121.0 points, 9.0 offensive rebounds, and 32.5% from 3PT."
     },
     "BOS": {
       "defending_team": "ATL",
@@ -40,13 +40,13 @@
         "IND",
         "CLE",
         "CHA",
-        "HOU"
+        "MIA"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 115.5,
-      "median_oreb_allowed": 10.5,
-      "median_3pt_pct_allowed": 30.3,
-      "summary_text": "ATL Defense vs. Opponents Similar to BKN (n=6 games). ATL allowed a median of 115.5 points, 10.5 offensive rebounds, and 30.3% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 111.0,
+      "median_oreb_allowed": 9.0,
+      "median_3pt_pct_allowed": 31.0,
+      "summary_text": "ATL Defense vs. Opponents Similar to BKN (n=5 games). ATL allowed a median of 111.0 points, 9.0 offensive rebounds, and 31.0% from 3PT."
     },
     "CHA": {
       "defending_team": "ATL",
@@ -68,11 +68,11 @@
       "defending_team": "ATL",
       "attacking_team": "CHI",
       "cluster_opponents": [
-        "CLE",
         "MIA",
+        "CLE",
         "IND",
-        "NOP",
-        "ORL"
+        "ORL",
+        "NOP"
       ],
       "n_games": 5,
       "median_pts_allowed": 121.0,
@@ -103,8 +103,8 @@
         "IND",
         "HOU",
         "WAS",
-        "CLE",
-        "ORL"
+        "ORL",
+        "CLE"
       ],
       "n_games": 6,
       "median_pts_allowed": 115.5,
@@ -199,8 +199,8 @@
         "CLE",
         "MIA",
         "IND",
-        "HOU",
-        "ORL"
+        "ORL",
+        "HOU"
       ],
       "n_games": 6,
       "median_pts_allowed": 120.5,
@@ -212,17 +212,17 @@
       "defending_team": "ATL",
       "attacking_team": "LAL",
       "cluster_opponents": [
-        "IND",
         "ORL",
+        "IND",
         "CLE",
         "CHA",
-        "HOU"
+        "MIA"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 115.5,
-      "median_oreb_allowed": 10.5,
-      "median_3pt_pct_allowed": 30.3,
-      "summary_text": "ATL Defense vs. Opponents Similar to LAL (n=6 games). ATL allowed a median of 115.5 points, 10.5 offensive rebounds, and 30.3% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 111.0,
+      "median_oreb_allowed": 9.0,
+      "median_3pt_pct_allowed": 31.0,
+      "summary_text": "ATL Defense vs. Opponents Similar to LAL (n=5 games). ATL allowed a median of 111.0 points, 9.0 offensive rebounds, and 31.0% from 3PT."
     },
     "MEM": {
       "defending_team": "ATL",
@@ -247,14 +247,14 @@
         "CLE",
         "IND",
         "NOP",
-        "HOU",
-        "WAS"
+        "ORL",
+        "HOU"
       ],
       "n_games": 6,
-      "median_pts_allowed": 115.5,
+      "median_pts_allowed": 120.5,
       "median_oreb_allowed": 9.5,
-      "median_3pt_pct_allowed": 30.3,
-      "summary_text": "ATL Defense vs. Opponents Similar to MIA (n=6 games). ATL allowed a median of 115.5 points, 9.5 offensive rebounds, and 30.3% from 3PT."
+      "median_3pt_pct_allowed": 31.7,
+      "summary_text": "ATL Defense vs. Opponents Similar to MIA (n=6 games). ATL allowed a median of 120.5 points, 9.5 offensive rebounds, and 31.7% from 3PT."
     },
     "MIL": {
       "defending_team": "ATL",
@@ -280,13 +280,13 @@
         "CLE",
         "IND",
         "HOU",
-        "WAS"
+        "NOP"
       ],
       "n_games": 6,
-      "median_pts_allowed": 115.5,
-      "median_oreb_allowed": 10.5,
-      "median_3pt_pct_allowed": 30.3,
-      "summary_text": "ATL Defense vs. Opponents Similar to MIN (n=6 games). ATL allowed a median of 115.5 points, 10.5 offensive rebounds, and 30.3% from 3PT."
+      "median_pts_allowed": 120.5,
+      "median_oreb_allowed": 11.0,
+      "median_3pt_pct_allowed": 34.4,
+      "summary_text": "ATL Defense vs. Opponents Similar to MIN (n=6 games). ATL allowed a median of 120.5 points, 11.0 offensive rebounds, and 34.4% from 3PT."
     },
     "NOP": {
       "defending_team": "ATL",
@@ -327,8 +327,8 @@
         "WAS",
         "HOU",
         "IND",
-        "MIA",
-        "NOP"
+        "NOP",
+        "MIA"
       ],
       "n_games": 6,
       "median_pts_allowed": 120.5,
@@ -341,8 +341,8 @@
       "attacking_team": "ORL",
       "cluster_opponents": [
         "CHA",
-        "HOU",
         "IND",
+        "HOU",
         "WAS",
         "CLE"
       ],
@@ -375,8 +375,8 @@
         "IND",
         "HOU",
         "WAS",
-        "ORL",
-        "CLE"
+        "CLE",
+        "ORL"
       ],
       "n_games": 6,
       "median_pts_allowed": 115.5,
@@ -504,8 +504,8 @@
       "cluster_opponents": [
         "DET",
         "NYK",
-        "BKN",
         "ORL",
+        "BKN",
         "MIL"
       ],
       "n_games": 5,
@@ -518,8 +518,8 @@
       "defending_team": "BOS",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "MIL",
         "ORL",
+        "MIL",
         "DET",
         "NYK",
         "CHI"
@@ -553,8 +553,8 @@
         "MIL",
         "BKN",
         "DET",
-        "NYK",
-        "ORL"
+        "ORL",
+        "NYK"
       ],
       "n_games": 5,
       "median_pts_allowed": 103.0,
@@ -586,13 +586,13 @@
         "HOU",
         "NYK",
         "MIL",
-        "BKN"
+        "ORL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 109.0,
+      "median_pts_allowed": 103.0,
       "median_oreb_allowed": 12.0,
       "median_3pt_pct_allowed": 40.0,
-      "summary_text": "BOS Defense vs. Opponents Similar to DAL (n=5 games). BOS allowed a median of 109.0 points, 12.0 offensive rebounds, and 40.0% from 3PT."
+      "summary_text": "BOS Defense vs. Opponents Similar to DAL (n=5 games). BOS allowed a median of 103.0 points, 12.0 offensive rebounds, and 40.0% from 3PT."
     },
     "DEN": {
       "defending_team": "BOS",
@@ -632,8 +632,8 @@
       "cluster_opponents": [
         "BKN",
         "ORL",
-        "NYK",
         "DET",
+        "NYK",
         "MIL"
       ],
       "n_games": 5,
@@ -695,8 +695,8 @@
       "attacking_team": "LAL",
       "cluster_opponents": [
         "BKN",
-        "MIL",
         "ORL",
+        "MIL",
         "DET",
         "NYK"
       ],
@@ -855,8 +855,8 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "DET",
-        "NYK",
         "HOU",
+        "NYK",
         "MIL",
         "BKN"
       ],
@@ -1113,8 +1113,8 @@
       "attacking_team": "GSW",
       "cluster_opponents": [
         "BOS",
-        "NYK",
         "DET",
+        "NYK",
         "IND",
         "CHA"
       ],
@@ -1304,9 +1304,9 @@
       "defending_team": "BKN",
       "attacking_team": "ORL",
       "cluster_opponents": [
-        "CHA",
-        "NYK",
         "BOS",
+        "NYK",
+        "CHA",
         "DET",
         "IND"
       ],
@@ -1336,8 +1336,8 @@
       "defending_team": "BKN",
       "attacking_team": "PHX",
       "cluster_opponents": [
-        "DET",
         "IND",
+        "DET",
         "BOS",
         "NYK",
         "CLE"
@@ -1514,8 +1514,8 @@
       "defending_team": "CHA",
       "attacking_team": "CHI",
       "cluster_opponents": [
-        "ATL",
         "MIA",
+        "ATL",
         "BKN",
         "PHI",
         "DET"
@@ -1597,14 +1597,14 @@
         "BKN",
         "DET",
         "ATL",
-        "WAS",
+        "MIA",
         "PHI"
       ],
-      "n_games": 8,
-      "median_pts_allowed": 106.0,
-      "median_oreb_allowed": 9.0,
-      "median_3pt_pct_allowed": 39.1,
-      "summary_text": "CHA Defense vs. Opponents Similar to GSW (n=8 games). CHA allowed a median of 106.0 points, 9.0 offensive rebounds, and 39.1% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 110.0,
+      "median_oreb_allowed": 8.0,
+      "median_3pt_pct_allowed": 39.4,
+      "summary_text": "CHA Defense vs. Opponents Similar to GSW (n=7 games). CHA allowed a median of 110.0 points, 8.0 offensive rebounds, and 39.4% from 3PT."
     },
     "HOU": {
       "defending_team": "CHA",
@@ -1628,8 +1628,8 @@
       "cluster_opponents": [
         "DET",
         "PHI",
-        "ATL",
         "BKN",
+        "ATL",
         "MIA"
       ],
       "n_games": 7,
@@ -1773,8 +1773,8 @@
         "WAS",
         "PHI",
         "DET",
-        "MIA",
-        "ATL"
+        "ATL",
+        "MIA"
       ],
       "n_games": 7,
       "median_pts_allowed": 109.0,
@@ -1819,8 +1819,8 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "DET",
-        "WAS",
         "PHI",
+        "WAS",
         "BKN",
         "ATL"
       ],
@@ -1917,8 +1917,8 @@
         "DET",
         "PHI",
         "BKN",
-        "MIA",
-        "ATL"
+        "ATL",
+        "MIA"
       ],
       "n_games": 7,
       "median_pts_allowed": 110.0,
@@ -2079,8 +2079,8 @@
         "BOS",
         "NYK",
         "MIL",
-        "WAS",
-        "PHI"
+        "PHI",
+        "WAS"
       ],
       "n_games": 7,
       "median_pts_allowed": 126.0,
@@ -2172,8 +2172,8 @@
       "defending_team": "CHI",
       "attacking_team": "MIA",
       "cluster_opponents": [
-        "TOR",
         "MIL",
+        "TOR",
         "PHI",
         "BOS",
         "NYK"
@@ -2268,8 +2268,8 @@
       "defending_team": "CHI",
       "attacking_team": "ORL",
       "cluster_opponents": [
-        "NYK",
         "BOS",
+        "NYK",
         "MIL",
         "WAS",
         "PHI"
@@ -2302,9 +2302,9 @@
       "cluster_opponents": [
         "BOS",
         "NYK",
+        "PHI",
         "MIL",
-        "WAS",
-        "PHI"
+        "WAS"
       ],
       "n_games": 7,
       "median_pts_allowed": 126.0,
@@ -2465,8 +2465,8 @@
         "BKN",
         "MIL",
         "WAS",
-        "ATL",
-        "MIN"
+        "MIN",
+        "ATL"
       ],
       "n_games": 5,
       "median_pts_allowed": 114.0,
@@ -2546,13 +2546,13 @@
         "WAS",
         "MIL",
         "PHI",
-        "MIN"
+        "OKC"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 114.0,
-      "median_oreb_allowed": 15.0,
-      "median_3pt_pct_allowed": 32.5,
-      "summary_text": "CLE Defense vs. Opponents Similar to DET (n=5 games). CLE allowed a median of 114.0 points, 15.0 offensive rebounds, and 32.5% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 115.5,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 36.0,
+      "summary_text": "CLE Defense vs. Opponents Similar to DET (n=6 games). CLE allowed a median of 115.5 points, 12.0 offensive rebounds, and 36.0% from 3PT."
     },
     "GSW": {
       "defending_team": "CLE",
@@ -2562,7 +2562,7 @@
         "MIL",
         "MIN",
         "ATL",
-        "WAS"
+        "PHI"
       ],
       "n_games": 5,
       "median_pts_allowed": 114.0,
@@ -2593,8 +2593,8 @@
         "MIL",
         "MIN",
         "PHI",
-        "ATL",
-        "BKN"
+        "BKN",
+        "ATL"
       ],
       "n_games": 5,
       "median_pts_allowed": 114.0,
@@ -2721,8 +2721,8 @@
         "BKN",
         "WAS",
         "MIL",
-        "PHI",
-        "OKC"
+        "OKC",
+        "PHI"
       ],
       "n_games": 6,
       "median_pts_allowed": 115.5,
@@ -2782,17 +2782,17 @@
       "defending_team": "CLE",
       "attacking_team": "PHX",
       "cluster_opponents": [
+        "PHI",
         "MIL",
         "WAS",
-        "PHI",
         "MIN",
-        "BKN"
+        "OKC"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 114.0,
-      "median_oreb_allowed": 15.0,
-      "median_3pt_pct_allowed": 32.5,
-      "summary_text": "CLE Defense vs. Opponents Similar to PHX (n=5 games). CLE allowed a median of 114.0 points, 15.0 offensive rebounds, and 32.5% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 115.5,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 32.9,
+      "summary_text": "CLE Defense vs. Opponents Similar to PHX (n=6 games). CLE allowed a median of 115.5 points, 12.0 offensive rebounds, and 32.9% from 3PT."
     },
     "POR": {
       "defending_team": "CLE",
@@ -2929,9 +2929,9 @@
       "attacking_team": "BKN",
       "cluster_opponents": [
         "IND",
+        "MIA",
         "SAC",
         "HOU",
-        "MIA",
         "SAS"
       ],
       "n_games": 7,
@@ -3026,8 +3026,8 @@
       "cluster_opponents": [
         "HOU",
         "IND",
-        "SAC",
         "OKC",
+        "SAC",
         "MIA"
       ],
       "n_games": 6,
@@ -3044,13 +3044,13 @@
         "HOU",
         "SAC",
         "MIA",
-        "OKC"
+        "SAS"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 110.0,
-      "median_oreb_allowed": 12.5,
-      "median_3pt_pct_allowed": 27.9,
-      "summary_text": "DAL Defense vs. Opponents Similar to GSW (n=6 games). DAL allowed a median of 110.0 points, 12.5 offensive rebounds, and 27.9% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 112.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 31.7,
+      "summary_text": "DAL Defense vs. Opponents Similar to GSW (n=7 games). DAL allowed a median of 112.0 points, 15.0 offensive rebounds, and 31.7% from 3PT."
     },
     "HOU": {
       "defending_team": "DAL",
@@ -3088,8 +3088,8 @@
       "defending_team": "DAL",
       "attacking_team": "LAC",
       "cluster_opponents": [
-        "SAC",
         "MIA",
+        "SAC",
         "IND",
         "SAS",
         "HOU"
@@ -3106,8 +3106,8 @@
       "cluster_opponents": [
         "IND",
         "SAC",
-        "HOU",
         "MIA",
+        "HOU",
         "SAS"
       ],
       "n_games": 7,
@@ -3137,8 +3137,8 @@
       "attacking_team": "MIA",
       "cluster_opponents": [
         "SAC",
-        "SAS",
         "IND",
+        "SAS",
         "OKC",
         "HOU"
       ],
@@ -3232,8 +3232,8 @@
       "defending_team": "DAL",
       "attacking_team": "ORL",
       "cluster_opponents": [
-        "HOU",
         "IND",
+        "HOU",
         "SAC",
         "MIA",
         "OKC"
@@ -3296,8 +3296,8 @@
       "defending_team": "DAL",
       "attacking_team": "SAC",
       "cluster_opponents": [
-        "MIA",
         "SAS",
+        "MIA",
         "IND",
         "OKC",
         "HOU"
@@ -3410,8 +3410,8 @@
       "defending_team": "DEN",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "POR",
         "GSW",
+        "POR",
         "PHX",
         "TOR",
         "OKC"
@@ -3570,8 +3570,8 @@
       "defending_team": "DEN",
       "attacking_team": "LAC",
       "cluster_opponents": [
-        "POR",
         "PHX",
+        "POR",
         "TOR",
         "GSW",
         "OKC"
@@ -3604,8 +3604,8 @@
       "cluster_opponents": [
         "PHX",
         "TOR",
-        "GSW",
         "POR",
+        "GSW",
         "OKC"
       ],
       "n_games": 5,
@@ -3619,10 +3619,10 @@
       "attacking_team": "MIA",
       "cluster_opponents": [
         "TOR",
-        "PHX",
         "POR",
-        "NOP",
-        "GSW"
+        "PHX",
+        "GSW",
+        "NOP"
       ],
       "n_games": 6,
       "median_pts_allowed": 119.0,
@@ -3682,8 +3682,8 @@
       "defending_team": "DEN",
       "attacking_team": "NYK",
       "cluster_opponents": [
-        "GSW",
         "PHX",
+        "GSW",
         "POR",
         "OKC",
         "TOR"
@@ -3715,8 +3715,8 @@
       "attacking_team": "ORL",
       "cluster_opponents": [
         "GSW",
-        "PHX",
         "POR",
+        "PHX",
         "OKC",
         "TOR"
       ],
@@ -3782,13 +3782,13 @@
         "PHX",
         "OKC",
         "POR",
-        "GSW"
+        "NOP"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 118.0,
-      "median_oreb_allowed": 15.0,
-      "median_3pt_pct_allowed": 36.6,
-      "summary_text": "DEN Defense vs. Opponents Similar to SAC (n=5 games). DEN allowed a median of 118.0 points, 15.0 offensive rebounds, and 36.6% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 113.5,
+      "median_oreb_allowed": 14.5,
+      "median_3pt_pct_allowed": 32.1,
+      "summary_text": "DEN Defense vs. Opponents Similar to SAC (n=6 games). DEN allowed a median of 113.5 points, 14.5 offensive rebounds, and 32.1% from 3PT."
     },
     "SAS": {
       "defending_team": "DEN",
@@ -3813,8 +3813,8 @@
         "NOP",
         "OKC",
         "PHX",
-        "GSW",
-        "POR"
+        "POR",
+        "GSW"
       ],
       "n_games": 6,
       "median_pts_allowed": 119.0,
@@ -4004,17 +4004,17 @@
       "defending_team": "DET",
       "attacking_team": "GSW",
       "cluster_opponents": [
-        "BOS",
         "BKN",
+        "BOS",
         "NYK",
         "CHA",
-        "PHI"
+        "MIA"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 94.0,
-      "median_oreb_allowed": 9.0,
-      "median_3pt_pct_allowed": 33.3,
-      "summary_text": "DET Defense vs. Opponents Similar to GSW (n=7 games). DET allowed a median of 94.0 points, 9.0 offensive rebounds, and 33.3% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 102.5,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 31.5,
+      "summary_text": "DET Defense vs. Opponents Similar to GSW (n=6 games). DET allowed a median of 102.5 points, 15.0 offensive rebounds, and 31.5% from 3PT."
     },
     "HOU": {
       "defending_team": "DET",
@@ -4101,8 +4101,8 @@
       "attacking_team": "MIA",
       "cluster_opponents": [
         "PHI",
-        "BOS",
         "BKN",
+        "BOS",
         "NYK",
         "CHA"
       ],
@@ -4196,9 +4196,9 @@
       "defending_team": "DET",
       "attacking_team": "ORL",
       "cluster_opponents": [
-        "CHA",
-        "NYK",
         "BOS",
+        "NYK",
+        "CHA",
         "BKN",
         "PHI"
       ],
@@ -4342,17 +4342,17 @@
       "defending_team": "GSW",
       "attacking_team": "ATL",
       "cluster_opponents": [
+        "MIA",
         "MIN",
         "MEM",
         "LAC",
-        "PHX",
-        "LAL"
+        "PHX"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 113.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to ATL (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 112.5,
+      "median_oreb_allowed": 9.0,
+      "median_3pt_pct_allowed": 36.3,
+      "summary_text": "GSW Defense vs. Opponents Similar to ATL (n=6 games). GSW allowed a median of 112.5 points, 9.0 offensive rebounds, and 36.3% from 3PT."
     },
     "BOS": {
       "defending_team": "GSW",
@@ -4406,33 +4406,33 @@
       "defending_team": "GSW",
       "attacking_team": "CHI",
       "cluster_opponents": [
+        "MIA",
         "LAC",
         "MEM",
         "MIN",
-        "LAL",
-        "PHX"
+        "LAL"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 113.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to CHI (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 111.5,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 34.6,
+      "summary_text": "GSW Defense vs. Opponents Similar to CHI (n=6 games). GSW allowed a median of 111.5 points, 12.0 offensive rebounds, and 34.6% from 3PT."
     },
     "CLE": {
       "defending_team": "GSW",
       "attacking_team": "CLE",
       "cluster_opponents": [
         "LAC",
+        "MIA",
         "MEM",
         "MIN",
-        "LAL",
-        "PHX"
+        "LAL"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 113.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to CLE (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 111.5,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 34.6,
+      "summary_text": "GSW Defense vs. Opponents Similar to CLE (n=6 games). GSW allowed a median of 111.5 points, 12.0 offensive rebounds, and 34.6% from 3PT."
     },
     "DAL": {
       "defending_team": "GSW",
@@ -4489,8 +4489,8 @@
         "LAL",
         "PHX",
         "MEM",
-        "DEN",
-        "LAC"
+        "LAC",
+        "DEN"
       ],
       "n_games": 7,
       "median_pts_allowed": 113.0,
@@ -4536,15 +4536,15 @@
       "cluster_opponents": [
         "MEM",
         "MIN",
-        "LAL",
+        "MIA",
         "PHX",
-        "DEN"
+        "LAL"
       ],
       "n_games": 7,
-      "median_pts_allowed": 114.0,
-      "median_oreb_allowed": 10.0,
+      "median_pts_allowed": 113.0,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to LAC (n=7 games). GSW allowed a median of 114.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to LAC (n=7 games). GSW allowed a median of 113.0 points, 9.0 offensive rebounds, and 36.7% from 3PT."
     },
     "LAL": {
       "defending_team": "GSW",
@@ -4568,22 +4568,22 @@
       "cluster_opponents": [
         "MIN",
         "LAC",
+        "MIA",
         "PHX",
-        "LAL",
-        "DEN"
+        "LAL"
       ],
       "n_games": 7,
-      "median_pts_allowed": 114.0,
-      "median_oreb_allowed": 10.0,
+      "median_pts_allowed": 113.0,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 35.9,
-      "summary_text": "GSW Defense vs. Opponents Similar to MEM (n=7 games). GSW allowed a median of 114.0 points, 10.0 offensive rebounds, and 35.9% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to MEM (n=7 games). GSW allowed a median of 113.0 points, 9.0 offensive rebounds, and 35.9% from 3PT."
     },
     "MIA": {
       "defending_team": "GSW",
       "attacking_team": "MIA",
       "cluster_opponents": [
-        "MIN",
         "LAC",
+        "MIN",
         "MEM",
         "PHX",
         "LAL"
@@ -4602,13 +4602,13 @@
         "LAC",
         "LAL",
         "MIN",
-        "PHX"
+        "MIA"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 113.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to MIL (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 111.5,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 34.6,
+      "summary_text": "GSW Defense vs. Opponents Similar to MIL (n=6 games). GSW allowed a median of 111.5 points, 12.0 offensive rebounds, and 34.6% from 3PT."
     },
     "MIN": {
       "defending_team": "GSW",
@@ -4616,31 +4616,31 @@
       "cluster_opponents": [
         "MEM",
         "LAC",
+        "MIA",
         "PHX",
-        "LAL",
-        "DEN"
+        "LAL"
       ],
       "n_games": 7,
-      "median_pts_allowed": 113.0,
+      "median_pts_allowed": 112.0,
       "median_oreb_allowed": 10.0,
       "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to MIN (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to MIN (n=7 games). GSW allowed a median of 112.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
     },
     "NOP": {
       "defending_team": "GSW",
       "attacking_team": "NOP",
       "cluster_opponents": [
+        "MIA",
         "MIN",
         "MEM",
         "LAC",
-        "PHX",
-        "DEN"
+        "PHX"
       ],
       "n_games": 6,
-      "median_pts_allowed": 113.5,
-      "median_oreb_allowed": 9.5,
+      "median_pts_allowed": 112.5,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 36.3,
-      "summary_text": "GSW Defense vs. Opponents Similar to NOP (n=6 games). GSW allowed a median of 113.5 points, 9.5 offensive rebounds, and 36.3% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to NOP (n=6 games). GSW allowed a median of 112.5 points, 9.0 offensive rebounds, and 36.3% from 3PT."
     },
     "NYK": {
       "defending_team": "GSW",
@@ -4712,8 +4712,8 @@
       "cluster_opponents": [
         "DEN",
         "MEM",
-        "LAL",
         "MIN",
+        "LAL",
         "LAC"
       ],
       "n_games": 6,
@@ -4730,13 +4730,13 @@
         "LAC",
         "MEM",
         "PHX",
-        "MIN"
+        "MIA"
       ],
       "n_games": 7,
-      "median_pts_allowed": 113.0,
+      "median_pts_allowed": 112.0,
       "median_oreb_allowed": 10.0,
       "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to POR (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to POR (n=7 games). GSW allowed a median of 112.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
     },
     "SAC": {
       "defending_team": "GSW",
@@ -4745,14 +4745,14 @@
         "MIN",
         "MEM",
         "LAC",
-        "PHX",
-        "DEN"
+        "MIA",
+        "PHX"
       ],
       "n_games": 6,
-      "median_pts_allowed": 113.5,
-      "median_oreb_allowed": 9.5,
+      "median_pts_allowed": 112.5,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 36.3,
-      "summary_text": "GSW Defense vs. Opponents Similar to SAC (n=6 games). GSW allowed a median of 113.5 points, 9.5 offensive rebounds, and 36.3% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to SAC (n=6 games). GSW allowed a median of 112.5 points, 9.0 offensive rebounds, and 36.3% from 3PT."
     },
     "SAS": {
       "defending_team": "GSW",
@@ -4760,15 +4760,15 @@
       "cluster_opponents": [
         "MIN",
         "MEM",
+        "MIA",
         "LAC",
-        "PHX",
-        "DEN"
+        "PHX"
       ],
       "n_games": 6,
-      "median_pts_allowed": 113.5,
-      "median_oreb_allowed": 9.5,
+      "median_pts_allowed": 112.5,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 36.3,
-      "summary_text": "GSW Defense vs. Opponents Similar to SAS (n=6 games). GSW allowed a median of 113.5 points, 9.5 offensive rebounds, and 36.3% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to SAS (n=6 games). GSW allowed a median of 112.5 points, 9.0 offensive rebounds, and 36.3% from 3PT."
     },
     "TOR": {
       "defending_team": "GSW",
@@ -4776,15 +4776,15 @@
       "cluster_opponents": [
         "MIN",
         "MEM",
+        "MIA",
         "LAC",
-        "PHX",
-        "DEN"
+        "PHX"
       ],
       "n_games": 6,
-      "median_pts_allowed": 113.5,
-      "median_oreb_allowed": 9.5,
+      "median_pts_allowed": 112.5,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 36.3,
-      "summary_text": "GSW Defense vs. Opponents Similar to TOR (n=6 games). GSW allowed a median of 113.5 points, 9.5 offensive rebounds, and 36.3% from 3PT."
+      "summary_text": "GSW Defense vs. Opponents Similar to TOR (n=6 games). GSW allowed a median of 112.5 points, 9.0 offensive rebounds, and 36.3% from 3PT."
     },
     "UTA": {
       "defending_team": "GSW",
@@ -4793,14 +4793,14 @@
         "MEM",
         "MIN",
         "LAC",
-        "PHX",
-        "LAL"
+        "MIA",
+        "PHX"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 113.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 36.7,
-      "summary_text": "GSW Defense vs. Opponents Similar to UTA (n=7 games). GSW allowed a median of 113.0 points, 10.0 offensive rebounds, and 36.7% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 112.5,
+      "median_oreb_allowed": 9.0,
+      "median_3pt_pct_allowed": 36.3,
+      "summary_text": "GSW Defense vs. Opponents Similar to UTA (n=6 games). GSW allowed a median of 112.5 points, 9.0 offensive rebounds, and 36.3% from 3PT."
     },
     "WAS": {
       "defending_team": "GSW",
@@ -4875,8 +4875,8 @@
         "BOS",
         "DAL",
         "MIL",
-        "ATL",
-        "MIN"
+        "MIN",
+        "ATL"
       ],
       "n_games": 7,
       "median_pts_allowed": 110.0,
@@ -4955,8 +4955,8 @@
         "BOS",
         "DAL",
         "MIL",
-        "MIN",
-        "OKC"
+        "OKC",
+        "MIN"
       ],
       "n_games": 6,
       "median_pts_allowed": 105.0,
@@ -5019,8 +5019,8 @@
         "MIN",
         "ATL",
         "MIL",
-        "DAL",
-        "SAS"
+        "SAS",
+        "DAL"
       ],
       "n_games": 7,
       "median_pts_allowed": 110.0,
@@ -5066,8 +5066,8 @@
       "cluster_opponents": [
         "ATL",
         "MIN",
-        "SAS",
         "MIL",
+        "SAS",
         "DAL"
       ],
       "n_games": 7,
@@ -5370,8 +5370,8 @@
       "defending_team": "IND",
       "attacking_team": "CHI",
       "cluster_opponents": [
-        "ATL",
         "MIA",
+        "ATL",
         "MIL",
         "MEM",
         "BKN"
@@ -5388,8 +5388,8 @@
       "cluster_opponents": [
         "ATL",
         "MIL",
-        "MEM",
         "MIA",
+        "MEM",
         "BKN"
       ],
       "n_games": 6,
@@ -5486,13 +5486,13 @@
         "DAL",
         "MIL",
         "PHI",
-        "ATL"
+        "BKN"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 110.0,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 36.1,
-      "summary_text": "IND Defense vs. Opponents Similar to IND (n=5 games). IND allowed a median of 110.0 points, 13.0 offensive rebounds, and 36.1% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 109.5,
+      "median_oreb_allowed": 10.5,
+      "median_3pt_pct_allowed": 33.3,
+      "summary_text": "IND Defense vs. Opponents Similar to IND (n=6 games). IND allowed a median of 109.5 points, 10.5 offensive rebounds, and 33.3% from 3PT."
     },
     "LAC": {
       "defending_team": "IND",
@@ -5629,14 +5629,14 @@
         "PHI",
         "DAL",
         "MEM",
-        "MIA",
-        "NOP"
+        "NOP",
+        "MIL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 120.0,
+      "median_pts_allowed": 114.0,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 36.1,
-      "summary_text": "IND Defense vs. Opponents Similar to OKC (n=5 games). IND allowed a median of 120.0 points, 13.0 offensive rebounds, and 36.1% from 3PT."
+      "median_3pt_pct_allowed": 33.3,
+      "summary_text": "IND Defense vs. Opponents Similar to OKC (n=5 games). IND allowed a median of 114.0 points, 13.0 offensive rebounds, and 33.3% from 3PT."
     },
     "ORL": {
       "defending_team": "IND",
@@ -5676,8 +5676,8 @@
       "cluster_opponents": [
         "DAL",
         "MEM",
-        "MIL",
         "PHI",
+        "MIL",
         "BKN"
       ],
       "n_games": 6,
@@ -5694,13 +5694,13 @@
         "MIL",
         "MEM",
         "ATL",
-        "DAL"
+        "MIA"
       ],
       "n_games": 6,
       "median_pts_allowed": 108.5,
-      "median_oreb_allowed": 12.0,
+      "median_oreb_allowed": 14.0,
       "median_3pt_pct_allowed": 33.3,
-      "summary_text": "IND Defense vs. Opponents Similar to POR (n=6 games). IND allowed a median of 108.5 points, 12.0 offensive rebounds, and 33.3% from 3PT."
+      "summary_text": "IND Defense vs. Opponents Similar to POR (n=6 games). IND allowed a median of 108.5 points, 14.0 offensive rebounds, and 33.3% from 3PT."
     },
     "SAC": {
       "defending_team": "IND",
@@ -5723,8 +5723,8 @@
       "attacking_team": "SAS",
       "cluster_opponents": [
         "PHI",
-        "MIA",
         "MEM",
+        "MIA",
         "ATL",
         "NOP"
       ],
@@ -5739,8 +5739,8 @@
       "attacking_team": "TOR",
       "cluster_opponents": [
         "PHI",
-        "MIA",
         "MEM",
+        "MIA",
         "ATL",
         "NOP"
       ],
@@ -5823,8 +5823,8 @@
         "LAL",
         "GSW",
         "MIN",
-        "SAC",
-        "MIA"
+        "MIA",
+        "SAC"
       ],
       "n_games": 6,
       "median_pts_allowed": 120.5,
@@ -5868,8 +5868,8 @@
       "defending_team": "LAC",
       "attacking_team": "CLE",
       "cluster_opponents": [
-        "MIN",
         "MIA",
+        "MIN",
         "SAC",
         "LAL",
         "GSW"
@@ -5884,8 +5884,8 @@
       "defending_team": "LAC",
       "attacking_team": "DAL",
       "cluster_opponents": [
-        "GSW",
         "SAC",
+        "GSW",
         "MIN",
         "OKC",
         "LAL"
@@ -5901,8 +5901,8 @@
       "attacking_team": "DEN",
       "cluster_opponents": [
         "OKC",
-        "GSW",
         "SAC",
+        "GSW",
         "LAL",
         "MIN"
       ],
@@ -5918,9 +5918,9 @@
       "cluster_opponents": [
         "GSW",
         "LAL",
+        "OKC",
         "SAC",
-        "MIN",
-        "OKC"
+        "MIN"
       ],
       "n_games": 6,
       "median_pts_allowed": 116.0,
@@ -5981,8 +5981,8 @@
       "attacking_team": "LAC",
       "cluster_opponents": [
         "MIN",
-        "SAC",
         "MIA",
+        "SAC",
         "LAL",
         "TOR"
       ],
@@ -6044,8 +6044,8 @@
       "defending_team": "LAC",
       "attacking_team": "MIL",
       "cluster_opponents": [
-        "LAL",
         "GSW",
+        "LAL",
         "MIN",
         "MIA",
         "SAC"
@@ -6157,9 +6157,9 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "GSW",
-        "LAL",
         "SAC",
         "MIN",
+        "LAL",
         "OKC"
       ],
       "n_games": 6,
@@ -6174,8 +6174,8 @@
       "cluster_opponents": [
         "LAL",
         "GSW",
-        "MIN",
         "MIA",
+        "MIN",
         "SAC"
       ],
       "n_games": 6,
@@ -6189,8 +6189,8 @@
       "attacking_team": "SAC",
       "cluster_opponents": [
         "MIN",
-        "MIA",
         "TOR",
+        "MIA",
         "OKC",
         "LAL"
       ],
@@ -6302,17 +6302,17 @@
       "defending_team": "LAL",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "POR",
         "GSW",
+        "POR",
         "LAC",
         "UTA",
-        "SAC"
+        "MIA"
       ],
       "n_games": 7,
-      "median_pts_allowed": 112.0,
-      "median_oreb_allowed": 15.0,
-      "median_3pt_pct_allowed": 32.3,
-      "summary_text": "LAL Defense vs. Opponents Similar to BKN (n=7 games). LAL allowed a median of 112.0 points, 15.0 offensive rebounds, and 32.3% from 3PT."
+      "median_pts_allowed": 117.0,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 39.0,
+      "summary_text": "LAL Defense vs. Opponents Similar to BKN (n=7 games). LAL allowed a median of 117.0 points, 12.0 offensive rebounds, and 39.0% from 3PT."
     },
     "CHA": {
       "defending_team": "LAL",
@@ -6351,8 +6351,8 @@
       "attacking_team": "CLE",
       "cluster_opponents": [
         "LAC",
-        "UTA",
         "MIA",
+        "UTA",
         "SAC",
         "POR"
       ],
@@ -6367,8 +6367,8 @@
       "attacking_team": "DAL",
       "cluster_opponents": [
         "UTA",
-        "GSW",
         "SAC",
+        "GSW",
         "LAC",
         "TOR"
       ],
@@ -6382,9 +6382,9 @@
       "defending_team": "LAL",
       "attacking_team": "DEN",
       "cluster_opponents": [
-        "GSW",
         "UTA",
         "SAC",
+        "GSW",
         "LAC",
         "TOR"
       ],
@@ -6450,7 +6450,7 @@
         "LAC",
         "SAC",
         "GSW",
-        "POR"
+        "MIA"
       ],
       "n_games": 7,
       "median_pts_allowed": 112.0,
@@ -6463,8 +6463,8 @@
       "attacking_team": "LAC",
       "cluster_opponents": [
         "UTA",
-        "SAC",
         "MIA",
+        "SAC",
         "POR",
         "TOR"
       ],
@@ -6511,8 +6511,8 @@
       "attacking_team": "MIA",
       "cluster_opponents": [
         "UTA",
-        "SAC",
         "LAC",
+        "SAC",
         "TOR",
         "POR"
       ],
@@ -6638,8 +6638,8 @@
       "defending_team": "LAL",
       "attacking_team": "PHX",
       "cluster_opponents": [
-        "GSW",
         "UTA",
+        "GSW",
         "SAC",
         "LAC",
         "POR"
@@ -6672,8 +6672,8 @@
       "cluster_opponents": [
         "UTA",
         "LAC",
-        "MIA",
         "TOR",
+        "MIA",
         "POR"
       ],
       "n_games": 6,
@@ -6706,13 +6706,13 @@
         "UTA",
         "MIA",
         "LAC",
-        "GSW"
+        "POR"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 112.0,
-      "median_oreb_allowed": 15.0,
-      "median_3pt_pct_allowed": 32.3,
-      "summary_text": "LAL Defense vs. Opponents Similar to TOR (n=7 games). LAL allowed a median of 112.0 points, 15.0 offensive rebounds, and 32.3% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 117.0,
+      "median_oreb_allowed": 11.5,
+      "median_3pt_pct_allowed": 35.6,
+      "summary_text": "LAL Defense vs. Opponents Similar to TOR (n=6 games). LAL allowed a median of 117.0 points, 11.5 offensive rebounds, and 35.6% from 3PT."
     },
     "UTA": {
       "defending_team": "LAL",
@@ -6784,8 +6784,8 @@
       "defending_team": "MEM",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "POR",
         "GSW",
+        "POR",
         "IND",
         "UTA",
         "SAC"
@@ -6850,8 +6850,8 @@
       "cluster_opponents": [
         "IND",
         "UTA",
-        "GSW",
         "SAC",
+        "GSW",
         "POR"
       ],
       "n_games": 7,
@@ -6865,9 +6865,9 @@
       "attacking_team": "DEN",
       "cluster_opponents": [
         "IND",
-        "GSW",
         "UTA",
         "SAC",
+        "GSW",
         "POR"
       ],
       "n_games": 7,
@@ -6979,8 +6979,8 @@
         "UTA",
         "IND",
         "SAC",
-        "GSW",
-        "POR"
+        "POR",
+        "GSW"
       ],
       "n_games": 7,
       "median_pts_allowed": 105.0,
@@ -6996,7 +6996,7 @@
         "SAC",
         "IND",
         "POR",
-        "NOP"
+        "GSW"
       ],
       "n_games": 7,
       "median_pts_allowed": 105.0,
@@ -7121,8 +7121,8 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "IND",
-        "GSW",
         "UTA",
+        "GSW",
         "SAC",
         "POR"
       ],
@@ -7155,8 +7155,8 @@
         "UTA",
         "IND",
         "POR",
-        "GSW",
-        "NOP"
+        "NOP",
+        "GSW"
       ],
       "n_games": 6,
       "median_pts_allowed": 106.0,
@@ -7188,13 +7188,13 @@
         "UTA",
         "NOP",
         "IND",
-        "GSW"
+        "POR"
       ],
       "n_games": 7,
-      "median_pts_allowed": 107.0,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 32.4,
-      "summary_text": "MEM Defense vs. Opponents Similar to TOR (n=7 games). MEM allowed a median of 107.0 points, 14.0 offensive rebounds, and 32.4% from 3PT."
+      "median_pts_allowed": 105.0,
+      "median_oreb_allowed": 13.0,
+      "median_3pt_pct_allowed": 30.3,
+      "summary_text": "MEM Defense vs. Opponents Similar to TOR (n=7 games). MEM allowed a median of 105.0 points, 13.0 offensive rebounds, and 30.3% from 3PT."
     },
     "UTA": {
       "defending_team": "MEM",
@@ -7250,11 +7250,11 @@
       "defending_team": "MIA",
       "attacking_team": "BOS",
       "cluster_opponents": [
+        "GSW",
         "DET",
         "LAL",
         "IND",
-        "DAL",
-        "CHA"
+        "DAL"
       ],
       "n_games": 5,
       "median_pts_allowed": 125.0,
@@ -7267,10 +7267,10 @@
       "attacking_team": "BKN",
       "cluster_opponents": [
         "LAL",
+        "GSW",
         "IND",
         "DET",
-        "LAC",
-        "CHA"
+        "LAC"
       ],
       "n_games": 5,
       "median_pts_allowed": 125.0,
@@ -7282,11 +7282,11 @@
       "defending_team": "MIA",
       "attacking_team": "CHA",
       "cluster_opponents": [
+        "GSW",
         "DET",
         "LAL",
         "DAL",
-        "IND",
-        "LAC"
+        "IND"
       ],
       "n_games": 5,
       "median_pts_allowed": 125.0,
@@ -7332,9 +7332,9 @@
       "cluster_opponents": [
         "IND",
         "DET",
+        "GSW",
         "MIN",
-        "LAL",
-        "LAC"
+        "LAL"
       ],
       "n_games": 5,
       "median_pts_allowed": 128.0,
@@ -7349,30 +7349,30 @@
         "DAL",
         "DET",
         "IND",
-        "LAL",
-        "MIN"
+        "GSW",
+        "LAL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 128.0,
-      "median_oreb_allowed": 13.0,
+      "median_pts_allowed": 125.0,
+      "median_oreb_allowed": 12.0,
       "median_3pt_pct_allowed": 44.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to DEN (n=5 games). MIA allowed a median of 128.0 points, 13.0 offensive rebounds, and 44.2% from 3PT."
+      "summary_text": "MIA Defense vs. Opponents Similar to DEN (n=5 games). MIA allowed a median of 125.0 points, 12.0 offensive rebounds, and 44.2% from 3PT."
     },
     "DET": {
       "defending_team": "MIA",
       "attacking_team": "DET",
       "cluster_opponents": [
         "DAL",
+        "GSW",
         "IND",
         "LAL",
-        "CHA",
-        "LAC"
+        "CHA"
       ],
       "n_games": 5,
-      "median_pts_allowed": 116.0,
+      "median_pts_allowed": 120.0,
       "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 37.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to DET (n=5 games). MIA allowed a median of 116.0 points, 10.0 offensive rebounds, and 37.2% from 3PT."
+      "median_3pt_pct_allowed": 39.0,
+      "summary_text": "MIA Defense vs. Opponents Similar to DET (n=5 games). MIA allowed a median of 120.0 points, 10.0 offensive rebounds, and 39.0% from 3PT."
     },
     "GSW": {
       "defending_team": "MIA",
@@ -7397,14 +7397,14 @@
         "DET",
         "DAL",
         "IND",
-        "LAL",
-        "MIN"
+        "GSW",
+        "LAL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 128.0,
-      "median_oreb_allowed": 13.0,
+      "median_pts_allowed": 125.0,
+      "median_oreb_allowed": 12.0,
       "median_3pt_pct_allowed": 44.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to HOU (n=5 games). MIA allowed a median of 128.0 points, 13.0 offensive rebounds, and 44.2% from 3PT."
+      "summary_text": "MIA Defense vs. Opponents Similar to HOU (n=5 games). MIA allowed a median of 125.0 points, 12.0 offensive rebounds, and 44.2% from 3PT."
     },
     "IND": {
       "defending_team": "MIA",
@@ -7442,17 +7442,17 @@
       "defending_team": "MIA",
       "attacking_team": "LAL",
       "cluster_opponents": [
+        "GSW",
         "IND",
         "DET",
         "LAC",
-        "DAL",
-        "CHA"
+        "DAL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 116.0,
+      "median_pts_allowed": 120.0,
       "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 37.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to LAL (n=5 games). MIA allowed a median of 116.0 points, 12.0 offensive rebounds, and 37.2% from 3PT."
+      "median_3pt_pct_allowed": 39.0,
+      "summary_text": "MIA Defense vs. Opponents Similar to LAL (n=5 games). MIA allowed a median of 120.0 points, 12.0 offensive rebounds, and 39.0% from 3PT."
     },
     "MEM": {
       "defending_team": "MIA",
@@ -7475,8 +7475,8 @@
       "attacking_team": "MIA",
       "cluster_opponents": [
         "ATL",
-        "MIN",
         "LAC",
+        "MIN",
         "IND",
         "DAL"
       ],
@@ -7493,14 +7493,14 @@
         "IND",
         "ATL",
         "LAC",
-        "LAL",
-        "MIN"
+        "GSW",
+        "LAL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 125.0,
-      "median_oreb_allowed": 10.0,
+      "median_pts_allowed": 120.0,
+      "median_oreb_allowed": 9.0,
       "median_3pt_pct_allowed": 42.1,
-      "summary_text": "MIA Defense vs. Opponents Similar to MIL (n=5 games). MIA allowed a median of 125.0 points, 10.0 offensive rebounds, and 42.1% from 3PT."
+      "summary_text": "MIA Defense vs. Opponents Similar to MIL (n=5 games). MIA allowed a median of 120.0 points, 9.0 offensive rebounds, and 42.1% from 3PT."
     },
     "MIN": {
       "defending_team": "MIA",
@@ -7539,10 +7539,10 @@
       "attacking_team": "NYK",
       "cluster_opponents": [
         "DET",
+        "GSW",
         "DAL",
         "IND",
-        "LAL",
-        "CHA"
+        "LAL"
       ],
       "n_games": 5,
       "median_pts_allowed": 125.0,
@@ -7570,17 +7570,17 @@
       "defending_team": "MIA",
       "attacking_team": "ORL",
       "cluster_opponents": [
+        "GSW",
         "CHA",
         "DET",
         "LAL",
-        "DAL",
-        "IND"
+        "DAL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 125.0,
-      "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 44.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to ORL (n=5 games). MIA allowed a median of 125.0 points, 12.0 offensive rebounds, and 44.2% from 3PT."
+      "median_pts_allowed": 120.0,
+      "median_oreb_allowed": 10.0,
+      "median_3pt_pct_allowed": 39.0,
+      "summary_text": "MIA Defense vs. Opponents Similar to ORL (n=5 games). MIA allowed a median of 120.0 points, 10.0 offensive rebounds, and 39.0% from 3PT."
     },
     "PHI": {
       "defending_team": "MIA",
@@ -7603,32 +7603,32 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "DAL",
-        "DET",
         "IND",
-        "LAL",
+        "DET",
+        "GSW",
         "MIN"
       ],
       "n_games": 5,
-      "median_pts_allowed": 128.0,
+      "median_pts_allowed": 125.0,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 44.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to PHX (n=5 games). MIA allowed a median of 128.0 points, 13.0 offensive rebounds, and 44.2% from 3PT."
+      "median_3pt_pct_allowed": 42.0,
+      "summary_text": "MIA Defense vs. Opponents Similar to PHX (n=5 games). MIA allowed a median of 125.0 points, 13.0 offensive rebounds, and 42.0% from 3PT."
     },
     "POR": {
       "defending_team": "MIA",
       "attacking_team": "POR",
       "cluster_opponents": [
         "LAL",
+        "GSW",
         "IND",
         "LAC",
-        "ATL",
-        "DET"
+        "ATL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 125.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 44.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to POR (n=5 games). MIA allowed a median of 125.0 points, 10.0 offensive rebounds, and 44.2% from 3PT."
+      "median_pts_allowed": 120.0,
+      "median_oreb_allowed": 9.0,
+      "median_3pt_pct_allowed": 42.1,
+      "summary_text": "MIA Defense vs. Opponents Similar to POR (n=5 games). MIA allowed a median of 120.0 points, 9.0 offensive rebounds, and 42.1% from 3PT."
     },
     "SAC": {
       "defending_team": "MIA",
@@ -7701,14 +7701,14 @@
         "DAL",
         "DET",
         "IND",
-        "MIN",
-        "LAL"
+        "GSW",
+        "MIN"
       ],
       "n_games": 5,
-      "median_pts_allowed": 128.0,
+      "median_pts_allowed": 125.0,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 44.2,
-      "summary_text": "MIA Defense vs. Opponents Similar to WAS (n=5 games). MIA allowed a median of 128.0 points, 13.0 offensive rebounds, and 44.2% from 3PT."
+      "median_3pt_pct_allowed": 42.0,
+      "summary_text": "MIA Defense vs. Opponents Similar to WAS (n=5 games). MIA allowed a median of 125.0 points, 13.0 offensive rebounds, and 42.0% from 3PT."
     }
   },
   "MIL": {
@@ -7956,9 +7956,9 @@
       "defending_team": "MIL",
       "attacking_team": "MIA",
       "cluster_opponents": [
-        "MIN",
         "CLE",
         "CHI",
+        "MIN",
         "IND",
         "PHI"
       ],
@@ -8053,8 +8053,8 @@
       "attacking_team": "ORL",
       "cluster_opponents": [
         "BOS",
-        "HOU",
         "IND",
+        "HOU",
         "WAS",
         "CLE"
       ],
@@ -8087,8 +8087,8 @@
         "IND",
         "BOS",
         "HOU",
-        "WAS",
-        "PHI"
+        "PHI",
+        "WAS"
       ],
       "n_games": 5,
       "median_pts_allowed": 127.0,
@@ -8198,8 +8198,8 @@
       "defending_team": "MIN",
       "attacking_team": "ATL",
       "cluster_opponents": [
-        "CLE",
         "MIA",
+        "CLE",
         "LAC",
         "MIL",
         "SAS"
@@ -8231,8 +8231,8 @@
       "attacking_team": "BKN",
       "cluster_opponents": [
         "GSW",
-        "MIL",
         "ORL",
+        "MIL",
         "CLE",
         "LAC"
       ],
@@ -8262,8 +8262,8 @@
       "defending_team": "MIN",
       "attacking_team": "CHI",
       "cluster_opponents": [
-        "CLE",
         "MIA",
+        "CLE",
         "LAC",
         "MIL",
         "SAS"
@@ -8295,16 +8295,16 @@
       "attacking_team": "DAL",
       "cluster_opponents": [
         "HOU",
-        "GSW",
         "MIL",
+        "GSW",
         "LAC",
-        "CLE"
+        "ORL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 107.0,
+      "median_pts_allowed": 101.0,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 35.1,
-      "summary_text": "MIN Defense vs. Opponents Similar to DAL (n=5 games). MIN allowed a median of 107.0 points, 13.0 offensive rebounds, and 35.1% from 3PT."
+      "median_3pt_pct_allowed": 31.4,
+      "summary_text": "MIN Defense vs. Opponents Similar to DAL (n=5 games). MIN allowed a median of 101.0 points, 13.0 offensive rebounds, and 31.4% from 3PT."
     },
     "DEN": {
       "defending_team": "MIN",
@@ -8327,8 +8327,8 @@
       "attacking_team": "DET",
       "cluster_opponents": [
         "HOU",
-        "GSW",
         "ORL",
+        "GSW",
         "MIL",
         "LAC"
       ],
@@ -8345,8 +8345,8 @@
         "ORL",
         "MIL",
         "CLE",
-        "HOU",
-        "LAC"
+        "LAC",
+        "HOU"
       ],
       "n_games": 5,
       "median_pts_allowed": 101.0,
@@ -8358,8 +8358,8 @@
       "defending_team": "MIN",
       "attacking_team": "HOU",
       "cluster_opponents": [
-        "GSW",
         "ORL",
+        "GSW",
         "MIL",
         "LAC",
         "SAS"
@@ -8407,8 +8407,8 @@
       "attacking_team": "LAL",
       "cluster_opponents": [
         "GSW",
-        "MIL",
         "ORL",
+        "MIL",
         "CLE",
         "LAC"
       ],
@@ -8438,11 +8438,11 @@
       "defending_team": "MIN",
       "attacking_team": "MIA",
       "cluster_opponents": [
-        "LAC",
         "CLE",
-        "TOR",
+        "LAC",
+        "MIL",
         "SAS",
-        "MIL"
+        "TOR"
       ],
       "n_games": 5,
       "median_pts_allowed": 101.0,
@@ -8503,8 +8503,8 @@
       "attacking_team": "NYK",
       "cluster_opponents": [
         "ORL",
-        "GSW",
         "HOU",
+        "GSW",
         "MIL",
         "CLE"
       ],
@@ -8522,13 +8522,13 @@
         "SAS",
         "TOR",
         "LAC",
-        "MIA"
+        "MIL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 106.0,
+      "median_pts_allowed": 101.0,
       "median_oreb_allowed": 14.0,
       "median_3pt_pct_allowed": 35.1,
-      "summary_text": "MIN Defense vs. Opponents Similar to OKC (n=5 games). MIN allowed a median of 106.0 points, 14.0 offensive rebounds, and 35.1% from 3PT."
+      "summary_text": "MIN Defense vs. Opponents Similar to OKC (n=5 games). MIN allowed a median of 101.0 points, 14.0 offensive rebounds, and 35.1% from 3PT."
     },
     "ORL": {
       "defending_team": "MIN",
@@ -8567,26 +8567,26 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "HOU",
-        "GSW",
         "MIL",
+        "GSW",
         "LAC",
-        "ORL"
+        "CLE"
       ],
       "n_games": 5,
-      "median_pts_allowed": 101.0,
+      "median_pts_allowed": 107.0,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 31.4,
-      "summary_text": "MIN Defense vs. Opponents Similar to PHX (n=5 games). MIN allowed a median of 101.0 points, 13.0 offensive rebounds, and 31.4% from 3PT."
+      "median_3pt_pct_allowed": 35.1,
+      "summary_text": "MIN Defense vs. Opponents Similar to PHX (n=5 games). MIN allowed a median of 107.0 points, 13.0 offensive rebounds, and 35.1% from 3PT."
     },
     "POR": {
       "defending_team": "MIN",
       "attacking_team": "POR",
       "cluster_opponents": [
-        "MIL",
         "GSW",
+        "MIL",
         "CLE",
-        "LAC",
-        "ORL"
+        "ORL",
+        "LAC"
       ],
       "n_games": 5,
       "median_pts_allowed": 101.0,
@@ -8599,9 +8599,9 @@
       "attacking_team": "SAC",
       "cluster_opponents": [
         "LAC",
-        "MIA",
         "SAS",
         "TOR",
+        "MIA",
         "CLE"
       ],
       "n_games": 5,
@@ -8663,9 +8663,9 @@
       "attacking_team": "WAS",
       "cluster_opponents": [
         "HOU",
-        "GSW",
         "ORL",
         "SAS",
+        "GSW",
         "TOR"
       ],
       "n_games": 5,
@@ -8922,8 +8922,8 @@
       "cluster_opponents": [
         "ATL",
         "UTA",
-        "SAC",
         "MEM",
+        "SAC",
         "IND"
       ],
       "n_games": 6,
@@ -9179,8 +9179,8 @@
       "attacking_team": "BOS",
       "cluster_opponents": [
         "DET",
-        "BKN",
         "ORL",
+        "BKN",
         "PHI",
         "CHI"
       ],
@@ -9214,13 +9214,13 @@
         "BOS",
         "BKN",
         "DET",
-        "CHI"
+        "PHI"
       ],
       "n_games": 6,
-      "median_pts_allowed": 106.0,
-      "median_oreb_allowed": 11.0,
-      "median_3pt_pct_allowed": 36.3,
-      "summary_text": "NYK Defense vs. Opponents Similar to CHA (n=6 games). NYK allowed a median of 106.0 points, 11.0 offensive rebounds, and 36.3% from 3PT."
+      "median_pts_allowed": 102.0,
+      "median_oreb_allowed": 10.0,
+      "median_3pt_pct_allowed": 34.8,
+      "summary_text": "NYK Defense vs. Opponents Similar to CHA (n=6 games). NYK allowed a median of 102.0 points, 10.0 offensive rebounds, and 34.8% from 3PT."
     },
     "CHI": {
       "defending_team": "NYK",
@@ -9261,8 +9261,8 @@
         "DET",
         "BOS",
         "PHI",
-        "BKN",
-        "ORL"
+        "ORL",
+        "BKN"
       ],
       "n_games": 6,
       "median_pts_allowed": 102.0,
@@ -9306,17 +9306,17 @@
       "defending_team": "NYK",
       "attacking_team": "GSW",
       "cluster_opponents": [
-        "BOS",
         "BKN",
+        "BOS",
         "ORL",
         "DET",
-        "PHI"
+        "CHI"
       ],
       "n_games": 6,
-      "median_pts_allowed": 102.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 34.8,
-      "summary_text": "NYK Defense vs. Opponents Similar to GSW (n=6 games). NYK allowed a median of 102.0 points, 10.0 offensive rebounds, and 34.8% from 3PT."
+      "median_pts_allowed": 106.0,
+      "median_oreb_allowed": 11.0,
+      "median_3pt_pct_allowed": 36.3,
+      "summary_text": "NYK Defense vs. Opponents Similar to GSW (n=6 games). NYK allowed a median of 106.0 points, 11.0 offensive rebounds, and 36.3% from 3PT."
     },
     "HOU": {
       "defending_team": "NYK",
@@ -9404,8 +9404,8 @@
       "cluster_opponents": [
         "CHI",
         "PHI",
-        "BOS",
         "BKN",
+        "BOS",
         "DET"
       ],
       "n_games": 7,
@@ -9422,13 +9422,13 @@
         "BOS",
         "CHI",
         "DET",
-        "PHI"
+        "ORL"
       ],
-      "n_games": 7,
-      "median_pts_allowed": 105.0,
-      "median_oreb_allowed": 10.0,
-      "median_3pt_pct_allowed": 34.2,
-      "summary_text": "NYK Defense vs. Opponents Similar to MIL (n=7 games). NYK allowed a median of 105.0 points, 10.0 offensive rebounds, and 34.2% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 106.0,
+      "median_oreb_allowed": 11.0,
+      "median_3pt_pct_allowed": 36.3,
+      "summary_text": "NYK Defense vs. Opponents Similar to MIL (n=6 games). NYK allowed a median of 106.0 points, 11.0 offensive rebounds, and 36.3% from 3PT."
     },
     "MIN": {
       "defending_team": "NYK",
@@ -9692,8 +9692,8 @@
       "defending_team": "OKC",
       "attacking_team": "CHA",
       "cluster_opponents": [
-        "PHX",
         "HOU",
+        "PHX",
         "DAL",
         "DEN",
         "CLE"
@@ -9791,14 +9791,14 @@
         "PHX",
         "DAL",
         "CLE",
-        "DEN",
-        "HOU"
+        "LAC",
+        "DEN"
       ],
       "n_games": 6,
-      "median_pts_allowed": 115.0,
-      "median_oreb_allowed": 13.5,
+      "median_pts_allowed": 113.0,
+      "median_oreb_allowed": 12.5,
       "median_3pt_pct_allowed": 36.4,
-      "summary_text": "OKC Defense vs. Opponents Similar to GSW (n=6 games). OKC allowed a median of 115.0 points, 13.5 offensive rebounds, and 36.4% from 3PT."
+      "summary_text": "OKC Defense vs. Opponents Similar to GSW (n=6 games). OKC allowed a median of 113.0 points, 12.5 offensive rebounds, and 36.4% from 3PT."
     },
     "HOU": {
       "defending_team": "OKC",
@@ -9837,9 +9837,9 @@
       "attacking_team": "LAC",
       "cluster_opponents": [
         "CLE",
-        "DAL",
-        "SAS",
         "PHX",
+        "SAS",
+        "DAL",
         "DEN"
       ],
       "n_games": 6,
@@ -9870,8 +9870,8 @@
       "cluster_opponents": [
         "LAC",
         "CLE",
-        "DAL",
         "PHX",
+        "DAL",
         "SAS"
       ],
       "n_games": 6,
@@ -9884,11 +9884,11 @@
       "defending_team": "OKC",
       "attacking_team": "MIA",
       "cluster_opponents": [
-        "LAC",
         "CLE",
+        "LAC",
         "SAS",
-        "DAL",
-        "PHX"
+        "PHX",
+        "DAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 113.0,
@@ -9919,8 +9919,8 @@
         "LAC",
         "CLE",
         "SAS",
-        "DAL",
-        "PHX"
+        "PHX",
+        "DAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 113.0,
@@ -9948,8 +9948,8 @@
       "defending_team": "OKC",
       "attacking_team": "NYK",
       "cluster_opponents": [
-        "PHX",
         "HOU",
+        "PHX",
         "DAL",
         "DEN",
         "CLE"
@@ -9967,8 +9967,8 @@
         "DEN",
         "DAL",
         "HOU",
-        "SAS",
-        "PHX"
+        "PHX",
+        "SAS"
       ],
       "n_games": 5,
       "median_pts_allowed": 114.0,
@@ -10047,8 +10047,8 @@
         "LAC",
         "SAS",
         "CLE",
-        "DAL",
-        "PHX"
+        "PHX",
+        "DAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 113.0,
@@ -10061,8 +10061,8 @@
       "attacking_team": "SAS",
       "cluster_opponents": [
         "LAC",
-        "DAL",
         "CLE",
+        "DAL",
         "PHX",
         "DEN"
       ],
@@ -10095,8 +10095,8 @@
         "LAC",
         "CLE",
         "SAS",
-        "DAL",
-        "PHX"
+        "PHX",
+        "DAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 113.0,
@@ -10128,31 +10128,31 @@
       "cluster_opponents": [
         "MIN",
         "TOR",
+        "PHX",
         "BOS",
-        "NYK",
-        "WAS"
+        "NYK"
       ],
       "n_games": 6,
-      "median_pts_allowed": 111.0,
+      "median_pts_allowed": 114.5,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 37.7,
-      "summary_text": "ORL Defense vs. Opponents Similar to ATL (n=6 games). ORL allowed a median of 111.0 points, 13.0 offensive rebounds, and 37.7% from 3PT."
+      "median_3pt_pct_allowed": 39.3,
+      "summary_text": "ORL Defense vs. Opponents Similar to ATL (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 39.3% from 3PT."
     },
     "BOS": {
       "defending_team": "ORL",
       "attacking_team": "BOS",
       "cluster_opponents": [
         "NYK",
+        "PHX",
         "MIN",
         "WAS",
-        "ATL",
-        "TOR"
+        "ATL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 11.5,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to BOS (n=6 games). ORL allowed a median of 114.5 points, 11.5 offensive rebounds, and 38.4% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 115.0,
+      "median_oreb_allowed": 11.0,
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to BOS (n=5 games). ORL allowed a median of 115.0 points, 11.0 offensive rebounds, and 37.8% from 3PT."
     },
     "BKN": {
       "defending_team": "ORL",
@@ -10160,15 +10160,15 @@
       "cluster_opponents": [
         "BOS",
         "NYK",
+        "PHX",
         "ATL",
-        "MIN",
-        "WAS"
+        "MIN"
       ],
       "n_games": 5,
-      "median_pts_allowed": 108.0,
+      "median_pts_allowed": 115.0,
       "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 37.5,
-      "summary_text": "ORL Defense vs. Opponents Similar to BKN (n=5 games). ORL allowed a median of 108.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to BKN (n=5 games). ORL allowed a median of 115.0 points, 12.0 offensive rebounds, and 37.8% from 3PT."
     },
     "CHA": {
       "defending_team": "ORL",
@@ -10176,8 +10176,8 @@
       "cluster_opponents": [
         "NYK",
         "BOS",
+        "PHX",
         "WAS",
-        "ATL",
         "MIN"
       ],
       "n_games": 5,
@@ -10193,14 +10193,14 @@
         "ATL",
         "MIN",
         "TOR",
-        "BOS",
-        "NYK"
+        "PHX",
+        "BOS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to CHI (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 12.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to CHI (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "CLE": {
       "defending_team": "ORL",
@@ -10208,25 +10208,25 @@
       "cluster_opponents": [
         "ATL",
         "MIN",
+        "PHX",
         "BOS",
-        "TOR",
-        "NYK"
+        "TOR"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to CLE (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 12.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to CLE (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "DAL": {
       "defending_team": "ORL",
       "attacking_team": "DAL",
       "cluster_opponents": [
+        "PHX",
         "BOS",
         "NYK",
         "WAS",
-        "MIN",
-        "ATL"
+        "MIN"
       ],
       "n_games": 5,
       "median_pts_allowed": 108.0,
@@ -10239,16 +10239,16 @@
       "attacking_team": "DEN",
       "cluster_opponents": [
         "WAS",
+        "PHX",
         "NYK",
         "BOS",
-        "MIN",
-        "TOR"
+        "MIN"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 111.0,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 37.7,
-      "summary_text": "ORL Defense vs. Opponents Similar to DEN (n=6 games). ORL allowed a median of 111.0 points, 13.0 offensive rebounds, and 37.7% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 108.0,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "ORL Defense vs. Opponents Similar to DEN (n=5 games). ORL allowed a median of 108.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
     },
     "DET": {
       "defending_team": "ORL",
@@ -10256,9 +10256,9 @@
       "cluster_opponents": [
         "NYK",
         "BOS",
+        "PHX",
         "WAS",
-        "MIN",
-        "ATL"
+        "MIN"
       ],
       "n_games": 5,
       "median_pts_allowed": 108.0,
@@ -10272,15 +10272,15 @@
       "cluster_opponents": [
         "BOS",
         "NYK",
+        "PHX",
         "MIN",
-        "ATL",
-        "WAS"
+        "ATL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 108.0,
+      "median_pts_allowed": 115.0,
       "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 37.5,
-      "summary_text": "ORL Defense vs. Opponents Similar to GSW (n=5 games). ORL allowed a median of 108.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to GSW (n=5 games). ORL allowed a median of 115.0 points, 12.0 offensive rebounds, and 37.8% from 3PT."
     },
     "HOU": {
       "defending_team": "ORL",
@@ -10288,31 +10288,31 @@
       "cluster_opponents": [
         "WAS",
         "NYK",
+        "PHX",
         "BOS",
-        "MIN",
-        "TOR"
+        "MIN"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 111.0,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 37.7,
-      "summary_text": "ORL Defense vs. Opponents Similar to HOU (n=6 games). ORL allowed a median of 111.0 points, 13.0 offensive rebounds, and 37.7% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 108.0,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "ORL Defense vs. Opponents Similar to HOU (n=5 games). ORL allowed a median of 108.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
     },
     "IND": {
       "defending_team": "ORL",
       "attacking_team": "IND",
       "cluster_opponents": [
+        "PHX",
         "BOS",
         "MIN",
         "ATL",
-        "NYK",
-        "TOR"
+        "NYK"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to IND (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 115.0,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to IND (n=5 games). ORL allowed a median of 115.0 points, 12.0 offensive rebounds, and 37.8% from 3PT."
     },
     "LAC": {
       "defending_team": "ORL",
@@ -10320,31 +10320,31 @@
       "cluster_opponents": [
         "MIN",
         "ATL",
+        "PHX",
         "TOR",
-        "BOS",
-        "NYK"
+        "BOS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to LAC (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 12.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to LAC (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "LAL": {
       "defending_team": "ORL",
       "attacking_team": "LAL",
       "cluster_opponents": [
         "BOS",
+        "PHX",
         "NYK",
         "MIN",
-        "ATL",
-        "WAS"
+        "ATL"
       ],
       "n_games": 5,
-      "median_pts_allowed": 108.0,
+      "median_pts_allowed": 115.0,
       "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 37.5,
-      "summary_text": "ORL Defense vs. Opponents Similar to LAL (n=5 games). ORL allowed a median of 108.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to LAL (n=5 games). ORL allowed a median of 115.0 points, 12.0 offensive rebounds, and 37.8% from 3PT."
     },
     "MEM": {
       "defending_team": "ORL",
@@ -10352,15 +10352,15 @@
       "cluster_opponents": [
         "MIN",
         "ATL",
+        "PHX",
         "TOR",
-        "BOS",
-        "NYK"
+        "BOS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to MEM (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 12.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to MEM (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "MIA": {
       "defending_team": "ORL",
@@ -10369,14 +10369,14 @@
         "ATL",
         "MIN",
         "TOR",
-        "BOS",
-        "NYK"
+        "PHX",
+        "BOS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to MIA (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 12.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to MIA (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "MIL": {
       "defending_team": "ORL",
@@ -10385,14 +10385,14 @@
         "ATL",
         "MIN",
         "BOS",
-        "NYK",
-        "TOR"
+        "PHX",
+        "NYK"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to MIL (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 115.0,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to MIL (n=5 games). ORL allowed a median of 115.0 points, 12.0 offensive rebounds, and 37.8% from 3PT."
     },
     "MIN": {
       "defending_team": "ORL",
@@ -10400,15 +10400,15 @@
       "cluster_opponents": [
         "ATL",
         "TOR",
+        "PHX",
         "BOS",
-        "NYK",
-        "WAS"
+        "NYK"
       ],
       "n_games": 6,
-      "median_pts_allowed": 111.0,
+      "median_pts_allowed": 115.5,
       "median_oreb_allowed": 11.5,
-      "median_3pt_pct_allowed": 38.2,
-      "summary_text": "ORL Defense vs. Opponents Similar to MIN (n=6 games). ORL allowed a median of 111.0 points, 11.5 offensive rebounds, and 38.2% from 3PT."
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to MIN (n=6 games). ORL allowed a median of 115.5 points, 11.5 offensive rebounds, and 39.8% from 3PT."
     },
     "NOP": {
       "defending_team": "ORL",
@@ -10417,56 +10417,56 @@
         "TOR",
         "MIN",
         "ATL",
-        "WAS",
-        "BOS"
+        "PHX",
+        "WAS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 12.5,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to NOP (n=6 games). ORL allowed a median of 114.5 points, 12.5 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 9.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to NOP (n=6 games). ORL allowed a median of 116.0 points, 9.5 offensive rebounds, and 39.8% from 3PT."
     },
     "NYK": {
       "defending_team": "ORL",
       "attacking_team": "NYK",
       "cluster_opponents": [
         "BOS",
+        "PHX",
         "WAS",
         "MIN",
-        "ATL",
-        "TOR"
+        "ATL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 12.5,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to NYK (n=6 games). ORL allowed a median of 114.5 points, 12.5 offensive rebounds, and 38.4% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 115.0,
+      "median_oreb_allowed": 11.0,
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to NYK (n=5 games). ORL allowed a median of 115.0 points, 11.0 offensive rebounds, and 37.8% from 3PT."
     },
     "OKC": {
       "defending_team": "ORL",
       "attacking_team": "OKC",
       "cluster_opponents": [
         "WAS",
+        "PHX",
         "TOR",
         "MIN",
-        "NYK",
-        "BOS"
+        "NYK"
       ],
       "n_games": 6,
-      "median_pts_allowed": 111.0,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 37.7,
-      "summary_text": "ORL Defense vs. Opponents Similar to OKC (n=6 games). ORL allowed a median of 111.0 points, 13.0 offensive rebounds, and 37.7% from 3PT."
+      "median_pts_allowed": 114.5,
+      "median_oreb_allowed": 10.0,
+      "median_3pt_pct_allowed": 39.3,
+      "summary_text": "ORL Defense vs. Opponents Similar to OKC (n=6 games). ORL allowed a median of 114.5 points, 10.0 offensive rebounds, and 39.3% from 3PT."
     },
     "ORL": {
       "defending_team": "ORL",
       "attacking_team": "ORL",
       "cluster_opponents": [
-        "NYK",
         "BOS",
+        "NYK",
+        "PHX",
         "WAS",
-        "MIN",
-        "ATL"
+        "MIN"
       ],
       "n_games": 5,
       "median_pts_allowed": 108.0,
@@ -10480,15 +10480,15 @@
       "cluster_opponents": [
         "TOR",
         "MIN",
+        "PHX",
         "ATL",
-        "WAS",
-        "BOS"
+        "WAS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 12.5,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to PHI (n=6 games). ORL allowed a median of 114.5 points, 12.5 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 9.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to PHI (n=6 games). ORL allowed a median of 116.0 points, 9.5 offensive rebounds, and 39.8% from 3PT."
     },
     "PHX": {
       "defending_team": "ORL",
@@ -10512,15 +10512,15 @@
       "cluster_opponents": [
         "BOS",
         "ATL",
+        "PHX",
         "NYK",
-        "MIN",
-        "TOR"
+        "MIN"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to POR (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 115.0,
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to POR (n=5 games). ORL allowed a median of 115.0 points, 12.0 offensive rebounds, and 37.8% from 3PT."
     },
     "SAC": {
       "defending_team": "ORL",
@@ -10529,14 +10529,14 @@
         "MIN",
         "TOR",
         "ATL",
-        "BOS",
-        "WAS"
+        "PHX",
+        "BOS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
+      "median_pts_allowed": 116.0,
       "median_oreb_allowed": 12.5,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to SAC (n=6 games). ORL allowed a median of 114.5 points, 12.5 offensive rebounds, and 38.4% from 3PT."
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to SAC (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "SAS": {
       "defending_team": "ORL",
@@ -10545,14 +10545,14 @@
         "TOR",
         "MIN",
         "ATL",
-        "WAS",
-        "BOS"
+        "PHX",
+        "WAS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 12.5,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to SAS (n=6 games). ORL allowed a median of 114.5 points, 12.5 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 9.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to SAS (n=6 games). ORL allowed a median of 116.0 points, 9.5 offensive rebounds, and 39.8% from 3PT."
     },
     "TOR": {
       "defending_team": "ORL",
@@ -10560,15 +10560,15 @@
       "cluster_opponents": [
         "MIN",
         "ATL",
+        "PHX",
         "WAS",
-        "BOS",
-        "NYK"
+        "BOS"
       ],
       "n_games": 5,
-      "median_pts_allowed": 108.0,
-      "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 37.5,
-      "summary_text": "ORL Defense vs. Opponents Similar to TOR (n=5 games). ORL allowed a median of 108.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
+      "median_pts_allowed": 115.0,
+      "median_oreb_allowed": 11.0,
+      "median_3pt_pct_allowed": 37.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to TOR (n=5 games). ORL allowed a median of 115.0 points, 11.0 offensive rebounds, and 37.8% from 3PT."
     },
     "UTA": {
       "defending_team": "ORL",
@@ -10577,30 +10577,30 @@
         "MIN",
         "ATL",
         "TOR",
-        "BOS",
-        "NYK"
+        "PHX",
+        "BOS"
       ],
       "n_games": 6,
-      "median_pts_allowed": 114.5,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to UTA (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_pts_allowed": 116.0,
+      "median_oreb_allowed": 12.5,
+      "median_3pt_pct_allowed": 39.8,
+      "summary_text": "ORL Defense vs. Opponents Similar to UTA (n=6 games). ORL allowed a median of 116.0 points, 12.5 offensive rebounds, and 39.8% from 3PT."
     },
     "WAS": {
       "defending_team": "ORL",
       "attacking_team": "WAS",
       "cluster_opponents": [
+        "PHX",
         "NYK",
         "BOS",
         "MIN",
-        "TOR",
-        "ATL"
+        "TOR"
       ],
       "n_games": 6,
       "median_pts_allowed": 114.5,
       "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 38.4,
-      "summary_text": "ORL Defense vs. Opponents Similar to WAS (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 38.4% from 3PT."
+      "median_3pt_pct_allowed": 39.3,
+      "summary_text": "ORL Defense vs. Opponents Similar to WAS (n=6 games). ORL allowed a median of 114.5 points, 13.0 offensive rebounds, and 39.3% from 3PT."
     }
   },
   "PHI": {
@@ -10752,10 +10752,10 @@
       "defending_team": "PHI",
       "attacking_team": "GSW",
       "cluster_opponents": [
-        "NYK",
         "DET",
-        "IND",
+        "NYK",
         "MIL",
+        "IND",
         "CHA"
       ],
       "n_games": 7,
@@ -10944,8 +10944,8 @@
       "defending_team": "PHI",
       "attacking_team": "ORL",
       "cluster_opponents": [
-        "CHA",
         "NYK",
+        "CHA",
         "DET",
         "IND",
         "MIL"
@@ -10976,8 +10976,8 @@
       "defending_team": "PHI",
       "attacking_team": "PHX",
       "cluster_opponents": [
-        "DET",
         "IND",
+        "DET",
         "NYK",
         "MIL",
         "CLE"
@@ -11093,58 +11093,62 @@
         "POR",
         "GSW",
         "DEN",
-        "OKC"
+        "OKC",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to ATL (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to ATL (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "BOS": {
       "defending_team": "PHX",
       "attacking_team": "BOS",
       "cluster_opponents": [
         "GSW",
+        "ORL",
         "POR",
         "DEN",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to BOS (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to BOS (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "BKN": {
       "defending_team": "PHX",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "POR",
         "GSW",
+        "POR",
+        "ORL",
         "DEN",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to BKN (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to BKN (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "CHA": {
       "defending_team": "PHX",
       "attacking_team": "CHA",
       "cluster_opponents": [
+        "ORL",
         "GSW",
         "POR",
         "DEN",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to CHA (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to CHA (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "CHI": {
       "defending_team": "PHX",
@@ -11152,14 +11156,15 @@
       "cluster_opponents": [
         "POR",
         "GSW",
+        "ORL",
         "DEN",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to CHI (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to CHI (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "CLE": {
       "defending_team": "PHX",
@@ -11168,13 +11173,14 @@
         "POR",
         "GSW",
         "DEN",
+        "ORL",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to CLE (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to CLE (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "DAL": {
       "defending_team": "PHX",
@@ -11183,13 +11189,14 @@
         "DEN",
         "GSW",
         "OKC",
+        "ORL",
         "POR"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to DAL (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to DAL (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "DEN": {
       "defending_team": "PHX",
@@ -11197,42 +11204,45 @@
       "cluster_opponents": [
         "OKC",
         "GSW",
+        "ORL",
         "POR"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 124.0,
-      "median_oreb_allowed": 16.0,
-      "median_3pt_pct_allowed": 37.5,
-      "summary_text": "PHX Defense vs. Opponents Similar to DEN (n=5 games). PHX allowed a median of 124.0 points, 16.0 offensive rebounds, and 37.5% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 123.0,
+      "median_oreb_allowed": 15.5,
+      "median_3pt_pct_allowed": 36.7,
+      "summary_text": "PHX Defense vs. Opponents Similar to DEN (n=6 games). PHX allowed a median of 123.0 points, 15.5 offensive rebounds, and 36.7% from 3PT."
     },
     "DET": {
       "defending_team": "PHX",
       "attacking_team": "DET",
       "cluster_opponents": [
-        "GSW",
         "DEN",
+        "ORL",
+        "GSW",
         "POR",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to DET (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to DET (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "GSW": {
       "defending_team": "PHX",
       "attacking_team": "GSW",
       "cluster_opponents": [
+        "ORL",
         "POR",
         "DEN",
         "OKC"
       ],
-      "n_games": 4,
-      "median_pts_allowed": 126.0,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to GSW (n=4 games). PHX allowed a median of 126.0 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 5,
+      "median_pts_allowed": 125.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to GSW (n=5 games). PHX allowed a median of 125.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "HOU": {
       "defending_team": "PHX",
@@ -11240,14 +11250,15 @@
       "cluster_opponents": [
         "DEN",
         "OKC",
+        "ORL",
         "GSW",
         "POR"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to HOU (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to HOU (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "IND": {
       "defending_team": "PHX",
@@ -11256,13 +11267,14 @@
         "GSW",
         "DEN",
         "POR",
+        "ORL",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to IND (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to IND (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "LAC": {
       "defending_team": "PHX",
@@ -11271,13 +11283,14 @@
         "POR",
         "GSW",
         "DEN",
+        "ORL",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to LAC (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to LAC (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "LAL": {
       "defending_team": "PHX",
@@ -11285,29 +11298,31 @@
       "cluster_opponents": [
         "GSW",
         "POR",
+        "ORL",
         "DEN",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to LAL (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to LAL (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "MEM": {
       "defending_team": "PHX",
       "attacking_team": "MEM",
       "cluster_opponents": [
-        "GSW",
         "POR",
+        "GSW",
         "DEN",
-        "OKC"
+        "OKC",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to MEM (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to MEM (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "MIA": {
       "defending_team": "PHX",
@@ -11316,13 +11331,14 @@
         "POR",
         "GSW",
         "DEN",
-        "OKC"
+        "OKC",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to MIA (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to MIA (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "MIL": {
       "defending_team": "PHX",
@@ -11330,14 +11346,15 @@
       "cluster_opponents": [
         "POR",
         "GSW",
+        "ORL",
         "DEN",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to MIL (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to MIL (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "MIN": {
       "defending_team": "PHX",
@@ -11346,13 +11363,14 @@
         "POR",
         "DEN",
         "GSW",
-        "OKC"
+        "OKC",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to MIN (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to MIN (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "NOP": {
       "defending_team": "PHX",
@@ -11361,28 +11379,30 @@
         "OKC",
         "DEN",
         "POR",
-        "GSW"
+        "GSW",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to NOP (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to NOP (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "NYK": {
       "defending_team": "PHX",
       "attacking_team": "NYK",
       "cluster_opponents": [
+        "ORL",
         "GSW",
         "DEN",
         "POR",
         "OKC"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to NYK (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to NYK (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "OKC": {
       "defending_team": "PHX",
@@ -11390,13 +11410,14 @@
       "cluster_opponents": [
         "DEN",
         "GSW",
+        "ORL",
         "POR"
       ],
-      "n_games": 5,
-      "median_pts_allowed": 124.0,
-      "median_oreb_allowed": 16.0,
-      "median_3pt_pct_allowed": 40.4,
-      "summary_text": "PHX Defense vs. Opponents Similar to OKC (n=5 games). PHX allowed a median of 124.0 points, 16.0 offensive rebounds, and 40.4% from 3PT."
+      "n_games": 6,
+      "median_pts_allowed": 123.0,
+      "median_oreb_allowed": 15.5,
+      "median_3pt_pct_allowed": 38.2,
+      "summary_text": "PHX Defense vs. Opponents Similar to OKC (n=6 games). PHX allowed a median of 123.0 points, 15.5 offensive rebounds, and 38.2% from 3PT."
     },
     "ORL": {
       "defending_team": "PHX",
@@ -11420,13 +11441,14 @@
         "OKC",
         "DEN",
         "GSW",
-        "POR"
+        "POR",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to PHI (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to PHI (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "PHX": {
       "defending_team": "PHX",
@@ -11435,27 +11457,29 @@
         "DEN",
         "GSW",
         "OKC",
+        "ORL",
         "POR"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to PHX (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to PHX (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "POR": {
       "defending_team": "PHX",
       "attacking_team": "POR",
       "cluster_opponents": [
         "GSW",
+        "ORL",
         "DEN",
         "OKC"
       ],
-      "n_games": 4,
-      "median_pts_allowed": 123.5,
+      "n_games": 5,
+      "median_pts_allowed": 122.0,
       "median_oreb_allowed": 12.0,
-      "median_3pt_pct_allowed": 40.5,
-      "summary_text": "PHX Defense vs. Opponents Similar to POR (n=4 games). PHX allowed a median of 123.5 points, 12.0 offensive rebounds, and 40.5% from 3PT."
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to POR (n=5 games). PHX allowed a median of 122.0 points, 12.0 offensive rebounds, and 37.5% from 3PT."
     },
     "SAC": {
       "defending_team": "PHX",
@@ -11464,13 +11488,14 @@
         "DEN",
         "OKC",
         "POR",
-        "GSW"
+        "GSW",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to SAC (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to SAC (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "SAS": {
       "defending_team": "PHX",
@@ -11479,13 +11504,14 @@
         "OKC",
         "DEN",
         "GSW",
-        "POR"
+        "POR",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to SAS (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to SAS (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "TOR": {
       "defending_team": "PHX",
@@ -11493,29 +11519,31 @@
       "cluster_opponents": [
         "OKC",
         "DEN",
+        "POR",
         "GSW",
-        "POR"
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to TOR (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to TOR (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "UTA": {
       "defending_team": "PHX",
       "attacking_team": "UTA",
       "cluster_opponents": [
-        "DEN",
         "POR",
+        "DEN",
         "GSW",
-        "OKC"
+        "OKC",
+        "ORL"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to UTA (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to UTA (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     },
     "WAS": {
       "defending_team": "PHX",
@@ -11523,14 +11551,15 @@
       "cluster_opponents": [
         "DEN",
         "OKC",
+        "ORL",
         "GSW",
         "POR"
       ],
-      "n_games": 6,
-      "median_pts_allowed": 124.5,
-      "median_oreb_allowed": 14.0,
-      "median_3pt_pct_allowed": 39.0,
-      "summary_text": "PHX Defense vs. Opponents Similar to WAS (n=6 games). PHX allowed a median of 124.5 points, 14.0 offensive rebounds, and 39.0% from 3PT."
+      "n_games": 7,
+      "median_pts_allowed": 124.0,
+      "median_oreb_allowed": 15.0,
+      "median_3pt_pct_allowed": 37.5,
+      "summary_text": "PHX Defense vs. Opponents Similar to WAS (n=7 games). PHX allowed a median of 124.0 points, 15.0 offensive rebounds, and 37.5% from 3PT."
     }
   },
   "POR": {
@@ -11733,8 +11762,8 @@
         "UTA",
         "MEM",
         "SAC",
-        "LAL",
-        "PHX"
+        "PHX",
+        "LAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 119.5,
@@ -11779,8 +11808,8 @@
       "attacking_team": "MIA",
       "cluster_opponents": [
         "UTA",
-        "SAC",
         "MEM",
+        "SAC",
         "PHX",
         "LAL"
       ],
@@ -11909,8 +11938,8 @@
         "DEN",
         "MEM",
         "UTA",
-        "LAL",
-        "SAC"
+        "SAC",
+        "LAL"
       ],
       "n_games": 5,
       "median_pts_allowed": 120.0,
@@ -11924,8 +11953,8 @@
       "cluster_opponents": [
         "LAL",
         "MEM",
-        "PHX",
         "UTA",
+        "PHX",
         "SAC"
       ],
       "n_games": 6,
@@ -12214,9 +12243,9 @@
       "cluster_opponents": [
         "MEM",
         "LAL",
-        "DAL",
         "SAS",
-        "POR"
+        "POR",
+        "DAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 125.5,
@@ -12263,8 +12292,8 @@
         "LAC",
         "MEM",
         "SAS",
-        "DAL",
-        "POR"
+        "POR",
+        "DAL"
       ],
       "n_games": 6,
       "median_pts_allowed": 125.5,
@@ -12633,22 +12662,22 @@
         "DAL",
         "HOU",
         "UTA",
-        "SAC",
-        "MIN"
+        "OKC",
+        "SAC"
       ],
       "n_games": 7,
       "median_pts_allowed": 111.0,
-      "median_oreb_allowed": 13.0,
-      "median_3pt_pct_allowed": 37.8,
-      "summary_text": "SAS Defense vs. Opponents Similar to DET (n=7 games). SAS allowed a median of 111.0 points, 13.0 offensive rebounds, and 37.8% from 3PT."
+      "median_oreb_allowed": 12.0,
+      "median_3pt_pct_allowed": 38.5,
+      "summary_text": "SAS Defense vs. Opponents Similar to DET (n=7 games). SAS allowed a median of 111.0 points, 12.0 offensive rebounds, and 38.5% from 3PT."
     },
     "GSW": {
       "defending_team": "SAS",
       "attacking_team": "GSW",
       "cluster_opponents": [
         "DAL",
-        "HOU",
         "UTA",
+        "HOU",
         "MIN",
         "SAC"
       ],
@@ -13130,8 +13159,8 @@
       "cluster_opponents": [
         "LAL",
         "ORL",
-        "DEN",
         "LAC",
+        "DEN",
         "MIN"
       ],
       "n_games": 6,
@@ -13224,9 +13253,9 @@
       "defending_team": "TOR",
       "attacking_team": "MIA",
       "cluster_opponents": [
-        "MIN",
         "LAC",
         "CHI",
+        "MIN",
         "LAL",
         "DEN"
       ],
@@ -13354,8 +13383,8 @@
       "cluster_opponents": [
         "DEN",
         "WAS",
-        "LAL",
         "MIN",
+        "LAL",
         "LAC"
       ],
       "n_games": 5,
@@ -13369,8 +13398,8 @@
       "attacking_team": "POR",
       "cluster_opponents": [
         "LAL",
-        "LAC",
         "ORL",
+        "LAC",
         "CHI",
         "MIN"
       ],
@@ -13975,8 +14004,8 @@
       "defending_team": "WAS",
       "attacking_team": "BKN",
       "cluster_opponents": [
-        "MIL",
         "ORL",
+        "MIL",
         "CLE",
         "CHA",
         "ATL"
@@ -14040,8 +14069,8 @@
       "attacking_team": "DAL",
       "cluster_opponents": [
         "MIL",
-        "CLE",
         "ORL",
+        "CLE",
         "ATL",
         "TOR"
       ],
@@ -14122,8 +14151,8 @@
         "MIL",
         "CLE",
         "ATL",
-        "TOR",
-        "ORL"
+        "ORL",
+        "TOR"
       ],
       "n_games": 5,
       "median_pts_allowed": 116.0,
@@ -14151,8 +14180,8 @@
       "defending_team": "WAS",
       "attacking_team": "LAL",
       "cluster_opponents": [
-        "MIL",
         "ORL",
+        "MIL",
         "CLE",
         "CHA",
         "ATL"
@@ -14186,8 +14215,8 @@
         "ATL",
         "CLE",
         "CHI",
-        "TOR",
-        "MIL"
+        "MIL",
+        "TOR"
       ],
       "n_games": 5,
       "median_pts_allowed": 120.0,
@@ -14312,8 +14341,8 @@
       "attacking_team": "PHX",
       "cluster_opponents": [
         "MIL",
-        "ORL",
         "CLE",
+        "ORL",
         "ATL",
         "TOR"
       ],

@@ -1210,23 +1210,23 @@
     "gametime": "10:30 PM ET"
   },
   {
-    "game_id": "22600125",
+    "game_id": "22600188",
     "gameday": "2026-11-05",
     "away_team": "MIA",
     "home_team": "GSW",
-    "away_score": 0,
-    "home_score": 0,
-    "is_final": false,
+    "away_score": 100,
+    "home_score": 120,
+    "is_final": true,
     "gametime": "10:00 PM ET"
   },
   {
-    "game_id": "401909936",
+    "game_id": "22600187",
     "gameday": "2026-11-05",
     "away_team": "ORL",
     "home_team": "PHX",
-    "away_score": 0,
-    "home_score": 0,
-    "is_final": false,
+    "away_score": 104,
+    "home_score": 117,
+    "is_final": true,
     "gametime": "9:00 PM ET"
   },
   {

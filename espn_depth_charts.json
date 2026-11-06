@@ -2,8 +2,8 @@
   "teams": {
     "ATL": {
       "PG": [
-        "CJ McCollum",
         "Kingston Flemings",
+        "CJ McCollum",
         "Nickeil Alexander-Walker",
         "Dyson Daniels",
         "RayJ Dennis",
@@ -248,7 +248,7 @@
         "Mario Hezonja",
         "Nae'Qwan Tomlin",
         "Tristan Enaruna",
-        "Riley Minix"
+        "Norchad Omier"
       ],
       "PF": [
         "Evan Mobley",
@@ -257,7 +257,7 @@
         "Peyton Watson",
         "Nae'Qwan Tomlin",
         "Tristan Enaruna",
-        "Riley Minix"
+        "Norchad Omier"
       ],
       "C": [
         "Jarrett Allen",
@@ -808,16 +808,14 @@
         "Ayo Dosunmu",
         "Jonathan Kuminga",
         "Isaiah Evans",
-        "Cody Williams",
-        "Norchad Omier"
+        "Cody Williams"
       ],
       "PF": [
         "Jonathan Kuminga",
         "Trey Lyles",
         "Jaden McDaniels",
         "Terrence Shannon Jr.",
-        "Cody Williams",
-        "Norchad Omier"
+        "Cody Williams"
       ],
       "C": [
         "Rudy Gobert",
@@ -1250,7 +1248,8 @@
         "Allen Graves",
         "Scottie Barnes",
         "Kyle Anderson",
-        "Kawhi Leonard"
+        "Kawhi Leonard",
+        "Kevin McCullar Jr."
       ],
       "PF": [
         "Scottie Barnes",
@@ -1362,31 +1361,31 @@
     }
   },
   "players": {
-    "CJ McCollum": {
-      "pos": "PG",
-      "team": "ATL",
-      "depth": 0,
-      "espn_id": "2490149",
-      "all_positions": [
-        [
-          "PG",
-          0
-        ],
-        [
-          "SG",
-          3
-        ]
-      ]
-    },
     "Kingston Flemings": {
       "pos": "PG",
       "team": "ATL",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "5149077",
       "all_positions": [
         [
           "PG",
+          0
+        ]
+      ]
+    },
+    "CJ McCollum": {
+      "pos": "PG",
+      "team": "ATL",
+      "depth": 1,
+      "espn_id": "2490149",
+      "all_positions": [
+        [
+          "PG",
           1
+        ],
+        [
+          "SG",
+          3
         ]
       ]
     },
@@ -2902,11 +2901,11 @@
         ]
       ]
     },
-    "Riley Minix": {
+    "Norchad Omier": {
       "pos": "SF",
       "team": "CLE",
       "depth": 6,
-      "espn_id": "5177362",
+      "espn_id": "4702134",
       "all_positions": [
         [
           "SF",
@@ -6270,22 +6269,6 @@
         ]
       ]
     },
-    "Norchad Omier": {
-      "pos": "PF",
-      "team": "MIN",
-      "depth": 5,
-      "espn_id": "4702134",
-      "all_positions": [
-        [
-          "PF",
-          5
-        ],
-        [
-          "SF",
-          7
-        ]
-      ]
-    },
     "Trey Lyles": {
       "pos": "PF",
       "team": "MIN",
@@ -8939,6 +8922,18 @@
         [
           "SF",
           6
+        ]
+      ]
+    },
+    "Kevin McCullar Jr.": {
+      "pos": "SF",
+      "team": "TOR",
+      "depth": 7,
+      "espn_id": "4411057",
+      "all_positions": [
+        [
+          "SF",
+          7
         ]
       ]
     },
