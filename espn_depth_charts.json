@@ -1080,8 +1080,8 @@
         "Duop Reath"
       ],
       "C": [
-        "Khaman Maluach",
         "Oso Ighodaro",
+        "Khaman Maluach",
         "Duop Reath",
         "Drew Timme",
         "Koa Peat",
@@ -7889,11 +7889,11 @@
         ]
       ]
     },
-    "Khaman Maluach": {
+    "Oso Ighodaro": {
       "pos": "C",
       "team": "PHX",
       "depth": 0,
-      "espn_id": "5203685",
+      "espn_id": "4601023",
       "all_positions": [
         [
           "C",
@@ -7901,11 +7901,11 @@
         ]
       ]
     },
-    "Oso Ighodaro": {
+    "Khaman Maluach": {
       "pos": "C",
       "team": "PHX",
       "depth": 1,
-      "espn_id": "4601023",
+      "espn_id": "5203685",
       "all_positions": [
         [
           "C",
