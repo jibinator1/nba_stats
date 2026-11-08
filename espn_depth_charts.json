@@ -682,8 +682,7 @@
         "Quinten Post",
         "Taylor Hendricks",
         "Olivier-Maxence Prosper",
-        "Cameron Boozer",
-        "Carson Cooper"
+        "Cameron Boozer"
       ]
     },
     "MIA": {
@@ -5490,18 +5489,6 @@
         [
           "C",
           2
-        ]
-      ]
-    },
-    "Carson Cooper": {
-      "pos": "C",
-      "team": "MEM",
-      "depth": 6,
-      "espn_id": "5105817",
-      "all_positions": [
-        [
-          "C",
-          6
         ]
       ]
     },
