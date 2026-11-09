@@ -248,7 +248,8 @@
         "Mario Hezonja",
         "Nae'Qwan Tomlin",
         "Tristan Enaruna",
-        "Norchad Omier"
+        "Norchad Omier",
+        "Riley Minix"
       ],
       "PF": [
         "Evan Mobley",
@@ -257,7 +258,8 @@
         "Peyton Watson",
         "Nae'Qwan Tomlin",
         "Tristan Enaruna",
-        "Norchad Omier"
+        "Norchad Omier",
+        "Riley Minix"
       ],
       "C": [
         "Jarrett Allen",
@@ -652,6 +654,7 @@
         "Ty Jerome",
         "Jahmai Mashack",
         "Javon Small",
+        "Richie Saunders",
         "Scotty Pippen Jr."
       ],
       "SF": [
@@ -924,18 +927,18 @@
         "Jared McCain",
         "Bennett Stirtz",
         "Alex Caruso",
+        "Nique Clifford",
         "Josh Dix",
-        "Dalen Terry",
         "Nikola Topic",
         "Cason Wallace"
       ],
       "SF": [
         "Alex Caruso",
         "Kenrich Williams",
+        "Nique Clifford",
         "Josh Dix",
         "Brooks Barnhizer",
         "Micah Peavy",
-        "Dalen Terry",
         "Cason Wallace",
         "Jalen Williams"
       ],
@@ -943,9 +946,9 @@
         "Jaylin Williams",
         "Kenrich Williams",
         "Alex Caruso",
+        "Nique Clifford",
         "Brooks Barnhizer",
         "Micah Peavy",
-        "Dalen Terry",
         "Chet Holmgren"
       ],
       "C": [
@@ -1146,7 +1149,6 @@
         "Emanuel Sharp",
         "Darius Acuff Jr.",
         "Malik Monk",
-        "Nique Clifford",
         "Daeqwon Plowden",
         "Sean Pedulla"
       ],
@@ -1156,7 +1158,6 @@
         "Malik Monk",
         "Keegan Murray",
         "Alex Karaban",
-        "Nique Clifford",
         "Daeqwon Plowden",
         "Leaky Black"
       ],
@@ -1169,7 +1170,6 @@
         "Alex Karaban",
         "Daeqwon Plowden",
         "Domantas Sabonis",
-        "Nique Clifford",
         "Ben Simmons"
       ],
       "C": [
@@ -2913,6 +2913,22 @@
         [
           "PF",
           6
+        ]
+      ]
+    },
+    "Riley Minix": {
+      "pos": "SF",
+      "team": "CLE",
+      "depth": 7,
+      "espn_id": "5177362",
+      "all_positions": [
+        [
+          "SF",
+          7
+        ],
+        [
+          "PF",
+          7
         ]
       ]
     },
@@ -5244,7 +5260,7 @@
         ],
         [
           "SG",
-          5
+          6
         ]
       ]
     },
@@ -5317,6 +5333,18 @@
         [
           "SF",
           4
+        ]
+      ]
+    },
+    "Richie Saunders": {
+      "pos": "SG",
+      "team": "MEM",
+      "depth": 5,
+      "espn_id": "5105462",
+      "all_positions": [
+        [
+          "SG",
+          5
         ]
       ]
     },
@@ -6956,15 +6984,19 @@
         ]
       ]
     },
-    "Josh Dix": {
+    "Nique Clifford": {
       "pos": "SF",
       "team": "OKC",
       "depth": 2,
-      "espn_id": "5105800",
+      "espn_id": "4702384",
       "all_positions": [
         [
           "SF",
           2
+        ],
+        [
+          "PF",
+          3
         ],
         [
           "SG",
@@ -6972,22 +7004,18 @@
         ]
       ]
     },
-    "Dalen Terry": {
-      "pos": "SG",
+    "Josh Dix": {
+      "pos": "SF",
       "team": "OKC",
-      "depth": 5,
-      "espn_id": "4433159",
+      "depth": 3,
+      "espn_id": "5105800",
       "all_positions": [
         [
-          "SG",
-          5
-        ],
-        [
           "SF",
-          5
+          3
         ],
         [
-          "PF",
+          "SG",
           5
         ]
       ]
@@ -7011,32 +7039,32 @@
     "Brooks Barnhizer": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 3,
+      "depth": 4,
       "espn_id": "4684208",
       "all_positions": [
         [
           "SF",
-          3
+          4
         ],
         [
           "PF",
-          3
+          4
         ]
       ]
     },
     "Micah Peavy": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 4,
+      "depth": 5,
       "espn_id": "4432185",
       "all_positions": [
         [
           "SF",
-          4
+          5
         ],
         [
           "PF",
-          4
+          5
         ]
       ]
     },
@@ -8232,7 +8260,7 @@
         ],
         [
           "SG",
-          6
+          5
         ]
       ]
     },
@@ -8248,7 +8276,7 @@
         ],
         [
           "PF",
-          9
+          8
         ]
       ]
     },
@@ -8280,11 +8308,11 @@
         ]
       ]
     },
-    "Nique Clifford": {
+    "Daeqwon Plowden": {
       "pos": "SG",
       "team": "SAC",
       "depth": 4,
-      "espn_id": "4702384",
+      "espn_id": "4279318",
       "all_positions": [
         [
           "SG",
@@ -8293,26 +8321,6 @@
         [
           "SF",
           5
-        ],
-        [
-          "PF",
-          8
-        ]
-      ]
-    },
-    "Daeqwon Plowden": {
-      "pos": "SG",
-      "team": "SAC",
-      "depth": 5,
-      "espn_id": "4279318",
-      "all_positions": [
-        [
-          "SG",
-          5
-        ],
-        [
-          "SF",
-          6
         ],
         [
           "PF",
@@ -8371,12 +8379,12 @@
     "Leaky Black": {
       "pos": "SF",
       "team": "SAC",
-      "depth": 7,
+      "depth": 6,
       "espn_id": "4395650",
       "all_positions": [
         [
           "SF",
-          7
+          6
         ]
       ]
     },
