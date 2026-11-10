@@ -51,16 +51,16 @@
     },
     "BOS": {
       "PG": [
-        "Derrick White",
-        "Payton Pritchard",
         "Mike Conley",
+        "Payton Pritchard",
+        "Derrick White",
         "Devin Carter"
       ],
       "SG": [
+        "Derrick White",
         "Hugo Gonzalez",
         "Baylor Scheierman",
         "Payton Pritchard",
-        "Derrick White",
         "Ron Harper Jr.",
         "Devin Carter"
       ],
@@ -278,8 +278,8 @@
         "Cooper Flagg"
       ],
       "SG": [
-        "Max Christie",
         "Caleb Martin",
+        "Max Christie",
         "Marcus Sasser",
         "Kyrie Irving",
         "Walter Clayton Jr.",
@@ -613,9 +613,9 @@
         "Chris Manon"
       ],
       "SF": [
+        "Quentin Grimes",
         "Ziaire Williams",
         "Jake LaRavia",
-        "Quentin Grimes",
         "Matisse Thybulle",
         "Cameron Carr",
         "Adou Thiero",
@@ -933,8 +933,8 @@
         "Cason Wallace"
       ],
       "SF": [
-        "Alex Caruso",
         "Kenrich Williams",
+        "Alex Caruso",
         "Nique Clifford",
         "Josh Dix",
         "Brooks Barnhizer",
@@ -1652,19 +1652,15 @@
         ]
       ]
     },
-    "Derrick White": {
+    "Mike Conley": {
       "pos": "PG",
       "team": "BOS",
       "depth": 0,
-      "espn_id": "3078576",
+      "espn_id": "3195",
       "all_positions": [
         [
           "PG",
           0
-        ],
-        [
-          "SG",
-          3
         ]
       ]
     },
@@ -1680,16 +1676,20 @@
         ],
         [
           "SG",
-          2
+          3
         ]
       ]
     },
-    "Mike Conley": {
-      "pos": "PG",
+    "Derrick White": {
+      "pos": "SG",
       "team": "BOS",
-      "depth": 2,
-      "espn_id": "3195",
+      "depth": 0,
+      "espn_id": "3078576",
       "all_positions": [
+        [
+          "SG",
+          0
+        ],
         [
           "PG",
           2
@@ -1715,12 +1715,12 @@
     "Hugo Gonzalez": {
       "pos": "SG",
       "team": "BOS",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "5175647",
       "all_positions": [
         [
           "SG",
-          0
+          1
         ],
         [
           "SF",
@@ -1735,12 +1735,12 @@
     "Baylor Scheierman": {
       "pos": "SG",
       "team": "BOS",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "4593841",
       "all_positions": [
         [
           "SG",
-          1
+          2
         ],
         [
           "SF",
@@ -3080,31 +3080,15 @@
         ]
       ]
     },
-    "Max Christie": {
-      "pos": "SG",
-      "team": "DAL",
-      "depth": 0,
-      "espn_id": "4432582",
-      "all_positions": [
-        [
-          "SG",
-          0
-        ],
-        [
-          "SF",
-          5
-        ]
-      ]
-    },
     "Caleb Martin": {
       "pos": "SG",
       "team": "DAL",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "3138160",
       "all_positions": [
         [
           "SG",
-          1
+          0
         ],
         [
           "SF",
@@ -3113,6 +3097,22 @@
         [
           "PF",
           4
+        ]
+      ]
+    },
+    "Max Christie": {
+      "pos": "SG",
+      "team": "DAL",
+      "depth": 1,
+      "espn_id": "4432582",
+      "all_positions": [
+        [
+          "SG",
+          1
+        ],
+        [
+          "SF",
+          5
         ]
       ]
     },
@@ -4989,18 +4989,18 @@
       ]
     },
     "Quentin Grimes": {
-      "pos": "SG",
+      "pos": "SF",
       "team": "LAL",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "4397014",
       "all_positions": [
         [
-          "SG",
-          1
+          "SF",
+          0
         ],
         [
-          "SF",
-          2
+          "SG",
+          1
         ],
         [
           "PG",
@@ -5027,12 +5027,12 @@
     "Ziaire Williams": {
       "pos": "SF",
       "team": "LAL",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "4433137",
       "all_positions": [
         [
           "SF",
-          0
+          1
         ],
         [
           "SG",
@@ -5083,12 +5083,12 @@
     "Jake LaRavia": {
       "pos": "SF",
       "team": "LAL",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "4592691",
       "all_positions": [
         [
           "SF",
-          1
+          2
         ],
         [
           "PF",
@@ -6967,12 +6967,12 @@
     "Alex Caruso": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "2991350",
       "all_positions": [
         [
           "SF",
-          0
+          1
         ],
         [
           "PF",
@@ -7023,12 +7023,12 @@
     "Kenrich Williams": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "3133626",
       "all_positions": [
         [
           "SF",
-          1
+          0
         ],
         [
           "PF",
