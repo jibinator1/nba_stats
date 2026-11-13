@@ -148,29 +148,29 @@
         "Kylan Boswell"
       ],
       "SG": [
-        "Kon Knueppel",
         "Grayson Allen",
+        "Sion James",
         "Coby White",
         "Dennis Schroder",
-        "Sion James",
         "Liam McNeeley",
-        "Kylan Boswell"
+        "Kylan Boswell",
+        "Kon Knueppel"
       ],
       "SF": [
         "Brandon Miller",
-        "Sion James",
-        "Grayson Allen",
         "Royce O'Neale",
-        "Liam McNeeley",
+        "Grayson Allen",
+        "Sion James",
         "Tidjane Salaun",
+        "Liam McNeeley",
         "Michael Ajayi"
       ],
       "PF": [
         "Naz Reid",
-        "Royce O'Neale",
-        "Tidjane Salaun",
-        "Sion James",
         "Grant Williams",
+        "Tidjane Salaun",
+        "Royce O'Neale",
+        "Sion James",
         "Liam McNeeley",
         "Hannes Steinbach",
         "PJ Hall",
@@ -199,30 +199,29 @@
         "Jaylin Sellers"
       ],
       "SF": [
-        "Matas Buzelis",
         "Isaac Okoro",
+        "Patrick Williams",
         "Norman Powell",
-        "Caleb Wilson",
         "Leonard Miller",
         "Buddy Hield",
         "Noa Essengue",
-        "Patrick Williams",
-        "Dailyn Swain"
+        "Dailyn Swain",
+        "Caleb Wilson"
       ],
       "PF": [
-        "Caleb Wilson",
-        "Leonard Miller",
-        "Noa Essengue",
         "Matas Buzelis",
+        "Noa Essengue",
+        "Patrick Williams",
+        "Leonard Miller",
         "Jalen Smith",
         "Zach Collins",
-        "Patrick Williams",
         "Dailyn Swain",
-        "Tobe Awaka"
+        "Tobe Awaka",
+        "Caleb Wilson"
       ],
       "C": [
-        "Nic Claxton",
         "Jalen Smith",
+        "Nic Claxton",
         "Zach Collins",
         "Tobe Awaka",
         "Leonard Miller"
@@ -410,18 +409,18 @@
     },
     "GSW": {
       "PG": [
-        "Stephen Curry",
-        "Brandon Williams",
         "Brandin Podziemski",
+        "Brandon Williams",
         "De'Anthony Melton",
         "Will Richard",
         "Gary Payton II",
-        "LJ Cryer"
+        "LJ Cryer",
+        "Stephen Curry"
       ],
       "SG": [
-        "Brandin Podziemski",
         "De'Anthony Melton",
         "Gary Payton II",
+        "Brandin Podziemski",
         "Will Richard",
         "Gui Santos",
         "Moses Moody"
@@ -769,8 +768,8 @@
       ],
       "PF": [
         "Kyle Kuzma",
-        "Kel'el Ware",
         "Nate Ament",
+        "Kel'el Ware",
         "Ousmane Dieng",
         "Jaime Jaquez Jr.",
         "Bogoljub Markovic",
@@ -939,9 +938,9 @@
         "Cason Wallace"
       ],
       "SF": [
+        "Ajay Mitchell",
         "Alex Caruso",
         "Kenrich Williams",
-        "Ajay Mitchell",
         "Nique Clifford",
         "Josh Dix",
         "Brooks Barnhizer",
@@ -951,8 +950,8 @@
       ],
       "PF": [
         "Aday Mara",
-        "Jaylin Williams",
         "Kenrich Williams",
+        "Jaylin Williams",
         "Alex Caruso",
         "Nique Clifford",
         "Brooks Barnhizer",
@@ -968,25 +967,25 @@
     },
     "ORL": {
       "PG": [
-        "Anthony Black",
+        "Jalen Suggs",
         "Jevon Carter",
+        "Anthony Black",
         "Jase Richardson",
-        "Alex Morales",
-        "Jalen Suggs"
+        "Alex Morales"
       ],
       "SG": [
-        "Desmond Bane",
-        "Jase Richardson",
         "Anthony Black",
+        "Jase Richardson",
+        "Desmond Bane",
         "Alex Morales",
         "Jamal Cain",
         "Jevon Carter",
         "Noah Penda"
       ],
       "SF": [
+        "Desmond Bane",
         "Jamal Cain",
         "Tristan da Silva",
-        "Desmond Bane",
         "Franz Wagner",
         "Noah Penda"
       ],
@@ -1150,6 +1149,7 @@
       "PG": [
         "Darius Acuff Jr.",
         "Malik Monk",
+        "Emanuel Sharp",
         "Sean Pedulla",
         "Ben Simmons"
       ],
@@ -1163,16 +1163,16 @@
       ],
       "SF": [
         "De'Andre Hunter",
+        "Leaky Black",
         "Zach LaVine",
         "Malik Monk",
         "Keegan Murray",
         "Alex Karaban",
-        "Daeqwon Plowden",
-        "Leaky Black"
+        "Daeqwon Plowden"
       ],
       "PF": [
-        "Keegan Murray",
         "Precious Achiuwa",
+        "Keegan Murray",
         "De'Andre Hunter",
         "Dylan Cardwell",
         "Jonathan Mogbo",
@@ -2266,31 +2266,19 @@
         ],
         [
           "SG",
-          6
-        ]
-      ]
-    },
-    "Kon Knueppel": {
-      "pos": "SG",
-      "team": "CHA",
-      "depth": 0,
-      "espn_id": "5061575",
-      "all_positions": [
-        [
-          "SG",
-          0
+          5
         ]
       ]
     },
     "Grayson Allen": {
       "pos": "SG",
       "team": "CHA",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "3135045",
       "all_positions": [
         [
           "SG",
-          1
+          0
         ],
         [
           "SF",
@@ -2299,42 +2287,54 @@
       ]
     },
     "Sion James": {
-      "pos": "SF",
+      "pos": "SG",
       "team": "CHA",
       "depth": 1,
       "espn_id": "4602025",
       "all_positions": [
         [
-          "SF",
+          "SG",
           1
         ],
         [
-          "PF",
+          "SF",
           3
         ],
         [
-          "SG",
+          "PF",
           4
         ]
       ]
     },
     "Liam McNeeley": {
-      "pos": "SF",
+      "pos": "SG",
       "team": "CHA",
       "depth": 4,
       "espn_id": "5239590",
       "all_positions": [
         [
-          "SF",
+          "SG",
           4
         ],
         [
-          "SG",
+          "SF",
           5
         ],
         [
           "PF",
           5
+        ]
+      ]
+    },
+    "Kon Knueppel": {
+      "pos": "SG",
+      "team": "CHA",
+      "depth": 6,
+      "espn_id": "5061575",
+      "all_positions": [
+        [
+          "SG",
+          6
         ]
       ]
     },
@@ -2351,17 +2351,17 @@
       ]
     },
     "Royce O'Neale": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "CHA",
       "depth": 1,
       "espn_id": "2583632",
       "all_positions": [
         [
-          "PF",
+          "SF",
           1
         ],
         [
-          "SF",
+          "PF",
           3
         ]
       ]
@@ -2378,7 +2378,7 @@
         ],
         [
           "SF",
-          5
+          4
         ]
       ]
     },
@@ -2417,12 +2417,12 @@
     "Grant Williams": {
       "pos": "PF",
       "team": "CHA",
-      "depth": 4,
+      "depth": 1,
       "espn_id": "4066218",
       "all_positions": [
         [
           "PF",
-          4
+          1
         ]
       ]
     },
@@ -2554,19 +2554,19 @@
         ],
         [
           "SF",
-          5
+          4
         ]
       ]
     },
     "Isaac Okoro": {
       "pos": "SF",
       "team": "CHI",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "4432822",
       "all_positions": [
         [
           "SF",
-          1
+          0
         ],
         [
           "SG",
@@ -2586,51 +2586,35 @@
         ]
       ]
     },
-    "Matas Buzelis": {
+    "Patrick Williams": {
       "pos": "SF",
       "team": "CHI",
-      "depth": 0,
-      "espn_id": "4711294",
+      "depth": 1,
+      "espn_id": "4431687",
       "all_positions": [
         [
           "SF",
-          0
+          1
         ],
         [
           "PF",
-          3
-        ]
-      ]
-    },
-    "Caleb Wilson": {
-      "pos": "PF",
-      "team": "CHI",
-      "depth": 0,
-      "espn_id": "5095151",
-      "all_positions": [
-        [
-          "PF",
-          0
-        ],
-        [
-          "SF",
-          3
+          2
         ]
       ]
     },
     "Leonard Miller": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "CHI",
-      "depth": 1,
+      "depth": 3,
       "espn_id": "5044385",
       "all_positions": [
         [
-          "PF",
-          1
+          "SF",
+          3
         ],
         [
-          "SF",
-          4
+          "PF",
+          3
         ],
         [
           "C",
@@ -2641,60 +2625,72 @@
     "Noa Essengue": {
       "pos": "PF",
       "team": "CHI",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "5242496",
       "all_positions": [
         [
           "PF",
-          2
+          1
         ],
         [
           "SF",
-          6
-        ]
-      ]
-    },
-    "Patrick Williams": {
-      "pos": "PF",
-      "team": "CHI",
-      "depth": 6,
-      "espn_id": "4431687",
-      "all_positions": [
-        [
-          "PF",
-          6
-        ],
-        [
-          "SF",
-          7
+          5
         ]
       ]
     },
     "Dailyn Swain": {
-      "pos": "PF",
+      "pos": "SF",
       "team": "CHI",
-      "depth": 7,
+      "depth": 6,
       "espn_id": "4848625",
       "all_positions": [
         [
+          "SF",
+          6
+        ],
+        [
           "PF",
+          6
+        ]
+      ]
+    },
+    "Caleb Wilson": {
+      "pos": "SF",
+      "team": "CHI",
+      "depth": 7,
+      "espn_id": "5095151",
+      "all_positions": [
+        [
+          "SF",
           7
         ],
         [
-          "SF",
+          "PF",
           8
+        ]
+      ]
+    },
+    "Matas Buzelis": {
+      "pos": "PF",
+      "team": "CHI",
+      "depth": 0,
+      "espn_id": "4711294",
+      "all_positions": [
+        [
+          "PF",
+          0
         ]
       ]
     },
     "Jalen Smith": {
       "pos": "C",
       "team": "CHI",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "4397189",
       "all_positions": [
         [
           "C",
-          1
+          0
         ],
         [
           "PF",
@@ -2730,19 +2726,19 @@
         ],
         [
           "PF",
-          8
+          7
         ]
       ]
     },
     "Nic Claxton": {
       "pos": "C",
       "team": "CHI",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "4278067",
       "all_positions": [
         [
           "C",
-          0
+          1
         ]
       ]
     },
@@ -3842,15 +3838,19 @@
         ]
       ]
     },
-    "Stephen Curry": {
+    "Brandin Podziemski": {
       "pos": "PG",
       "team": "GSW",
       "depth": 0,
-      "espn_id": "3975",
+      "espn_id": "4709138",
       "all_positions": [
         [
           "PG",
           0
+        ],
+        [
+          "SG",
+          2
         ]
       ]
     },
@@ -3866,11 +3866,11 @@
         ]
       ]
     },
-    "Brandin Podziemski": {
+    "De'Anthony Melton": {
       "pos": "SG",
       "team": "GSW",
       "depth": 0,
-      "espn_id": "4709138",
+      "espn_id": "4066436",
       "all_positions": [
         [
           "SG",
@@ -3879,22 +3879,6 @@
         [
           "PG",
           2
-        ]
-      ]
-    },
-    "De'Anthony Melton": {
-      "pos": "SG",
-      "team": "GSW",
-      "depth": 1,
-      "espn_id": "4066436",
-      "all_positions": [
-        [
-          "SG",
-          1
-        ],
-        [
-          "PG",
-          3
         ]
       ]
     },
@@ -3909,24 +3893,24 @@
           1
         ],
         [
-          "SG",
+          "PG",
           3
         ],
         [
-          "PG",
-          4
+          "SG",
+          3
         ]
       ]
     },
     "Gary Payton II": {
       "pos": "SG",
       "team": "GSW",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "3134903",
       "all_positions": [
         [
           "SG",
-          2
+          1
         ],
         [
           "SF",
@@ -3934,15 +3918,27 @@
         ],
         [
           "PG",
-          5
+          4
         ]
       ]
     },
     "LJ Cryer": {
       "pos": "PG",
       "team": "GSW",
-      "depth": 6,
+      "depth": 5,
       "espn_id": "4433149",
+      "all_positions": [
+        [
+          "PG",
+          5
+        ]
+      ]
+    },
+    "Stephen Curry": {
+      "pos": "PG",
+      "team": "GSW",
+      "depth": 6,
+      "espn_id": "3975",
       "all_positions": [
         [
           "PG",
@@ -5977,12 +5973,12 @@
     "Nate Ament": {
       "pos": "PF",
       "team": "MIL",
-      "depth": 2,
+      "depth": 1,
       "espn_id": "5164559",
       "all_positions": [
         [
           "PF",
-          2
+          1
         ],
         [
           "SF",
@@ -6047,18 +6043,18 @@
       ]
     },
     "Kel'el Ware": {
-      "pos": "PF",
+      "pos": "C",
       "team": "MIL",
       "depth": 1,
       "espn_id": "5105623",
       "all_positions": [
         [
-          "PF",
+          "C",
           1
         ],
         [
-          "C",
-          1
+          "PF",
+          2
         ]
       ]
     },
@@ -6939,21 +6935,21 @@
       ]
     },
     "Ajay Mitchell": {
-      "pos": "SG",
+      "pos": "SF",
       "team": "OKC",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "4900671",
       "all_positions": [
+        [
+          "SF",
+          0
+        ],
         [
           "SG",
           1
         ],
         [
           "PG",
-          2
-        ],
-        [
-          "SF",
           2
         ]
       ]
@@ -7013,12 +7009,12 @@
     "Alex Caruso": {
       "pos": "SF",
       "team": "OKC",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "2991350",
       "all_positions": [
         [
           "SF",
-          0
+          1
         ],
         [
           "SG",
@@ -7067,17 +7063,17 @@
       ]
     },
     "Kenrich Williams": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "OKC",
       "depth": 1,
       "espn_id": "3133626",
       "all_positions": [
         [
-          "SF",
+          "PF",
           1
         ],
         [
-          "PF",
+          "SF",
           2
         ]
       ]
@@ -7145,12 +7141,12 @@
     "Jaylin Williams": {
       "pos": "PF",
       "team": "OKC",
-      "depth": 1,
+      "depth": 2,
       "espn_id": "4432823",
       "all_positions": [
         [
           "PF",
-          1
+          2
         ],
         [
           "C",
@@ -7194,19 +7190,15 @@
         ]
       ]
     },
-    "Anthony Black": {
+    "Jalen Suggs": {
       "pos": "PG",
       "team": "ORL",
       "depth": 0,
-      "espn_id": "4712849",
+      "espn_id": "4432165",
       "all_positions": [
         [
           "PG",
           0
-        ],
-        [
-          "SG",
-          2
         ]
       ]
     },
@@ -7226,6 +7218,22 @@
         ]
       ]
     },
+    "Anthony Black": {
+      "pos": "SG",
+      "team": "ORL",
+      "depth": 0,
+      "espn_id": "4712849",
+      "all_positions": [
+        [
+          "SG",
+          0
+        ],
+        [
+          "PG",
+          2
+        ]
+      ]
+    },
     "Jase Richardson": {
       "pos": "SG",
       "team": "ORL",
@@ -7238,32 +7246,20 @@
         ],
         [
           "PG",
-          2
+          3
         ]
       ]
     },
     "Alex Morales": {
-      "pos": "PG",
+      "pos": "SG",
       "team": "ORL",
       "depth": 3,
       "espn_id": "4593034",
       "all_positions": [
         [
-          "PG",
-          3
-        ],
-        [
           "SG",
           3
-        ]
-      ]
-    },
-    "Jalen Suggs": {
-      "pos": "PG",
-      "team": "ORL",
-      "depth": 4,
-      "espn_id": "4432165",
-      "all_positions": [
+        ],
         [
           "PG",
           4
@@ -7271,17 +7267,17 @@
       ]
     },
     "Desmond Bane": {
-      "pos": "SG",
+      "pos": "SF",
       "team": "ORL",
       "depth": 0,
       "espn_id": "4066320",
       "all_positions": [
         [
-          "SG",
+          "SF",
           0
         ],
         [
-          "SF",
+          "SG",
           2
         ]
       ]
@@ -7289,12 +7285,12 @@
     "Jamal Cain": {
       "pos": "SF",
       "team": "ORL",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "4278572",
       "all_positions": [
         [
           "SF",
-          0
+          1
         ],
         [
           "PF",
@@ -7327,18 +7323,18 @@
       ]
     },
     "Tristan da Silva": {
-      "pos": "SF",
+      "pos": "PF",
       "team": "ORL",
       "depth": 1,
       "espn_id": "4702382",
       "all_positions": [
         [
-          "SF",
+          "PF",
           1
         ],
         [
-          "PF",
-          1
+          "SF",
+          2
         ]
       ]
     },
@@ -8293,24 +8289,40 @@
           1
         ],
         [
-          "SF",
-          2
-        ],
-        [
           "SG",
           3
+        ],
+        [
+          "SF",
+          3
+        ]
+      ]
+    },
+    "Emanuel Sharp": {
+      "pos": "SG",
+      "team": "SAC",
+      "depth": 1,
+      "espn_id": "5106058",
+      "all_positions": [
+        [
+          "SG",
+          1
+        ],
+        [
+          "PG",
+          2
         ]
       ]
     },
     "Sean Pedulla": {
       "pos": "PG",
       "team": "SAC",
-      "depth": 2,
+      "depth": 3,
       "espn_id": "4709131",
       "all_positions": [
         [
           "PG",
-          2
+          3
         ],
         [
           "SG",
@@ -8321,12 +8333,12 @@
     "Ben Simmons": {
       "pos": "PG",
       "team": "SAC",
-      "depth": 3,
+      "depth": 4,
       "espn_id": "3907387",
       "all_positions": [
         [
           "PG",
-          3
+          4
         ],
         [
           "PF",
@@ -8346,19 +8358,7 @@
         ],
         [
           "SF",
-          1
-        ]
-      ]
-    },
-    "Emanuel Sharp": {
-      "pos": "SG",
-      "team": "SAC",
-      "depth": 1,
-      "espn_id": "5106058",
-      "all_positions": [
-        [
-          "SG",
-          1
+          2
         ]
       ]
     },
@@ -8374,7 +8374,7 @@
         ],
         [
           "SF",
-          5
+          6
         ],
         [
           "PF",
@@ -8398,31 +8398,43 @@
         ]
       ]
     },
+    "Leaky Black": {
+      "pos": "SF",
+      "team": "SAC",
+      "depth": 1,
+      "espn_id": "4395650",
+      "all_positions": [
+        [
+          "SF",
+          1
+        ]
+      ]
+    },
     "Keegan Murray": {
       "pos": "PF",
       "team": "SAC",
-      "depth": 0,
+      "depth": 1,
       "espn_id": "4594327",
       "all_positions": [
         [
           "PF",
-          0
+          1
         ],
         [
           "SF",
-          3
+          4
         ]
       ]
     },
     "Alex Karaban": {
       "pos": "SF",
       "team": "SAC",
-      "depth": 4,
+      "depth": 5,
       "espn_id": "4917149",
       "all_positions": [
         [
           "SF",
-          4
+          5
         ],
         [
           "PF",
@@ -8430,27 +8442,15 @@
         ]
       ]
     },
-    "Leaky Black": {
-      "pos": "SF",
-      "team": "SAC",
-      "depth": 6,
-      "espn_id": "4395650",
-      "all_positions": [
-        [
-          "SF",
-          6
-        ]
-      ]
-    },
     "Precious Achiuwa": {
       "pos": "PF",
       "team": "SAC",
-      "depth": 1,
+      "depth": 0,
       "espn_id": "4431679",
       "all_positions": [
         [
           "PF",
-          1
+          0
         ],
         [
           "C",
