@@ -223,6 +223,7 @@
         "Jalen Smith",
         "Nic Claxton",
         "Zach Collins",
+        "Orlando Robinson",
         "Tobe Awaka",
         "Leonard Miller"
       ]
@@ -868,10 +869,10 @@
       "C": [
         "Yves Missi",
         "Karlo Matkovic",
+        "DeAndre Jordan",
         "Derik Queen",
         "Trendon Watford",
         "Zion Williamson",
-        "DeAndre Jordan",
         "Julian Reese",
         "Malik Dia"
       ]
@@ -2618,7 +2619,7 @@
         ],
         [
           "C",
-          4
+          5
         ]
       ]
     },
@@ -2717,12 +2718,12 @@
     "Tobe Awaka": {
       "pos": "C",
       "team": "CHI",
-      "depth": 3,
+      "depth": 4,
       "espn_id": "5105555",
       "all_positions": [
         [
           "C",
-          3
+          4
         ],
         [
           "PF",
@@ -2739,6 +2740,18 @@
         [
           "C",
           1
+        ]
+      ]
+    },
+    "Orlando Robinson": {
+      "pos": "C",
+      "team": "CHI",
+      "depth": 3,
+      "espn_id": "4593049",
+      "all_positions": [
+        [
+          "C",
+          3
         ]
       ]
     },
@@ -6542,7 +6555,7 @@
         ],
         [
           "C",
-          4
+          5
         ]
       ]
     },
@@ -6558,7 +6571,7 @@
         ],
         [
           "C",
-          2
+          3
         ]
       ]
     },
@@ -6581,12 +6594,12 @@
     "Trendon Watford": {
       "pos": "C",
       "team": "NOP",
-      "depth": 3,
+      "depth": 4,
       "espn_id": "4431675",
       "all_positions": [
         [
           "C",
-          3
+          4
         ],
         [
           "PF",
@@ -6641,12 +6654,12 @@
     "DeAndre Jordan": {
       "pos": "C",
       "team": "NOP",
-      "depth": 5,
+      "depth": 2,
       "espn_id": "3442",
       "all_positions": [
         [
           "C",
-          5
+          2
         ]
       ]
     },
