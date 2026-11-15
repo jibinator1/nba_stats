@@ -18,7 +18,7 @@
       "fg3a": 4.2,
       "fg3m": 0.8,
       "paint_pts": 10.2,
-      "pts_rank": 43,
+      "pts_rank": 44,
       "reb_rank": 13,
       "ast_rank": 11
     },
@@ -246,9 +246,9 @@
       "fg3a": 10.5,
       "fg3m": 3.7,
       "paint_pts": 6.0,
-      "pts_rank": 33,
+      "pts_rank": 31,
       "reb_rank": 96,
-      "ast_rank": 87
+      "ast_rank": 88
     },
     "distribution_10g": {
       "pts": {
@@ -518,7 +518,7 @@
       "paint_pts": 5.3,
       "pts_rank": 113,
       "reb_rank": 25,
-      "ast_rank": 26
+      "ast_rank": 25
     },
     "distribution_10g": {
       "pts": {
@@ -1299,8 +1299,8 @@
       "fg3m": 3.7,
       "paint_pts": 6.3,
       "pts_rank": 27,
-      "reb_rank": 54,
-      "ast_rank": 57
+      "reb_rank": 55,
+      "ast_rank": 56
     },
     "distribution_10g": {
       "pts": {
@@ -1526,9 +1526,9 @@
       "fg3a": 5.2,
       "fg3m": 1.8,
       "paint_pts": 4.3,
-      "pts_rank": 94,
-      "reb_rank": 109,
-      "ast_rank": 31
+      "pts_rank": 93,
+      "reb_rank": 110,
+      "ast_rank": 30
     },
     "distribution_10g": {
       "pts": {
@@ -1782,8 +1782,8 @@
       "fg3a": 6.2,
       "fg3m": 2.2,
       "paint_pts": 3.8,
-      "pts_rank": 88,
-      "reb_rank": 102,
+      "pts_rank": 89,
+      "reb_rank": 103,
       "ast_rank": 62
     },
     "distribution_10g": {
@@ -2026,21 +2026,21 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 22.2
+      "frequency": 22.3
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 19.7,
-      "reb": 6.5,
+      "pts": 19.9,
+      "reb": 6.2,
       "ast": 5.0,
-      "min": 33.1,
-      "fg3a": 4.5,
-      "fg3m": 1.4,
-      "paint_pts": 9.1,
+      "min": 33.0,
+      "fg3a": 4.6,
+      "fg3m": 1.5,
+      "paint_pts": 8.9,
       "pts_rank": 45,
-      "reb_rank": 36,
-      "ast_rank": 36
+      "reb_rank": 42,
+      "ast_rank": 37
     },
     "distribution_10g": {
       "pts": {
@@ -2048,6 +2048,7 @@
         "median": 19.5,
         "ceiling": 21.8,
         "logs": [
+          22,
           17,
           13,
           19,
@@ -2056,15 +2057,15 @@
           20,
           15,
           24,
-          10,
-          23
+          10
         ]
       },
       "reb": {
-        "floor": 4.2,
-        "median": 6.0,
+        "floor": 4.0,
+        "median": 5.5,
         "ceiling": 7.8,
         "logs": [
+          4,
           4,
           4,
           6,
@@ -2073,8 +2074,7 @@
           5,
           8,
           9,
-          7,
-          6
+          7
         ]
       },
       "ast": {
@@ -2083,6 +2083,7 @@
         "ceiling": 5.8,
         "logs": [
           5,
+          5,
           4,
           8,
           4,
@@ -2090,21 +2091,34 @@
           6,
           3,
           4,
-          7,
-          5
+          7
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 27.8,
-      "ast_pct": 26.7,
-      "reb_pct": 11.1
+      "usg_pct": 27.9,
+      "ast_pct": 26.6,
+      "reb_pct": 10.8
     },
     "situational": {
-      "clutch_usg_pct": 29.3,
-      "paint_touches_pg": 7.9
+      "clutch_usg_pct": 29.4,
+      "paint_touches_pg": 7.8
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 22,
+        "reb": 4,
+        "ast": 5,
+        "min": 31.4,
+        "fg3m": 3,
+        "fg3a": 6,
+        "paint_pts": 7.5,
+        "fga": 16,
+        "fgm": 8,
+        "fta": 6,
+        "tov": 4
+      },
       {
         "d": "2026-11-11",
         "pts": 17,
@@ -2280,7 +2294,7 @@
       "fg3a": 9.5,
       "fg3m": 3.5,
       "paint_pts": 6.3,
-      "pts_rank": 33,
+      "pts_rank": 31,
       "reb_rank": 20,
       "ast_rank": 115
     },
@@ -2338,12 +2352,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 26.1,
-      "ast_pct": 7.2,
-      "reb_pct": 13.2
+      "usg_pct": 26.0,
+      "ast_pct": 7.1,
+      "reb_pct": 13.1
     },
     "situational": {
-      "clutch_usg_pct": 27.6,
+      "clutch_usg_pct": 27.5,
       "paint_touches_pg": 7.6
     },
     "all_logs": [
@@ -2510,28 +2524,29 @@
     "position": "C",
     "role_archetype": {
       "primary_role": "Roll Man / Rim Runner",
-      "frequency": 36.4
+      "frequency": 35.5
     },
-    "games_played": 6,
+    "games_played": 7,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 9.8,
-      "reb": 6.2,
-      "ast": 2.2,
-      "min": 23.7,
-      "fg3a": 4.0,
-      "fg3m": 1.8,
-      "paint_pts": 2.5,
-      "pts_rank": 112,
-      "reb_rank": 43,
-      "ast_rank": 94
+      "pts": 10.4,
+      "reb": 6.1,
+      "ast": 2.0,
+      "min": 24.3,
+      "fg3a": 4.6,
+      "fg3m": 2.1,
+      "paint_pts": 2.3,
+      "pts_rank": 108,
+      "reb_rank": 45,
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
-        "floor": 9.2,
+        "floor": 9.5,
         "median": 10.0,
-        "ceiling": 10.8,
+        "ceiling": 12.0,
         "logs": [
+          14,
           10,
           10,
           11,
@@ -2541,10 +2556,11 @@
         ]
       },
       "reb": {
-        "floor": 3.5,
-        "median": 5.5,
-        "ceiling": 9.0,
+        "floor": 4.0,
+        "median": 6.0,
+        "ceiling": 8.0,
         "logs": [
+          6,
           11,
           3,
           10,
@@ -2554,10 +2570,11 @@
         ]
       },
       "ast": {
-        "floor": 1.2,
+        "floor": 1.0,
         "median": 2.0,
-        "ceiling": 2.8,
+        "ceiling": 2.5,
         "logs": [
+          1,
           4,
           2,
           1,
@@ -2568,15 +2585,29 @@
       }
     },
     "context_stats": {
-      "usg_pct": 17.1,
-      "ast_pct": 14.4,
-      "reb_pct": 14.8
+      "usg_pct": 17.8,
+      "ast_pct": 13.0,
+      "reb_pct": 14.4
     },
     "situational": {
-      "clutch_usg_pct": 16.1,
-      "paint_touches_pg": 5.9
+      "clutch_usg_pct": 16.8,
+      "paint_touches_pg": 5.8
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 14,
+        "reb": 6,
+        "ast": 1,
+        "min": 27.7,
+        "fg3m": 4,
+        "fg3a": 8,
+        "paint_pts": 1.2,
+        "fga": 13,
+        "fgm": 5,
+        "fta": 0,
+        "tov": 1
+      },
       {
         "d": "2026-11-11",
         "pts": 10,
@@ -2670,28 +2701,29 @@
     "position": "C",
     "role_archetype": {
       "primary_role": "Roll Man / Rim Runner",
-      "frequency": 42.1
+      "frequency": 42.8
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 8.2,
-      "reb": 6.8,
-      "ast": 4.1,
-      "min": 23.3,
+      "pts": 8.8,
+      "reb": 7.2,
+      "ast": 4.2,
+      "min": 23.7,
       "fg3a": 1.3,
-      "fg3m": 0.5,
-      "paint_pts": 4.0,
-      "pts_rank": 116,
-      "reb_rank": 30,
-      "ast_rank": 53
+      "fg3m": 0.4,
+      "paint_pts": 4.4,
+      "pts_rank": 114,
+      "reb_rank": 25,
+      "ast_rank": 51
     },
     "distribution_10g": {
       "pts": {
         "floor": 4.2,
-        "median": 6.5,
-        "ceiling": 11.8,
+        "median": 8.5,
+        "ceiling": 14.2,
         "logs": [
+          16,
           15,
           6,
           12,
@@ -2700,15 +2732,15 @@
           15,
           3,
           4,
-          11,
-          7
+          11
         ]
       },
       "reb": {
         "floor": 4.2,
         "median": 6.0,
-        "ceiling": 7.8,
+        "ceiling": 9.2,
         "logs": [
+          11,
           4,
           4,
           10,
@@ -2717,15 +2749,15 @@
           13,
           7,
           6,
-          4,
-          8
+          4
         ]
       },
       "ast": {
-        "floor": 1.0,
-        "median": 3.5,
+        "floor": 1.5,
+        "median": 4.5,
         "ceiling": 5.8,
         "logs": [
+          5,
           5,
           6,
           13,
@@ -2734,21 +2766,34 @@
           4,
           1,
           0,
-          1,
           1
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 16.3,
-      "ast_pct": 27.8,
-      "reb_pct": 16.7
+      "usg_pct": 17.2,
+      "ast_pct": 28.0,
+      "reb_pct": 17.2
     },
     "situational": {
-      "clutch_usg_pct": 15.3,
-      "paint_touches_pg": 6.8
+      "clutch_usg_pct": 16.2,
+      "paint_touches_pg": 7.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 16,
+        "reb": 11,
+        "ast": 5,
+        "min": 27.8,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 9.3,
+        "fga": 14,
+        "fgm": 7,
+        "fta": 2,
+        "tov": 2
+      },
       {
         "d": "2026-11-11",
         "pts": 15,
@@ -2925,7 +2970,7 @@
       "fg3m": 2.7,
       "paint_pts": 7.2,
       "pts_rank": 41,
-      "reb_rank": 61,
+      "reb_rank": 62,
       "ast_rank": 94
     },
     "distribution_10g": {
@@ -2982,12 +3027,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 33.5,
+      "usg_pct": 33.6,
       "ast_pct": 14.6,
       "reb_pct": 8.3
     },
     "situational": {
-      "clutch_usg_pct": 35.0,
+      "clutch_usg_pct": 35.1,
       "paint_touches_pg": 7.0
     },
     "all_logs": [
@@ -3152,9 +3197,9 @@
       "fg3a": 3.9,
       "fg3m": 0.8,
       "paint_pts": 4.6,
-      "pts_rank": 110,
-      "reb_rank": 93,
-      "ast_rank": 38
+      "pts_rank": 111,
+      "reb_rank": 91,
+      "ast_rank": 39
     },
     "distribution_10g": {
       "pts": {
@@ -3363,7 +3408,7 @@
       "fg3a": 6.6,
       "fg3m": 2.3,
       "paint_pts": 5.9,
-      "pts_rank": 58,
+      "pts_rank": 57,
       "reb_rank": 16,
       "ast_rank": 94
     },
@@ -3619,9 +3664,9 @@
       "fg3a": 0.0,
       "fg3m": 0.0,
       "paint_pts": 5.0,
-      "pts_rank": 114,
+      "pts_rank": 115,
       "reb_rank": 10,
-      "ast_rank": 101
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -3848,7 +3893,7 @@
       "fg3m": 2.3,
       "paint_pts": 7.0,
       "pts_rank": 48,
-      "reb_rank": 43,
+      "reb_rank": 42,
       "ast_rank": 106
     },
     "distribution_10g": {
@@ -3905,12 +3950,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 27.3,
-      "ast_pct": 10.4,
-      "reb_pct": 11.1
+      "usg_pct": 27.4,
+      "ast_pct": 10.2,
+      "reb_pct": 11.0
     },
     "situational": {
-      "clutch_usg_pct": 28.8,
+      "clutch_usg_pct": 28.9,
       "paint_touches_pg": 7.5
     },
     "all_logs": [
@@ -4063,28 +4108,29 @@
     "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 26.1
+      "frequency": 26.9
     },
-    "games_played": 9,
+    "games_played": 10,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 20.8,
-      "reb": 2.8,
-      "ast": 1.7,
-      "min": 29.0,
-      "fg3a": 7.0,
-      "fg3m": 2.3,
-      "paint_pts": 8.0,
-      "pts_rank": 40,
-      "reb_rank": 112,
-      "ast_rank": 110
+      "pts": 21.1,
+      "reb": 3.0,
+      "ast": 1.8,
+      "min": 29.1,
+      "fg3a": 6.8,
+      "fg3m": 2.4,
+      "paint_pts": 8.1,
+      "pts_rank": 36,
+      "reb_rank": 109,
+      "ast_rank": 108
     },
     "distribution_10g": {
       "pts": {
-        "floor": 16.0,
-        "median": 18.0,
-        "ceiling": 25.0,
+        "floor": 16.5,
+        "median": 19.0,
+        "ceiling": 24.8,
         "logs": [
+          24,
           33,
           12,
           18,
@@ -4098,9 +4144,10 @@
       },
       "reb": {
         "floor": 2.0,
-        "median": 2.0,
-        "ceiling": 4.0,
+        "median": 2.5,
+        "ceiling": 4.8,
         "logs": [
+          5,
           5,
           1,
           3,
@@ -4115,8 +4162,9 @@
       "ast": {
         "floor": 1.0,
         "median": 2.0,
-        "ceiling": 2.0,
+        "ceiling": 2.8,
         "logs": [
+          3,
           2,
           1,
           0,
@@ -4130,15 +4178,29 @@
       }
     },
     "context_stats": {
-      "usg_pct": 26.8,
-      "ast_pct": 9.4,
-      "reb_pct": 5.3
+      "usg_pct": 27.4,
+      "ast_pct": 10.2,
+      "reb_pct": 5.6
     },
     "situational": {
-      "clutch_usg_pct": 28.3,
-      "paint_touches_pg": 5.5
+      "clutch_usg_pct": 28.9,
+      "paint_touches_pg": 5.8
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 24,
+        "reb": 5,
+        "ast": 3,
+        "min": 30.1,
+        "fg3m": 3,
+        "fg3a": 5,
+        "paint_pts": 8.7,
+        "fga": 19,
+        "fgm": 10,
+        "fta": 2,
+        "tov": 4
+      },
       {
         "d": "2026-11-13",
         "pts": 33,
@@ -4274,21 +4336,21 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 32.3
+      "frequency": 31.6
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 10.6,
-      "reb": 5.1,
-      "ast": 8.8,
-      "min": 28.6,
+      "pts": 10.4,
+      "reb": 5.3,
+      "ast": 8.5,
+      "min": 28.4,
       "fg3a": 3.8,
       "fg3m": 1.2,
-      "paint_pts": 4.1,
+      "paint_pts": 3.9,
       "pts_rank": 108,
-      "reb_rank": 58,
-      "ast_rank": 4
+      "reb_rank": 54,
+      "ast_rank": 5
     },
     "distribution_10g": {
       "pts": {
@@ -4296,6 +4358,7 @@
         "median": 10.5,
         "ceiling": 13.0,
         "logs": [
+          8,
           15,
           9,
           19,
@@ -4304,15 +4367,15 @@
           13,
           10,
           11,
-          9,
-          6
+          9
         ]
       },
       "reb": {
         "floor": 2.5,
-        "median": 4.0,
-        "ceiling": 7.8,
+        "median": 5.5,
+        "ceiling": 8.0,
         "logs": [
+          8,
           10,
           2,
           7,
@@ -4321,15 +4384,15 @@
           4,
           8,
           1,
-          8,
-          4
+          8
         ]
       },
       "ast": {
-        "floor": 6.2,
-        "median": 9.5,
+        "floor": 5.2,
+        "median": 8.5,
         "ceiling": 10.8,
         "logs": [
+          5,
           14,
           7,
           15,
@@ -4338,21 +4401,34 @@
           5,
           11,
           4,
-          10,
-          9
+          10
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 19.3,
-      "ast_pct": 45.5,
-      "reb_pct": 9.8
+      "usg_pct": 19.2,
+      "ast_pct": 43.6,
+      "reb_pct": 10.2
     },
     "situational": {
-      "clutch_usg_pct": 18.3,
+      "clutch_usg_pct": 18.2,
       "paint_touches_pg": 6.2
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 8,
+        "reb": 8,
+        "ast": 5,
+        "min": 26.2,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 1.2,
+        "fga": 10,
+        "fgm": 3,
+        "fta": 0,
+        "tov": 1
+      },
       {
         "d": "2026-11-13",
         "pts": 15,
@@ -4516,28 +4592,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 38.5
+      "frequency": 38.0
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 13.3,
-      "reb": 4.5,
+      "pts": 13.7,
+      "reb": 4.8,
       "ast": 2.0,
-      "min": 26.5,
-      "fg3a": 5.3,
-      "fg3m": 1.7,
-      "paint_pts": 4.7,
-      "pts_rank": 88,
-      "reb_rank": 73,
-      "ast_rank": 101
+      "min": 26.8,
+      "fg3a": 5.2,
+      "fg3m": 1.8,
+      "paint_pts": 4.9,
+      "pts_rank": 84,
+      "reb_rank": 67,
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
-        "floor": 11.0,
-        "median": 12.5,
-        "ceiling": 16.2,
+        "floor": 11.2,
+        "median": 13.5,
+        "ceiling": 17.8,
         "logs": [
+          18,
           11,
           13,
           19,
@@ -4546,8 +4623,7 @@
           14,
           17,
           11,
-          21,
-          7
+          21
         ]
       },
       "reb": {
@@ -4555,6 +4631,7 @@
         "median": 5.0,
         "ceiling": 5.0,
         "logs": [
+          9,
           6,
           3,
           5,
@@ -4563,15 +4640,15 @@
           5,
           5,
           1,
-          5,
           5
         ]
       },
       "ast": {
         "floor": 2.0,
         "median": 2.0,
-        "ceiling": 2.8,
+        "ceiling": 2.0,
         "logs": [
+          2,
           2,
           2,
           2,
@@ -4580,21 +4657,34 @@
           1,
           3,
           2,
-          2,
-          3
+          2
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 21.6,
-      "ast_pct": 11.4,
-      "reb_pct": 9.2
+      "usg_pct": 21.4,
+      "ast_pct": 11.2,
+      "reb_pct": 9.8
     },
     "situational": {
-      "clutch_usg_pct": 20.6,
-      "paint_touches_pg": 5.7
+      "clutch_usg_pct": 20.4,
+      "paint_touches_pg": 5.9
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 18,
+        "reb": 9,
+        "ast": 2,
+        "min": 29.8,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 7.0,
+        "fga": 9,
+        "fgm": 5,
+        "fta": 6,
+        "tov": 2
+      },
       {
         "d": "2026-11-13",
         "pts": 11,
@@ -4758,7 +4848,7 @@
     "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 34.2
+      "frequency": 33.9
     },
     "games_played": 13,
     "is_small_sample": false,
@@ -4770,9 +4860,9 @@
       "fg3a": 7.5,
       "fg3m": 2.8,
       "paint_pts": 8.4,
-      "pts_rank": 23,
+      "pts_rank": 24,
       "reb_rank": 64,
-      "ast_rank": 26
+      "ast_rank": 25
     },
     "distribution_10g": {
       "pts": {
@@ -4828,12 +4918,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 28.8,
-      "ast_pct": 27.7,
-      "reb_pct": 8.0
+      "usg_pct": 28.7,
+      "ast_pct": 27.2,
+      "reb_pct": 7.9
     },
     "situational": {
-      "clutch_usg_pct": 30.3,
+      "clutch_usg_pct": 30.2,
       "paint_touches_pg": 7.3
     },
     "all_logs": [
@@ -5028,7 +5118,7 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 28.2
+      "frequency": 28.1
     },
     "games_played": 13,
     "is_small_sample": false,
@@ -5041,8 +5131,8 @@
       "fg3m": 2.6,
       "paint_pts": 5.3,
       "pts_rank": 60,
-      "reb_rank": 69,
-      "ast_rank": 24
+      "reb_rank": 70,
+      "ast_rank": 22
     },
     "distribution_10g": {
       "pts": {
@@ -5099,8 +5189,8 @@
     },
     "context_stats": {
       "usg_pct": 23.0,
-      "ast_pct": 24.8,
-      "reb_pct": 7.7
+      "ast_pct": 24.4,
+      "reb_pct": 7.6
     },
     "situational": {
       "clutch_usg_pct": 22.0,
@@ -5312,7 +5402,7 @@
       "paint_pts": 6.5,
       "pts_rank": 60,
       "reb_rank": 23,
-      "ast_rank": 66
+      "ast_rank": 65
     },
     "distribution_10g": {
       "pts": {
@@ -5369,8 +5459,8 @@
     },
     "context_stats": {
       "usg_pct": 19.6,
-      "ast_pct": 17.1,
-      "reb_pct": 12.4
+      "ast_pct": 16.8,
+      "reb_pct": 12.2
     },
     "situational": {
       "clutch_usg_pct": 18.6,
@@ -5566,8 +5656,8 @@
       "fg3a": 4.3,
       "fg3m": 0.9,
       "paint_pts": 4.4,
-      "pts_rank": 109,
-      "reb_rank": 73,
+      "pts_rank": 108,
+      "reb_rank": 75,
       "ast_rank": 85
     },
     "distribution_10g": {
@@ -5625,8 +5715,8 @@
     },
     "context_stats": {
       "usg_pct": 20.5,
-      "ast_pct": 13.5,
-      "reb_pct": 8.7
+      "ast_pct": 13.3,
+      "reb_pct": 8.6
     },
     "situational": {
       "clutch_usg_pct": 19.5,
@@ -5796,28 +5886,29 @@
     "position": "SF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 23.7
+      "frequency": 23.4
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 24.6,
-      "reb": 6.9,
-      "ast": 6.5,
-      "min": 33.5,
-      "fg3a": 4.5,
-      "fg3m": 1.4,
-      "paint_pts": 11.9,
-      "pts_rank": 17,
-      "reb_rank": 29,
-      "ast_rank": 17
+      "pts": 24.1,
+      "reb": 7.0,
+      "ast": 6.4,
+      "min": 33.9,
+      "fg3a": 4.7,
+      "fg3m": 1.2,
+      "paint_pts": 11.8,
+      "pts_rank": 19,
+      "reb_rank": 28,
+      "ast_rank": 19
     },
     "distribution_10g": {
       "pts": {
-        "floor": 17.5,
+        "floor": 18.2,
         "median": 23.0,
         "ceiling": 28.2,
         "logs": [
+          18,
           12,
           43,
           25,
@@ -5826,15 +5917,15 @@
           17,
           33,
           26,
-          29,
-          14
+          29
         ]
       },
       "reb": {
-        "floor": 5.0,
-        "median": 6.5,
+        "floor": 5.2,
+        "median": 7.5,
         "ceiling": 9.8,
         "logs": [
+          8,
           7,
           10,
           5,
@@ -5843,15 +5934,15 @@
           4,
           9,
           5,
-          6,
-          5
+          6
         ]
       },
       "ast": {
-        "floor": 6.0,
+        "floor": 5.2,
         "median": 6.0,
         "ceiling": 7.8,
         "logs": [
+          5,
           3,
           6,
           12,
@@ -5860,21 +5951,34 @@
           6,
           6,
           8,
-          11,
-          6
+          11
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 29.6,
-      "ast_pct": 32.3,
-      "reb_pct": 11.3
+      "usg_pct": 29.2,
+      "ast_pct": 31.0,
+      "reb_pct": 11.4
     },
     "situational": {
-      "clutch_usg_pct": 31.1,
+      "clutch_usg_pct": 30.7,
       "paint_touches_pg": 9.2
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 18,
+        "reb": 8,
+        "ast": 5,
+        "min": 38.4,
+        "fg3m": 0,
+        "fg3a": 6,
+        "paint_pts": 10.4,
+        "fga": 19,
+        "fgm": 6,
+        "fta": 8,
+        "tov": 0
+      },
       {
         "d": "2026-11-12",
         "pts": 12,
@@ -6038,28 +6142,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 40.1
+      "frequency": 39.5
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 14.2,
-      "reb": 7.2,
+      "pts": 13.9,
+      "reb": 6.8,
       "ast": 1.1,
-      "min": 32.2,
-      "fg3a": 6.4,
+      "min": 31.7,
+      "fg3a": 6.2,
       "fg3m": 2.2,
-      "paint_pts": 4.3,
-      "pts_rank": 78,
-      "reb_rank": 25,
+      "paint_pts": 4.2,
+      "pts_rank": 80,
+      "reb_rank": 30,
       "ast_rank": 119
     },
     "distribution_10g": {
       "pts": {
-        "floor": 10.5,
+        "floor": 10.0,
         "median": 12.5,
         "ceiling": 19.5,
         "logs": [
+          10,
           10,
           13,
           6,
@@ -6068,8 +6173,7 @@
           12,
           3,
           18,
-          20,
-          12
+          20
         ]
       },
       "reb": {
@@ -6078,6 +6182,7 @@
         "ceiling": 9.0,
         "logs": [
           3,
+          3,
           9,
           5,
           6,
@@ -6085,15 +6190,15 @@
           5,
           10,
           9,
-          9,
-          4
+          9
         ]
       },
       "ast": {
         "floor": 0.2,
         "median": 1.0,
-        "ceiling": 1.8,
+        "ceiling": 1.0,
         "logs": [
+          1,
           0,
           1,
           0,
@@ -6102,21 +6207,34 @@
           1,
           1,
           0,
-          2,
           2
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 18.9,
+      "usg_pct": 18.8,
       "ast_pct": 4.7,
-      "reb_pct": 12.1
+      "reb_pct": 11.9
     },
     "situational": {
-      "clutch_usg_pct": 17.9,
-      "paint_touches_pg": 6.9
+      "clutch_usg_pct": 17.8,
+      "paint_touches_pg": 6.7
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 10,
+        "reb": 3,
+        "ast": 1,
+        "min": 26.1,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 2.3,
+        "fga": 9,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 1
+      },
       {
         "d": "2026-11-12",
         "pts": 10,
@@ -6294,28 +6412,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 31.5
+      "frequency": 32.1
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 21.6,
-      "reb": 3.2,
-      "ast": 4.3,
-      "min": 30.1,
-      "fg3a": 8.2,
-      "fg3m": 3.2,
+      "pts": 22.7,
+      "reb": 3.5,
+      "ast": 4.4,
+      "min": 30.8,
+      "fg3a": 8.9,
+      "fg3m": 3.5,
       "paint_pts": 7.0,
-      "pts_rank": 31,
-      "reb_rank": 106,
+      "pts_rank": 25,
+      "reb_rank": 96,
       "ast_rank": 46
     },
     "distribution_10g": {
       "pts": {
-        "floor": 15.0,
-        "median": 19.5,
-        "ceiling": 27.8,
+        "floor": 15.8,
+        "median": 22.5,
+        "ceiling": 32.8,
         "logs": [
+          34,
           10,
           35,
           21,
@@ -6324,15 +6443,15 @@
           35,
           15,
           18,
-          24,
-          15
+          24
         ]
       },
       "reb": {
         "floor": 2.0,
         "median": 3.0,
-        "ceiling": 4.0,
+        "ceiling": 5.5,
         "logs": [
+          6,
           3,
           0,
           3,
@@ -6341,15 +6460,15 @@
           4,
           2,
           6,
-          1,
-          4
+          1
         ]
       },
       "ast": {
-        "floor": 3.2,
+        "floor": 4.0,
         "median": 4.0,
-        "ceiling": 4.8,
+        "ceiling": 5.0,
         "logs": [
+          5,
           4,
           4,
           4,
@@ -6358,21 +6477,34 @@
           9,
           4,
           6,
-          3,
-          2
+          3
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 27.3,
-      "ast_pct": 23.8,
-      "reb_pct": 5.8
+      "usg_pct": 27.9,
+      "ast_pct": 23.9,
+      "reb_pct": 6.2
     },
     "situational": {
-      "clutch_usg_pct": 28.8,
-      "paint_touches_pg": 6.3
+      "clutch_usg_pct": 29.4,
+      "paint_touches_pg": 6.4
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 34,
+        "reb": 6,
+        "ast": 5,
+        "min": 37.3,
+        "fg3m": 7,
+        "fg3a": 16,
+        "paint_pts": 7.5,
+        "fga": 25,
+        "fgm": 11,
+        "fta": 7,
+        "tov": 1
+      },
       {
         "d": "2026-11-12",
         "pts": 10,
@@ -6522,28 +6654,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 15.2
+      "frequency": 15.1
     },
-    "games_played": 9,
+    "games_played": 10,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 11.3,
+      "pts": 11.4,
       "reb": 2.8,
-      "ast": 4.4,
-      "min": 24.6,
+      "ast": 4.5,
+      "min": 25.1,
       "fg3a": 3.2,
-      "fg3m": 0.9,
-      "paint_pts": 5.0,
-      "pts_rank": 103,
+      "fg3m": 0.8,
+      "paint_pts": 5.2,
+      "pts_rank": 101,
       "reb_rank": 112,
-      "ast_rank": 44
+      "ast_rank": 43
     },
     "distribution_10g": {
       "pts": {
-        "floor": 7.0,
-        "median": 10.0,
-        "ceiling": 15.0,
+        "floor": 7.2,
+        "median": 11.0,
+        "ceiling": 14.5,
         "logs": [
+          12,
           13,
           6,
           8,
@@ -6556,10 +6689,11 @@
         ]
       },
       "reb": {
-        "floor": 1.0,
-        "median": 2.0,
+        "floor": 1.2,
+        "median": 2.5,
         "ceiling": 4.0,
         "logs": [
+          3,
           1,
           5,
           1,
@@ -6572,10 +6706,11 @@
         ]
       },
       "ast": {
-        "floor": 3.0,
+        "floor": 3.2,
         "median": 5.0,
-        "ceiling": 6.0,
+        "ceiling": 5.8,
         "logs": [
+          5,
           4,
           2,
           2,
@@ -6589,15 +6724,29 @@
       }
     },
     "context_stats": {
-      "usg_pct": 21.7,
-      "ast_pct": 26.7,
-      "reb_pct": 6.2
+      "usg_pct": 21.6,
+      "ast_pct": 26.4,
+      "reb_pct": 6.1
     },
     "situational": {
-      "clutch_usg_pct": 20.7,
+      "clutch_usg_pct": 20.6,
       "paint_touches_pg": 5.6
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 12,
+        "reb": 3,
+        "ast": 5,
+        "min": 29.9,
+        "fg3m": 0,
+        "fg3a": 3,
+        "paint_pts": 7.0,
+        "fga": 10,
+        "fgm": 4,
+        "fta": 4,
+        "tov": 3
+      },
       {
         "d": "2026-11-12",
         "pts": 13,
@@ -6733,28 +6882,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 31.9
+      "frequency": 32.3
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 26.2,
-      "reb": 5.0,
-      "ast": 5.9,
-      "min": 36.4,
-      "fg3a": 7.8,
-      "fg3m": 4.0,
-      "paint_pts": 8.2,
+      "pts": 25.9,
+      "reb": 5.2,
+      "ast": 6.2,
+      "min": 36.5,
+      "fg3a": 7.4,
+      "fg3m": 3.6,
+      "paint_pts": 8.7,
       "pts_rank": 10,
-      "reb_rank": 61,
-      "ast_rank": 22
+      "reb_rank": 55,
+      "ast_rank": 20
     },
     "distribution_10g": {
       "pts": {
-        "floor": 16.8,
+        "floor": 20.0,
         "median": 26.5,
         "ceiling": 37.2,
         "logs": [
+          23,
           30,
           38,
           16,
@@ -6763,8 +6913,7 @@
           39,
           23,
           19,
-          42,
-          6
+          42
         ]
       },
       "reb": {
@@ -6772,6 +6921,7 @@
         "median": 5.0,
         "ceiling": 6.0,
         "logs": [
+          7,
           4,
           2,
           6,
@@ -6780,15 +6930,15 @@
           8,
           1,
           6,
-          3,
-          10
+          3
         ]
       },
       "ast": {
-        "floor": 5.2,
-        "median": 6.0,
-        "ceiling": 7.8,
+        "floor": 6.0,
+        "median": 6.5,
+        "ceiling": 8.0,
         "logs": [
+          9,
           8,
           2,
           8,
@@ -6797,21 +6947,34 @@
           5,
           6,
           8,
-          6,
-          3
+          6
         ]
       }
     },
     "context_stats": {
       "usg_pct": 26.7,
-      "ast_pct": 26.4,
-      "reb_pct": 8.0
+      "ast_pct": 27.4,
+      "reb_pct": 8.1
     },
     "situational": {
       "clutch_usg_pct": 28.2,
-      "paint_touches_pg": 7.1
+      "paint_touches_pg": 7.4
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 23,
+        "reb": 7,
+        "ast": 9,
+        "min": 38.0,
+        "fg3m": 0,
+        "fg3a": 3,
+        "paint_pts": 13.3,
+        "fga": 16,
+        "fgm": 9,
+        "fta": 6,
+        "tov": 4
+      },
       {
         "d": "2026-11-11",
         "pts": 30,
@@ -6961,28 +7124,29 @@
     "position": "C",
     "role_archetype": {
       "primary_role": "Roll Man / Rim Runner",
-      "frequency": 42.9
+      "frequency": 42.4
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 23.5,
-      "reb": 10.8,
-      "ast": 9.0,
-      "min": 36.3,
-      "fg3a": 4.3,
+      "pts": 23.7,
+      "reb": 10.5,
+      "ast": 9.1,
+      "min": 36.4,
+      "fg3a": 4.0,
       "fg3m": 1.0,
-      "paint_pts": 11.9,
-      "pts_rank": 20,
-      "reb_rank": 5,
+      "paint_pts": 12.0,
+      "pts_rank": 21,
+      "reb_rank": 6,
       "ast_rank": 3
     },
     "distribution_10g": {
       "pts": {
-        "floor": 19.0,
-        "median": 23.0,
+        "floor": 19.5,
+        "median": 25.5,
         "ceiling": 26.8,
         "logs": [
+          26,
           27,
           25,
           19,
@@ -6991,15 +7155,15 @@
           18,
           21,
           19,
-          35,
-          13
+          35
         ]
       },
       "reb": {
-        "floor": 7.5,
+        "floor": 8.2,
         "median": 10.5,
         "ceiling": 13.0,
         "logs": [
+          8,
           11,
           16,
           13,
@@ -7008,15 +7172,15 @@
           7,
           13,
           7,
-          15,
-          7
+          15
         ]
       },
       "ast": {
-        "floor": 8.0,
-        "median": 9.5,
+        "floor": 8.2,
+        "median": 10.0,
         "ceiling": 10.0,
         "logs": [
+          10,
           8,
           9,
           8,
@@ -7025,21 +7189,34 @@
           10,
           10,
           11,
-          10,
-          5
+          10
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 28.7,
-      "ast_pct": 41.3,
-      "reb_pct": 17.2
+      "usg_pct": 28.3,
+      "ast_pct": 41.4,
+      "reb_pct": 16.6
     },
     "situational": {
-      "clutch_usg_pct": 30.2,
-      "paint_touches_pg": 11.5
+      "clutch_usg_pct": 29.8,
+      "paint_touches_pg": 11.3
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 26,
+        "reb": 8,
+        "ast": 10,
+        "min": 37.1,
+        "fg3m": 1,
+        "fg3a": 1,
+        "paint_pts": 13.3,
+        "fga": 14,
+        "fgm": 9,
+        "fta": 7,
+        "tov": 4
+      },
       {
         "d": "2026-11-11",
         "pts": 27,
@@ -7189,28 +7366,29 @@
     "position": "SG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 35.6
+      "frequency": 32.9
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 12.4,
-      "reb": 4.1,
-      "ast": 2.4,
-      "min": 34.4,
-      "fg3a": 4.7,
-      "fg3m": 1.6,
-      "paint_pts": 4.4,
-      "pts_rank": 95,
-      "reb_rank": 84,
+      "pts": 12.8,
+      "reb": 4.4,
+      "ast": 2.3,
+      "min": 33.8,
+      "fg3a": 4.5,
+      "fg3m": 1.5,
+      "paint_pts": 4.7,
+      "pts_rank": 93,
+      "reb_rank": 81,
       "ast_rank": 92
     },
     "distribution_10g": {
       "pts": {
-        "floor": 7.5,
-        "median": 11.5,
-        "ceiling": 14.8,
+        "floor": 9.5,
+        "median": 13.0,
+        "ceiling": 15.0,
         "logs": [
+          17,
           12,
           4,
           6,
@@ -7219,8 +7397,7 @@
           31,
           15,
           9,
-          15,
-          7
+          15
         ]
       },
       "reb": {
@@ -7228,6 +7405,7 @@
         "median": 4.0,
         "ceiling": 5.0,
         "logs": [
+          7,
           5,
           5,
           4,
@@ -7236,8 +7414,7 @@
           3,
           0,
           4,
-          8,
-          6
+          8
         ]
       },
       "ast": {
@@ -7245,6 +7422,7 @@
         "median": 2.5,
         "ceiling": 3.0,
         "logs": [
+          1,
           4,
           3,
           1,
@@ -7253,21 +7431,34 @@
           1,
           4,
           2,
-          2,
-          1
+          2
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 15.3,
-      "ast_pct": 9.8,
-      "reb_pct": 6.9
+      "usg_pct": 16.0,
+      "ast_pct": 9.5,
+      "reb_pct": 7.4
     },
     "situational": {
-      "clutch_usg_pct": 14.3,
-      "paint_touches_pg": 5.9
+      "clutch_usg_pct": 15.0,
+      "paint_touches_pg": 6.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 17,
+        "reb": 7,
+        "ast": 1,
+        "min": 27.8,
+        "fg3m": 1,
+        "fg3a": 3,
+        "paint_pts": 8.1,
+        "fga": 14,
+        "fgm": 6,
+        "fta": 5,
+        "tov": 0
+      },
       {
         "d": "2026-11-11",
         "pts": 12,
@@ -7417,28 +7608,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 32.7
+      "frequency": 31.4
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
       "pts": 11.0,
       "reb": 5.0,
-      "ast": 2.1,
-      "min": 29.1,
-      "fg3a": 4.3,
+      "ast": 2.0,
+      "min": 29.4,
+      "fg3a": 4.0,
       "fg3m": 1.1,
       "paint_pts": 4.5,
       "pts_rank": 107,
-      "reb_rank": 61,
+      "reb_rank": 62,
       "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
         "floor": 7.0,
-        "median": 10.5,
-        "ceiling": 15.0,
+        "median": 10.0,
+        "ceiling": 14.2,
         "logs": [
+          11,
           9,
           3,
           12,
@@ -7447,15 +7639,15 @@
           15,
           15,
           7,
-          7,
-          20
+          7
         ]
       },
       "reb": {
         "floor": 4.0,
         "median": 5.0,
-        "ceiling": 5.8,
+        "ceiling": 5.0,
         "logs": [
+          5,
           3,
           5,
           5,
@@ -7464,8 +7656,7 @@
           4,
           11,
           4,
-          5,
-          6
+          5
         ]
       },
       "ast": {
@@ -7473,6 +7664,7 @@
         "median": 2.0,
         "ceiling": 2.8,
         "logs": [
+          1,
           2,
           2,
           0,
@@ -7481,21 +7673,34 @@
           5,
           3,
           2,
-          4,
-          1
+          4
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 18.6,
-      "ast_pct": 9.8,
-      "reb_pct": 10.0
+      "usg_pct": 17.8,
+      "ast_pct": 9.3,
+      "reb_pct": 9.7
     },
     "situational": {
-      "clutch_usg_pct": 17.6,
+      "clutch_usg_pct": 16.8,
       "paint_touches_pg": 6.0
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 11,
+        "reb": 5,
+        "ast": 1,
+        "min": 32.5,
+        "fg3m": 1,
+        "fg3a": 1,
+        "paint_pts": 4.6,
+        "fga": 6,
+        "fgm": 4,
+        "fta": 5,
+        "tov": 0
+      },
       {
         "d": "2026-11-11",
         "pts": 9,
@@ -7647,26 +7852,27 @@
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 39.5
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 25.0,
+      "pts": 25.7,
       "reb": 5.2,
       "ast": 7.9,
-      "min": 34.5,
-      "fg3a": 6.4,
-      "fg3m": 2.0,
-      "paint_pts": 11.0,
-      "pts_rank": 15,
-      "reb_rank": 54,
+      "min": 34.7,
+      "fg3a": 6.5,
+      "fg3m": 2.1,
+      "paint_pts": 11.3,
+      "pts_rank": 11,
+      "reb_rank": 55,
       "ast_rank": 7
     },
     "distribution_10g": {
       "pts": {
-        "floor": 17.5,
-        "median": 23.0,
-        "ceiling": 29.0,
+        "floor": 19.2,
+        "median": 26.0,
+        "ceiling": 32.2,
         "logs": [
+          33,
           52,
           17,
           14,
@@ -7675,15 +7881,15 @@
           20,
           30,
           19,
-          26,
-          16
+          26
         ]
       },
       "reb": {
-        "floor": 4.2,
+        "floor": 5.0,
         "median": 5.0,
         "ceiling": 6.5,
         "logs": [
+          5,
           5,
           3,
           4,
@@ -7692,8 +7898,7 @@
           5,
           5,
           9,
-          8,
-          2
+          8
         ]
       },
       "ast": {
@@ -7701,6 +7906,7 @@
         "median": 8.0,
         "ceiling": 8.0,
         "logs": [
+          8,
           11,
           7,
           8,
@@ -7709,21 +7915,34 @@
           4,
           7,
           8,
-          8,
           8
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 30.4,
-      "ast_pct": 39.0,
-      "reb_pct": 8.3
+      "usg_pct": 30.5,
+      "ast_pct": 38.9,
+      "reb_pct": 8.2
     },
     "situational": {
-      "clutch_usg_pct": 31.9,
-      "paint_touches_pg": 8.2
+      "clutch_usg_pct": 32.0,
+      "paint_touches_pg": 8.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 33,
+        "reb": 5,
+        "ast": 8,
+        "min": 36.2,
+        "fg3m": 3,
+        "fg3a": 8,
+        "paint_pts": 13.9,
+        "fga": 20,
+        "fgm": 8,
+        "fta": 14,
+        "tov": 3
+      },
       {
         "d": "2026-11-12",
         "pts": 52,
@@ -7889,26 +8108,27 @@
       "primary_role": "Spot-Up Shooter",
       "frequency": 48.0
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 18.1,
-      "reb": 1.9,
-      "ast": 2.2,
-      "min": 31.7,
-      "fg3a": 9.4,
-      "fg3m": 4.1,
-      "paint_pts": 3.4,
-      "pts_rank": 52,
-      "reb_rank": 119,
-      "ast_rank": 94
+      "pts": 17.4,
+      "reb": 1.8,
+      "ast": 2.1,
+      "min": 30.5,
+      "fg3a": 9.1,
+      "fg3m": 3.9,
+      "paint_pts": 3.3,
+      "pts_rank": 55,
+      "reb_rank": 120,
+      "ast_rank": 97
     },
     "distribution_10g": {
       "pts": {
-        "floor": 13.0,
-        "median": 17.0,
+        "floor": 12.2,
+        "median": 15.0,
         "ceiling": 21.8,
         "logs": [
+          10,
           13,
           22,
           12,
@@ -7917,8 +8137,7 @@
           17,
           13,
           12,
-          21,
-          17
+          21
         ]
       },
       "reb": {
@@ -7926,6 +8145,7 @@
         "median": 2.0,
         "ceiling": 3.0,
         "logs": [
+          1,
           3,
           3,
           0,
@@ -7934,8 +8154,7 @@
           4,
           2,
           0,
-          3,
-          1
+          3
         ]
       },
       "ast": {
@@ -7944,6 +8163,7 @@
         "ceiling": 2.8,
         "logs": [
           1,
+          1,
           2,
           3,
           2,
@@ -7951,21 +8171,34 @@
           2,
           2,
           2,
-          3,
-          2
+          3
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 20.1,
+      "usg_pct": 20.0,
       "ast_pct": 10.3,
       "reb_pct": 3.3
     },
     "situational": {
-      "clutch_usg_pct": 19.1,
+      "clutch_usg_pct": 19.0,
       "paint_touches_pg": 4.0
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 10,
+        "reb": 1,
+        "ast": 1,
+        "min": 16.9,
+        "fg3m": 2,
+        "fg3a": 6,
+        "paint_pts": 2.3,
+        "fga": 8,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 0
+      },
       {
         "d": "2026-11-12",
         "pts": 13,
@@ -8123,262 +8356,35 @@
     ]
   },
   {
-    "player_name": "Ausar Thompson",
-    "team": "DET",
-    "team_name": "Detroit Pistons",
-    "position": "PF",
-    "role_archetype": {
-      "primary_role": "Isolation Scorer",
-      "frequency": 15.0
-    },
-    "games_played": 10,
-    "is_small_sample": false,
-    "season_avg": {
-      "pts": 10.1,
-      "reb": 8.7,
-      "ast": 5.1,
-      "min": 28.8,
-      "fg3a": 0.4,
-      "fg3m": 0.0,
-      "paint_pts": 5.9,
-      "pts_rank": 111,
-      "reb_rank": 15,
-      "ast_rank": 33
-    },
-    "distribution_10g": {
-      "pts": {
-        "floor": 7.2,
-        "median": 11.0,
-        "ceiling": 11.0,
-        "logs": [
-          17,
-          8,
-          7,
-          11,
-          14,
-          11,
-          7,
-          11,
-          4,
-          11
-        ]
-      },
-      "reb": {
-        "floor": 6.0,
-        "median": 8.5,
-        "ceiling": 11.0,
-        "logs": [
-          11,
-          5,
-          11,
-          17,
-          6,
-          8,
-          9,
-          6,
-          3,
-          11
-        ]
-      },
-      "ast": {
-        "floor": 3.2,
-        "median": 4.5,
-        "ceiling": 5.8,
-        "logs": [
-          11,
-          4,
-          3,
-          3,
-          4,
-          6,
-          8,
-          2,
-          5,
-          5
-        ]
-      }
-    },
-    "context_stats": {
-      "usg_pct": 18.5,
-      "ast_pct": 25.5,
-      "reb_pct": 16.7
-    },
-    "situational": {
-      "clutch_usg_pct": 17.5,
-      "paint_touches_pg": 8.5
-    },
-    "all_logs": [
-      {
-        "d": "2026-11-12",
-        "pts": 17,
-        "reb": 11,
-        "ast": 11,
-        "min": 42.9,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 9.9,
-        "fga": 15,
-        "fgm": 8,
-        "fta": 2,
-        "tov": 3
-      },
-      {
-        "d": "2026-11-09",
-        "pts": 8,
-        "reb": 5,
-        "ast": 4,
-        "min": 27.6,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 4.6,
-        "fga": 8,
-        "fgm": 3,
-        "fta": 2,
-        "tov": 5
-      },
-      {
-        "d": "2026-11-08",
-        "pts": 7,
-        "reb": 11,
-        "ast": 3,
-        "min": 24.2,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 4.1,
-        "fga": 9,
-        "fgm": 3,
-        "fta": 2,
-        "tov": 2
-      },
-      {
-        "d": "2026-11-04",
-        "pts": 11,
-        "reb": 17,
-        "ast": 3,
-        "min": 34.2,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 6.4,
-        "fga": 10,
-        "fgm": 4,
-        "fta": 4,
-        "tov": 1
-      },
-      {
-        "d": "2026-11-02",
-        "pts": 14,
-        "reb": 6,
-        "ast": 4,
-        "min": 25.8,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 8.1,
-        "fga": 7,
-        "fgm": 5,
-        "fta": 5,
-        "tov": 2
-      },
-      {
-        "d": "2026-10-30",
-        "pts": 11,
-        "reb": 8,
-        "ast": 6,
-        "min": 26.4,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 6.4,
-        "fga": 9,
-        "fgm": 5,
-        "fta": 2,
-        "tov": 0
-      },
-      {
-        "d": "2026-10-28",
-        "pts": 7,
-        "reb": 9,
-        "ast": 8,
-        "min": 29.0,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 4.1,
-        "fga": 5,
-        "fgm": 3,
-        "fta": 2,
-        "tov": 3
-      },
-      {
-        "d": "2026-10-27",
-        "pts": 11,
-        "reb": 6,
-        "ast": 2,
-        "min": 25.2,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 6.4,
-        "fga": 9,
-        "fgm": 5,
-        "fta": 3,
-        "tov": 4
-      },
-      {
-        "d": "2026-10-23",
-        "pts": 4,
-        "reb": 3,
-        "ast": 5,
-        "min": 19.3,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 2.3,
-        "fga": 5,
-        "fgm": 2,
-        "fta": 0,
-        "tov": 3
-      },
-      {
-        "d": "2026-10-20",
-        "pts": 11,
-        "reb": 11,
-        "ast": 5,
-        "min": 33.2,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 6.4,
-        "fga": 8,
-        "fgm": 4,
-        "fta": 3,
-        "tov": 3
-      }
-    ]
-  },
-  {
     "player_name": "Daniss Jenkins",
     "team": "DET",
     "team_name": "Detroit Pistons",
     "position": "SG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 38.9
+      "frequency": 37.4
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 13.5,
-      "reb": 3.8,
+      "pts": 13.2,
+      "reb": 3.6,
       "ast": 4.3,
-      "min": 27.5,
+      "min": 28.1,
       "fg3a": 4.9,
-      "fg3m": 2.2,
+      "fg3m": 2.1,
       "paint_pts": 4.0,
-      "pts_rank": 84,
-      "reb_rank": 88,
-      "ast_rank": 46
+      "pts_rank": 90,
+      "reb_rank": 91,
+      "ast_rank": 48
     },
     "distribution_10g": {
       "pts": {
-        "floor": 7.2,
-        "median": 14.5,
+        "floor": 7.0,
+        "median": 12.5,
         "ceiling": 20.2,
         "logs": [
+          10,
           21,
           22,
           31,
@@ -8387,15 +8393,15 @@
           6,
           14,
           11,
-          18,
-          15
+          18
         ]
       },
       "reb": {
-        "floor": 2.2,
-        "median": 4.0,
+        "floor": 1.2,
+        "median": 3.0,
         "ceiling": 5.8,
         "logs": [
+          1,
           6,
           6,
           5,
@@ -8404,8 +8410,7 @@
           3,
           2,
           3,
-          8,
-          5
+          8
         ]
       },
       "ast": {
@@ -8413,6 +8418,7 @@
         "median": 4.5,
         "ceiling": 5.8,
         "logs": [
+          5,
           0,
           8,
           4,
@@ -8421,21 +8427,34 @@
           5,
           3,
           2,
-          6,
-          5
+          6
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 19.2,
-      "ast_pct": 22.8,
-      "reb_pct": 7.7
+      "usg_pct": 19.0,
+      "ast_pct": 22.5,
+      "reb_pct": 7.0
     },
     "situational": {
-      "clutch_usg_pct": 18.2,
-      "paint_touches_pg": 5.3
+      "clutch_usg_pct": 18.0,
+      "paint_touches_pg": 5.2
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 10,
+        "reb": 1,
+        "ast": 5,
+        "min": 35.3,
+        "fg3m": 1,
+        "fg3a": 5,
+        "paint_pts": 4.1,
+        "fga": 14,
+        "fgm": 4,
+        "fta": 2,
+        "tov": 1
+      },
       {
         "d": "2026-11-12",
         "pts": 21,
@@ -8593,34 +8612,277 @@
     ]
   },
   {
+    "player_name": "Ausar Thompson",
+    "team": "DET",
+    "team_name": "Detroit Pistons",
+    "position": "PF",
+    "role_archetype": {
+      "primary_role": "Isolation Scorer",
+      "frequency": 15.0
+    },
+    "games_played": 11,
+    "is_small_sample": false,
+    "season_avg": {
+      "pts": 10.1,
+      "reb": 8.6,
+      "ast": 5.1,
+      "min": 27.8,
+      "fg3a": 0.4,
+      "fg3m": 0.0,
+      "paint_pts": 5.9,
+      "pts_rank": 112,
+      "reb_rank": 15,
+      "ast_rank": 34
+    },
+    "distribution_10g": {
+      "pts": {
+        "floor": 7.2,
+        "median": 10.5,
+        "ceiling": 11.0,
+        "logs": [
+          10,
+          17,
+          8,
+          7,
+          11,
+          14,
+          11,
+          7,
+          11,
+          4
+        ]
+      },
+      "reb": {
+        "floor": 6.0,
+        "median": 8.0,
+        "ceiling": 10.5,
+        "logs": [
+          8,
+          11,
+          5,
+          11,
+          17,
+          6,
+          8,
+          9,
+          6,
+          3
+        ]
+      },
+      "ast": {
+        "floor": 3.2,
+        "median": 4.5,
+        "ceiling": 5.8,
+        "logs": [
+          5,
+          11,
+          4,
+          3,
+          3,
+          4,
+          6,
+          8,
+          2,
+          5
+        ]
+      }
+    },
+    "context_stats": {
+      "usg_pct": 18.6,
+      "ast_pct": 26.7,
+      "reb_pct": 17.1
+    },
+    "situational": {
+      "clutch_usg_pct": 17.6,
+      "paint_touches_pg": 8.5
+    },
+    "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 10,
+        "reb": 8,
+        "ast": 5,
+        "min": 18.2,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 5.8,
+        "fga": 8,
+        "fgm": 5,
+        "fta": 0,
+        "tov": 2
+      },
+      {
+        "d": "2026-11-12",
+        "pts": 17,
+        "reb": 11,
+        "ast": 11,
+        "min": 42.9,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 9.9,
+        "fga": 15,
+        "fgm": 8,
+        "fta": 2,
+        "tov": 3
+      },
+      {
+        "d": "2026-11-09",
+        "pts": 8,
+        "reb": 5,
+        "ast": 4,
+        "min": 27.6,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 4.6,
+        "fga": 8,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 5
+      },
+      {
+        "d": "2026-11-08",
+        "pts": 7,
+        "reb": 11,
+        "ast": 3,
+        "min": 24.2,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 4.1,
+        "fga": 9,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 2
+      },
+      {
+        "d": "2026-11-04",
+        "pts": 11,
+        "reb": 17,
+        "ast": 3,
+        "min": 34.2,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 6.4,
+        "fga": 10,
+        "fgm": 4,
+        "fta": 4,
+        "tov": 1
+      },
+      {
+        "d": "2026-11-02",
+        "pts": 14,
+        "reb": 6,
+        "ast": 4,
+        "min": 25.8,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 8.1,
+        "fga": 7,
+        "fgm": 5,
+        "fta": 5,
+        "tov": 2
+      },
+      {
+        "d": "2026-10-30",
+        "pts": 11,
+        "reb": 8,
+        "ast": 6,
+        "min": 26.4,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 6.4,
+        "fga": 9,
+        "fgm": 5,
+        "fta": 2,
+        "tov": 0
+      },
+      {
+        "d": "2026-10-28",
+        "pts": 7,
+        "reb": 9,
+        "ast": 8,
+        "min": 29.0,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 4.1,
+        "fga": 5,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 3
+      },
+      {
+        "d": "2026-10-27",
+        "pts": 11,
+        "reb": 6,
+        "ast": 2,
+        "min": 25.2,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 6.4,
+        "fga": 9,
+        "fgm": 5,
+        "fta": 3,
+        "tov": 4
+      },
+      {
+        "d": "2026-10-23",
+        "pts": 4,
+        "reb": 3,
+        "ast": 5,
+        "min": 19.3,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 2.3,
+        "fga": 5,
+        "fgm": 2,
+        "fta": 0,
+        "tov": 3
+      },
+      {
+        "d": "2026-10-20",
+        "pts": 11,
+        "reb": 11,
+        "ast": 5,
+        "min": 33.2,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 6.4,
+        "fga": 8,
+        "fgm": 4,
+        "fta": 3,
+        "tov": 3
+      }
+    ]
+  },
+  {
     "player_name": "Brandin Podziemski",
     "team": "GSW",
     "team_name": "Golden State Warriors",
     "position": "PG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 42.4
+      "frequency": 42.1
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 17.3,
-      "reb": 5.1,
-      "ast": 4.2,
-      "min": 33.4,
-      "fg3a": 7.3,
-      "fg3m": 2.9,
-      "paint_pts": 5.0,
-      "pts_rank": 57,
-      "reb_rank": 58,
-      "ast_rank": 50
+      "pts": 16.5,
+      "reb": 4.9,
+      "ast": 3.8,
+      "min": 32.4,
+      "fg3a": 7.1,
+      "fg3m": 2.8,
+      "paint_pts": 4.6,
+      "pts_rank": 64,
+      "reb_rank": 64,
+      "ast_rank": 56
     },
     "distribution_10g": {
       "pts": {
-        "floor": 15.5,
-        "median": 18.0,
+        "floor": 10.5,
+        "median": 17.5,
         "ceiling": 20.8,
         "logs": [
+          8,
           22,
           25,
           15,
@@ -8629,7 +8891,6 @@
           17,
           21,
           8,
-          18,
           18
         ]
       },
@@ -8638,6 +8899,7 @@
         "median": 5.5,
         "ceiling": 6.8,
         "logs": [
+          3,
           6,
           2,
           7,
@@ -8646,15 +8908,15 @@
           8,
           5,
           5,
-          7,
-          2
+          7
         ]
       },
       "ast": {
-        "floor": 3.0,
+        "floor": 2.2,
         "median": 4.0,
         "ceiling": 5.8,
         "logs": [
+          0,
           4,
           4,
           1,
@@ -8663,21 +8925,34 @@
           8,
           6,
           6,
-          5,
-          3
+          5
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 19.7,
-      "ast_pct": 19.1,
-      "reb_pct": 8.3
+      "usg_pct": 19.8,
+      "ast_pct": 18.2,
+      "reb_pct": 8.2
     },
     "situational": {
-      "clutch_usg_pct": 18.7,
-      "paint_touches_pg": 6.4
+      "clutch_usg_pct": 18.8,
+      "paint_touches_pg": 6.2
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 8,
+        "reb": 3,
+        "ast": 0,
+        "min": 22.1,
+        "fg3m": 2,
+        "fg3a": 5,
+        "paint_pts": 1.2,
+        "fga": 10,
+        "fgm": 2,
+        "fta": 2,
+        "tov": 0
+      },
       {
         "d": "2026-11-11",
         "pts": 22,
@@ -8827,28 +9102,29 @@
     "position": "SF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 21.3
+      "frequency": 21.5
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 21.7,
+      "pts": 20.2,
       "reb": 7.4,
-      "ast": 3.7,
-      "min": 32.2,
-      "fg3a": 5.7,
-      "fg3m": 2.4,
-      "paint_pts": 8.4,
-      "pts_rank": 30,
+      "ast": 3.5,
+      "min": 31.6,
+      "fg3a": 5.4,
+      "fg3m": 2.2,
+      "paint_pts": 7.9,
+      "pts_rank": 43,
       "reb_rank": 22,
-      "ast_rank": 62
+      "ast_rank": 67
     },
     "distribution_10g": {
       "pts": {
-        "floor": 18.5,
-        "median": 24.0,
-        "ceiling": 26.0,
+        "floor": 16.2,
+        "median": 23.0,
+        "ceiling": 25.8,
         "logs": [
+          3,
           25,
           23,
           23,
@@ -8857,15 +9133,15 @@
           37,
           6,
           26,
-          31,
-          26
+          31
         ]
       },
       "reb": {
         "floor": 5.5,
-        "median": 8.0,
-        "ceiling": 9.0,
+        "median": 7.5,
+        "ceiling": 8.8,
         "logs": [
+          7,
           10,
           7,
           8,
@@ -8874,15 +9150,15 @@
           4,
           1,
           9,
-          12,
-          9
+          12
         ]
       },
       "ast": {
-        "floor": 1.5,
-        "median": 4.5,
+        "floor": 1.0,
+        "median": 3.5,
         "ceiling": 5.8,
         "logs": [
+          1,
           0,
           4,
           3,
@@ -8891,21 +9167,34 @@
           6,
           0,
           1,
-          6,
-          5
+          6
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 26.6,
-      "ast_pct": 18.5,
-      "reb_pct": 12.5
+      "usg_pct": 26.9,
+      "ast_pct": 18.0,
+      "reb_pct": 12.7
     },
     "situational": {
-      "clutch_usg_pct": 28.1,
-      "paint_touches_pg": 8.3
+      "clutch_usg_pct": 28.4,
+      "paint_touches_pg": 8.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 3,
+        "reb": 7,
+        "ast": 1,
+        "min": 23.7,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 1.7,
+        "fga": 13,
+        "fgm": 1,
+        "fta": 2,
+        "tov": 3
+      },
       {
         "d": "2026-11-11",
         "pts": 25,
@@ -9077,241 +9366,13 @@
     ]
   },
   {
-    "player_name": "Draymond Green",
-    "team": "GSW",
-    "team_name": "Golden State Warriors",
-    "position": "C",
-    "role_archetype": {
-      "primary_role": "Roll Man / Rim Runner",
-      "frequency": 35.2
-    },
-    "games_played": 10,
-    "is_small_sample": false,
-    "season_avg": {
-      "pts": 3.2,
-      "reb": 4.9,
-      "ast": 7.5,
-      "min": 26.8,
-      "fg3a": 1.1,
-      "fg3m": 0.3,
-      "paint_pts": 1.3,
-      "pts_rank": 120,
-      "reb_rank": 64,
-      "ast_rank": 11
-    },
-    "distribution_10g": {
-      "pts": {
-        "floor": 2.0,
-        "median": 2.5,
-        "ceiling": 3.8,
-        "logs": [
-          7,
-          2,
-          2,
-          2,
-          4,
-          2,
-          3,
-          3,
-          5,
-          2
-        ]
-      },
-      "reb": {
-        "floor": 4.0,
-        "median": 4.5,
-        "ceiling": 5.0,
-        "logs": [
-          5,
-          3,
-          6,
-          5,
-          4,
-          4,
-          9,
-          4,
-          5,
-          4
-        ]
-      },
-      "ast": {
-        "floor": 6.0,
-        "median": 7.0,
-        "ceiling": 8.8,
-        "logs": [
-          7,
-          6,
-          13,
-          11,
-          2,
-          9,
-          6,
-          7,
-          6,
-          8
-        ]
-      }
-    },
-    "context_stats": {
-      "usg_pct": 10.1,
-      "ast_pct": 35.3,
-      "reb_pct": 9.9
-    },
-    "situational": {
-      "clutch_usg_pct": 9.1,
-      "paint_touches_pg": 5.2
-    },
-    "all_logs": [
-      {
-        "d": "2026-11-11",
-        "pts": 7,
-        "reb": 5,
-        "ast": 7,
-        "min": 26.8,
-        "fg3m": 1,
-        "fg3a": 1,
-        "paint_pts": 2.3,
-        "fga": 5,
-        "fgm": 3,
-        "fta": 0,
-        "tov": 1
-      },
-      {
-        "d": "2026-11-09",
-        "pts": 2,
-        "reb": 3,
-        "ast": 6,
-        "min": 20.8,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 1.2,
-        "fga": 1,
-        "fgm": 1,
-        "fta": 0,
-        "tov": 2
-      },
-      {
-        "d": "2026-11-07",
-        "pts": 2,
-        "reb": 6,
-        "ast": 13,
-        "min": 33.5,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 1.2,
-        "fga": 5,
-        "fgm": 1,
-        "fta": 2,
-        "tov": 4
-      },
-      {
-        "d": "2026-11-05",
-        "pts": 2,
-        "reb": 5,
-        "ast": 11,
-        "min": 27.4,
-        "fg3m": 0,
-        "fg3a": 2,
-        "paint_pts": 1.2,
-        "fga": 3,
-        "fgm": 1,
-        "fta": 0,
-        "tov": 3
-      },
-      {
-        "d": "2026-11-02",
-        "pts": 4,
-        "reb": 4,
-        "ast": 2,
-        "min": 16.8,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 2.3,
-        "fga": 2,
-        "fgm": 1,
-        "fta": 2,
-        "tov": 1
-      },
-      {
-        "d": "2026-10-30",
-        "pts": 2,
-        "reb": 4,
-        "ast": 9,
-        "min": 31.7,
-        "fg3m": 0,
-        "fg3a": 2,
-        "paint_pts": 1.2,
-        "fga": 3,
-        "fgm": 1,
-        "fta": 0,
-        "tov": 1
-      },
-      {
-        "d": "2026-10-28",
-        "pts": 3,
-        "reb": 9,
-        "ast": 6,
-        "min": 31.8,
-        "fg3m": 0,
-        "fg3a": 0,
-        "paint_pts": 1.7,
-        "fga": 3,
-        "fgm": 1,
-        "fta": 2,
-        "tov": 3
-      },
-      {
-        "d": "2026-10-26",
-        "pts": 3,
-        "reb": 4,
-        "ast": 7,
-        "min": 26.9,
-        "fg3m": 1,
-        "fg3a": 2,
-        "paint_pts": 0.0,
-        "fga": 2,
-        "fgm": 1,
-        "fta": 0,
-        "tov": 5
-      },
-      {
-        "d": "2026-10-23",
-        "pts": 5,
-        "reb": 5,
-        "ast": 6,
-        "min": 31.1,
-        "fg3m": 1,
-        "fg3a": 2,
-        "paint_pts": 1.2,
-        "fga": 4,
-        "fgm": 2,
-        "fta": 0,
-        "tov": 5
-      },
-      {
-        "d": "2026-10-21",
-        "pts": 2,
-        "reb": 4,
-        "ast": 8,
-        "min": 21.2,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 1.2,
-        "fga": 4,
-        "fgm": 1,
-        "fta": 0,
-        "tov": 4
-      }
-    ]
-  },
-  {
     "player_name": "Stephen Curry",
     "team": "GSW",
     "team_name": "Golden State Warriors",
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 38.6
+      "frequency": 38.9
     },
     "games_played": 10,
     "is_small_sample": false,
@@ -9324,7 +9385,7 @@
       "fg3m": 4.3,
       "paint_pts": 8.6,
       "pts_rank": 6,
-      "reb_rank": 92,
+      "reb_rank": 90,
       "ast_rank": 55
     },
     "distribution_10g": {
@@ -9382,8 +9443,8 @@
     },
     "context_stats": {
       "usg_pct": 34.1,
-      "ast_pct": 27.6,
-      "reb_pct": 7.6
+      "ast_pct": 28.4,
+      "reb_pct": 7.7
     },
     "situational": {
       "clutch_usg_pct": 35.6,
@@ -9533,6 +9594,248 @@
     ]
   },
   {
+    "player_name": "Draymond Green",
+    "team": "GSW",
+    "team_name": "Golden State Warriors",
+    "position": "C",
+    "role_archetype": {
+      "primary_role": "Roll Man / Rim Runner",
+      "frequency": 35.6
+    },
+    "games_played": 11,
+    "is_small_sample": false,
+    "season_avg": {
+      "pts": 3.3,
+      "reb": 4.7,
+      "ast": 7.1,
+      "min": 25.8,
+      "fg3a": 1.2,
+      "fg3m": 0.3,
+      "paint_pts": 1.4,
+      "pts_rank": 120,
+      "reb_rank": 70,
+      "ast_rank": 15
+    },
+    "distribution_10g": {
+      "pts": {
+        "floor": 2.0,
+        "median": 3.0,
+        "ceiling": 4.0,
+        "logs": [
+          4,
+          7,
+          2,
+          2,
+          2,
+          4,
+          2,
+          3,
+          3,
+          5
+        ]
+      },
+      "reb": {
+        "floor": 4.0,
+        "median": 4.5,
+        "ceiling": 5.0,
+        "logs": [
+          3,
+          5,
+          3,
+          6,
+          5,
+          4,
+          4,
+          9,
+          4,
+          5
+        ]
+      },
+      "ast": {
+        "floor": 6.0,
+        "median": 6.5,
+        "ceiling": 8.5,
+        "logs": [
+          3,
+          7,
+          6,
+          13,
+          11,
+          2,
+          9,
+          6,
+          7,
+          6
+        ]
+      }
+    },
+    "context_stats": {
+      "usg_pct": 10.6,
+      "ast_pct": 35.5,
+      "reb_pct": 10.0
+    },
+    "situational": {
+      "clutch_usg_pct": 9.6,
+      "paint_touches_pg": 5.2
+    },
+    "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 4,
+        "reb": 3,
+        "ast": 3,
+        "min": 15.7,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 2.3,
+        "fga": 5,
+        "fgm": 2,
+        "fta": 0,
+        "tov": 2
+      },
+      {
+        "d": "2026-11-11",
+        "pts": 7,
+        "reb": 5,
+        "ast": 7,
+        "min": 26.8,
+        "fg3m": 1,
+        "fg3a": 1,
+        "paint_pts": 2.3,
+        "fga": 5,
+        "fgm": 3,
+        "fta": 0,
+        "tov": 1
+      },
+      {
+        "d": "2026-11-09",
+        "pts": 2,
+        "reb": 3,
+        "ast": 6,
+        "min": 20.8,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 1.2,
+        "fga": 1,
+        "fgm": 1,
+        "fta": 0,
+        "tov": 2
+      },
+      {
+        "d": "2026-11-07",
+        "pts": 2,
+        "reb": 6,
+        "ast": 13,
+        "min": 33.5,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 1.2,
+        "fga": 5,
+        "fgm": 1,
+        "fta": 2,
+        "tov": 4
+      },
+      {
+        "d": "2026-11-05",
+        "pts": 2,
+        "reb": 5,
+        "ast": 11,
+        "min": 27.4,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 1.2,
+        "fga": 3,
+        "fgm": 1,
+        "fta": 0,
+        "tov": 3
+      },
+      {
+        "d": "2026-11-02",
+        "pts": 4,
+        "reb": 4,
+        "ast": 2,
+        "min": 16.8,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 2.3,
+        "fga": 2,
+        "fgm": 1,
+        "fta": 2,
+        "tov": 1
+      },
+      {
+        "d": "2026-10-30",
+        "pts": 2,
+        "reb": 4,
+        "ast": 9,
+        "min": 31.7,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 1.2,
+        "fga": 3,
+        "fgm": 1,
+        "fta": 0,
+        "tov": 1
+      },
+      {
+        "d": "2026-10-28",
+        "pts": 3,
+        "reb": 9,
+        "ast": 6,
+        "min": 31.8,
+        "fg3m": 0,
+        "fg3a": 0,
+        "paint_pts": 1.7,
+        "fga": 3,
+        "fgm": 1,
+        "fta": 2,
+        "tov": 3
+      },
+      {
+        "d": "2026-10-26",
+        "pts": 3,
+        "reb": 4,
+        "ast": 7,
+        "min": 26.9,
+        "fg3m": 1,
+        "fg3a": 2,
+        "paint_pts": 0.0,
+        "fga": 2,
+        "fgm": 1,
+        "fta": 0,
+        "tov": 5
+      },
+      {
+        "d": "2026-10-23",
+        "pts": 5,
+        "reb": 5,
+        "ast": 6,
+        "min": 31.1,
+        "fg3m": 1,
+        "fg3a": 2,
+        "paint_pts": 1.2,
+        "fga": 4,
+        "fgm": 2,
+        "fta": 0,
+        "tov": 5
+      },
+      {
+        "d": "2026-10-21",
+        "pts": 2,
+        "reb": 4,
+        "ast": 8,
+        "min": 21.2,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 1.2,
+        "fga": 4,
+        "fgm": 1,
+        "fta": 0,
+        "tov": 4
+      }
+    ]
+  },
+  {
     "player_name": "Alperen Sengun",
     "team": "HOU",
     "team_name": "Houston Rockets",
@@ -9551,7 +9854,7 @@
       "fg3a": 2.2,
       "fg3m": 1.0,
       "paint_pts": 11.7,
-      "pts_rank": 22,
+      "pts_rank": 23,
       "reb_rank": 9,
       "ast_rank": 8
     },
@@ -9795,7 +10098,7 @@
       "paint_pts": 4.8,
       "pts_rank": 67,
       "reb_rank": 40,
-      "ast_rank": 101
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -10065,7 +10368,7 @@
       "paint_pts": 9.8,
       "pts_rank": 38,
       "reb_rank": 50,
-      "ast_rank": 57
+      "ast_rank": 56
     },
     "distribution_10g": {
       "pts": {
@@ -10333,7 +10636,7 @@
       "fg3a": 0.8,
       "fg3m": 0.2,
       "paint_pts": 8.4,
-      "pts_rank": 72,
+      "pts_rank": 73,
       "reb_rank": 28,
       "ast_rank": 75
     },
@@ -10603,8 +10906,8 @@
       "fg3a": 5.6,
       "fg3m": 2.3,
       "paint_pts": 5.7,
-      "pts_rank": 64,
-      "reb_rank": 117,
+      "pts_rank": 63,
+      "reb_rank": 118,
       "ast_rank": 8
     },
     "distribution_10g": {
@@ -10845,8 +11148,8 @@
       "fg3a": 6.8,
       "fg3m": 2.5,
       "paint_pts": 8.3,
-      "pts_rank": 28,
-      "reb_rank": 73,
+      "pts_rank": 29,
+      "reb_rank": 75,
       "ast_rank": 1
     },
     "distribution_10g": {
@@ -10971,9 +11274,9 @@
       "fg3a": 4.9,
       "fg3m": 1.8,
       "paint_pts": 10.0,
-      "pts_rank": 25,
+      "pts_rank": 26,
       "reb_rank": 35,
-      "ast_rank": 50
+      "ast_rank": 51
     },
     "distribution_10g": {
       "pts": {
@@ -11227,9 +11530,9 @@
       "fg3a": 5.7,
       "fg3m": 1.8,
       "paint_pts": 4.0,
-      "pts_rank": 97,
+      "pts_rank": 96,
       "reb_rank": 114,
-      "ast_rank": 111
+      "ast_rank": 112
     },
     "distribution_10g": {
       "pts": {
@@ -11457,28 +11760,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 37.2
+      "frequency": 36.9
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 20.4,
-      "reb": 1.8,
+      "pts": 20.7,
+      "reb": 2.0,
       "ast": 6.9,
-      "min": 32.6,
+      "min": 33.0,
       "fg3a": 6.8,
-      "fg3m": 2.4,
-      "paint_pts": 7.7,
-      "pts_rank": 42,
-      "reb_rank": 120,
+      "fg3m": 2.5,
+      "paint_pts": 7.8,
+      "pts_rank": 40,
+      "reb_rank": 119,
       "ast_rank": 16
     },
     "distribution_10g": {
       "pts": {
         "floor": 15.2,
         "median": 20.0,
-        "ceiling": 25.5,
+        "ceiling": 24.0,
         "logs": [
+          24,
           13,
           24,
           26,
@@ -11487,15 +11791,15 @@
           24,
           14,
           16,
-          26,
-          30
+          26
         ]
       },
       "reb": {
         "floor": 0.2,
-        "median": 1.0,
-        "ceiling": 3.5,
+        "median": 1.5,
+        "ceiling": 4.0,
         "logs": [
+          4,
           5,
           0,
           1,
@@ -11504,15 +11808,15 @@
           2,
           1,
           4,
-          0,
-          1
+          0
         ]
       },
       "ast": {
-        "floor": 5.2,
-        "median": 6.5,
+        "floor": 6.0,
+        "median": 7.0,
         "ceiling": 7.8,
         "logs": [
+          7,
           6,
           10,
           7,
@@ -11521,21 +11825,34 @@
           5,
           5,
           11,
-          6,
-          4
+          6
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 29.0,
-      "ast_pct": 36.0,
-      "reb_pct": 3.3
+      "usg_pct": 28.8,
+      "ast_pct": 35.4,
+      "reb_pct": 3.6
     },
     "situational": {
-      "clutch_usg_pct": 30.5,
-      "paint_touches_pg": 5.7
+      "clutch_usg_pct": 30.3,
+      "paint_touches_pg": 5.8
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 24,
+        "reb": 4,
+        "ast": 7,
+        "min": 37.0,
+        "fg3m": 3,
+        "fg3a": 7,
+        "paint_pts": 8.7,
+        "fga": 17,
+        "fgm": 8,
+        "fta": 5,
+        "tov": 3
+      },
       {
         "d": "2026-11-10",
         "pts": 13,
@@ -11685,28 +12002,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 32.2
+      "frequency": 33.4
     },
-    "games_played": 8,
+    "games_played": 9,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 14.4,
-      "reb": 5.9,
-      "ast": 1.6,
-      "min": 29.6,
+      "pts": 13.6,
+      "reb": 6.4,
+      "ast": 1.8,
+      "min": 29.8,
       "fg3a": 6.1,
-      "fg3m": 2.2,
-      "paint_pts": 4.4,
-      "pts_rank": 77,
-      "reb_rank": 49,
-      "ast_rank": 111
+      "fg3m": 2.1,
+      "paint_pts": 4.2,
+      "pts_rank": 86,
+      "reb_rank": 38,
+      "ast_rank": 108
     },
     "distribution_10g": {
       "pts": {
-        "floor": 11.5,
-        "median": 13.5,
-        "ceiling": 17.2,
+        "floor": 10.0,
+        "median": 13.0,
+        "ceiling": 16.0,
         "logs": [
+          7,
           13,
           14,
           21,
@@ -11718,10 +12036,11 @@
         ]
       },
       "reb": {
-        "floor": 4.8,
-        "median": 5.5,
-        "ceiling": 7.2,
+        "floor": 5.0,
+        "median": 6.0,
+        "ceiling": 8.0,
         "logs": [
+          11,
           5,
           3,
           9,
@@ -11737,6 +12056,7 @@
         "median": 1.0,
         "ceiling": 2.0,
         "logs": [
+          3,
           1,
           2,
           7,
@@ -11749,15 +12069,29 @@
       }
     },
     "context_stats": {
-      "usg_pct": 23.3,
-      "ast_pct": 8.7,
-      "reb_pct": 11.9
+      "usg_pct": 22.5,
+      "ast_pct": 9.2,
+      "reb_pct": 12.9
     },
     "situational": {
-      "clutch_usg_pct": 22.3,
-      "paint_touches_pg": 6.6
+      "clutch_usg_pct": 21.5,
+      "paint_touches_pg": 6.7
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 7,
+        "reb": 11,
+        "ast": 3,
+        "min": 31.7,
+        "fg3m": 1,
+        "fg3a": 6,
+        "paint_pts": 2.3,
+        "fga": 9,
+        "fgm": 2,
+        "fta": 2,
+        "tov": 2
+      },
       {
         "d": "2026-11-10",
         "pts": 13,
@@ -11879,28 +12213,29 @@
     "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 34.5
+      "frequency": 36.3
     },
-    "games_played": 9,
+    "games_played": 10,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 11.1,
+      "pts": 11.4,
       "reb": 4.9,
-      "ast": 1.4,
+      "ast": 1.3,
       "min": 29.1,
-      "fg3a": 4.0,
-      "fg3m": 1.9,
-      "paint_pts": 3.2,
-      "pts_rank": 104,
+      "fg3a": 4.3,
+      "fg3m": 2.1,
+      "paint_pts": 3.0,
+      "pts_rank": 101,
       "reb_rank": 64,
-      "ast_rank": 114
+      "ast_rank": 115
     },
     "distribution_10g": {
       "pts": {
-        "floor": 9.0,
+        "floor": 9.2,
         "median": 11.0,
-        "ceiling": 12.0,
+        "ceiling": 13.5,
         "logs": [
+          14,
           11,
           8,
           12,
@@ -11917,6 +12252,7 @@
         "median": 5.0,
         "ceiling": 6.0,
         "logs": [
+          5,
           3,
           4,
           8,
@@ -11929,10 +12265,11 @@
         ]
       },
       "ast": {
-        "floor": 1.0,
+        "floor": 0.2,
         "median": 1.0,
         "ceiling": 1.0,
         "logs": [
+          0,
           0,
           3,
           1,
@@ -11946,15 +12283,29 @@
       }
     },
     "context_stats": {
-      "usg_pct": 14.5,
-      "ast_pct": 7.5,
+      "usg_pct": 14.7,
+      "ast_pct": 6.7,
       "reb_pct": 10.1
     },
     "situational": {
-      "clutch_usg_pct": 13.5,
+      "clutch_usg_pct": 13.7,
       "paint_touches_pg": 5.8
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 14,
+        "reb": 5,
+        "ast": 0,
+        "min": 29.2,
+        "fg3m": 4,
+        "fg3a": 7,
+        "paint_pts": 1.2,
+        "fga": 10,
+        "fgm": 5,
+        "fta": 0,
+        "tov": 1
+      },
       {
         "d": "2026-11-10",
         "pts": 11,
@@ -12092,26 +12443,27 @@
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 20.0
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 8.5,
-      "reb": 4.0,
-      "ast": 4.3,
-      "min": 28.5,
-      "fg3a": 2.4,
-      "fg3m": 1.0,
-      "paint_pts": 3.2,
-      "pts_rank": 115,
+      "pts": 7.9,
+      "reb": 3.9,
+      "ast": 4.5,
+      "min": 27.8,
+      "fg3a": 2.3,
+      "fg3m": 0.9,
+      "paint_pts": 3.0,
+      "pts_rank": 117,
       "reb_rank": 87,
-      "ast_rank": 46
+      "ast_rank": 43
     },
     "distribution_10g": {
       "pts": {
         "floor": 5.0,
-        "median": 7.0,
+        "median": 6.0,
         "ceiling": 12.0,
         "logs": [
+          2,
           3,
           14,
           5,
@@ -12120,15 +12472,15 @@
           5,
           5,
           15,
-          7,
           7
         ]
       },
       "reb": {
-        "floor": 3.2,
-        "median": 4.5,
+        "floor": 3.0,
+        "median": 4.0,
         "ceiling": 5.0,
         "logs": [
+          3,
           2,
           5,
           5,
@@ -12137,7 +12489,6 @@
           5,
           3,
           4,
-          5,
           5
         ]
       },
@@ -12146,6 +12497,7 @@
         "median": 4.0,
         "ceiling": 5.8,
         "logs": [
+          6,
           3,
           4,
           3,
@@ -12154,21 +12506,34 @@
           7,
           3,
           6,
-          5,
-          7
+          5
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 12.8,
-      "ast_pct": 21.5,
+      "usg_pct": 12.5,
+      "ast_pct": 22.7,
       "reb_pct": 8.4
     },
     "situational": {
-      "clutch_usg_pct": 11.8,
-      "paint_touches_pg": 5.3
+      "clutch_usg_pct": 11.5,
+      "paint_touches_pg": 5.2
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 2,
+        "reb": 3,
+        "ast": 6,
+        "min": 20.0,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 1.2,
+        "fga": 4,
+        "fgm": 1,
+        "fta": 0,
+        "tov": 0
+      },
       {
         "d": "2026-11-10",
         "pts": 3,
@@ -12573,7 +12938,7 @@
       "fg3m": 2.2,
       "paint_pts": 10.4,
       "pts_rank": 16,
-      "reb_rank": 102,
+      "reb_rank": 103,
       "ast_rank": 42
     },
     "distribution_10g": {
@@ -12828,7 +13193,7 @@
       "fg3a": 0.0,
       "fg3m": 0.0,
       "paint_pts": 8.4,
-      "pts_rank": 76,
+      "pts_rank": 77,
       "reb_rank": 5,
       "ast_rank": 108
     },
@@ -13098,9 +13463,9 @@
       "fg3a": 3.0,
       "fg3m": 0.7,
       "paint_pts": 3.4,
-      "pts_rank": 117,
+      "pts_rank": 116,
       "reb_rank": 115,
-      "ast_rank": 88
+      "ast_rank": 89
     },
     "distribution_10g": {
       "pts": {
@@ -13328,28 +13693,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 30.6
+      "frequency": 29.6
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 15.6,
-      "reb": 9.8,
+      "pts": 15.5,
+      "reb": 9.7,
       "ast": 5.2,
-      "min": 31.7,
-      "fg3a": 5.9,
-      "fg3m": 1.8,
-      "paint_pts": 6.0,
-      "pts_rank": 68,
+      "min": 31.5,
+      "fg3a": 5.7,
+      "fg3m": 1.6,
+      "paint_pts": 6.2,
+      "pts_rank": 69,
       "reb_rank": 8,
-      "ast_rank": 31
+      "ast_rank": 30
     },
     "distribution_10g": {
       "pts": {
         "floor": 12.2,
-        "median": 13.5,
+        "median": 14.0,
         "ceiling": 18.0,
         "logs": [
+          15,
           12,
           13,
           22,
@@ -13358,15 +13724,15 @@
           18,
           27,
           18,
-          13,
-          14
+          13
         ]
       },
       "reb": {
-        "floor": 7.5,
-        "median": 9.5,
-        "ceiling": 11.0,
+        "floor": 7.2,
+        "median": 9.0,
+        "ceiling": 10.8,
         "logs": [
+          8,
           10,
           11,
           7,
@@ -13375,15 +13741,15 @@
           9,
           9,
           12,
-          7,
-          11
+          7
         ]
       },
       "ast": {
         "floor": 4.0,
-        "median": 4.0,
+        "median": 4.5,
         "ceiling": 5.0,
         "logs": [
+          5,
           3,
           5,
           8,
@@ -13392,14 +13758,13 @@
           5,
           3,
           12,
-          4,
           4
         ]
       }
     },
     "context_stats": {
       "usg_pct": 24.5,
-      "ast_pct": 23.5,
+      "ast_pct": 23.6,
       "reb_pct": 15.7
     },
     "situational": {
@@ -13407,6 +13772,20 @@
       "paint_touches_pg": 8.6
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 15,
+        "reb": 8,
+        "ast": 5,
+        "min": 28.8,
+        "fg3m": 0,
+        "fg3a": 3,
+        "paint_pts": 8.7,
+        "fga": 13,
+        "fgm": 7,
+        "fta": 3,
+        "tov": 2
+      },
       {
         "d": "2026-11-13",
         "pts": 12,
@@ -13584,7 +13963,7 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 37.8
+      "frequency": 37.7
     },
     "games_played": 11,
     "is_small_sample": false,
@@ -13598,7 +13977,7 @@
       "paint_pts": 10.3,
       "pts_rank": 14,
       "reb_rank": 99,
-      "ast_rank": 30
+      "ast_rank": 29
     },
     "distribution_10g": {
       "pts": {
@@ -13655,7 +14034,7 @@
     },
     "context_stats": {
       "usg_pct": 32.0,
-      "ast_pct": 30.3,
+      "ast_pct": 29.9,
       "reb_pct": 5.6
     },
     "situational": {
@@ -13828,19 +14207,19 @@
       "primary_role": "Spot-Up Shooter",
       "frequency": 36.0
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 12.9,
-      "reb": 8.5,
-      "ast": 3.0,
-      "min": 28.4,
-      "fg3a": 5.1,
-      "fg3m": 2.1,
-      "paint_pts": 3.8,
-      "pts_rank": 92,
-      "reb_rank": 16,
-      "ast_rank": 79
+      "pts": 13.8,
+      "reb": 8.8,
+      "ast": 3.1,
+      "min": 28.8,
+      "fg3a": 5.2,
+      "fg3m": 2.2,
+      "paint_pts": 4.1,
+      "pts_rank": 83,
+      "reb_rank": 13,
+      "ast_rank": 75
     },
     "distribution_10g": {
       "pts": {
@@ -13848,6 +14227,7 @@
         "median": 14.5,
         "ceiling": 16.8,
         "logs": [
+          23,
           14,
           15,
           3,
@@ -13856,8 +14236,7 @@
           10,
           10,
           17,
-          16,
-          17
+          16
         ]
       },
       "reb": {
@@ -13865,6 +14244,7 @@
         "median": 9.0,
         "ceiling": 10.5,
         "logs": [
+          12,
           7,
           11,
           6,
@@ -13873,15 +14253,15 @@
           9,
           7,
           7,
-          11,
           11
         ]
       },
       "ast": {
-        "floor": 2.2,
-        "median": 3.5,
+        "floor": 3.0,
+        "median": 4.0,
         "ceiling": 4.0,
         "logs": [
+          4,
           6,
           4,
           4,
@@ -13890,21 +14270,34 @@
           3,
           2,
           4,
-          3,
-          1
+          3
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 18.8,
-      "ast_pct": 15.2,
-      "reb_pct": 15.2
+      "usg_pct": 19.2,
+      "ast_pct": 15.3,
+      "reb_pct": 15.7
     },
     "situational": {
-      "clutch_usg_pct": 17.8,
-      "paint_touches_pg": 7.7
+      "clutch_usg_pct": 18.2,
+      "paint_touches_pg": 7.8
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 23,
+        "reb": 12,
+        "ast": 4,
+        "min": 32.8,
+        "fg3m": 4,
+        "fg3a": 6,
+        "paint_pts": 6.4,
+        "fga": 13,
+        "fgm": 7,
+        "fta": 6,
+        "tov": 2
+      },
       {
         "d": "2026-11-13",
         "pts": 14,
@@ -14068,28 +14461,29 @@
     "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 46.2
+      "frequency": 46.8
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 11.9,
-      "reb": 2.9,
-      "ast": 1.2,
-      "min": 27.3,
-      "fg3a": 5.5,
-      "fg3m": 2.2,
-      "paint_pts": 3.1,
-      "pts_rank": 99,
-      "reb_rank": 109,
-      "ast_rank": 118
+      "pts": 11.4,
+      "reb": 2.8,
+      "ast": 1.3,
+      "min": 27.1,
+      "fg3a": 5.3,
+      "fg3m": 2.1,
+      "paint_pts": 3.0,
+      "pts_rank": 101,
+      "reb_rank": 112,
+      "ast_rank": 115
     },
     "distribution_10g": {
       "pts": {
-        "floor": 7.8,
-        "median": 12.5,
-        "ceiling": 15.5,
+        "floor": 5.5,
+        "median": 10.5,
+        "ceiling": 14.0,
         "logs": [
+          5,
           11,
           22,
           14,
@@ -14098,15 +14492,15 @@
           16,
           4,
           10,
-          14,
-          16
+          14
         ]
       },
       "reb": {
         "floor": 2.0,
         "median": 2.0,
-        "ceiling": 3.0,
+        "ceiling": 2.8,
         "logs": [
+          2,
           2,
           2,
           4,
@@ -14115,15 +14509,15 @@
           3,
           2,
           1,
-          3,
-          7
+          3
         ]
       },
       "ast": {
         "floor": 0.0,
         "median": 1.0,
-        "ceiling": 2.5,
+        "ceiling": 1.8,
         "logs": [
+          2,
           1,
           1,
           1,
@@ -14132,21 +14526,34 @@
           3,
           0,
           0,
-          0,
-          3
+          0
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 15.3,
-      "ast_pct": 6.4,
+      "usg_pct": 14.7,
+      "ast_pct": 6.6,
       "reb_pct": 5.4
     },
     "situational": {
-      "clutch_usg_pct": 14.3,
-      "paint_touches_pg": 4.8
+      "clutch_usg_pct": 13.7,
+      "paint_touches_pg": 4.7
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 5,
+        "reb": 2,
+        "ast": 2,
+        "min": 24.6,
+        "fg3m": 1,
+        "fg3a": 3,
+        "paint_pts": 1.2,
+        "fga": 3,
+        "fgm": 1,
+        "fta": 3,
+        "tov": 0
+      },
       {
         "d": "2026-11-13",
         "pts": 11,
@@ -14324,28 +14731,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 28.9
+      "frequency": 28.7
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 16.9,
-      "reb": 2.2,
+      "pts": 16.8,
+      "reb": 2.4,
       "ast": 9.2,
-      "min": 36.0,
-      "fg3a": 5.8,
-      "fg3m": 2.3,
-      "paint_pts": 5.8,
-      "pts_rank": 60,
-      "reb_rank": 118,
+      "min": 35.7,
+      "fg3a": 5.7,
+      "fg3m": 2.4,
+      "paint_pts": 5.6,
+      "pts_rank": 62,
+      "reb_rank": 117,
       "ast_rank": 2
     },
     "distribution_10g": {
       "pts": {
         "floor": 15.0,
-        "median": 18.0,
-        "ceiling": 21.8,
+        "median": 16.0,
+        "ceiling": 20.5,
         "logs": [
+          15,
           22,
           19,
           17,
@@ -14354,15 +14762,15 @@
           15,
           15,
           10,
-          21,
-          22
+          21
         ]
       },
       "reb": {
-        "floor": 1.0,
-        "median": 2.0,
-        "ceiling": 4.5,
+        "floor": 1.2,
+        "median": 2.5,
+        "ceiling": 4.8,
         "logs": [
+          4,
           5,
           5,
           3,
@@ -14371,15 +14779,15 @@
           0,
           6,
           1,
-          0,
-          1
+          0
         ]
       },
       "ast": {
         "floor": 8.0,
-        "median": 10.0,
+        "median": 9.5,
         "ceiling": 10.8,
         "logs": [
+          9,
           17,
           8,
           11,
@@ -14388,21 +14796,34 @@
           7,
           11,
           10,
-          2,
-          10
+          2
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 18.9,
-      "ast_pct": 36.8,
-      "reb_pct": 3.6
+      "usg_pct": 18.7,
+      "ast_pct": 36.7,
+      "reb_pct": 3.8
     },
     "situational": {
-      "clutch_usg_pct": 17.9,
-      "paint_touches_pg": 5.5
+      "clutch_usg_pct": 17.7,
+      "paint_touches_pg": 5.4
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 15,
+        "reb": 4,
+        "ast": 9,
+        "min": 32.3,
+        "fg3m": 3,
+        "fg3a": 5,
+        "paint_pts": 3.5,
+        "fga": 7,
+        "fgm": 4,
+        "fta": 4,
+        "tov": 4
+      },
       {
         "d": "2026-11-13",
         "pts": 22,
@@ -14580,21 +15001,21 @@
     "position": "C",
     "role_archetype": {
       "primary_role": "Roll Man / Rim Runner",
-      "frequency": 41.5
+      "frequency": 40.8
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 19.4,
-      "reb": 8.8,
-      "ast": 3.2,
-      "min": 33.6,
-      "fg3a": 3.2,
+      "pts": 19.5,
+      "reb": 8.5,
+      "ast": 3.3,
+      "min": 33.8,
+      "fg3a": 3.1,
       "fg3m": 0.7,
       "paint_pts": 10.1,
       "pts_rank": 47,
-      "reb_rank": 13,
-      "ast_rank": 74
+      "reb_rank": 16,
+      "ast_rank": 72
     },
     "distribution_10g": {
       "pts": {
@@ -14602,6 +15023,7 @@
         "median": 19.0,
         "ceiling": 26.2,
         "logs": [
+          20,
           37,
           11,
           18,
@@ -14610,8 +15032,7 @@
           16,
           27,
           24,
-          8,
-          20
+          8
         ]
       },
       "reb": {
@@ -14619,6 +15040,7 @@
         "median": 9.0,
         "ceiling": 9.8,
         "logs": [
+          5,
           14,
           8,
           8,
@@ -14627,7 +15049,6 @@
           9,
           9,
           9,
-          8,
           8
         ]
       },
@@ -14636,6 +15057,7 @@
         "median": 3.5,
         "ceiling": 4.0,
         "logs": [
+          4,
           3,
           4,
           4,
@@ -14644,21 +15066,34 @@
           4,
           3,
           3,
-          3,
-          4
+          3
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 21.8,
-      "ast_pct": 14.8,
-      "reb_pct": 15.1
+      "usg_pct": 21.3,
+      "ast_pct": 14.7,
+      "reb_pct": 14.3
     },
     "situational": {
-      "clutch_usg_pct": 20.8,
-      "paint_touches_pg": 9.6
+      "clutch_usg_pct": 20.3,
+      "paint_touches_pg": 9.4
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 20,
+        "reb": 5,
+        "ast": 4,
+        "min": 36.1,
+        "fg3m": 1,
+        "fg3a": 2,
+        "paint_pts": 9.9,
+        "fga": 8,
+        "fgm": 5,
+        "fta": 13,
+        "tov": 1
+      },
       {
         "d": "2026-11-13",
         "pts": 37,
@@ -14836,28 +15271,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 27.4
+      "frequency": 27.3
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 28.5,
-      "reb": 12.3,
-      "ast": 4.9,
-      "min": 32.5,
+      "pts": 28.9,
+      "reb": 12.5,
+      "ast": 5.2,
+      "min": 32.4,
       "fg3a": 2.4,
       "fg3m": 0.6,
-      "paint_pts": 15.5,
-      "pts_rank": 5,
+      "paint_pts": 15.7,
+      "pts_rank": 4,
       "reb_rank": 3,
-      "ast_rank": 38
+      "ast_rank": 30
     },
     "distribution_10g": {
       "pts": {
-        "floor": 24.8,
-        "median": 29.0,
-        "ceiling": 30.0,
+        "floor": 27.5,
+        "median": 29.5,
+        "ceiling": 30.8,
         "logs": [
+          34,
           37,
           30,
           29,
@@ -14866,15 +15302,15 @@
           30,
           31,
           24,
-          29,
-          14
+          29
         ]
       },
       "reb": {
-        "floor": 11.2,
+        "floor": 12.5,
         "median": 14.0,
         "ceiling": 14.0,
         "logs": [
+          14,
           9,
           11,
           14,
@@ -14883,15 +15319,15 @@
           12,
           18,
           18,
-          14,
-          6
+          14
         ]
       },
       "ast": {
-        "floor": 3.0,
-        "median": 4.0,
-        "ceiling": 6.8,
+        "floor": 3.2,
+        "median": 5.0,
+        "ceiling": 7.8,
         "logs": [
+          8,
           2,
           4,
           3,
@@ -14900,21 +15336,34 @@
           7,
           10,
           3,
-          11,
-          3
+          11
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 34.3,
-      "ast_pct": 29.1,
+      "usg_pct": 34.1,
+      "ast_pct": 30.7,
       "reb_pct": 21.8
     },
     "situational": {
-      "clutch_usg_pct": 35.8,
-      "paint_touches_pg": 13.3
+      "clutch_usg_pct": 35.6,
+      "paint_touches_pg": 13.5
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 34,
+        "reb": 14,
+        "ast": 8,
+        "min": 30.9,
+        "fg3m": 1,
+        "fg3a": 2,
+        "paint_pts": 18.0,
+        "fga": 17,
+        "fgm": 13,
+        "fta": 9,
+        "tov": 3
+      },
       {
         "d": "2026-11-13",
         "pts": 37,
@@ -15104,9 +15553,9 @@
       "fg3a": 2.9,
       "fg3m": 1.4,
       "paint_pts": 4.2,
-      "pts_rank": 102,
+      "pts_rank": 101,
       "reb_rank": 96,
-      "ast_rank": 69
+      "ast_rank": 67
     },
     "distribution_10g": {
       "pts": {
@@ -15163,8 +15612,8 @@
     },
     "context_stats": {
       "usg_pct": 15.0,
-      "ast_pct": 15.9,
-      "reb_pct": 6.7
+      "ast_pct": 15.8,
+      "reb_pct": 6.6
     },
     "situational": {
       "clutch_usg_pct": 14.0,
@@ -15346,9 +15795,9 @@
       "fg3a": 7.7,
       "fg3m": 2.9,
       "paint_pts": 7.4,
-      "pts_rank": 31,
-      "reb_rank": 84,
-      "ast_rank": 46
+      "pts_rank": 30,
+      "reb_rank": 85,
+      "ast_rank": 48
     },
     "distribution_10g": {
       "pts": {
@@ -15602,9 +16051,9 @@
       "fg3a": 4.5,
       "fg3m": 2.0,
       "paint_pts": 6.1,
-      "pts_rank": 65,
+      "pts_rank": 64,
       "reb_rank": 51,
-      "ast_rank": 81
+      "ast_rank": 82
     },
     "distribution_10g": {
       "pts": {
@@ -15873,8 +16322,8 @@
       "fg3m": 1.4,
       "paint_pts": 1.8,
       "pts_rank": 118,
-      "reb_rank": 48,
-      "ast_rank": 81
+      "reb_rank": 49,
+      "ast_rank": 82
     },
     "distribution_10g": {
       "pts": {
@@ -16128,9 +16577,9 @@
       "fg3a": 5.0,
       "fg3m": 1.5,
       "paint_pts": 3.7,
-      "pts_rank": 104,
-      "reb_rank": 54,
-      "ast_rank": 88
+      "pts_rank": 105,
+      "reb_rank": 55,
+      "ast_rank": 89
     },
     "distribution_10g": {
       "pts": {
@@ -16386,7 +16835,7 @@
     "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 39.1
+      "frequency": 39.2
     },
     "games_played": 4,
     "is_small_sample": false,
@@ -16400,7 +16849,7 @@
       "paint_pts": 11.5,
       "pts_rank": 2,
       "reb_rank": 67,
-      "ast_rank": 69
+      "ast_rank": 67
     },
     "distribution_10g": {
       "pts": {
@@ -16439,7 +16888,7 @@
     },
     "context_stats": {
       "usg_pct": 38.0,
-      "ast_pct": 19.5,
+      "ast_pct": 19.8,
       "reb_pct": 7.0
     },
     "situational": {
@@ -16514,26 +16963,27 @@
       "primary_role": "Spot-Up Shooter",
       "frequency": 26.0
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 16.9,
-      "reb": 6.3,
-      "ast": 3.6,
-      "min": 33.1,
-      "fg3a": 4.3,
-      "fg3m": 1.3,
+      "pts": 17.0,
+      "reb": 6.2,
+      "ast": 3.8,
+      "min": 33.4,
+      "fg3a": 4.4,
+      "fg3m": 1.4,
       "paint_pts": 7.5,
-      "pts_rank": 60,
-      "reb_rank": 40,
-      "ast_rank": 66
+      "pts_rank": 59,
+      "reb_rank": 42,
+      "ast_rank": 56
     },
     "distribution_10g": {
       "pts": {
-        "floor": 14.0,
-        "median": 16.0,
+        "floor": 14.5,
+        "median": 17.0,
         "ceiling": 19.0,
         "logs": [
+          18,
           16,
           16,
           23,
@@ -16542,7 +16992,6 @@
           19,
           23,
           19,
-          14,
           14
         ]
       },
@@ -16551,6 +17000,7 @@
         "median": 6.0,
         "ceiling": 6.0,
         "logs": [
+          5,
           9,
           6,
           6,
@@ -16559,15 +17009,15 @@
           3,
           6,
           6,
-          6,
           6
         ]
       },
       "ast": {
         "floor": 3.0,
-        "median": 3.5,
-        "ceiling": 4.0,
+        "median": 4.0,
+        "ceiling": 4.8,
         "logs": [
+          6,
           3,
           3,
           5,
@@ -16576,21 +17026,34 @@
           3,
           7,
           4,
-          4,
-          3
+          4
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 20.5,
-      "ast_pct": 15.6,
-      "reb_pct": 9.5
+      "usg_pct": 20.1,
+      "ast_pct": 16.4,
+      "reb_pct": 9.3
     },
     "situational": {
-      "clutch_usg_pct": 19.5,
-      "paint_touches_pg": 8.2
+      "clutch_usg_pct": 19.1,
+      "paint_touches_pg": 8.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 18,
+        "reb": 5,
+        "ast": 6,
+        "min": 37.0,
+        "fg3m": 2,
+        "fg3a": 5,
+        "paint_pts": 7.0,
+        "fga": 11,
+        "fgm": 7,
+        "fta": 2,
+        "tov": 3
+      },
       {
         "d": "2026-11-12",
         "pts": 16,
@@ -16768,28 +17231,29 @@
     "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 20.0
+      "frequency": 20.1
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 18.1,
-      "reb": 4.7,
-      "ast": 3.8,
-      "min": 31.0,
-      "fg3a": 4.1,
-      "fg3m": 1.9,
-      "paint_pts": 7.2,
-      "pts_rank": 52,
-      "reb_rank": 69,
-      "ast_rank": 57
+      "pts": 18.5,
+      "reb": 4.6,
+      "ast": 3.5,
+      "min": 31.2,
+      "fg3a": 3.9,
+      "fg3m": 1.8,
+      "paint_pts": 7.7,
+      "pts_rank": 49,
+      "reb_rank": 73,
+      "ast_rank": 67
     },
     "distribution_10g": {
       "pts": {
-        "floor": 15.5,
-        "median": 18.5,
-        "ceiling": 24.8,
+        "floor": 17.2,
+        "median": 20.0,
+        "ceiling": 25.5,
         "logs": [
+          24,
           18,
           26,
           26,
@@ -16798,15 +17262,15 @@
           27,
           15,
           17,
-          9,
           9
         ]
       },
       "reb": {
         "floor": 2.0,
-        "median": 3.0,
+        "median": 3.5,
         "ceiling": 6.2,
         "logs": [
+          4,
           2,
           4,
           2,
@@ -16815,15 +17279,15 @@
           9,
           7,
           3,
-          1,
-          3
+          1
         ]
       },
       "ast": {
-        "floor": 1.2,
-        "median": 3.0,
+        "floor": 1.0,
+        "median": 2.5,
         "ceiling": 4.0,
         "logs": [
+          0,
           1,
           1,
           4,
@@ -16832,21 +17296,34 @@
           3,
           2,
           4,
-          0,
-          3
+          0
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 22.2,
-      "ast_pct": 17.8,
-      "reb_pct": 7.5
+      "usg_pct": 22.3,
+      "ast_pct": 16.7,
+      "reb_pct": 7.4
     },
     "situational": {
-      "clutch_usg_pct": 21.2,
-      "paint_touches_pg": 7.1
+      "clutch_usg_pct": 21.3,
+      "paint_touches_pg": 7.3
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 24,
+        "reb": 4,
+        "ast": 0,
+        "min": 33.1,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 13.9,
+        "fga": 16,
+        "fgm": 10,
+        "fta": 4,
+        "tov": 2
+      },
       {
         "d": "2026-11-12",
         "pts": 18,
@@ -17024,28 +17501,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 29.9
+      "frequency": 29.2
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 12.4,
-      "reb": 5.7,
+      "pts": 12.3,
+      "reb": 5.5,
       "ast": 2.9,
-      "min": 30.2,
-      "fg3a": 4.3,
-      "fg3m": 1.8,
-      "paint_pts": 4.2,
-      "pts_rank": 95,
-      "reb_rank": 51,
-      "ast_rank": 80
+      "min": 30.6,
+      "fg3a": 4.2,
+      "fg3m": 1.6,
+      "paint_pts": 4.3,
+      "pts_rank": 96,
+      "reb_rank": 52,
+      "ast_rank": 81
     },
     "distribution_10g": {
       "pts": {
         "floor": 8.5,
-        "median": 13.5,
+        "median": 12.5,
         "ceiling": 16.8,
         "logs": [
+          11,
           14,
           4,
           17,
@@ -17054,15 +17532,15 @@
           19,
           5,
           20,
-          10,
-          13
+          10
         ]
       },
       "reb": {
-        "floor": 4.0,
+        "floor": 3.2,
         "median": 7.0,
         "ceiling": 8.0,
         "logs": [
+          3,
           8,
           0,
           8,
@@ -17071,15 +17549,15 @@
           6,
           1,
           4,
-          10,
-          4
+          10
         ]
       },
       "ast": {
-        "floor": 1.0,
+        "floor": 1.5,
         "median": 3.0,
         "ceiling": 4.8,
         "logs": [
+          3,
           5,
           0,
           4,
@@ -17088,21 +17566,34 @@
           3,
           0,
           5,
-          1,
           1
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 17.4,
-      "ast_pct": 12.8,
-      "reb_pct": 9.3
+      "usg_pct": 17.2,
+      "ast_pct": 12.7,
+      "reb_pct": 8.9
     },
     "situational": {
-      "clutch_usg_pct": 16.4,
-      "paint_touches_pg": 6.4
+      "clutch_usg_pct": 16.2,
+      "paint_touches_pg": 6.3
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 11,
+        "reb": 3,
+        "ast": 3,
+        "min": 35.4,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 6.4,
+        "fga": 10,
+        "fgm": 3,
+        "fta": 6,
+        "tov": 1
+      },
       {
         "d": "2026-11-12",
         "pts": 14,
@@ -17294,7 +17785,7 @@
       "paint_pts": 5.2,
       "pts_rank": 68,
       "reb_rank": 67,
-      "ast_rank": 66
+      "ast_rank": 65
     },
     "distribution_10g": {
       "pts": {
@@ -17347,12 +17838,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 18.6,
-      "ast_pct": 16.4,
+      "usg_pct": 18.5,
+      "ast_pct": 16.5,
       "reb_pct": 8.7
     },
     "situational": {
-      "clutch_usg_pct": 17.6,
+      "clutch_usg_pct": 17.5,
       "paint_touches_pg": 6.2
     },
     "all_logs": [
@@ -17491,28 +17982,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 16.2
+      "frequency": 16.5
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 21.8,
+      "pts": 21.9,
       "reb": 5.2,
-      "ast": 2.8,
-      "min": 32.8,
-      "fg3a": 0.8,
-      "fg3m": 0.3,
-      "paint_pts": 12.0,
+      "ast": 2.7,
+      "min": 32.6,
+      "fg3a": 1.0,
+      "fg3m": 0.5,
+      "paint_pts": 11.9,
       "pts_rank": 28,
-      "reb_rank": 54,
-      "ast_rank": 81
+      "reb_rank": 55,
+      "ast_rank": 85
     },
     "distribution_10g": {
       "pts": {
-        "floor": 18.2,
-        "median": 22.5,
+        "floor": 22.0,
+        "median": 23.5,
         "ceiling": 25.0,
         "logs": [
+          24,
           22,
           29,
           25,
@@ -17521,15 +18013,15 @@
           25,
           15,
           22,
-          25,
-          17
+          25
         ]
       },
       "reb": {
-        "floor": 4.0,
-        "median": 5.0,
+        "floor": 4.2,
+        "median": 5.5,
         "ceiling": 6.0,
         "logs": [
+          6,
           5,
           4,
           4,
@@ -17538,8 +18030,7 @@
           11,
           6,
           6,
-          5,
-          1
+          5
         ]
       },
       "ast": {
@@ -17547,29 +18038,43 @@
         "median": 2.0,
         "ceiling": 4.0,
         "logs": [
-          4,
-          2,
           2,
           4,
           2,
-          4,
+          2,
           4,
           2,
+          4,
+          4,
           2,
           2
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 23.1,
+      "usg_pct": 23.6,
       "ast_pct": 14.2,
-      "reb_pct": 9.4
+      "reb_pct": 9.6
     },
     "situational": {
-      "clutch_usg_pct": 22.1,
-      "paint_touches_pg": 8.4
+      "clutch_usg_pct": 22.6,
+      "paint_touches_pg": 8.5
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 24,
+        "reb": 6,
+        "ast": 2,
+        "min": 30.8,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 10.4,
+        "fga": 16,
+        "fgm": 9,
+        "fta": 8,
+        "tov": 2
+      },
       {
         "d": "2026-11-13",
         "pts": 22,
@@ -17759,9 +18264,9 @@
       "fg3a": 3.0,
       "fg3m": 0.9,
       "paint_pts": 6.3,
-      "pts_rank": 86,
-      "reb_rank": 72,
-      "ast_rank": 44
+      "pts_rank": 88,
+      "reb_rank": 73,
+      "ast_rank": 46
     },
     "distribution_10g": {
       "pts": {
@@ -17815,8 +18320,8 @@
     },
     "context_stats": {
       "usg_pct": 20.2,
-      "ast_pct": 21.3,
-      "reb_pct": 8.6
+      "ast_pct": 21.4,
+      "reb_pct": 8.7
     },
     "situational": {
       "clutch_usg_pct": 19.2,
@@ -17960,26 +18465,27 @@
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 31.6
     },
-    "games_played": 13,
+    "games_played": 14,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 15.5,
+      "pts": 15.3,
       "reb": 4.5,
-      "ast": 5.1,
-      "min": 29.2,
-      "fg3a": 4.0,
+      "ast": 5.2,
+      "min": 29.5,
+      "fg3a": 3.9,
       "fg3m": 1.1,
-      "paint_pts": 7.1,
-      "pts_rank": 70,
-      "reb_rank": 73,
-      "ast_rank": 33
+      "paint_pts": 7.0,
+      "pts_rank": 71,
+      "reb_rank": 75,
+      "ast_rank": 30
     },
     "distribution_10g": {
       "pts": {
-        "floor": 12.5,
+        "floor": 13.2,
         "median": 18.5,
         "ceiling": 21.5,
         "logs": [
+          13,
           18,
           14,
           11,
@@ -17988,8 +18494,7 @@
           19,
           12,
           20,
-          22,
-          11
+          22
         ]
       },
       "reb": {
@@ -17997,6 +18502,7 @@
         "median": 5.0,
         "ceiling": 5.8,
         "logs": [
+          4,
           5,
           4,
           3,
@@ -18005,15 +18511,15 @@
           6,
           4,
           5,
-          8,
-          4
+          8
         ]
       },
       "ast": {
         "floor": 5.0,
-        "median": 6.0,
+        "median": 7.0,
         "ceiling": 7.0,
         "logs": [
+          7,
           7,
           5,
           8,
@@ -18022,21 +18528,34 @@
           2,
           7,
           7,
-          13,
-          3
+          13
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 25.5,
-      "ast_pct": 28.3,
-      "reb_pct": 9.2
+      "usg_pct": 25.3,
+      "ast_pct": 28.9,
+      "reb_pct": 9.1
     },
     "situational": {
-      "clutch_usg_pct": 27.0,
+      "clutch_usg_pct": 26.8,
       "paint_touches_pg": 7.0
     },
     "all_logs": [
+      {
+        "d": "2026-11-14",
+        "pts": 13,
+        "reb": 4,
+        "ast": 7,
+        "min": 32.7,
+        "fg3m": 1,
+        "fg3a": 3,
+        "paint_pts": 5.8,
+        "fga": 15,
+        "fgm": 6,
+        "fta": 1,
+        "tov": 2
+      },
       {
         "d": "2026-11-13",
         "pts": 18,
@@ -18241,8 +18760,8 @@
       "fg3m": 2.8,
       "paint_pts": 10.6,
       "pts_rank": 8,
-      "reb_rank": 109,
-      "ast_rank": 25
+      "reb_rank": 110,
+      "ast_rank": 24
     },
     "distribution_10g": {
       "pts": {
@@ -18497,7 +19016,7 @@
       "fg3m": 2.2,
       "paint_pts": 5.5,
       "pts_rank": 66,
-      "reb_rank": 58,
+      "reb_rank": 61,
       "ast_rank": 94
     },
     "distribution_10g": {
@@ -18752,7 +19271,7 @@
       "fg3a": 5.0,
       "fg3m": 2.0,
       "paint_pts": 8.7,
-      "pts_rank": 37,
+      "pts_rank": 36,
       "reb_rank": 1,
       "ast_rank": 62
     },
@@ -19010,7 +19529,7 @@
       "paint_pts": 1.7,
       "pts_rank": 118,
       "reb_rank": 33,
-      "ast_rank": 57
+      "ast_rank": 56
     },
     "distribution_10g": {
       "pts": {
@@ -19209,26 +19728,27 @@
       "primary_role": "Pick & Roll Ball Handler",
       "frequency": 40.4
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 29.7,
+      "pts": 30.5,
       "reb": 4.2,
       "ast": 4.5,
-      "min": 32.8,
-      "fg3a": 6.7,
+      "min": 33.2,
+      "fg3a": 6.5,
       "fg3m": 2.2,
-      "paint_pts": 13.3,
-      "pts_rank": 4,
-      "reb_rank": 81,
+      "paint_pts": 13.8,
+      "pts_rank": 3,
+      "reb_rank": 82,
       "ast_rank": 43
     },
     "distribution_10g": {
       "pts": {
         "floor": 26.0,
         "median": 29.0,
-        "ceiling": 33.2,
+        "ceiling": 37.8,
         "logs": [
+          40,
           31,
           26,
           30,
@@ -19237,15 +19757,15 @@
           43,
           26,
           21,
-          26,
-          34
+          26
         ]
       },
       "reb": {
         "floor": 3.0,
         "median": 4.0,
-        "ceiling": 5.5,
+        "ceiling": 4.0,
         "logs": [
+          4,
           4,
           8,
           2,
@@ -19254,8 +19774,7 @@
           3,
           4,
           6,
-          3,
-          6
+          3
         ]
       },
       "ast": {
@@ -19263,6 +19782,7 @@
         "median": 3.5,
         "ceiling": 7.2,
         "logs": [
+          5,
           2,
           3,
           9,
@@ -19271,8 +19791,7 @@
           8,
           3,
           2,
-          3,
-          5
+          3
         ]
       }
     },
@@ -19283,9 +19802,23 @@
     },
     "situational": {
       "clutch_usg_pct": 38.5,
-      "paint_touches_pg": 8.5
+      "paint_touches_pg": 8.6
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 40,
+        "reb": 4,
+        "ast": 5,
+        "min": 38.5,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 19.7,
+        "fga": 26,
+        "fgm": 15,
+        "fta": 11,
+        "tov": 3
+      },
       {
         "d": "2026-11-11",
         "pts": 31,
@@ -19475,8 +20008,8 @@
       "fg3a": 3.0,
       "fg3m": 1.0,
       "paint_pts": 6.2,
-      "pts_rank": 83,
-      "reb_rank": 69,
+      "pts_rank": 84,
+      "reb_rank": 70,
       "ast_rank": 72
     },
     "distribution_10g": {
@@ -19512,12 +20045,12 @@
       }
     },
     "context_stats": {
-      "usg_pct": 21.4,
-      "ast_pct": 15.2,
+      "usg_pct": 21.3,
+      "ast_pct": 15.1,
       "reb_pct": 7.6
     },
     "situational": {
-      "clutch_usg_pct": 20.4,
+      "clutch_usg_pct": 20.3,
       "paint_touches_pg": 6.6
     },
     "all_logs": [
@@ -19694,7 +20227,7 @@
       "fg3m": 0.8,
       "paint_pts": 9.3,
       "pts_rank": 49,
-      "reb_rank": 93,
+      "reb_rank": 91,
       "ast_rank": 72
     },
     "distribution_10g": {
@@ -19752,8 +20285,8 @@
     },
     "context_stats": {
       "usg_pct": 26.7,
-      "ast_pct": 20.6,
-      "reb_pct": 6.8
+      "ast_pct": 20.4,
+      "reb_pct": 6.9
     },
     "situational": {
       "clutch_usg_pct": 28.2,
@@ -19935,7 +20468,7 @@
       "fg3a": 5.3,
       "fg3m": 1.4,
       "paint_pts": 11.7,
-      "pts_rank": 19,
+      "pts_rank": 18,
       "reb_rank": 30,
       "ast_rank": 6
     },
@@ -20191,9 +20724,9 @@
       "fg3a": 10.0,
       "fg3m": 4.1,
       "paint_pts": 3.5,
-      "pts_rank": 50,
-      "reb_rank": 84,
-      "ast_rank": 88
+      "pts_rank": 51,
+      "reb_rank": 85,
+      "ast_rank": 89
     },
     "distribution_10g": {
       "pts": {
@@ -20433,7 +20966,7 @@
       "fg3a": 3.0,
       "fg3m": 1.5,
       "paint_pts": 11.6,
-      "pts_rank": 18,
+      "pts_rank": 17,
       "reb_rank": 36,
       "ast_rank": 11
     },
@@ -20525,7 +21058,7 @@
       "fg3a": 2.5,
       "fg3m": 1.0,
       "paint_pts": 6.1,
-      "pts_rank": 84,
+      "pts_rank": 87,
       "reb_rank": 11,
       "ast_rank": 119
     },
@@ -20783,7 +21316,7 @@
       "paint_pts": 11.2,
       "pts_rank": 7,
       "reb_rank": 99,
-      "ast_rank": 29
+      "ast_rank": 28
     },
     "distribution_10g": {
       "pts": {
@@ -21051,7 +21584,7 @@
       "fg3a": 4.7,
       "fg3m": 1.8,
       "paint_pts": 9.2,
-      "pts_rank": 36,
+      "pts_rank": 35,
       "reb_rank": 36,
       "ast_rank": 62
     },
@@ -21308,8 +21841,8 @@
       "fg3m": 1.7,
       "paint_pts": 4.6,
       "pts_rank": 92,
-      "reb_rank": 39,
-      "ast_rank": 69
+      "reb_rank": 38,
+      "ast_rank": 67
     },
     "distribution_10g": {
       "pts": {
@@ -21563,7 +22096,7 @@
       "fg3a": 3.8,
       "fg3m": 0.9,
       "paint_pts": 7.2,
-      "pts_rank": 71,
+      "pts_rank": 72,
       "reb_rank": 25,
       "ast_rank": 17
     },
@@ -21793,7 +22326,7 @@
       "paint_pts": 11.0,
       "pts_rank": 13,
       "reb_rank": 115,
-      "ast_rank": 36
+      "ast_rank": 37
     },
     "distribution_10g": {
       "pts": {
@@ -22033,9 +22566,9 @@
       "fg3a": 4.6,
       "fg3m": 2.0,
       "paint_pts": 5.2,
-      "pts_rank": 74,
+      "pts_rank": 75,
       "reb_rank": 88,
-      "ast_rank": 99
+      "ast_rank": 97
     },
     "distribution_10g": {
       "pts": {
@@ -22275,7 +22808,7 @@
       "fg3a": 5.6,
       "fg3m": 1.7,
       "paint_pts": 5.5,
-      "pts_rank": 75,
+      "pts_rank": 76,
       "reb_rank": 23,
       "ast_rank": 75
     },
@@ -22517,7 +23050,7 @@
       "fg3a": 3.4,
       "fg3m": 0.9,
       "paint_pts": 5.3,
-      "pts_rank": 101,
+      "pts_rank": 99,
       "reb_rank": 99,
       "ast_rank": 75
     },
@@ -22747,28 +23280,29 @@
     "position": "PF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 23.5
+      "frequency": 23.3
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 23.0,
+      "pts": 23.9,
       "reb": 6.1,
-      "ast": 6.5,
-      "min": 32.5,
+      "ast": 6.2,
+      "min": 32.7,
       "fg3a": 5.6,
-      "fg3m": 1.9,
-      "paint_pts": 10.0,
-      "pts_rank": 23,
+      "fg3m": 2.0,
+      "paint_pts": 10.4,
+      "pts_rank": 20,
       "reb_rank": 45,
-      "ast_rank": 17
+      "ast_rank": 20
     },
     "distribution_10g": {
       "pts": {
         "floor": 22.2,
         "median": 24.0,
-        "ceiling": 25.5,
+        "ceiling": 27.0,
         "logs": [
+          34,
           28,
           24,
           15,
@@ -22777,15 +23311,15 @@
           28,
           24,
           24,
-          23,
-          26
+          23
         ]
       },
       "reb": {
         "floor": 4.0,
         "median": 5.5,
-        "ceiling": 7.0,
+        "ceiling": 6.8,
         "logs": [
+          6,
           3,
           6,
           4,
@@ -22794,15 +23328,15 @@
           3,
           5,
           9,
-          4,
-          7
+          4
         ]
       },
       "ast": {
-        "floor": 5.2,
+        "floor": 4.2,
         "median": 6.5,
         "ceiling": 8.8,
         "logs": [
+          4,
           6,
           8,
           1,
@@ -22811,21 +23345,34 @@
           5,
           2,
           7,
-          9,
-          6
+          9
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 29.4,
-      "ast_pct": 32.9,
+      "usg_pct": 29.1,
+      "ast_pct": 32.4,
       "reb_pct": 10.1
     },
     "situational": {
-      "clutch_usg_pct": 30.9,
-      "paint_touches_pg": 8.0
+      "clutch_usg_pct": 30.6,
+      "paint_touches_pg": 8.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 34,
+        "reb": 6,
+        "ast": 4,
+        "min": 34.6,
+        "fg3m": 3,
+        "fg3a": 5,
+        "paint_pts": 14.5,
+        "fga": 13,
+        "fgm": 11,
+        "fta": 9,
+        "tov": 3
+      },
       {
         "d": "2026-11-11",
         "pts": 28,
@@ -22989,28 +23536,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 30.6
+      "frequency": 31.5
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 19.8,
-      "reb": 3.2,
-      "ast": 4.2,
-      "min": 29.1,
-      "fg3a": 8.5,
-      "fg3m": 2.8,
+      "pts": 20.6,
+      "reb": 3.1,
+      "ast": 4.3,
+      "min": 29.4,
+      "fg3a": 8.8,
+      "fg3m": 3.1,
       "paint_pts": 6.6,
-      "pts_rank": 44,
-      "reb_rank": 106,
-      "ast_rank": 50
+      "pts_rank": 41,
+      "reb_rank": 107,
+      "ast_rank": 48
     },
     "distribution_10g": {
       "pts": {
-        "floor": 18.2,
-        "median": 20.5,
-        "ceiling": 22.0,
+        "floor": 18.5,
+        "median": 21.5,
+        "ceiling": 24.2,
         "logs": [
+          29,
           18,
           25,
           12,
@@ -23019,15 +23567,15 @@
           20,
           22,
           9,
-          21,
-          19
+          21
         ]
       },
       "reb": {
-        "floor": 2.2,
+        "floor": 2.0,
         "median": 3.0,
-        "ceiling": 5.0,
+        "ceiling": 4.5,
         "logs": [
+          2,
           3,
           3,
           0,
@@ -23036,15 +23584,15 @@
           6,
           5,
           2,
-          5,
           5
         ]
       },
       "ast": {
-        "floor": 3.0,
+        "floor": 3.2,
         "median": 4.0,
-        "ceiling": 4.8,
+        "ceiling": 5.8,
         "logs": [
+          6,
           3,
           3,
           7,
@@ -23053,21 +23601,34 @@
           6,
           4,
           2,
-          4,
-          2
+          4
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 26.6,
-      "ast_pct": 22.7,
-      "reb_pct": 5.9
+      "usg_pct": 27.4,
+      "ast_pct": 23.4,
+      "reb_pct": 5.7
     },
     "situational": {
-      "clutch_usg_pct": 28.1,
-      "paint_touches_pg": 5.4
+      "clutch_usg_pct": 28.9,
+      "paint_touches_pg": 5.3
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 29,
+        "reb": 2,
+        "ast": 6,
+        "min": 33.0,
+        "fg3m": 6,
+        "fg3a": 13,
+        "paint_pts": 6.4,
+        "fga": 18,
+        "fgm": 6,
+        "fta": 11,
+        "tov": 4
+      },
       {
         "d": "2026-11-11",
         "pts": 18,
@@ -23233,18 +23794,18 @@
       "primary_role": "Spot-Up Shooter",
       "frequency": 48.0
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 13.1,
-      "reb": 3.5,
-      "ast": 1.5,
-      "min": 28.5,
-      "fg3a": 6.7,
-      "fg3m": 2.9,
-      "paint_pts": 2.5,
-      "pts_rank": 91,
-      "reb_rank": 96,
+      "pts": 13.2,
+      "reb": 3.3,
+      "ast": 1.4,
+      "min": 29.1,
+      "fg3a": 6.5,
+      "fg3m": 2.8,
+      "paint_pts": 2.7,
+      "pts_rank": 90,
+      "reb_rank": 103,
       "ast_rank": 113
     },
     "distribution_10g": {
@@ -23254,6 +23815,7 @@
         "ceiling": 14.0,
         "logs": [
           14,
+          14,
           12,
           4,
           18,
@@ -23261,8 +23823,7 @@
           9,
           14,
           13,
-          12,
-          19
+          12
         ]
       },
       "reb": {
@@ -23270,6 +23831,7 @@
         "median": 4.0,
         "ceiling": 4.8,
         "logs": [
+          2,
           5,
           3,
           4,
@@ -23278,8 +23840,7 @@
           5,
           4,
           2,
-          1,
-          2
+          1
         ]
       },
       "ast": {
@@ -23287,6 +23848,7 @@
         "median": 1.0,
         "ceiling": 1.8,
         "logs": [
+          1,
           3,
           3,
           0,
@@ -23295,21 +23857,34 @@
           1,
           0,
           1,
-          1,
           1
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 15.9,
-      "ast_pct": 7.6,
-      "reb_pct": 6.5
+      "usg_pct": 15.6,
+      "ast_pct": 7.3,
+      "reb_pct": 6.2
     },
     "situational": {
-      "clutch_usg_pct": 14.9,
+      "clutch_usg_pct": 14.6,
       "paint_touches_pg": 4.9
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 14,
+        "reb": 2,
+        "ast": 1,
+        "min": 35.7,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 4.6,
+        "fga": 7,
+        "fgm": 5,
+        "fta": 2,
+        "tov": 2
+      },
       {
         "d": "2026-11-11",
         "pts": 14,
@@ -23473,28 +24048,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 49.0
+      "frequency": 48.1
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 13.4,
-      "reb": 3.3,
-      "ast": 3.9,
+      "pts": 12.8,
+      "reb": 3.4,
+      "ast": 4.0,
       "min": 26.2,
-      "fg3a": 5.7,
-      "fg3m": 2.5,
+      "fg3a": 5.5,
+      "fg3m": 2.3,
       "paint_pts": 3.3,
-      "pts_rank": 86,
-      "reb_rank": 102,
-      "ast_rank": 55
+      "pts_rank": 93,
+      "reb_rank": 99,
+      "ast_rank": 54
     },
     "distribution_10g": {
       "pts": {
-        "floor": 11.2,
+        "floor": 11.0,
         "median": 13.0,
         "ceiling": 16.5,
         "logs": [
+          6,
           19,
           11,
           11,
@@ -23503,15 +24079,15 @@
           17,
           14,
           6,
-          22,
-          12
+          22
         ]
       },
       "reb": {
-        "floor": 1.0,
-        "median": 3.5,
-        "ceiling": 4.0,
+        "floor": 1.5,
+        "median": 4.0,
+        "ceiling": 4.8,
         "logs": [
+          5,
           3,
           1,
           0,
@@ -23520,15 +24096,15 @@
           8,
           4,
           6,
-          4,
-          1
+          4
         ]
       },
       "ast": {
         "floor": 2.2,
         "median": 3.5,
-        "ceiling": 6.5,
+        "ceiling": 5.0,
         "logs": [
+          5,
           5,
           2,
           0,
@@ -23537,21 +24113,34 @@
           10,
           3,
           4,
-          3,
-          8
+          3
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 17.9,
-      "ast_pct": 22.4,
-      "reb_pct": 6.7
+      "usg_pct": 18.4,
+      "ast_pct": 22.8,
+      "reb_pct": 7.1
     },
     "situational": {
-      "clutch_usg_pct": 16.9,
-      "paint_touches_pg": 4.9
+      "clutch_usg_pct": 17.4,
+      "paint_touches_pg": 5.0
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 6,
+        "reb": 5,
+        "ast": 5,
+        "min": 26.6,
+        "fg3m": 0,
+        "fg3a": 3,
+        "paint_pts": 3.5,
+        "fga": 7,
+        "fgm": 2,
+        "fta": 2,
+        "tov": 6
+      },
       {
         "d": "2026-11-11",
         "pts": 19,
@@ -23715,28 +24304,29 @@
     "position": "PG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 39.8
+      "frequency": 39.5
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 26.2,
+      "pts": 25.4,
       "reb": 3.8,
-      "ast": 7.3,
-      "min": 37.3,
+      "ast": 7.2,
+      "min": 37.2,
       "fg3a": 9.4,
       "fg3m": 3.1,
-      "paint_pts": 9.8,
-      "pts_rank": 10,
+      "paint_pts": 9.4,
+      "pts_rank": 14,
       "reb_rank": 88,
-      "ast_rank": 15
+      "ast_rank": 14
     },
     "distribution_10g": {
       "pts": {
         "floor": 22.0,
-        "median": 27.0,
-        "ceiling": 32.8,
+        "median": 23.5,
+        "ceiling": 31.2,
         "logs": [
+          17,
           29,
           32,
           22,
@@ -23745,15 +24335,15 @@
           38,
           34,
           19,
-          22,
-          33
+          22
         ]
       },
       "reb": {
         "floor": 3.0,
-        "median": 3.5,
+        "median": 4.0,
         "ceiling": 5.0,
         "logs": [
+          4,
           4,
           5,
           3,
@@ -23762,15 +24352,15 @@
           5,
           6,
           3,
-          3,
-          2
+          3
         ]
       },
       "ast": {
-        "floor": 5.2,
+        "floor": 6.0,
         "median": 6.5,
         "ceiling": 9.5,
         "logs": [
+          6,
           6,
           10,
           8,
@@ -23779,21 +24369,34 @@
           5,
           14,
           5,
-          7,
-          4
+          7
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 32.6,
-      "ast_pct": 34.6,
-      "reb_pct": 6.1
+      "usg_pct": 32.5,
+      "ast_pct": 33.9,
+      "reb_pct": 6.2
     },
     "situational": {
-      "clutch_usg_pct": 34.1,
-      "paint_touches_pg": 7.4
+      "clutch_usg_pct": 34.0,
+      "paint_touches_pg": 7.3
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 17,
+        "reb": 4,
+        "ast": 6,
+        "min": 35.2,
+        "fg3m": 3,
+        "fg3a": 10,
+        "paint_pts": 4.6,
+        "fga": 19,
+        "fgm": 6,
+        "fta": 2,
+        "tov": 4
+      },
       {
         "d": "2026-11-10",
         "pts": 29,
@@ -23957,28 +24560,29 @@
     "position": "C",
     "role_archetype": {
       "primary_role": "Roll Man / Rim Runner",
-      "frequency": 48.6
+      "frequency": 48.2
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 13.8,
-      "reb": 13.3,
-      "ast": 5.9,
-      "min": 34.3,
-      "fg3a": 0.5,
-      "fg3m": 0.2,
-      "paint_pts": 7.7,
-      "pts_rank": 82,
+      "pts": 14.5,
+      "reb": 13.2,
+      "ast": 5.8,
+      "min": 34.4,
+      "fg3a": 0.7,
+      "fg3m": 0.3,
+      "paint_pts": 7.9,
+      "pts_rank": 77,
       "reb_rank": 2,
       "ast_rank": 22
     },
     "distribution_10g": {
       "pts": {
         "floor": 9.5,
-        "median": 14.5,
-        "ceiling": 16.8,
+        "median": 15.5,
+        "ceiling": 19.2,
         "logs": [
+          21,
           0,
           17,
           16,
@@ -23987,15 +24591,15 @@
           9,
           20,
           15,
-          27,
-          14
+          27
         ]
       },
       "reb": {
-        "floor": 12.5,
-        "median": 14.5,
-        "ceiling": 16.5,
+        "floor": 12.0,
+        "median": 14.0,
+        "ceiling": 15.0,
         "logs": [
+          12,
           2,
           12,
           17,
@@ -24004,15 +24608,15 @@
           15,
           14,
           15,
-          19,
-          18
+          19
         ]
       },
       "ast": {
         "floor": 4.2,
-        "median": 6.0,
-        "ceiling": 8.0,
+        "median": 5.0,
+        "ceiling": 7.8,
         "logs": [
+          5,
           5,
           5,
           1,
@@ -24021,21 +24625,34 @@
           7,
           8,
           3,
-          10,
-          8
+          10
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 16.3,
+      "usg_pct": 16.9,
       "ast_pct": 26.1,
-      "reb_pct": 23.2
+      "reb_pct": 23.0
     },
     "situational": {
-      "clutch_usg_pct": 15.3,
-      "paint_touches_pg": 11.1
+      "clutch_usg_pct": 15.9,
+      "paint_touches_pg": 11.2
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 21,
+        "reb": 12,
+        "ast": 5,
+        "min": 35.5,
+        "fg3m": 1,
+        "fg3a": 3,
+        "paint_pts": 10.4,
+        "fga": 16,
+        "fgm": 9,
+        "fta": 2,
+        "tov": 1
+      },
       {
         "d": "2026-11-10",
         "pts": 0,
@@ -24184,29 +24801,30 @@
     "team_name": "Sacramento Kings",
     "position": "SG",
     "role_archetype": {
-      "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 26.9
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 38.1
     },
-    "games_played": 11,
+    "games_played": 12,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 22.3,
-      "reb": 3.3,
-      "ast": 2.5,
-      "min": 32.7,
-      "fg3a": 7.4,
+      "pts": 21.4,
+      "reb": 3.2,
+      "ast": 2.8,
+      "min": 33.0,
+      "fg3a": 7.2,
       "fg3m": 2.8,
-      "paint_pts": 8.0,
-      "pts_rank": 26,
-      "reb_rank": 102,
-      "ast_rank": 88
+      "paint_pts": 7.5,
+      "pts_rank": 33,
+      "reb_rank": 106,
+      "ast_rank": 82
     },
     "distribution_10g": {
       "pts": {
-        "floor": 16.5,
-        "median": 21.5,
+        "floor": 14.2,
+        "median": 21.0,
         "ceiling": 22.8,
         "logs": [
+          12,
           31,
           15,
           14,
@@ -24215,15 +24833,15 @@
           11,
           21,
           22,
-          37,
-          22
+          37
         ]
       },
       "reb": {
         "floor": 3.0,
-        "median": 3.5,
+        "median": 3.0,
         "ceiling": 4.0,
         "logs": [
+          3,
           3,
           4,
           4,
@@ -24232,15 +24850,15 @@
           0,
           3,
           3,
-          2,
-          5
+          2
         ]
       },
       "ast": {
-        "floor": 1.0,
-        "median": 2.0,
-        "ceiling": 3.0,
+        "floor": 1.2,
+        "median": 2.5,
+        "ceiling": 4.5,
         "logs": [
+          6,
           2,
           2,
           3,
@@ -24249,21 +24867,34 @@
           1,
           5,
           3,
-          5,
-          1
+          5
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 26.3,
-      "ast_pct": 13.1,
-      "reb_pct": 6.0
+      "usg_pct": 25.1,
+      "ast_pct": 14.2,
+      "reb_pct": 5.9
     },
     "situational": {
-      "clutch_usg_pct": 27.8,
-      "paint_touches_pg": 6.2
+      "clutch_usg_pct": 26.6,
+      "paint_touches_pg": 6.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 12,
+        "reb": 3,
+        "ast": 6,
+        "min": 36.4,
+        "fg3m": 3,
+        "fg3a": 6,
+        "paint_pts": 1.7,
+        "fga": 9,
+        "fgm": 4,
+        "fta": 2,
+        "tov": 1
+      },
       {
         "d": "2026-11-10",
         "pts": 31,
@@ -24427,28 +25058,29 @@
     "position": "SF",
     "role_archetype": {
       "primary_role": "Spot-Up Shooter",
-      "frequency": 38.0
+      "frequency": 36.5
     },
-    "games_played": 10,
+    "games_played": 11,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 13.3,
+      "pts": 14.3,
       "reb": 4.5,
-      "ast": 1.3,
-      "min": 31.5,
-      "fg3a": 5.7,
+      "ast": 1.4,
+      "min": 32.4,
+      "fg3a": 5.6,
       "fg3m": 2.1,
-      "paint_pts": 4.1,
-      "pts_rank": 88,
-      "reb_rank": 73,
-      "ast_rank": 115
+      "paint_pts": 4.6,
+      "pts_rank": 79,
+      "reb_rank": 75,
+      "ast_rank": 113
     },
     "distribution_10g": {
       "pts": {
-        "floor": 6.2,
-        "median": 14.0,
-        "ceiling": 18.0,
+        "floor": 8.8,
+        "median": 14.5,
+        "ceiling": 22.8,
         "logs": [
+          24,
           15,
           14,
           14,
@@ -24457,15 +25089,15 @@
           24,
           24,
           7,
-          4,
-          6
+          4
         ]
       },
       "reb": {
-        "floor": 3.0,
-        "median": 4.5,
+        "floor": 3.2,
+        "median": 5.0,
         "ceiling": 5.8,
         "logs": [
+          5,
           4,
           3,
           2,
@@ -24474,15 +25106,15 @@
           5,
           6,
           5,
-          7,
-          3
+          7
         ]
       },
       "ast": {
         "floor": 1.0,
-        "median": 1.0,
+        "median": 1.5,
         "ceiling": 2.0,
         "logs": [
+          2,
           2,
           1,
           2,
@@ -24491,21 +25123,34 @@
           1,
           2,
           1,
-          1,
           1
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 18.0,
-      "ast_pct": 6.1,
-      "reb_pct": 8.6
+      "usg_pct": 18.1,
+      "ast_pct": 6.3,
+      "reb_pct": 8.4
     },
     "situational": {
-      "clutch_usg_pct": 17.0,
-      "paint_touches_pg": 5.7
+      "clutch_usg_pct": 17.1,
+      "paint_touches_pg": 5.9
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 24,
+        "reb": 5,
+        "ast": 2,
+        "min": 41.5,
+        "fg3m": 2,
+        "fg3a": 5,
+        "paint_pts": 10.4,
+        "fga": 13,
+        "fgm": 7,
+        "fta": 9,
+        "tov": 1
+      },
       {
         "d": "2026-11-10",
         "pts": 15,
@@ -24655,28 +25300,29 @@
     "position": "SF",
     "role_archetype": {
       "primary_role": "Isolation Scorer",
-      "frequency": 15.5
+      "frequency": 15.1
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 18.0,
-      "reb": 5.4,
+      "pts": 17.3,
+      "reb": 5.2,
       "ast": 4.8,
-      "min": 31.8,
+      "min": 31.3,
       "fg3a": 3.3,
       "fg3m": 1.2,
-      "paint_pts": 8.4,
-      "pts_rank": 54,
-      "reb_rank": 53,
+      "paint_pts": 8.0,
+      "pts_rank": 56,
+      "reb_rank": 55,
       "ast_rank": 40
     },
     "distribution_10g": {
       "pts": {
-        "floor": 14.0,
-        "median": 17.5,
-        "ceiling": 20.5,
+        "floor": 13.0,
+        "median": 17.0,
+        "ceiling": 18.8,
         "logs": [
+          9,
           18,
           17,
           13,
@@ -24685,8 +25331,7 @@
           17,
           25,
           13,
-          13,
-          22
+          13
         ]
       },
       "reb": {
@@ -24694,6 +25339,7 @@
         "median": 5.5,
         "ceiling": 6.8,
         "logs": [
+          3,
           6,
           5,
           7,
@@ -24702,15 +25348,15 @@
           7,
           7,
           5,
-          6,
-          5
+          6
         ]
       },
       "ast": {
-        "floor": 3.2,
+        "floor": 4.0,
         "median": 5.0,
         "ceiling": 7.5,
         "logs": [
+          4,
           10,
           4,
           4,
@@ -24719,21 +25365,34 @@
           8,
           6,
           8,
-          6,
-          2
+          6
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 22.2,
-      "ast_pct": 22.9,
-      "reb_pct": 8.7
+      "usg_pct": 21.6,
+      "ast_pct": 22.7,
+      "reb_pct": 8.3
     },
     "situational": {
-      "clutch_usg_pct": 21.2,
-      "paint_touches_pg": 7.8
+      "clutch_usg_pct": 20.6,
+      "paint_touches_pg": 7.6
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 9,
+        "reb": 3,
+        "ast": 4,
+        "min": 25.2,
+        "fg3m": 1,
+        "fg3a": 3,
+        "paint_pts": 3.5,
+        "fga": 8,
+        "fgm": 4,
+        "fta": 0,
+        "tov": 0
+      },
       {
         "d": "2026-11-11",
         "pts": 18,
@@ -24905,27 +25564,269 @@
     ]
   },
   {
+    "player_name": "Devin Vassell",
+    "team": "SAS",
+    "team_name": "San Antonio Spurs",
+    "position": "PF",
+    "role_archetype": {
+      "primary_role": "Spot-Up Shooter",
+      "frequency": 33.2
+    },
+    "games_played": 11,
+    "is_small_sample": false,
+    "season_avg": {
+      "pts": 11.5,
+      "reb": 3.6,
+      "ast": 3.0,
+      "min": 29.4,
+      "fg3a": 4.4,
+      "fg3m": 1.5,
+      "paint_pts": 4.1,
+      "pts_rank": 100,
+      "reb_rank": 91,
+      "ast_rank": 80
+    },
+    "distribution_10g": {
+      "pts": {
+        "floor": 9.2,
+        "median": 11.0,
+        "ceiling": 14.8,
+        "logs": [
+          7,
+          15,
+          19,
+          2,
+          11,
+          9,
+          21,
+          14,
+          11,
+          10
+        ]
+      },
+      "reb": {
+        "floor": 2.0,
+        "median": 4.0,
+        "ceiling": 4.8,
+        "logs": [
+          2,
+          2,
+          2,
+          7,
+          2,
+          5,
+          5,
+          4,
+          4,
+          4
+        ]
+      },
+      "ast": {
+        "floor": 2.0,
+        "median": 2.0,
+        "ceiling": 3.8,
+        "logs": [
+          2,
+          3,
+          2,
+          4,
+          1,
+          2,
+          2,
+          8,
+          6,
+          2
+        ]
+      }
+    },
+    "context_stats": {
+      "usg_pct": 16.1,
+      "ast_pct": 13.5,
+      "reb_pct": 6.2
+    },
+    "situational": {
+      "clutch_usg_pct": 15.1,
+      "paint_touches_pg": 5.3
+    },
+    "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 7,
+        "reb": 2,
+        "ast": 2,
+        "min": 22.9,
+        "fg3m": 0,
+        "fg3a": 3,
+        "paint_pts": 4.1,
+        "fga": 6,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 0
+      },
+      {
+        "d": "2026-11-07",
+        "pts": 15,
+        "reb": 2,
+        "ast": 3,
+        "min": 21.0,
+        "fg3m": 2,
+        "fg3a": 4,
+        "paint_pts": 5.2,
+        "fga": 8,
+        "fgm": 4,
+        "fta": 5,
+        "tov": 0
+      },
+      {
+        "d": "2026-11-06",
+        "pts": 19,
+        "reb": 2,
+        "ast": 2,
+        "min": 26.5,
+        "fg3m": 5,
+        "fg3a": 6,
+        "paint_pts": 2.3,
+        "fga": 10,
+        "fgm": 6,
+        "fta": 2,
+        "tov": 0
+      },
+      {
+        "d": "2026-11-04",
+        "pts": 2,
+        "reb": 7,
+        "ast": 4,
+        "min": 35.5,
+        "fg3m": 0,
+        "fg3a": 5,
+        "paint_pts": 1.2,
+        "fga": 8,
+        "fgm": 0,
+        "fta": 2,
+        "tov": 0
+      },
+      {
+        "d": "2026-11-02",
+        "pts": 11,
+        "reb": 2,
+        "ast": 1,
+        "min": 25.2,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 6.4,
+        "fga": 9,
+        "fgm": 4,
+        "fta": 3,
+        "tov": 1
+      },
+      {
+        "d": "2026-10-31",
+        "pts": 9,
+        "reb": 5,
+        "ast": 2,
+        "min": 33.7,
+        "fg3m": 0,
+        "fg3a": 1,
+        "paint_pts": 5.2,
+        "fga": 6,
+        "fgm": 2,
+        "fta": 6,
+        "tov": 2
+      },
+      {
+        "d": "2026-10-28",
+        "pts": 21,
+        "reb": 5,
+        "ast": 2,
+        "min": 37.8,
+        "fg3m": 1,
+        "fg3a": 7,
+        "paint_pts": 10.4,
+        "fga": 18,
+        "fgm": 8,
+        "fta": 4,
+        "tov": 1
+      },
+      {
+        "d": "2026-10-27",
+        "pts": 14,
+        "reb": 4,
+        "ast": 8,
+        "min": 24.3,
+        "fg3m": 4,
+        "fg3a": 7,
+        "paint_pts": 1.2,
+        "fga": 11,
+        "fgm": 5,
+        "fta": 0,
+        "tov": 1
+      },
+      {
+        "d": "2026-10-24",
+        "pts": 11,
+        "reb": 4,
+        "ast": 6,
+        "min": 31.7,
+        "fg3m": 1,
+        "fg3a": 4,
+        "paint_pts": 4.6,
+        "fga": 10,
+        "fgm": 5,
+        "fta": 0,
+        "tov": 0
+      },
+      {
+        "d": "2026-10-23",
+        "pts": 10,
+        "reb": 4,
+        "ast": 2,
+        "min": 33.5,
+        "fg3m": 2,
+        "fg3a": 5,
+        "paint_pts": 2.3,
+        "fga": 8,
+        "fgm": 3,
+        "fta": 2,
+        "tov": 5
+      },
+      {
+        "d": "2026-10-20",
+        "pts": 7,
+        "reb": 3,
+        "ast": 1,
+        "min": 30.9,
+        "fg3m": 1,
+        "fg3a": 4,
+        "paint_pts": 2.3,
+        "fga": 8,
+        "fgm": 2,
+        "fta": 2,
+        "tov": 0
+      }
+    ]
+  },
+  {
     "player_name": "Victor Wembanyama",
     "team": "SAS",
     "team_name": "San Antonio Spurs",
     "position": "C",
     "role_archetype": {
       "primary_role": "Roll Man / Rim Runner",
-      "frequency": 44.2
+      "frequency": 44.4
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 30.2,
+      "pts": 28.8,
       "reb": 11.7,
-      "ast": 2.8,
-      "min": 30.0,
-      "fg3a": 5.9,
-      "fg3m": 1.9,
-      "paint_pts": 14.2,
-      "pts_rank": 3,
+      "ast": 3.1,
+      "min": 29.3,
+      "fg3a": 5.6,
+      "fg3m": 1.8,
+      "paint_pts": 13.7,
+      "pts_rank": 5,
       "reb_rank": 4,
-      "ast_rank": 81
+      "ast_rank": 75
     },
     "distribution_10g": {
       "pts": {
@@ -24933,6 +25834,7 @@
         "median": 31.0,
         "ceiling": 39.0,
         "logs": [
+          12,
           32,
           40,
           29,
@@ -24941,15 +25843,15 @@
           12,
           43,
           36,
-          29,
-          23
+          29
         ]
       },
       "reb": {
-        "floor": 7.5,
-        "median": 10.5,
-        "ceiling": 13.2,
+        "floor": 9.2,
+        "median": 11.0,
+        "ceiling": 13.5,
         "logs": [
+          12,
           9,
           11,
           7,
@@ -24958,15 +25860,15 @@
           11,
           7,
           14,
-          10,
-          7
+          10
         ]
       },
       "ast": {
         "floor": 2.0,
-        "median": 2.5,
-        "ceiling": 3.8,
+        "median": 3.0,
+        "ceiling": 4.8,
         "logs": [
+          6,
           1,
           3,
           3,
@@ -24975,21 +25877,34 @@
           5,
           4,
           5,
-          2,
           2
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 36.1,
-      "ast_pct": 18.3,
-      "reb_pct": 19.7
+      "usg_pct": 35.7,
+      "ast_pct": 19.9,
+      "reb_pct": 19.8
     },
     "situational": {
-      "clutch_usg_pct": 37.6,
-      "paint_touches_pg": 12.3
+      "clutch_usg_pct": 37.2,
+      "paint_touches_pg": 12.1
     },
     "all_logs": [
+      {
+        "d": "2026-11-13",
+        "pts": 12,
+        "reb": 12,
+        "ast": 6,
+        "min": 20.9,
+        "fg3m": 0,
+        "fg3a": 2,
+        "paint_pts": 7.0,
+        "fga": 11,
+        "fgm": 5,
+        "fta": 3,
+        "tov": 2
+      },
       {
         "d": "2026-11-11",
         "pts": 32,
@@ -25161,486 +26076,272 @@
     ]
   },
   {
-    "player_name": "Devin Vassell",
+    "player_name": "Stephon Castle",
     "team": "SAS",
     "team_name": "San Antonio Spurs",
-    "position": "PF",
-    "role_archetype": {
-      "primary_role": "Spot-Up Shooter",
-      "frequency": 32.8
-    },
-    "games_played": 10,
-    "is_small_sample": false,
-    "season_avg": {
-      "pts": 11.9,
-      "reb": 3.8,
-      "ast": 3.1,
-      "min": 30.0,
-      "fg3a": 4.5,
-      "fg3m": 1.6,
-      "paint_pts": 4.1,
-      "pts_rank": 99,
-      "reb_rank": 88,
-      "ast_rank": 75
-    },
-    "distribution_10g": {
-      "pts": {
-        "floor": 9.2,
-        "median": 11.0,
-        "ceiling": 14.8,
-        "logs": [
-          15,
-          19,
-          2,
-          11,
-          9,
-          21,
-          14,
-          11,
-          10,
-          7
-        ]
-      },
-      "reb": {
-        "floor": 2.2,
-        "median": 4.0,
-        "ceiling": 4.8,
-        "logs": [
-          2,
-          2,
-          7,
-          2,
-          5,
-          5,
-          4,
-          4,
-          4,
-          3
-        ]
-      },
-      "ast": {
-        "floor": 2.0,
-        "median": 2.0,
-        "ceiling": 3.8,
-        "logs": [
-          3,
-          2,
-          4,
-          1,
-          2,
-          2,
-          8,
-          6,
-          2,
-          1
-        ]
-      }
-    },
-    "context_stats": {
-      "usg_pct": 16.4,
-      "ast_pct": 13.7,
-      "reb_pct": 6.4
-    },
-    "situational": {
-      "clutch_usg_pct": 15.4,
-      "paint_touches_pg": 5.4
-    },
-    "all_logs": [
-      {
-        "d": "2026-11-07",
-        "pts": 15,
-        "reb": 2,
-        "ast": 3,
-        "min": 21.0,
-        "fg3m": 2,
-        "fg3a": 4,
-        "paint_pts": 5.2,
-        "fga": 8,
-        "fgm": 4,
-        "fta": 5,
-        "tov": 0
-      },
-      {
-        "d": "2026-11-06",
-        "pts": 19,
-        "reb": 2,
-        "ast": 2,
-        "min": 26.5,
-        "fg3m": 5,
-        "fg3a": 6,
-        "paint_pts": 2.3,
-        "fga": 10,
-        "fgm": 6,
-        "fta": 2,
-        "tov": 0
-      },
-      {
-        "d": "2026-11-04",
-        "pts": 2,
-        "reb": 7,
-        "ast": 4,
-        "min": 35.5,
-        "fg3m": 0,
-        "fg3a": 5,
-        "paint_pts": 1.2,
-        "fga": 8,
-        "fgm": 0,
-        "fta": 2,
-        "tov": 0
-      },
-      {
-        "d": "2026-11-02",
-        "pts": 11,
-        "reb": 2,
-        "ast": 1,
-        "min": 25.2,
-        "fg3m": 0,
-        "fg3a": 2,
-        "paint_pts": 6.4,
-        "fga": 9,
-        "fgm": 4,
-        "fta": 3,
-        "tov": 1
-      },
-      {
-        "d": "2026-10-31",
-        "pts": 9,
-        "reb": 5,
-        "ast": 2,
-        "min": 33.7,
-        "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 5.2,
-        "fga": 6,
-        "fgm": 2,
-        "fta": 6,
-        "tov": 2
-      },
-      {
-        "d": "2026-10-28",
-        "pts": 21,
-        "reb": 5,
-        "ast": 2,
-        "min": 37.8,
-        "fg3m": 1,
-        "fg3a": 7,
-        "paint_pts": 10.4,
-        "fga": 18,
-        "fgm": 8,
-        "fta": 4,
-        "tov": 1
-      },
-      {
-        "d": "2026-10-27",
-        "pts": 14,
-        "reb": 4,
-        "ast": 8,
-        "min": 24.3,
-        "fg3m": 4,
-        "fg3a": 7,
-        "paint_pts": 1.2,
-        "fga": 11,
-        "fgm": 5,
-        "fta": 0,
-        "tov": 1
-      },
-      {
-        "d": "2026-10-24",
-        "pts": 11,
-        "reb": 4,
-        "ast": 6,
-        "min": 31.7,
-        "fg3m": 1,
-        "fg3a": 4,
-        "paint_pts": 4.6,
-        "fga": 10,
-        "fgm": 5,
-        "fta": 0,
-        "tov": 0
-      },
-      {
-        "d": "2026-10-23",
-        "pts": 10,
-        "reb": 4,
-        "ast": 2,
-        "min": 33.5,
-        "fg3m": 2,
-        "fg3a": 5,
-        "paint_pts": 2.3,
-        "fga": 8,
-        "fgm": 3,
-        "fta": 2,
-        "tov": 5
-      },
-      {
-        "d": "2026-10-20",
-        "pts": 7,
-        "reb": 3,
-        "ast": 1,
-        "min": 30.9,
-        "fg3m": 1,
-        "fg3a": 4,
-        "paint_pts": 2.3,
-        "fga": 8,
-        "fgm": 2,
-        "fta": 2,
-        "tov": 0
-      }
-    ]
-  },
-  {
-    "player_name": "De'Aaron Fox",
-    "team": "SAS",
-    "team_name": "San Antonio Spurs",
-    "position": "PG",
+    "position": "SG",
     "role_archetype": {
       "primary_role": "Pick & Roll Ball Handler",
-      "frequency": 26.5
+      "frequency": 29.9
     },
-    "games_played": 12,
+    "games_played": 13,
     "is_small_sample": false,
     "season_avg": {
-      "pts": 14.2,
-      "reb": 4.3,
-      "ast": 6.2,
-      "min": 29.5,
-      "fg3a": 3.1,
-      "fg3m": 1.1,
-      "paint_pts": 6.3,
-      "pts_rank": 78,
-      "reb_rank": 80,
-      "ast_rank": 21
+      "pts": 15.4,
+      "reb": 5.5,
+      "ast": 5.1,
+      "min": 28.8,
+      "fg3a": 6.2,
+      "fg3m": 2.2,
+      "paint_pts": 5.2,
+      "pts_rank": 70,
+      "reb_rank": 52,
+      "ast_rank": 34
     },
     "distribution_10g": {
       "pts": {
-        "floor": 10.2,
-        "median": 13.0,
-        "ceiling": 16.5,
+        "floor": 11.8,
+        "median": 14.5,
+        "ceiling": 16.8,
         "logs": [
-          17,
-          15,
-          8,
-          9,
-          10,
-          12,
-          22,
-          14,
+          32,
           11,
-          19
+          4,
+          14,
+          19,
+          17,
+          16,
+          0,
+          14,
+          15
         ]
       },
       "reb": {
-        "floor": 3.0,
-        "median": 3.0,
-        "ceiling": 4.0,
+        "floor": 5.0,
+        "median": 5.0,
+        "ceiling": 6.8,
         "logs": [
-          4,
-          9,
+          5,
+          1,
+          7,
+          7,
           3,
-          2,
-          3,
-          2,
-          8,
-          3,
-          4,
-          3
+          10,
+          5,
+          5,
+          6,
+          5
         ]
       },
       "ast": {
         "floor": 4.0,
-        "median": 6.0,
+        "median": 5.0,
         "ceiling": 6.8,
         "logs": [
-          9,
           6,
-          6,
-          4,
-          4,
           3,
           7,
+          5,
+          7,
+          3,
           4,
-          6,
-          9
+          4,
+          8,
+          5
         ]
       }
     },
     "context_stats": {
-      "usg_pct": 19.2,
-      "ast_pct": 29.0,
-      "reb_pct": 7.5
+      "usg_pct": 24.6,
+      "ast_pct": 25.8,
+      "reb_pct": 9.6
     },
     "situational": {
-      "clutch_usg_pct": 18.2,
-      "paint_touches_pg": 6.3
+      "clutch_usg_pct": 26.1,
+      "paint_touches_pg": 6.9
     },
     "all_logs": [
       {
-        "d": "2026-11-11",
-        "pts": 17,
-        "reb": 4,
-        "ast": 9,
-        "min": 30.9,
-        "fg3m": 2,
-        "fg3a": 7,
-        "paint_pts": 6.4,
-        "fga": 17,
-        "fgm": 7,
-        "fta": 2,
-        "tov": 1
-      },
-      {
-        "d": "2026-11-09",
-        "pts": 15,
-        "reb": 9,
+        "d": "2026-11-13",
+        "pts": 32,
+        "reb": 5,
         "ast": 6,
-        "min": 28.6,
-        "fg3m": 2,
-        "fg3a": 4,
-        "paint_pts": 5.2,
-        "fga": 8,
-        "fgm": 5,
+        "min": 25.1,
+        "fg3m": 5,
+        "fg3a": 8,
+        "paint_pts": 9.9,
+        "fga": 18,
+        "fgm": 12,
         "fta": 3,
         "tov": 1
       },
       {
-        "d": "2026-11-07",
-        "pts": 8,
-        "reb": 3,
-        "ast": 6,
-        "min": 21.6,
+        "d": "2026-11-11",
+        "pts": 11,
+        "reb": 1,
+        "ast": 3,
+        "min": 29.4,
         "fg3m": 1,
-        "fg3a": 2,
-        "paint_pts": 2.9,
-        "fga": 3,
-        "fgm": 1,
-        "fta": 6,
-        "tov": 1
-      },
-      {
-        "d": "2026-11-06",
-        "pts": 9,
-        "reb": 2,
-        "ast": 4,
-        "min": 26.1,
-        "fg3m": 0,
-        "fg3a": 2,
-        "paint_pts": 5.2,
-        "fga": 6,
-        "fgm": 2,
-        "fta": 6,
+        "fg3a": 5,
+        "paint_pts": 4.6,
+        "fga": 13,
+        "fgm": 5,
+        "fta": 0,
         "tov": 2
       },
       {
-        "d": "2026-11-04",
-        "pts": 10,
-        "reb": 3,
-        "ast": 4,
-        "min": 32.8,
+        "d": "2026-11-09",
+        "pts": 4,
+        "reb": 7,
+        "ast": 7,
+        "min": 29.8,
         "fg3m": 0,
-        "fg3a": 2,
-        "paint_pts": 5.8,
-        "fga": 10,
-        "fgm": 3,
-        "fta": 4,
-        "tov": 3
+        "fg3a": 1,
+        "paint_pts": 2.3,
+        "fga": 9,
+        "fgm": 2,
+        "fta": 2,
+        "tov": 2
       },
       {
-        "d": "2026-11-02",
-        "pts": 12,
-        "reb": 2,
-        "ast": 3,
-        "min": 21.9,
-        "fg3m": 1,
-        "fg3a": 1,
-        "paint_pts": 5.2,
-        "fga": 8,
+        "d": "2026-11-07",
+        "pts": 14,
+        "reb": 7,
+        "ast": 5,
+        "min": 24.1,
+        "fg3m": 2,
+        "fg3a": 5,
+        "paint_pts": 4.6,
+        "fga": 12,
         "fgm": 5,
         "fta": 2,
+        "tov": 2
+      },
+      {
+        "d": "2026-11-06",
+        "pts": 19,
+        "reb": 3,
+        "ast": 7,
+        "min": 28.4,
+        "fg3m": 1,
+        "fg3a": 3,
+        "paint_pts": 9.3,
+        "fga": 13,
+        "fgm": 7,
+        "fta": 5,
         "tov": 1
       },
       {
+        "d": "2026-11-04",
+        "pts": 17,
+        "reb": 10,
+        "ast": 3,
+        "min": 35.2,
+        "fg3m": 2,
+        "fg3a": 9,
+        "paint_pts": 6.4,
+        "fga": 20,
+        "fgm": 6,
+        "fta": 4,
+        "tov": 2
+      },
+      {
+        "d": "2026-11-02",
+        "pts": 16,
+        "reb": 5,
+        "ast": 4,
+        "min": 25.7,
+        "fg3m": 2,
+        "fg3a": 7,
+        "paint_pts": 5.8,
+        "fga": 16,
+        "fgm": 7,
+        "fta": 0,
+        "tov": 0
+      },
+      {
         "d": "2026-10-31",
-        "pts": 22,
-        "reb": 8,
-        "ast": 7,
-        "min": 35.0,
+        "pts": 0,
+        "reb": 5,
+        "ast": 4,
+        "min": 22.2,
         "fg3m": 0,
-        "fg3a": 1,
-        "paint_pts": 12.8,
-        "fga": 10,
-        "fgm": 8,
-        "fta": 7,
-        "tov": 4
+        "fg3a": 2,
+        "paint_pts": 0.0,
+        "fga": 4,
+        "fgm": 0,
+        "fta": 0,
+        "tov": 3
       },
       {
         "d": "2026-10-28",
         "pts": 14,
-        "reb": 3,
-        "ast": 4,
-        "min": 39.2,
+        "reb": 6,
+        "ast": 8,
+        "min": 38.2,
         "fg3m": 1,
-        "fg3a": 5,
+        "fg3a": 4,
         "paint_pts": 6.4,
-        "fga": 12,
-        "fgm": 5,
-        "fta": 4,
+        "fga": 13,
+        "fgm": 6,
+        "fta": 2,
         "tov": 3
       },
       {
         "d": "2026-10-27",
-        "pts": 11,
-        "reb": 4,
-        "ast": 6,
-        "min": 26.0,
-        "fg3m": 2,
-        "fg3a": 2,
-        "paint_pts": 2.9,
-        "fga": 6,
-        "fgm": 3,
+        "pts": 15,
+        "reb": 5,
+        "ast": 5,
+        "min": 27.2,
+        "fg3m": 3,
+        "fg3a": 8,
+        "paint_pts": 3.5,
+        "fga": 11,
+        "fgm": 4,
         "fta": 4,
         "tov": 3
       },
       {
         "d": "2026-10-24",
         "pts": 19,
-        "reb": 3,
-        "ast": 9,
-        "min": 27.7,
-        "fg3m": 2,
-        "fg3a": 4,
-        "paint_pts": 7.5,
-        "fga": 11,
-        "fgm": 6,
-        "fta": 7,
-        "tov": 2
+        "reb": 4,
+        "ast": 8,
+        "min": 28.2,
+        "fg3m": 3,
+        "fg3a": 8,
+        "paint_pts": 5.8,
+        "fga": 18,
+        "fgm": 8,
+        "fta": 0,
+        "tov": 3
       },
       {
         "d": "2026-10-23",
-        "pts": 19,
-        "reb": 4,
-        "ast": 9,
-        "min": 32.4,
-        "fg3m": 2,
-        "fg3a": 5,
-        "paint_pts": 7.5,
-        "fga": 11,
+        "pts": 15,
+        "reb": 7,
+        "ast": 5,
+        "min": 33.1,
+        "fg3m": 3,
+        "fg3a": 9,
+        "paint_pts": 3.5,
+        "fga": 15,
         "fgm": 6,
-        "fta": 5,
-        "tov": 5
+        "fta": 1,
+        "tov": 1
       },
       {
         "d": "2026-10-20",
-        "pts": 14,
+        "pts": 24,
         "reb": 7,
-        "ast": 7,
-        "min": 31.9,
-        "fg3m": 0,
-        "fg3a": 2,
-        "paint_pts": 8.1,
-        "fga": 9,
-        "fgm": 6,
-        "fta": 3,
-        "tov": 2
+        "ast": 1,
+        "min": 28.4,
+        "fg3m": 5,
+        "fg3a": 12,
+        "paint_pts": 5.2,
+        "fga": 21,
+        "fgm": 9,
+        "fta": 1,
+        "tov": 3
       }
     ]
   },
@@ -25663,7 +26364,7 @@
       "fg3a": 5.2,
       "fg3m": 1.6,
       "paint_pts": 9.6,
-      "pts_rank": 35,
+      "pts_rank": 34,
       "reb_rank": 33,
       "ast_rank": 53
     },
@@ -25919,9 +26620,9 @@
       "fg3a": 3.2,
       "fg3m": 0.5,
       "paint_pts": 12.8,
-      "pts_rank": 20,
+      "pts_rank": 22,
       "reb_rank": 19,
-      "ast_rank": 33
+      "ast_rank": 34
     },
     "distribution_10g": {
       "pts": {
@@ -26113,9 +26814,9 @@
       "fg3a": 7.8,
       "fg3m": 2.5,
       "paint_pts": 5.9,
-      "pts_rank": 56,
-      "reb_rank": 93,
-      "ast_rank": 26
+      "pts_rank": 54,
+      "reb_rank": 91,
+      "ast_rank": 25
     },
     "distribution_10g": {
       "pts": {
@@ -26341,8 +27042,8 @@
       "fg3a": 6.7,
       "fg3m": 2.2,
       "paint_pts": 2.5,
-      "pts_rank": 104,
-      "reb_rank": 81,
+      "pts_rank": 105,
+      "reb_rank": 82,
       "ast_rank": 106
     },
     "distribution_10g": {
@@ -26598,7 +27299,7 @@
       "fg3m": 2.0,
       "paint_pts": 8.7,
       "pts_rank": 39,
-      "reb_rank": 73,
+      "reb_rank": 75,
       "ast_rank": 17
     },
     "distribution_10g": {
@@ -27123,9 +27824,9 @@
       "fg3a": 6.2,
       "fg3m": 2.2,
       "paint_pts": 6.1,
-      "pts_rank": 58,
-      "reb_rank": 81,
-      "ast_rank": 57
+      "pts_rank": 57,
+      "reb_rank": 82,
+      "ast_rank": 56
     },
     "distribution_10g": {
       "pts": {
@@ -27393,9 +28094,9 @@
       "fg3a": 9.1,
       "fg3m": 3.6,
       "paint_pts": 4.1,
-      "pts_rank": 54,
+      "pts_rank": 53,
       "reb_rank": 30,
-      "ast_rank": 101
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -27587,8 +28288,8 @@
       "fg3a": 6.8,
       "fg3m": 2.2,
       "paint_pts": 7.7,
-      "pts_rank": 45,
-      "reb_rank": 108,
+      "pts_rank": 46,
+      "reb_rank": 107,
       "ast_rank": 4
     },
     "distribution_10g": {
@@ -27858,8 +28559,8 @@
       "fg3m": 0.8,
       "paint_pts": 13.4,
       "pts_rank": 12,
-      "reb_rank": 7,
-      "ast_rank": 101
+      "reb_rank": 6,
+      "ast_rank": 99
     },
     "distribution_10g": {
       "pts": {
@@ -28099,9 +28800,9 @@
       "fg3a": 3.3,
       "fg3m": 0.8,
       "paint_pts": 7.3,
-      "pts_rank": 72,
+      "pts_rank": 73,
       "reb_rank": 45,
-      "ast_rank": 93
+      "ast_rank": 92
     },
     "distribution_10g": {
       "pts": {
@@ -28310,8 +29011,8 @@
       "fg3a": 5.8,
       "fg3m": 2.5,
       "paint_pts": 6.2,
-      "pts_rank": 51,
-      "reb_rank": 73,
+      "pts_rank": 52,
+      "reb_rank": 75,
       "ast_rank": 40
     },
     "distribution_10g": {
