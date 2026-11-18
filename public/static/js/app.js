@@ -198,12 +198,12 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
     } else if (exp) {
         tooltipBody = `<span class="stat-info-box block"><span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span><span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span></span>`;
     }
-    if (posKey) {
+    if (posKey && typeof posKey === 'string' && posKey.includes('_')) {
         const parts = posKey.split('_');
         const pos = parts[0].toUpperCase();
         const stat = parts[1].toUpperCase();
 
-        if (aTeam && hTeam) {
+        if (aTeam && hTeam && ['PG', 'SG', 'SF', 'PF', 'C'].includes(pos)) {
             const dc = window.APP_DATA?.depthCharts || window.DEPTH_CHARTS || depthCharts || {};
             const aList = (dc[aTeam] && dc[aTeam][pos]) || [];
             const hList = (dc[hTeam] && dc[hTeam][pos]) || [];
@@ -212,22 +212,47 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
             const hStarter = hList[0] || 'Unlisted';
             const hBackup = hList[1] || (hList.length > 0 ? 'None' : 'Unlisted');
 
-            const aInjuries = (window.APP_DATA?.allForensicTeams && window.APP_DATA.allForensicTeams[aTeam]?.injuries) || (window.allForensicTeams && window.allForensicTeams[aTeam]?.injuries) || [];
-            const hInjuries = (window.APP_DATA?.allForensicTeams && window.APP_DATA.allForensicTeams[hTeam]?.injuries) || (window.allForensicTeams && window.allForensicTeams[hTeam]?.injuries) || [];
-            const aStarterOut = aInjuries.some(inj => inj && aStarter && inj.toLowerCase() === aStarter.toLowerCase());
-            const aBackupOut = aInjuries.some(inj => inj && aBackup && inj.toLowerCase() === aBackup.toLowerCase());
-            const hStarterOut = hInjuries.some(inj => inj && hStarter && inj.toLowerCase() === hStarter.toLowerCase());
-            const hBackupOut = hInjuries.some(inj => inj && hBackup && inj.toLowerCase() === hBackup.toLowerCase());
-            const aStarterDisplay = aStarterOut ? `${aStarter} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : aStarter;
-            const aBackupDisplay = aBackupOut ? `${aBackup} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : aBackup;
-            const hStarterDisplay = hStarterOut ? `${hStarter} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : hStarter;
-            const hBackupDisplay = hBackupOut ? `${hBackup} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : hBackup;
+            const getInjuries = (t) => {
+                return (window.currentForensicTeams && window.currentForensicTeams[t]?.injuries)
+                    || (window.APP_DATA?.allForensicTeams && window.APP_DATA.allForensicTeams[t]?.injuries)
+                    || (window.allForensicTeams && window.allForensicTeams[t]?.injuries)
+                    || [];
+            };
+            const isPlayerInjured = (name, injList) => {
+                if (!name || name === 'Unlisted' || name === 'None' || !Array.isArray(injList)) return false;
+                const clean = name.trim().toLowerCase().replace(/\s+(jr\.?|sr\.?|ii|iii|iv)$/i, '');
+                return injList.some(inj => {
+                    if (!inj) return false;
+                    const cleanInj = inj.trim().toLowerCase().replace(/\s+(jr\.?|sr\.?|ii|iii|iv)$/i, '');
+                    return clean === cleanInj || clean.includes(cleanInj) || cleanInj.includes(clean);
+                });
+            };
+
+            const aInjuries = getInjuries(aTeam);
+            const hInjuries = getInjuries(hTeam);
+            const aStarterOut = isPlayerInjured(aStarter, aInjuries);
+            const aBackupOut = isPlayerInjured(aBackup, aInjuries);
+            const hStarterOut = isPlayerInjured(hStarter, hInjuries);
+            const hBackupOut = isPlayerInjured(hBackup, hInjuries);
 
             const aFullName = (window.APP_DATA?.teamNamesMap && window.APP_DATA.teamNamesMap[aTeam]) || teamNamesMap[aTeam] || aTeam;
             const hFullName = (window.APP_DATA?.teamNamesMap && window.APP_DATA.teamNamesMap[hTeam]) || teamNamesMap[hTeam] || hTeam;
-            const aNick = aFullName.split(' ').pop();
-            const hNick = hFullName.split(' ').pop();
+            const aNick = (aFullName && aFullName !== aTeam) ? aFullName.split(' ').pop() : '';
+            const hNick = (hFullName && hFullName !== hTeam) ? hFullName.split(' ').pop() : '';
             const posDisplayName = pos === 'C' ? 'Center (C)' : pos;
+
+            const renderPlayerSlot = (role, name, isOut, isStarter) => {
+                const isPlaceholder = (name === 'None' || name === 'Unlisted');
+                const nameCls = isPlaceholder ? 'text-slate-500 italic' : (isStarter ? 'font-semibold text-slate-100' : 'text-slate-300');
+                const outBadge = isOut ? '<span class="text-rose-400 font-mono text-[8.5px] font-bold shrink-0 ml-1">(OUT)</span>' : '';
+                return `
+                    <div class="flex items-center text-[10px] min-w-0" title="${role}: ${name}${isOut ? ' (Out - Injury Report)' : ''}">
+                        <span class="text-slate-500 font-mono text-[9px] uppercase shrink-0 w-6">${role}:</span>
+                        <span class="truncate ${nameCls}">${name}</span>
+                        ${outBadge}
+                    </div>
+                `;
+            };
 
             const depthChartHtml = `
                 <div class="mt-2.5 pt-2 border-t border-[#30363d] space-y-1.5">
@@ -239,32 +264,24 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
                         <span class="text-[9px] text-slate-500 font-normal">Starter &amp; Secondary</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2 text-[10.5px]">
-                        <div class="bg-[#161b22] p-2 rounded border border-[#30363d]/80 text-left min-w-0">
+                        <div class="bg-[#161b22] px-2 py-1.5 rounded border border-[#30363d]/80 text-left min-w-0">
                             <div class="font-bold text-cyan-400 font-mono text-[10.5px] border-b border-[#21262d] pb-1 mb-1 truncate flex items-center justify-between">
                                 <span>${aTeam}</span>
-                                <span class="text-[9px] text-slate-400 font-normal truncate ml-1">${aNick}</span>
+                                ${aNick ? `<span class="text-[9px] text-slate-400 font-normal truncate ml-1">${aNick}</span>` : ''}
                             </div>
                             <div class="space-y-0.5">
-                                <div class="truncate text-[10px]" title="Starter: ${aStarter}">
-                                    <span class="text-slate-500 font-mono text-[9px] uppercase">1st:</span> <span class="font-semibold text-slate-100">${aStarterDisplay}</span>
-                                </div>
-                                <div class="truncate text-[10px]" title="Secondary: ${aBackup}">
-                                    <span class="text-slate-500 font-mono text-[9px] uppercase">2nd:</span> <span class="text-slate-300">${aBackupDisplay}</span>
-                                </div>
+                                ${renderPlayerSlot('1st', aStarter, aStarterOut, true)}
+                                ${renderPlayerSlot('2nd', aBackup, aBackupOut, false)}
                             </div>
                         </div>
-                        <div class="bg-[#161b22] p-2 rounded border border-[#30363d]/80 text-left min-w-0">
-                            <div class="font-bold text-cyan-400 font-mono text-[10.5px] border-b border-[#21262d] pb-1 mb-1 truncate flex items-center justify-between">
+                        <div class="bg-[#161b22] px-2 py-1.5 rounded border border-[#30363d]/80 text-left min-w-0">
+                            <div class="font-bold text-rose-400 font-mono text-[10.5px] border-b border-[#21262d] pb-1 mb-1 truncate flex items-center justify-between">
                                 <span>${hTeam}</span>
-                                <span class="text-[9px] text-slate-400 font-normal truncate ml-1">${hNick}</span>
+                                ${hNick ? `<span class="text-[9px] text-slate-400 font-normal truncate ml-1">${hNick}</span>` : ''}
                             </div>
                             <div class="space-y-0.5">
-                                <div class="truncate text-[10px]" title="Starter: ${hStarter}">
-                                    <span class="text-slate-500 font-mono text-[9px] uppercase">1st:</span> <span class="font-semibold text-slate-100">${hStarterDisplay}</span>
-                                </div>
-                                <div class="truncate text-[10px]" title="Secondary: ${hBackup}">
-                                    <span class="text-slate-500 font-mono text-[9px] uppercase">2nd:</span> <span class="text-slate-300">${hBackupDisplay}</span>
-                                </div>
+                                ${renderPlayerSlot('1st', hStarter, hStarterOut, true)}
+                                ${renderPlayerSlot('2nd', hBackup, hBackupOut, false)}
                             </div>
                         </div>
                     </div>

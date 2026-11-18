@@ -234,7 +234,8 @@ tbody tr.selected-row {
 }
 
 .stat-info-box.stat-info-box-pos {
-    width: 340px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
 }
 
 .stat-info-box::after {
