@@ -644,6 +644,7 @@
             allPlayerProfiles: {{ player_profiles | tojson }},
             allTeamGameLogs: {{ (team_game_logs if team_game_logs is defined else []) | tojson }},
             positionMatchupDeltas: {{ (position_matchup_deltas if position_matchup_deltas is defined else {}) | tojson }},
+            depthCharts: {{ (depth_charts if depth_charts is defined else {}) | tojson }},
             teamNamesMap: {{ team_names | tojson }},
             startDate: '{{ start_date }}' || '2026-10-20',
             endDate: '{{ end_date }}',
@@ -651,6 +652,7 @@
             initialHome: {{ (initial_home if initial_home is defined else None) | tojson }}
         };
         window.NBA_TEAM_NAMES = {{ team_names | tojson }};
+        window.DEPTH_CHARTS = window.APP_DATA.depthCharts;
     </script>
     <script src="{{ url_for('static', filename='js/app.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>
     <script src="{{ url_for('static', filename='js/visuals.js') }}?v={{ last_updated|replace(' ', '_') }}_slate2"></script>

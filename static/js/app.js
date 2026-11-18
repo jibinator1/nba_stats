@@ -11,6 +11,21 @@ const allForensicTeams = APP_DATA.allForensicTeams || {};
 const allPlayerProfiles = APP_DATA.allPlayerProfiles || [];
 const allTeamGameLogs = APP_DATA.allTeamGameLogs || [];
 const teamNamesMap = APP_DATA.teamNamesMap || {};
+const depthCharts = APP_DATA.depthCharts || window.DEPTH_CHARTS || {};
+
+if (!APP_DATA.depthCharts || Object.keys(APP_DATA.depthCharts).length === 0) {
+    fetch('/api/depth-charts')
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+            if (data && Object.keys(data).length > 0) {
+                window.APP_DATA = window.APP_DATA || {};
+                window.APP_DATA.depthCharts = data;
+                window.DEPTH_CHARTS = data;
+                if (typeof renderScheduleGames === 'function') renderScheduleGames();
+            }
+        })
+        .catch(() => {});
+}
 // Resilient ESPN Logo Map for 100% correct team assets
 const ESPN_LOGO_MAP = {
     'GSW': 'gs', 'NOP': 'no', 'NYK': 'ny', 'SAS': 'sa', 'UTA': 'utah', 'WAS': 'wsh'
@@ -187,6 +202,77 @@ function formatStatRow(label, aVal, aRank, hVal, hRank, posKey, aTeam, hTeam) {
         const parts = posKey.split('_');
         const pos = parts[0].toUpperCase();
         const stat = parts[1].toUpperCase();
+
+        if (aTeam && hTeam) {
+            const dc = window.APP_DATA?.depthCharts || window.DEPTH_CHARTS || depthCharts || {};
+            const aList = (dc[aTeam] && dc[aTeam][pos]) || [];
+            const hList = (dc[hTeam] && dc[hTeam][pos]) || [];
+            const aStarter = aList[0] || 'Unlisted';
+            const aBackup = aList[1] || (aList.length > 0 ? 'None' : 'Unlisted');
+            const hStarter = hList[0] || 'Unlisted';
+            const hBackup = hList[1] || (hList.length > 0 ? 'None' : 'Unlisted');
+
+            const aInjuries = (window.APP_DATA?.allForensicTeams && window.APP_DATA.allForensicTeams[aTeam]?.injuries) || (window.allForensicTeams && window.allForensicTeams[aTeam]?.injuries) || [];
+            const hInjuries = (window.APP_DATA?.allForensicTeams && window.APP_DATA.allForensicTeams[hTeam]?.injuries) || (window.allForensicTeams && window.allForensicTeams[hTeam]?.injuries) || [];
+            const aStarterOut = aInjuries.some(inj => inj && aStarter && inj.toLowerCase() === aStarter.toLowerCase());
+            const aBackupOut = aInjuries.some(inj => inj && aBackup && inj.toLowerCase() === aBackup.toLowerCase());
+            const hStarterOut = hInjuries.some(inj => inj && hStarter && inj.toLowerCase() === hStarter.toLowerCase());
+            const hBackupOut = hInjuries.some(inj => inj && hBackup && inj.toLowerCase() === hBackup.toLowerCase());
+            const aStarterDisplay = aStarterOut ? `${aStarter} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : aStarter;
+            const aBackupDisplay = aBackupOut ? `${aBackup} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : aBackup;
+            const hStarterDisplay = hStarterOut ? `${hStarter} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : hStarter;
+            const hBackupDisplay = hBackupOut ? `${hBackup} <span class="text-rose-400 font-mono text-[8.5px]">(OUT)</span>` : hBackup;
+
+            const aFullName = (window.APP_DATA?.teamNamesMap && window.APP_DATA.teamNamesMap[aTeam]) || teamNamesMap[aTeam] || aTeam;
+            const hFullName = (window.APP_DATA?.teamNamesMap && window.APP_DATA.teamNamesMap[hTeam]) || teamNamesMap[hTeam] || hTeam;
+            const aNick = aFullName.split(' ').pop();
+            const hNick = hFullName.split(' ').pop();
+            const posDisplayName = pos === 'C' ? 'Center (C)' : pos;
+
+            const depthChartHtml = `
+                <div class="mt-2.5 pt-2 border-t border-[#30363d] space-y-1.5">
+                    <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                        <span class="flex items-center gap-1 text-cyan-400">
+                            <svg class="w-3 h-3 inline-block shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            <span>${posDisplayName} Depth Chart</span>
+                        </span>
+                        <span class="text-[9px] text-slate-500 font-normal">Starter &amp; Secondary</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10.5px]">
+                        <div class="bg-[#161b22] p-2 rounded border border-[#30363d]/80 text-left min-w-0">
+                            <div class="font-bold text-cyan-400 font-mono text-[10.5px] border-b border-[#21262d] pb-1 mb-1 truncate flex items-center justify-between">
+                                <span>${aTeam}</span>
+                                <span class="text-[9px] text-slate-400 font-normal truncate ml-1">${aNick}</span>
+                            </div>
+                            <div class="space-y-0.5">
+                                <div class="truncate text-[10px]" title="Starter: ${aStarter}">
+                                    <span class="text-slate-500 font-mono text-[9px] uppercase">1st:</span> <span class="font-semibold text-slate-100">${aStarterDisplay}</span>
+                                </div>
+                                <div class="truncate text-[10px]" title="Secondary: ${aBackup}">
+                                    <span class="text-slate-500 font-mono text-[9px] uppercase">2nd:</span> <span class="text-slate-300">${aBackupDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-[#161b22] p-2 rounded border border-[#30363d]/80 text-left min-w-0">
+                            <div class="font-bold text-cyan-400 font-mono text-[10.5px] border-b border-[#21262d] pb-1 mb-1 truncate flex items-center justify-between">
+                                <span>${hTeam}</span>
+                                <span class="text-[9px] text-slate-400 font-normal truncate ml-1">${hNick}</span>
+                            </div>
+                            <div class="space-y-0.5">
+                                <div class="truncate text-[10px]" title="Starter: ${hStarter}">
+                                    <span class="text-slate-500 font-mono text-[9px] uppercase">1st:</span> <span class="font-semibold text-slate-100">${hStarterDisplay}</span>
+                                </div>
+                                <div class="truncate text-[10px]" title="Secondary: ${hBackup}">
+                                    <span class="text-slate-500 font-mono text-[9px] uppercase">2nd:</span> <span class="text-slate-300">${hBackupDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            tooltipBody = `<span class="stat-info-box stat-info-box-pos block"><span class="font-bold text-slate-100 mb-1 flex items-center gap-1.5 border-b border-[#30363d] pb-1 text-left block"><i data-lucide="info" class="w-3 h-3 text-cyan-400 shrink-0 inline"></i><span>${label}</span></span><span class="text-slate-300 text-[10.5px] leading-relaxed text-left normal-case block">${exp}</span>${depthChartHtml}</span>`;
+        }
+
         const deltas = window.APP_DATA?.positionMatchupDeltas || {};
         const aD = deltas[`${pos}_${aTeam}_${stat}`];
         const hD = deltas[`${pos}_${hTeam}_${stat}`];

@@ -130,6 +130,25 @@ def load_forensic_data():
     return {}, {}, [], [], "Sync Error"
 
 
+_DEPTH_CHARTS_CACHE = None
+
+def load_depth_charts():
+    """Loads ESPN depth charts for all teams (team -> {PG: [...], SG: [...], ...})."""
+    global _DEPTH_CHARTS_CACHE
+    if _DEPTH_CHARTS_CACHE is not None:
+        return _DEPTH_CHARTS_CACHE
+    dc_path = resolve_file_path('espn_depth_charts.json')
+    if os.path.exists(dc_path):
+        try:
+            with open(dc_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                _DEPTH_CHARTS_CACHE = data.get('teams', {})
+                return _DEPTH_CHARTS_CACHE
+        except Exception as e:
+            print(f"Error loading espn_depth_charts.json: {e}")
+    return {}
+
+
 _POS_CORR_CACHE = {}
 
 
@@ -553,6 +572,7 @@ def render_main_dashboard(page_type='schedule', initial_away=None, initial_home=
                            player_profiles=player_profiles,
                            team_game_logs=team_game_logs,
                            position_matchup_deltas=position_matchup_deltas,
+                           depth_charts=load_depth_charts(),
                            min_minutes=min_minutes,
                            all_teams=NBA_TEAMS,
                            team_names=NBA_TEAM_NAMES,
@@ -911,6 +931,10 @@ def api_positional_correlations():
         'position_matchup_deltas': build_position_matchup_deltas(data),
         'count': len(matchups)
     })
+
+@app.route('/api/depth-charts')
+def api_depth_charts():
+    return jsonify(load_depth_charts())
 
 @app.route('/api/status')
 def api_status():

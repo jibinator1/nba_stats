@@ -203,6 +203,7 @@ tbody tr.selected-row {
 }
 
 .stat-info-box {
+    box-sizing: border-box;
     visibility: hidden;
     opacity: 0;
     position: absolute;
@@ -230,6 +231,10 @@ tbody tr.selected-row {
     z-index: 99999;
     transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
     transition-delay: 0s;
+}
+
+.stat-info-box.stat-info-box-pos {
+    width: 340px;
 }
 
 .stat-info-box::after {
